@@ -395,7 +395,7 @@ setRemote(ANSWER)|   |                                   |
           setting up the ICE (and perhaps DTLS) connections immediately,
           without having to wait for the caller to gather all possible
           candidates. This results in faster call startup in cases where
-          gathering is not performed prior to initating the call.</t>
+          gathering is not performed prior to initiating the call.</t>
 
           <t>JSEP supports optional candidate trickling by providing APIs that
           provide control and feedback on the ICE candidate gathering process.
@@ -679,7 +679,7 @@ candidate:1 1 UDP 1694498815 192.0.2.33 10000 typ host
           to the session, e.g. adding or removing MediaStreams, or requesting
           an ICE restart. For each existing stream, the generation
           of each SDP line must follow the process defined for generating an
-          updated offer from the document that specfies the given SDP line. For
+          updated offer from the document that specifies the given SDP line. For
           each new stream, the generation of the SDP must follow the process of
           generating an initial offer, as mentioned above.
           If no changes have been made, or for SDP lines that are unaffected by
@@ -779,7 +779,7 @@ candidate:1 1 UDP 1694498815 192.0.2.33 10000 typ host
             This approach is preferred because it minimizes the amount of time
             that the offer-answer exchange is left open, in addition to avoiding
             media clipping by ensuring the transport is ready to go by the time
-            the call is phyiscally answered. However, some applications may not
+            the call is physically answered. However, some applications may not
             be able to do this, particularly ones that are attempting to gateway
             to other signaling protocols. In these cases, "pranswer" can still
             allow the application to warm up the transport.</t>
@@ -967,7 +967,7 @@ candidate:1 1 UDP 1694498815 192.0.2.33 10000 typ host
             <list style="symbols">
                 <t>An "a=mid" line, as specified in RFC5888, Section 4.</t>
                 <t>An "a=msid" line, as specified in draft-ietf-mmusic-msid-01, Section 2.</t>
-                <t>[OPEN ISSUE: Use of App Token versus stream-correlator]</t>
+                <t>[OPEN ISSUE: Use of App Token versus stream-correlator ]</t>
                 <t>An "a=sendrecv" line, as specified in RFC3264, Section 5.1.</t>
                 <t>For each supported codec, "a=rtpmap" and "a=fmtp" lines, as specified in RFC4566, Section 6. For audio, the codecs specified in http://tools.ietf.org/html/draft-ietf-rtcweb-audio-02, Section 3, MUST be be supported.</t>
                 <t>For each primary codec where RTP retransmission should be used, a corresponding "a=rtpmap" line indicating "rtx/8000" and an "a=fmtp" line that references the payload type fo the primary codec, as specified in RFC4588.</t>
@@ -977,7 +977,7 @@ candidate:1 1 UDP 1694498815 192.0.2.33 10000 typ host
                 <t>For each candidate that has been gathered during the most recent gathering phase, an "a=candidate" line, as specified in RFC5245, Section 4.3., paragraph 3.</t>
                 <t>For the current default candidate, a "c=" line, as specific in RFC5245, Section 4.3., paragraph 6.</t>
                 <t>An "a=fingerprint" line, as specified in RFC4572, Section 5. Use of the SHA-256 algorithm for the fingerprint is REQUIRED; if the browser also supports stronger hashes, additional "a=fingerprint" lines with these hashes MAY also be added.</t>
-                <t>An "a=setup" line, as specified in RFC4145, Section 4, and clarified for use in DTLS-SRTP secnarios in RFC5763, Section 5. The role value in the offer MUST be "actpass".</t>
+                <t>An "a=setup" line, as specified in RFC4145, Section 4, and clarified for use in DTLS-SRTP scenarios in RFC5763, Section 5. The role value in the offer MUST be "actpass".</t>
                 <t>An "a=rtcp-mux" line, as specified in RFC5761, Section 5.1.1.</t>
                 <t>An "a=rtcp-rsize" line, as specified in RFC5506, Section 5.</t>
                 <t>For each supported RTP header extension, an "a=extmap" line, as specified in RFC 5285, Section 5. The list of header extensions that SHOULD/MUST be supported is specified in <xref target="I-D.ietf-rtcweb-rtp-usage"/>, Section 5.2. Any header extensions that require encryption MUST be specified as indicated in RFC6904, Section 4.</t>
@@ -1044,13 +1044,13 @@ candidate:1 1 UDP 1694498815 192.0.2.33 10000 typ host
         <section title="Constraints Handling">
         <t>The createOffer method takes as a parameter a MediaConstraints object. Special processing is performed when generating a SDP description if the following constraints are present.</t>
         <section title="OfferToReceiveAudio">
-            <t>If the "OfferToReceiveAudio" constraint is specified, with a value of "true", the offer MUST include a non-rejected m= section with media type "audio", even if no audio MediaStreamTrack has been added to the PeerConnection. This allows the offerer to receive audio even when not sending it; accordingly, the directional attribute on the audio m= section MUST be set to recvonly. If this constraint is specifed when an audio MediaStreamTrack has already been added to the PeerConnection, or a non-rejected m= section with media type "audio" previously existed, it has no effect.</t>
+            <t>If the "OfferToReceiveAudio" constraint is specified, with a value of "true", the offer MUST include a non-rejected m= section with media type "audio", even if no audio MediaStreamTrack has been added to the PeerConnection. This allows the offerer to receive audio even when not sending it; accordingly, the directional attribute on the audio m= section MUST be set to recvonly. If this constraint is specified when an audio MediaStreamTrack has already been added to the PeerConnection, or a non-rejected m= section with media type "audio" previously existed, it has no effect.</t>
         </section>
         <section title="OfferToReceiveVideo">
-            <t>If the "OfferToReceiveAudio" constraint is specified, with a value of "true", the offer MUST include a m= section with media type "video", even if no video MediaStreamTrack has been added to the PeerConnection. This allows the offerer to receive video even when not sending it; accordingly, the directional attribute on the video m= section MUST be set to recvonly. If this constraint is specifed when an video MediaStreamTrack has already been added to the PeerConnection, or a non-rejected m= section with media type "video" previously existed, it has no effect.</t>
+            <t>If the "OfferToReceiveAudio" constraint is specified, with a value of "true", the offer MUST include a m= section with media type "video", even if no video MediaStreamTrack has been added to the PeerConnection. This allows the offerer to receive video even when not sending it; accordingly, the directional attribute on the video m= section MUST be set to recvonly. If this constraint is specified when an video MediaStreamTrack has already been added to the PeerConnection, or a non-rejected m= section with media type "video" previously existed, it has no effect.</t>
         </section>
         <section title="VoiceActivityDetection">
-            <t>If the "VoiceActivityDetection" constraint is specified, with a value of "true", the offer MUST indicate support for silence suppression by including comfort noise ("CN") codecs for each supported clockrate, as specified in RFC3389, Section 5.1. [OPEN issue: should this do anything in signaling, or should it just control built-in DTX modes in audio codecs? Opus has built-in DTX, but G.711 does not.]</t>
+            <t>If the "VoiceActivityDetection" constraint is specified, with a value of "true", the offer MUST indicate support for silence suppression by including comfort noise ("CN") codecs for each supported clock rate, as specified in RFC3389, Section 5.1. [OPEN issue: should this do anything in signaling, or should it just control built-in DTX modes in audio codecs? Opus has built-in DTX, but G.711 does not.]</t>
         </section>
         <section title="IceRestart">
             <t>If the "IceRestart" constraint is specified, with a value of "true", the offer MUST indicate an ICE restart by generating new ICE ufrag and pwd attributes, as specified in RFC5245, Section 9.1.1.1. If this constraint is specified on an initial offer, it has no effect (since a new ICE ufrag and pwd are already generated).</t>
@@ -1123,9 +1123,9 @@ candidate:1 1 UDP 1694498815 192.0.2.33 10000 typ host
 
           <t>disable RTCP mux (a=rtcp-mux)</t>
 
-          <t>change send resolution or framerate</t>
+          <t>change send resolution or frame rate</t>
 
-          <t>change desired recv resolution or framerate</t>
+          <t>change desired recv resolution or frame rate</t>
 
           <t>change maximum total bandwidth (b=)
           [OPEN ISSUE: need to clarify if this is CT or AS - see section 5.8 of
@@ -1695,7 +1695,7 @@ associated with multiple SDP media descriptions ("m=" lines).</t></abstract>
 that can be used to specify relations between media streams within different RTP
 sessions.  This mechanism is used to signal the association between the RTP
 concept of SSRC and the WebRTC concept of "media stream" / "media stream track"
-using SDP signalling.  This document is an input document for discussion.  It
+using SDP signaling.  This document is an input document for discussion.  It
 should be discussed in the MMUSIC WG list, mmusic@ietf.org.</t></abstract>
 
 </front>
@@ -2231,7 +2231,7 @@ a=msid:61317484-2ed4-49d7-9eb7-1414322a7aae f30bdb4a-5db8-49b5-bcdc-e0c9a23172e0
 
           <!-- C -->
 
-          <t>Removed stuff that has moved to W3C specificaiton</t>
+          <t>Removed stuff that has moved to W3C specification</t>
 
           <!-- D -->
 
