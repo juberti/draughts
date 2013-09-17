@@ -123,6 +123,12 @@
         it using setRemoteDescription(), and initial setup is complete. This
         process can be repeated for additional offer/answer exchanges.</t>
 
+        <t>Most applications can treat the SDP produced and consumed by theses
+        various API calls as an opaque blob of bits and the application will not
+        need to read or change the SDP. The W3C API provides direct API
+        mechanism to allow the application to provide information to the browser
+        about what sort of SDP to produce. </t>
+
         <t>Regarding ICE <xref target="RFC5245"></xref>, JSEP decouples the
         ICE state machine from the overall signaling state machine, as the ICE
         state machine must remain in the browser, because only the browser has
