@@ -11,9 +11,9 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-ietf-uberti-fec" ipr="trust200902">
+<rfc category="std" docName="draft-uberti-rtcweb-fec" ipr="trust200902">
   <front>
-    <title abbrev="FECFECFEC">FEC FEC FEC FEC FEC</title>
+    <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
 
     <author fullname="Justin Uberti" initials="J." surname="Uberti">
       <organization>Google</organization>
@@ -35,7 +35,7 @@
       </address>
     </author>
 
-    <date day="25" month="August" year="2014" />
+    <date day="27" month="October" year="2014" />
 
     <area>RAI</area>
 
@@ -60,15 +60,38 @@
       target="RFC2119"></xref>.</t>
     </section>
 
+    <section title="Types of FEC">
+      <t>By its name, FEC describes the sending of redundant information in
+         an outgoing packet stream so that information can still be recovered
+         even in the face of packet loss. There are multiple ways in which this
+         can be accomplished; this section enumerates the various mechanisms
+         and describes their tradeoffs.</t>
+      <section title="Separate FEC Stream">
+          <t>This approach, 
+
+          </t>
+      </section>
+      <section title="Redundant Encoding">
+      </section>
+       <section title="Codec-Specific In-band FEC">
+      </section>
+    </section>
+
     <section title="FEC for Audio Content">
-      <t>Single SSRC; RFC2198. Opus inband fec (not CELT)
+      <section title="Recommended Mechanism">
+      </section>
+      <section title="Negotiating Support">
+      </section>
+     Single SSRC; RFC2198. Opus inband fec (not CELT)
         Offer offers RED; answerer can disable by rejecting RED
-        Partial packets - only Opus
-      
-      
+        Partial packets - only Opus 
     </section>
 
     <section title="FEC for Video Content">
+      <section title="Recommended Mechanism">
+      </section>
+      <section title="Negotiating Support">
+      </section>
       <t>Transmit on separate SSRC
         negotiate that SSRC with ssrc-group and FEC semantics
         details in payload-singh-fec
