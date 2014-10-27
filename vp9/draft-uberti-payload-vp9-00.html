@@ -649,6 +649,7 @@ X:   | EXTENDED PID  | (OPTIONAL)    .            .
 <p id="rfc.section.4.2.1.p.3">Its structure consists of a sequence of frames, encoded as with the layer indices.  It begins with PATTERN LENGTH, indicating the number of frames in the pattern; it is then followed by that many instances of data encoded using the same semantics as the layer indices.</p>
 <p id="rfc.section.4.2.1.p.4">TODO: add frame resolution information.</p>
 <p id="rfc.section.4.2.1.p.5">In a scalable stream sent with a fixed pattern, the scalability structure SHOULD be included in the first packet of every keyframe picture, and also in the first packet of the first picture in which the scalability structure changes.  If a SS is included in a picture with TID not equal to 0, it MUST also be repeated in the first packet the first frame with a lower TID, until TID equals 0.</p>
+<p id="rfc.section.4.2.1.p.6">If PATTERN LENGTH is 0, it indicates that no fixed scalability information is present going forward in the bitstream.  An SS with a PATTERN LENGTH of 0 allows a bitstream to be changed from non-flexible to flexible mode.</p>
 <h1 id="rfc.section.4.2.2"><a href="#rfc.section.4.2.2">4.2.2.</a> <a href="#VP9payloadDescriptorSU" id="VP9payloadDescriptorSU">Scalability Structure Update (SU):</a></h1>
 <p id="rfc.section.4.2.2.p.1">TODO</p>
 <p>

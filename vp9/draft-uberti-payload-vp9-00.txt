@@ -468,14 +468,14 @@ Internet-Draft         RTP Payload Format for VP9           October 2014
    with TID not equal to 0, it MUST also be repeated in the first packet
    the first frame with a lower TID, until TID equals 0.
 
+   If PATTERN LENGTH is 0, it indicates that no fixed scalability
+   information is present going forward in the bitstream.  An SS with a
+   PATTERN LENGTH of 0 allows a bitstream to be changed from non-
+   flexible to flexible mode.
+
 4.2.2.  Scalability Structure Update (SU):
 
    TODO
-
-
-
-
-
 
 
 
