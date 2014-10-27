@@ -243,15 +243,15 @@
           <artwork><![CDATA[
          0 1 2 3 4 5 6 7            
         +-+-+-+-+-+-+-+-+
-        |I|L|B|E|V|U|RSV| (REQUIRED)
+        |I|L|F|B|E|V|U|-| (REQUIRED)
         +-+-+-+-+-+-+-+-+
 I:      |M|PICTURE ID   | (RECOMMENDED)
         +-+-+-+-+-+-+-+-+
 M:      | EXTENDED PID  | (RECOMMENDED)
         +-+-+-+-+-+-+-+-+
-L:      | T | S | Q | R | (OPTIONAL)
+L:      | T | S | Q | R | (CONDITIONALLY RECOMMENDED)
         +-+-+-+-+-+-+-+-+              -\
-        | PID |X| RS| RQ| (OPTIONAL)    .
+F:      | PID |X| RS| RQ| (OPTIONAL)    .
         +-+-+-+-+-+-+-+-+               . - R times
 X:      | EXTENDED PID  | (OPTIONAL)    .
         +-+-+-+-+-+-+-+-+              -/
@@ -273,6 +273,12 @@ U:      | SU            |
 			  the octets following the first octet and the extended
 			  Picture ID (if present) are as described by "Layer
 			  indices" below.</t>
+			<t hangText="F:">Reference indices present.  When set to one,
+			  the octets following the first octet and the extended
+			  Picture ID (if present) are as described by "Reference
+			  indices" below.  This MUST only be set if L is also
+			  1; if L is 0 then this MUST be set to zero and
+			  ignored by receivers.</t>
             <t hangText="B:">Start of VP9 frame. MUST be set to 1 if
             the first payload octet of the RTP packet is the beginning of a
             new VP9 frame, and MUST NOT be 1 otherwise. Note that this
@@ -280,7 +286,7 @@ U:      | SU            |
 
             <t hangText="E:">End of picture. MUST be set to 1 for the final 
 			  RTP packet of a VP9 picture, and 0 otherwise.  Unless
-			  spatial or quality scalability is in use, this will have the same
+			  spatial or quality scalability is in use for this picture, this will have the same
 			  value as the marker bit in the RTP header.</t>
 
             <t hangText="V:">Scalability Structure (SS) present. When set
@@ -293,7 +299,7 @@ U:      | SU            |
             present in the payload descriptor.  Otherwise, the
             Scalability Structure Update MUST NOT be present.</t>
 
-			<t hangText="RSV:">Bits reserved for future use. MUST be set to
+			<t hangText="-:">Bit reserved for future use. MUST be set to
               zero and MUST be ignored by the receiver.</t>
           </list></t>
 
@@ -326,12 +332,12 @@ U:      | SU            |
 			  incrementing before S).  These can help MCUs measure bitrates per
 			  layer and can help them make a quick decision on whether
 			  to relay a packet or not. They can also help receivers
-			  determine what layers they are currently decoding.  R
-			  is 2 bits representing the number of frames this frame
-			  refers to. The layer indices field will be followed by R
-			  reference fields.</t>
+			  determine what layers they are currently decoding.  If "F" is set in the initial octet, R
+			  is 2 bits representing the number of reference fields this frame
+			  refers to. R MAY be zero, indicating a keyframe.  The layer indices field will be followed by R
+			  reference indices.  If "F" is not set, R MUST be set to zero and ignored by receivers.</t>
 
-			<t hangText="Reference fields:">These bytes are optional, but recommended when encoding with layers in
+			<t hangText="Reference indices:">These bytes are optional, but recommended when encoding with layers in
 		  the flexible mode. They are also recommended in the
 		  non-flexible mode when sending frames which are out of sync
 		  with the pattern signaled with the SS, for instance when
