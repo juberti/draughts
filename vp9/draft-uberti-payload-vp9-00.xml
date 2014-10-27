@@ -168,6 +168,28 @@
 		<t>[Editor's Note: Are separate spatial and quality layers
 		necessary and useful?  We could simplify by only defining a
 		single sequence of frames within a picture.</t>
+
+		<t>Two modes of describing layer information are possible:
+		"non-flexible mode" and "flexible mode".  An encoder can
+		freely switch between the two as appropriate.</t>
+
+		<t>In non-flexible mode, an SS message, which defines the
+		layer hierarchy, is sent in the beginning of the stream
+		together with the key frame. Each packet will have a picture
+		id and reference indices, which in conjunction with the SS and the
+		RTP sequence number can be used to determine if the packet is
+		decodable or not.  An SU message can be sent by the sending
+		client, or an MCU, to notify the receiver about what subset of
+		the SS it will actually be receiving.</t>
+
+		<t>In the flexible mode each packet contains 1-4 reference
+		indices, which identifies all frames referenced by the frame
+		transmitted in the current packet. This enables a receiver to
+		identify if a frame is decodable or not and helps it
+		understand the layer structure so that it can drop packets as
+		it sees fit. Since this is signaled in each packet it makes it
+		possible to have more flexible layer hierarchies and patterns
+		which are changing dynamically.</t>
     </section>
 
     <section anchor="payloadFormat" title="Payload Format">
