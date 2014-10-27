@@ -280,7 +280,7 @@ U:      | SU            |
 
             <t hangText="E:">End of picture. MUST be set to 1 for the final 
 			  RTP packet of a VP9 picture, and 0 otherwise.  Unless
-			  spatial or quality scalability is in use for this picture, this will have the same
+			  spatial or quality scalability is in use, this will have the same
 			  value as the marker bit in the RTP header.</t>
 
             <t hangText="V:">Scalability Structure (SS) present. When set
