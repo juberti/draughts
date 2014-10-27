@@ -974,6 +974,8 @@ Authors' Addresses
    Kirkland, WA  98033
    USA
 
+   Email: justin@uberti.name
+
 
    Stefan Holmer
    Google, Inc.
@@ -991,8 +993,6 @@ Authors' Addresses
    US
 
    Email: jonathan@vidyo.com
-
-
 
 
 
