@@ -979,10 +979,16 @@ Authors' Addresses
 
    Stefan Holmer
    Google, Inc.
+   Kungsbron 2
+   Stockholm  111 22
+   Sweden
 
 
    Magnus Flodman
    Google, Inc.
+   Kungsbron 2
+   Stockholm  111 22
+   Sweden
 
 
    Jonathan Lennox
@@ -993,12 +999,6 @@ Authors' Addresses
    US
 
    Email: jonathan@vidyo.com
-
-
-
-
-
-
 
 
 
