@@ -56,10 +56,32 @@
 
     <author fullname="Stefan Holmer" initials="S." surname="Holmer">
       <organization abbrev="Google">Google, Inc.</organization>
+       <address>
+        <postal>
+          <street>Kungsbron 2</street>      
+
+          <code>111 22</code>
+
+          <city>Stockholm</city>
+
+          <country>Sweden</country>
+        </postal>
+      </address>
     </author>
 
     <author fullname="Magnus Flodman" initials="M." surname="Flodman">
       <organization abbrev="Google">Google, Inc.</organization>
+      <address>
+        <postal>
+          <street>Kungsbron 2</street>      
+
+          <code>111 22</code>
+
+          <city>Stockholm</city>
+
+          <country>Sweden</country>
+        </postal>
+      </address>
     </author>
 
     <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
