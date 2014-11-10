@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc5245 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5245.xml">
+<!ENTITY icemob SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wing-mmusic-ice-mobility.xml">
+<!ENTITY mprtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.singh-avtcore-mprtp.xml">
+<!ENTITY redirect SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.williams-peer-redirect.xml">
+]>
+<?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
+<?rfc toc="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc iprnotified="no" ?>
+<?rfc strict="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc sortrefs="yes" ?>
+<?rfc colonspace="yes" ?>
+<?rfc rfcedstyle="no" ?>
+<?rfc tocdepth="4"?>
+
+<rfc category="std" docName="draft-uberti-mmusic-nombis-00" ipr="trust200902">
+  <front>
+    <title abbrev="IceNom">Improvements to ICE Candidate Nomination</title>
+
+    <author fullname="Justin Uberti" initials="J." surname="Uberti">
+      <organization>Google</organization>
+
+      <address>
+        <postal>
+          <street>747 6th Ave S</street>
+
+          <city>Kirkland</city>
+
+          <region>WA</region>
+
+          <code>98033</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>justin@uberti.name</email>
+      </address>
+    </author>
+
+    <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
+      <organization>Vidyo</organization>
+
+      <address>
+        <postal>
+          <street>433 Hackensack Avenue</street>
+
+          <city>Hackensack</city>
+
+          <region>NJ</region>
+
+          <code>07601</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>jonathan@vidyo.com</email>
+      </address>
+    </author>
+
+    <date day="06" month="November" year="2014" />
+
+    <area>RAI</area>
+
+    <abstract>
+      <t>This document makes recommendations for simplifying and improving the
+      procedures for candidate nomination in Interactive Connectivity Establishment (ICE).</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>Interactive Connectivity Establishment (ICE) attempts to find the 'best'
+      path for connectivity between two peers; in ICE parlance, these paths are
+      known as 'candidate pairs'. During the ICE process, one endpoint,
+      known as the 'controlling' endpoint, selects a candidate pair as the 
+      best pair; this action is known as nomination. ICE supports two different
+      mechanisms for performing nomination, known as Regular Nomination, and
+      Aggressive Nomination.</t>
+      <t>However, each of these modes have flaws that restrict their usefulness.
+      Regular Nomination, as currently speced, requires a best pair to be chosen
+      before media transmission can start, causing unnecessary call setup delay.
+      Aggressive Nomination, while avoiding this delay, gives the controlling
+      endpoint much less discretion into which candidate pair is chosen, preventing
+      it from making decisions based on dynamic factors such as RTT or loss rate.
+      Needless to say, the presence of both modes also adds nontrivial complexity.</t>
+      <t>Lastly, ICE is currently defined as a finite process, where the decision on
+      the optimal candidate pair is made during call setup and infrequently (if ever)
+      changed. While this may be acceptable for endpoints with static network 
+      configurations, it fails to meet the needs of mobile endpoints, who may need
+      to seamlessly move between networks, or be connected to multiple networks
+      simultaneously. In these cases, the controlling endpoint may want to maintain
+      multiple potential candidate pairs, and make dynamic decisions to switch 
+      between them as conditions change.</t>
+      <t>To address these challenges, this document makes two proposals for 
+      refactoring ICE nomination - merging Regular and Aggressive Nomination, and 
+      introducing a new mode, known as Continuous Nomination. This makes ICE
+      substantially more flexible without increasing complexity.
+      </t>
+    </section>
+
+    <section title="Terminology">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"></xref>.</t>
+    </section>
+
+    <section title="Goals and Requirements">
+      <t>The goals for improved ICE nomination are enumerated below.</t>
+      <section title="Minimize Call Setup Latency" anchor="minimize-latency">
+          <t>Modern ICE agents will often have multiple network interfaces and
+          multiple servers from which to obtain ICE candidates. While some ICE checks
+          may succeed quickly, finishing the entire set of checks can easily take multiple
+          seconds. As a result, ICE endpoints MUST be able to start transmitting
+          media immediately upon a successful ICE check, and MUST retain the ability
+          to switch if a better candidate pair becomes available later.
+          </t>
+      </section>
+      <section title="Allow Controlling Endpoint to Make Dynamic Decisions" anchor="dynamic-decisions">
+          <t>While an ICE endpoint will assign various priority values to its ICE candidates,
+          these priorities are static and can only be based on a priori knowledge. To 
+          properly make choices in multi-network and multi-server scenarios, the controlling
+          endpoint MUST be able to make dynamic decisions about the selected candidate pair
+          based on observed network performance. To ensure symmetric flows, this implies that
+          the controlling endpoint MUST be able to communicate its choice to the controlled
+          side.       
+          </t>
+      </section>
+       <section title="Allow Selected Pair Change At Any Time Without Signaling" anchor="continuous-change">
+          <t>Expanding on the requirement above, the need to make dynamic decisions is not
+          limited to call setup. A multihomed endpoint may need to switch interfaces based on
+          mobility considerations, or a robust endpoint may want to keep multiple network paths
+          warm and switch immediately if connectivity is interrupted on one of them. As the
+          signaling channel may be affected by the event necessitating the switch, this
+          implies that the controlling endpoint MUST be able to change the selected pair
+          and indicate this to the remote side without signaling.
+          </t>
+          <t>The rules in <xref target="RFC5245" /> ensure that the controlled
+          endpoint keeps its candidate needed for the selected pair alive. However,
+          in order for alternate pairs to remain available, the controlled endpoint 
+          must keep the associated candidates alive
+          as well. This implies that the controlling endpoint MUST have some way to 
+          indicate to the controlled side that specific candidates are to be kept alive.
+          </t>
+      </section>
+      <section title="Allow Continuous Addition of Candidates" anchor="continuous-candidates">
+          <t>In certain network mobility scenarios, networks may come up and down
+          while the call is active. In order to allow candidates gathered on these 
+          networks to be used for the selected pair or backup pairs, the endpoint MUST
+          be able to gather candidates on these networks and communicate them to the
+          remote side. While this could be done using an ICE restart, as described in
+          <xref target="RFC5245" />, the ICE restart implies that these candidates
+          should replace, instead of add to, the previously exchanged candidates.
+          [TODO: should this just be a tweak to Trickle ICE? It's not really specific
+          to nomination.]         
+          </t>
+      </section>
+      <section title="Maintain Backwards Compatibility" anchor="maintain-backcompat">
+          <t>To prevent interoperability problems, ICE endpoints that support the
+          functionality listed above MUST still maintain <xref target="RFC5245"/> compliance
+          when interacting with existing endpoints. However, the ideal solution SHOULD
+          allow some improvements to occur when only the controlling side supports the new
+          functionality.</t>
+      </section>
+      <section title="Minimize Complexity Increase" anchor="minimize-complexity">
+          <t>Increased functionality typically leads to increased complexity, which
+          leads to more edge cases, and more implementation bugs. This suggests that
+          in addition to proposing new ICE functionality, the ideal solution SHOULD 
+          deprecate superfluous functionality.</t>
+      </section>
+    </section>
+
+    <section title="Deprecating Aggressive Nomination">
+      <section title="Overview">
+        <t>The main benefits of Regular Nomination are that the controlling side can
+         dynamically choose which candidate pair to use, and a clear signal when the
+         nomination process has completed, via the presence of the USE-CANDIDATE flag
+         in a Binding Request. The main benefit of Aggressive Nomination is that it is
+         only necessary to send a single Binding Request before starting the transmission
+         of media, reducing setup latency. Why don't we have both?
+        </t>
+        <t>
+        By preserving the dynamic behavior of Regular Nomination, but allowing media
+        transmission to start upon a single successful connectivity check,
+        as in Aggressive Nomination, the requirements of <xref target="minimize-latency"/>
+        and <xref target="dynamic-decisions"/> can be met, while meeting the compatibility
+        requirement from <xref target="maintain-backcompat" /> and, since
+        Aggressive Nomination is no longer needed, the complexity requirement from 
+        <xref target="minimize-complexity" />.
+        </t>
+      </section>
+      <section title="Operation">
+        <t>Since media may be transmitted as soon as all components have a valid pair,
+        as indicated in <xref target="RFC5245" />, Page 69, an ICE Agent can begin
+        transmitting media as soon as this occurs, even if it has not sent a Binding
+        Request with USE-CANDIDATE.</t>
+        <t>This pair can change as more pairs are added to the Valid list on the controlling side. When
+nomination completes, and a final pair is selected, this is communicated to the controlled side
+via the typical Binding Request with USE-CANDIDATE.</t>
+        <t>On the controlled side, the same process can occur, with the ICE Agent transmitting media as
+soon as a valid pair exists. To encourage use of symmetric RTP, the controlled ICE Agent
+SHOULD use the same candidate pair on which it received media from the controlling side.
+[Doesn't need to be secure media, since the controlling side will finalize this preference
+through USE-CANDIDATE shortly.]</t>
+        <t>As this is legal ICE behavior, no negotiation of this mechanism should be needed. In the
+event the receiver drops any packets that arrive before a Binding Request with
+USE-CANDIDATE set, this will simply lead to brief media clipping and will resolve itself once
+nomination completes.</t>
+      </section>
+      <section title="Backwards Compatibility">
+        <t>When acting in the controlled role, new implementations MUST not use
+        Aggressive Nomination.</t>
+        <t>When acting in the controlled role, and the controlling side is using
+        Aggressive Nomination (e.g. sending USE-CANDIDATE in its initial Binding Requests),
+        the standard PRIORITY-based mechanism outlined in [TODO] should be used to
+        determine the reverse media path.
+        </t>
+        <t>Note that if implementations would prefer to just avoid Aggressive Nomination
+        altogether, they MAY indicate some TBD pseudo-option in the ice-options attribute.
+        Because compliant implementations MUST NOT use Aggressive Nomination if an unknown
+        ICE option is encountered, this effectively prohibits the use of Aggressive Nomination.
+        </t>
+      </section>
+    </section>
+
+    <section title="Introducing Continuous Nomination">
+      <section title="Overview">
+        <t>As discussed above, in mobile environments there can be multiple possible
+        valid candidate pairs, and  these can change at various points in the call, 
+        as new interfaces go up and down, signal strength for wireless interfaces changes,
+        and new relay servers are discovered.</t>
+        <t>However, under 5245 rules, once a candidate pair is selected and confirmed, via
+USE-CANDIDATE, nomination has completed and cannot be restarted without performing an
+ICE restart. This is overly complex in many cases, and especially problematic in some specific
+ones, namely a wifi-cellular handover, where the signaling path for communicating an ICE restart
+may be impacted by the handover.</t>
+        <t>To address this situation, this section introduces the concept of "continuous nomination",
+        where the controlling ICE endpoint can adjust the selected candidate pair at any time.
+        By allowing ICE processing to occur continuously during a call, rather than just at call
+        setup, the requirements expressed in <xref target="continuous-change"/> and
+        <xref target="continuous-candidates"/> can be met.</t>
+      </section>
+      <section title="Operation">
+        
+        <t>Upon receipt of a Binding Request with USE-CANDIDATE, the controlled side MUST switch
+its media path to the candidate pair on which the Binding Request was received. [could also
+follow media, if secure]</t>
+        <t>During continuous nomination, the controlling side may still elect to prune certain candidate
+pairs; for example, an implementation may choose to drop relay candidates once a successful
+connection has been established. The controlling ICE Agent does this by continuing to send
+Binding Requests to the remote side on each candidate pair that it still wants to retain. The
+controlled ICE Agent SHOULD prune any candidate pairs that have not received a Binding
+Request in N seconds (30?), and SHOULD NOT keep alive any candidates that are not
+associated with a live candidate pair. One side benefit of doing this is that the continuous
+exchange of Binding Requests across all candidate pairs allows the RTT and loss rate for
+each to be reliably determined and kept up to date.</t>
+        <t>At any point, either side may perform an ICE restart, which will result in both sides gathering
+new ICE candidates, starting a new continuous nomination sequence, and upon successful
+completion, discarding all candidates from the previous nomination sequence.</t>
+      </section> 
+      <section title="Backwards Compatibility">
+        <t>Under continuous nomination, ICE never concludes; new candidates can always be trickled,
+and a new candidate pair can always be selected by the controlling side by sending a new
+Binding Request with a USE-CANDIDATE attribute. The decision about which candidate pair
+to use is fully dynamic; the controlled side can use metrics such as RTT or loss rate to
+change the selected pair at any time.</t>
+        <t>Since standard ICE implementations may not expect the selected pair to change after a
+USE-CANDIDATE attribute is received, support for continuous nomination is explicitly
+indicated via a new "continuous" value for ice-options. If the remote side does not support the
+"continuous" option, the controlling side MUST fall back to Regular Nomination [consistent
+        with the behavior specified in TBD].</t>
+      </section>
+    </section>
+
+    <section title="Examples">
+      <t>TODO</t>
+    </section>
+
+    <section title="Security Considerations">
+      <t>TODO</t>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>This document requires no actions from IANA.</t>
+    </section>
+
+    <section title="Acknowledgements">
+      <t>Several people provided significant input into this document, including Martin Thomson, Brandon Williams, and Dan Wing.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      &rfc2119;
+      &rfc5245;
+    </references>
+
+    <references title="Informative References">
+      &redirect;
+      &icemob;
+      &mprtp;
+    </references>
+
+    <section title="Change log">
+      <t>Changes in draft -00: <list style="symbols">
+        <t>Initial version, from mailing list discussion post-IETF 90.</t>
+      </list></t>
+    </section>
+  </back>
+</rfc>
