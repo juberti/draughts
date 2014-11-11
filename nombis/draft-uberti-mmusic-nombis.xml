@@ -2,9 +2,11 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc5245 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5245.xml">
+<!ENTITY rfc6336 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6336.xml">
 <!ENTITY icemob SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wing-mmusic-ice-mobility.xml">
 <!ENTITY mprtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.singh-avtcore-mprtp.xml">
 <!ENTITY redirect SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.williams-peer-redirect.xml">
+<!ENTITY trickle SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-mmusic-trickle-ice.xml">
 ]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <?rfc toc="yes" ?>
@@ -115,17 +117,22 @@
           <t>Modern ICE agents will often have multiple network interfaces and
           multiple servers from which to obtain ICE candidates. While some ICE checks
           may succeed quickly, finishing the entire set of checks can easily take multiple
-          seconds. As a result, ICE endpoints MUST be able to start transmitting
+          seconds; this concern is discussed in <xref target="RFC5245"/>, Section 8.1.1.1.
+          As a result, ICE endpoints MUST be able to start transmitting
           media immediately upon a successful ICE check, and MUST retain the ability
           to switch if a better candidate pair becomes available later.
           </t>
       </section>
       <section title="Allow Controlling Endpoint to Make Dynamic Decisions" anchor="dynamic-decisions">
           <t>While an ICE endpoint will assign various priority values to its ICE candidates,
-          these priorities are static and can only be based on a priori knowledge. To 
+          these priorities are static and can only be based on a priori knowledge; the 
+          shortcomings of this approach are discussed in the first paragraph of Section 2.6
+          in <xref target="RFC5245"/>. To
           properly make choices in multi-network and multi-server scenarios, the controlling
           endpoint MUST be able to make dynamic decisions about the selected candidate pair
-          based on observed network performance. To ensure symmetric flows, this implies that
+          based on observed network performance. For example, RTT could be used to evaluate
+          which TURN servers to use, as described in <xref target="I-D.williams-peer-redirect"/>
+          To ensure symmetric flows, this implies that
           the controlling endpoint MUST be able to communicate its choice to the controlled
           side.       
           </t>
@@ -137,26 +144,30 @@
           warm and switch immediately if connectivity is interrupted on one of them. As the
           signaling channel may be affected by the event necessitating the switch, this
           implies that the controlling endpoint MUST be able to change the selected pair
-          and indicate this to the remote side without signaling.
+          and indicate this to the remote side without signaling. The need for this 
+          functionality has been stated in <xref target="I-D.wing-mmusic-ice-mobility"/> and
+          <xref target="I-D.singh-avtcore-mprtp"/>.
           </t>
           <t>The rules in <xref target="RFC5245" /> ensure that the controlled
           endpoint keeps its candidate needed for the selected pair alive. However,
           in order for alternate pairs to remain available, the controlled endpoint 
-          must keep the associated candidates alive
-          as well. This implies that the controlling endpoint MUST have some way to 
+          must keep the associated candidates alive as well, following the
+          procedures outlined in <xref target="RFC5245"/>, Section 4.1.1.4. This implies
+          that the controlling endpoint MUST have some way to 
           indicate to the controlled side that specific candidates are to be kept alive.
           </t>
       </section>
       <section title="Allow Continuous Addition of Candidates" anchor="continuous-candidates">
           <t>In certain network mobility scenarios, networks may come up and down
-          while the call is active. In order to allow candidates gathered on these 
-          networks to be used for the selected pair or backup pairs, the endpoint MUST
+          while the call is active. In order to allow candidates gathered on newly
+          available networks to be used for the selected pair or backup pairs, the endpoint MUST
           be able to gather candidates on these networks and communicate them to the
           remote side. While this could be done using an ICE restart, as described in
-          <xref target="RFC5245" />, the ICE restart implies that these candidates
-          should replace, instead of add to, the previously exchanged candidates.
-          [TODO: should this just be a tweak to Trickle ICE? It's not really specific
-          to nomination.]         
+          <xref target="RFC5245" />, Section 9.1, the ICE restart may have unintended
+          consequences, such as causing the remote side to regather all candidates.
+          Instead, it would be best if the new candidates could be trickled, as 
+          discussed in <xref target="I-D.ietf-mmusic-trickle-ice"/>, but even after
+          ICE processing has completed.
           </t>
       </section>
       <section title="Maintain Backwards Compatibility" anchor="maintain-backcompat">
@@ -212,17 +223,18 @@ USE-CANDIDATE set, this will simply lead to brief media clipping and will resolv
 nomination completes.</t>
       </section>
       <section title="Backwards Compatibility">
-        <t>When acting in the controlled role, new implementations MUST not use
+        <t>When acting in the controlled role, new implementations MUST NOT use
         Aggressive Nomination.</t>
         <t>When acting in the controlled role, and the controlling side is using
         Aggressive Nomination (e.g. sending USE-CANDIDATE in its initial Binding Requests),
-        the standard PRIORITY-based mechanism outlined in [TODO] should be used to
-        determine the reverse media path.
+        the standard PRIORITY-based mechanism outlined in <xref target="RFC5245"/>,
+        Section 8.1.1.2 should be used to determine the reverse media path.
         </t>
         <t>Note that if implementations would prefer to just avoid Aggressive Nomination
         altogether, they MAY indicate some TBD pseudo-option in the ice-options attribute.
         Because compliant implementations MUST NOT use Aggressive Nomination if an unknown
         ICE option is encountered, this effectively prohibits the use of Aggressive Nomination.
+        [N.B. this could be the ice-options:continuous option described below]
         </t>
       </section>
     </section>
@@ -245,34 +257,58 @@ may be impacted by the handover.</t>
         <xref target="continuous-candidates"/> can be met.</t>
       </section>
       <section title="Operation">
-        
+        <t>Under continuous nomination, ICE never concludes; new candidates can
+        always be trickled, and a new candidate pair can be selected by the 
+        controlling side at any time.</t>
+        <t>When selecting a new candidate pair, the controlling side informs the
+        controlled side of the chosen pat by sending a new Binding Request
+        with a USE-CANDIDATE attribute.
+        The decision about which candidate pair to use is fully dynamic; the controlling
+        side can use metrics such as RTT or loss rate to change the selected pair at any time.
+        If Binding Requests need to be sent for any other reason, such as consent checks
+        [TODO: reference], any checks sent on the selected pair MUST include a USE-CANDIDATE
+        attribute.
+        </t>
         <t>Upon receipt of a Binding Request with USE-CANDIDATE, the controlled side MUST switch
-its media path to the candidate pair on which the Binding Request was received. [could also
-follow media, if secure]</t>
-        <t>During continuous nomination, the controlling side may still elect to prune certain candidate
-pairs; for example, an implementation may choose to drop relay candidates once a successful
-connection has been established. The controlling ICE Agent does this by continuing to send
-Binding Requests to the remote side on each candidate pair that it still wants to retain. The
-controlled ICE Agent SHOULD prune any candidate pairs that have not received a Binding
-Request in N seconds (30?), and SHOULD NOT keep alive any candidates that are not
-associated with a live candidate pair. One side benefit of doing this is that the continuous
-exchange of Binding Requests across all candidate pairs allows the RTT and loss rate for
-each to be reliably determined and kept up to date.</t>
-        <t>At any point, either side may perform an ICE restart, which will result in both sides gathering
-new ICE candidates, starting a new continuous nomination sequence, and upon successful
-completion, discarding all candidates from the previous nomination sequence.</t>
+        its media path to the candidate pair on which the Binding Request
+        was received.</t>
+        <t>During continuous nomination, the controlling side may still elect
+        to prune certain candidate pairs; for example, an implementation may
+        choose to drop relay candidates once a successful connection has been
+        established. The controlled side, however, should follow the 
+        controlling side's lead in terms of deciding whether any pairs should
+        be pruned. The controlling ICE Agent informs the remote side of its
+        preferences by continuing to send
+        Binding Requests to the remote side on each candidate pair that it
+        wants to retain. The controlled ICE Agent SHOULD prune any
+        candidate pairs that have not received a Binding Request in N seconds
+        (30?), and SHOULD NOT keep alive any candidates that are not
+        associated with a live candidate pair. [TODO: decide if this implicit timeout
+        approach is correct, or if we should have some sort of approach
+        similar to TURN LIFETIME indicating when a pair should be GCed, with
+        LIFETIME==0 indicating immediate GC.] One side benefit of doing this
+        is that the continuous exchange of Binding Requests across all 
+        candidate pairs allows the RTT and loss rate for
+        each to be reliably determined and kept up to date.</t>
+        <t>If the endpoints have negotiated Trickle ICE support
+        [TODO: reference], and new candidates become available on either side,
+        the endpoint may send these candidates to the remote side using
+        the existing Trickle ICE mechanisms. Once all of the new candidates
+        have been transmitted, the endpoint MUST send an end-of-candidates
+        messages, which indicates that no more candidates will be sent
+        in the near future. </t>
+        <t>At any point, either side may perform an ICE restart, which will
+        result in both sides gathering new ICE candidates, starting a new
+        continuous nomination sequence, and upon successful
+        completion, discarding all candidates from the previous nomination
+        sequence.</t>
       </section> 
       <section title="Backwards Compatibility">
-        <t>Under continuous nomination, ICE never concludes; new candidates can always be trickled,
-and a new candidate pair can always be selected by the controlling side by sending a new
-Binding Request with a USE-CANDIDATE attribute. The decision about which candidate pair
-to use is fully dynamic; the controlled side can use metrics such as RTT or loss rate to
-change the selected pair at any time.</t>
         <t>Since standard ICE implementations may not expect the selected pair to change after a
 USE-CANDIDATE attribute is received, support for continuous nomination is explicitly
 indicated via a new "continuous" value for ice-options. If the remote side does not support the
-"continuous" option, the controlling side MUST fall back to Regular Nomination [consistent
-        with the behavior specified in TBD].</t>
+"continuous" option, the controlling side MUST fall back to Regular Nomination, as 
+        specified in <xref target="RFC5245"/>, Sectiom 8.1.1.</t>
       </section>
     </section>
 
@@ -285,11 +321,14 @@ indicated via a new "continuous" value for ice-options. If the remote side does 
     </section>
 
     <section title="IANA Considerations">
-      <t>This document requires no actions from IANA.</t>
+      <t>A new ICE option "continuous" has been [will be] registered
+      in the "ICE Options" registry created by <xref target="RFC6336"/>.  
+      </t>
     </section>
 
     <section title="Acknowledgements">
-      <t>Several people provided significant input into this document, including Martin Thomson, Brandon Williams, and Dan Wing.</t>
+      <t>Several people provided significant input into this document,
+      including Martin Thomson, Brandon Williams, and Dan Wing.</t>
     </section>
   </middle>
 
@@ -297,9 +336,11 @@ indicated via a new "continuous" value for ice-options. If the remote side does 
     <references title="Normative References">
       &rfc2119;
       &rfc5245;
+      &rfc6336;
     </references>
 
     <references title="Informative References">
+      &trickle;
       &redirect;
       &icemob;
       &mprtp;
