@@ -1,0 +1,655 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://dublincore.org/documents/2008/08/04/dc-html/">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="index,nofollow" />
+    <meta name="creator" content="rfcmarkup version 1.109" />
+    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+
+    <link rel="icon" href="" type="image/png" />
+    <link rel="shortcut icon" href="" type="image/png" />
+    <title>draft-uberti-mmusic-nombis-2.txt - Improvements to ICE Candidate Nomination</title>
+    
+    
+    <style type="text/css">
+	body {
+	    margin: 0px 8px;
+            font-size: 1em;
+	}
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	    font-weight: bold;
+            line-height: 0pt;
+            display: inline;
+            white-space: pre;
+            font-family: monospace;
+            font-size: 1em;
+	    font-weight: bold;
+        }
+        pre {
+            font-size: 1em;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+	.pre {
+	    white-space: pre;
+	    font-family: monospace;
+	}
+	.header{
+	    font-weight: bold;
+	}
+        .newpage {
+            page-break-before: always;
+        }
+        .invisible {
+            text-decoration: none;
+            color: white;
+        }
+        a.selflink {
+          color: black;
+          text-decoration: none;
+        }
+        @media print {
+            body {
+                font-family: monospace;
+                font-size: 10.5pt;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-size: 1em;
+            }
+        
+            a:link, a:visited {
+                color: inherit;
+                text-decoration: none;
+            }
+            .noprint {
+                display: none;
+            }
+        }
+	@media screen {
+	    .grey, .grey a:link, .grey a:visited {
+		color: #777;
+	    }
+            .docinfo {
+                background-color: #EEE;
+            }
+            .top {
+                border-top: 7px solid #EEE;
+            }
+            .bgwhite  { background-color: white; }
+            .bgred    { background-color: #F44; }
+            .bggrey   { background-color: #666; }
+            .bgbrown  { background-color: #840; }            
+            .bgorange { background-color: #FA0; }
+            .bgyellow { background-color: #EE0; }
+            .bgmagenta{ background-color: #F4F; }
+            .bgblue   { background-color: #66F; }
+            .bgcyan   { background-color: #4DD; }
+            .bggreen  { background-color: #4F4; }
+
+            .legend   { font-size: 90%; }
+            .cplate   { font-size: 70%; border: solid grey 1px; }
+	}
+    </style>
+    <!--[if IE]>
+    <style>
+    body {
+       font-size: 13px;
+       margin: 10px 10px;
+    }
+    </style>
+    <![endif]-->
+
+    <script type="text/javascript"><!--
+    function addHeaderTags() {
+	var spans = document.getElementsByTagName("span");
+	for (var i=0; i < spans.length; i++) {
+	    var elem = spans[i];
+	    if (elem) {
+		var level = elem.getAttribute("class");
+                if (level == "h1" || level == "h2" || level == "h3" || level == "h4" || level == "h5" || level == "h6") {
+                    elem.innerHTML = "<"+level+">"+elem.innerHTML+"</"+level+">";		
+                }
+	    }
+	}
+    }
+    var legend_html = "Colour legend:<br />      <table>         <tr><td>Unknown:</td>                   <td><span class='cplate bgwhite'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Draft:</td>                     <td><span class='cplate bgred'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Informational:</td>             <td><span class='cplate bgorange'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Experimental:</td>              <td><span class='cplate bgyellow'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Best Common Practice:</td>      <td><span class='cplate bgmagenta'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Proposed Standard:</td>         <td><span class='cplate bgblue'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Draft Standard (old designation):</td> <td><span class='cplate bgcyan'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Internet Standard:</td>         <td><span class='cplate bggreen'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Historic:</td>                  <td><span class='cplate bggrey'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Obsolete:</td>                  <td><span class='cplate bgbrown'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>     </table>";
+    function showElem(id) {
+        var elem = document.getElementById(id);
+        elem.innerHTML = eval(id+"_html");
+        elem.style.visibility='visible';
+    }
+    function hideElem(id) {
+        var elem = document.getElementById(id);
+        elem.style.visibility='hidden';        
+        elem.innerHTML = "";
+    }
+    // -->
+    </script>
+</head>
+<body onload="addHeaderTags()">
+   <div style="height: 13px;">
+      <div onmouseover="this.style.cursor='pointer';"
+         onclick="showElem('legend');"
+         onmouseout="hideElem('legend')"
+	 style="height: 6px; position: absolute;"
+         class="pre noprint docinfo "
+         title="Click for colour legend." >                                                                        </div>
+      <div id="legend"
+           class="docinfo noprint pre legend"
+           style="position:absolute; top: 4px; left: 4ex; visibility:hidden; background-color: white; padding: 4px 9px 5px 7px; border: solid #345 1px; "
+           onmouseover="showElem('legend');"
+           onmouseout="hideElem('legend');">
+      </div>
+   </div>
+
+<span class="pre noprint docinfo">                                                                        </span><br />
+<span class="pre noprint docinfo">                                                                        </span><br />
+<span class="pre noprint docinfo">                                                                        </span><br />
+<pre>
+Network Working Group                                          J. Uberti
+Internet-Draft                                                    Google
+Intended status: Standards Track                               J. Lennox
+Expires: May 10, 2015                                              Vidyo
+                                                       November 06, 2014
+
+
+                <span class="h1">Improvements to ICE Candidate Nomination</span>
+                     <span class="h1">draft-uberti-mmusic-nombis-00</span>
+
+Abstract
+
+   This document makes recommendations for simplifying and improving the
+   procedures for candidate nomination in Interactive Connectivity
+   Establishment (ICE).
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?bcp=78">BCP 78</a> and <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?bcp=79">BCP 79</a>.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at <a href="http://datatracker.ietf.org/drafts/current/">http://datatracker.ietf.org/drafts/current/</a>.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on May 10, 2015.
+
+Copyright Notice
+
+   Copyright (c) 2014 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?bcp=78">BCP 78</a> and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (<a href="http://trustee.ietf.org/license-info">http://trustee.ietf.org/license-info</a>) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in <a href="#section-4">Section 4</a>.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 1]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-2" id="page-2" href="#page-2" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+Table of Contents
+
+   <a href="#section-1">1</a>.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-2">2</a>
+   <a href="#section-2">2</a>.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-3">3</a>
+   <a href="#section-3">3</a>.  Goals and Requirements  . . . . . . . . . . . . . . . . . . .   <a href="#page-3">3</a>
+     <a href="#section-3.1">3.1</a>.  Minimize Call Setup Latency . . . . . . . . . . . . . . .   <a href="#page-3">3</a>
+     <a href="#section-3.2">3.2</a>.  Allow Controlling Endpoint to Make Dynamic Decisions  . .   <a href="#page-3">3</a>
+     3.3.  Allow Selected Pair Change At Any Time Without Signaling    4
+     <a href="#section-3.4">3.4</a>.  Allow Continuous Addition of Candidates . . . . . . . . .   <a href="#page-4">4</a>
+     <a href="#section-3.5">3.5</a>.  Maintain Backwards Compatibility  . . . . . . . . . . . .   <a href="#page-4">4</a>
+     <a href="#section-3.6">3.6</a>.  Minimize Complexity Increase  . . . . . . . . . . . . . .   <a href="#page-5">5</a>
+   <a href="#section-4">4</a>.  Deprecating Aggressive Nomination . . . . . . . . . . . . . .   <a href="#page-5">5</a>
+     <a href="#section-4.1">4.1</a>.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-5">5</a>
+     <a href="#section-4.2">4.2</a>.  Operation . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-5">5</a>
+     <a href="#section-4.3">4.3</a>.  Backwards Compatibility . . . . . . . . . . . . . . . . .   <a href="#page-6">6</a>
+   <a href="#section-5">5</a>.  Introducing Continuous Nomination . . . . . . . . . . . . . .   <a href="#page-6">6</a>
+     <a href="#section-5.1">5.1</a>.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-6">6</a>
+     <a href="#section-5.2">5.2</a>.  Operation . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-7">7</a>
+     <a href="#section-5.3">5.3</a>.  Backwards Compatibility . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+   <a href="#section-6">6</a>.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+   <a href="#section-7">7</a>.  Security Considerations . . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+   <a href="#section-8">8</a>.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+   <a href="#section-9">9</a>.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+   <a href="#section-10">10</a>. References  . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+     <a href="#section-10.1">10.1</a>.  Normative References . . . . . . . . . . . . . . . . . .   <a href="#page-8">8</a>
+     <a href="#section-10.2">10.2</a>.  Informative References . . . . . . . . . . . . . . . . .   <a href="#page-9">9</a>
+   <a href="#appendix-A">Appendix A</a>.  Change log . . . . . . . . . . . . . . . . . . . . .   <a href="#page-9">9</a>
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-9">9</a>
+
+<span class="h2"><a class="selflink" name="section-1" href="#section-1">1</a>.  Introduction</span>
+
+   Interactive Connectivity Establishment (ICE) attempts to find the
+   'best' path for connectivity between two peers; in ICE parlance,
+   these paths are known as 'candidate pairs'.  During the ICE process,
+   one endpoint, known as the 'controlling' endpoint, selects a
+   candidate pair as the best pair; this action is known as nomination.
+   ICE supports two different mechanisms for performing nomination,
+   known as Regular Nomination, and Aggressive Nomination.
+
+   However, each of these modes have flaws that restrict their
+   usefulness.  Regular Nomination, as currently speced, requires a best
+   pair to be chosen before media transmission can start, causing
+   unnecessary call setup delay.  Aggressive Nomination, while avoiding
+   this delay, gives the controlling endpoint much less discretion into
+   which candidate pair is chosen, preventing it from making decisions
+   based on dynamic factors such as RTT or loss rate.  Needless to say,
+   the presence of both modes also adds nontrivial complexity.
+
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 2]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-3" id="page-3" href="#page-3" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+   Lastly, ICE is currently defined as a finite process, where the
+   decision on the optimal candidate pair is made during call setup and
+   infrequently (if ever) changed.  While this may be acceptable for
+   endpoints with static network configurations, it fails to meet the
+   needs of mobile endpoints, who may need to seamlessly move between
+   networks, or be connected to multiple networks simultaneously.  In
+   these cases, the controlling endpoint may want to maintain multiple
+   potential candidate pairs, and make dynamic decisions to switch
+   between them as conditions change.
+
+   To address these challenges, this document makes two proposals for
+   refactoring ICE nomination - merging Regular and Aggressive
+   Nomination, and introducing a new mode, known as Continuous
+   Nomination.  This makes ICE substantially more flexible without
+   increasing complexity.
+
+<span class="h2"><a class="selflink" name="section-2" href="#section-2">2</a>.  Terminology</span>
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [<a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=2119" title="&quot;Key words for use in RFCs to Indicate Requirement Levels&quot;">RFC2119</a>].
+
+<span class="h2"><a class="selflink" name="section-3" href="#section-3">3</a>.  Goals and Requirements</span>
+
+   The goals for improved ICE nomination are enumerated below.
+
+<span class="h3"><a class="selflink" name="section-3.1" href="#section-3.1">3.1</a>.  Minimize Call Setup Latency</span>
+
+   Modern ICE agents will often have multiple network interfaces and
+   multiple servers from which to obtain ICE candidates.  While some ICE
+   checks may succeed quickly, finishing the entire set of checks can
+   easily take multiple seconds; this concern is discussed in <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245#section-8.1.1.1">[RFC5245],
+   Section&nbsp;8.1.1.1</a>.  As a result, ICE endpoints MUST be able to start
+   transmitting media immediately upon a successful ICE check, and MUST
+   retain the ability to switch if a better candidate pair becomes
+   available later.
+
+<span class="h3"><a class="selflink" name="section-3.2" href="#section-3.2">3.2</a>.  Allow Controlling Endpoint to Make Dynamic Decisions</span>
+
+   While an ICE endpoint will assign various priority values to its ICE
+   candidates, these priorities are static and can only be based on a
+   priori knowledge; the shortcomings of this approach are discussed in
+   the first paragraph of <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245#section-2.6">Section&nbsp;2.6 in [RFC5245]</a>.  To properly make
+   choices in multi-network and multi-server scenarios, the controlling
+   endpoint MUST be able to make dynamic decisions about the selected
+   candidate pair based on observed network performance.  For example,
+   RTT could be used to evaluate which TURN servers to use, as described
+   in [<a href="#ref-I-D.williams-peer-redirect">I-D.williams-peer-redirect</a>] To ensure symmetric flows, this
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 3]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-4" id="page-4" href="#page-4" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+   implies that the controlling endpoint MUST be able to communicate its
+   choice to the controlled side.
+
+<span class="h3"><a class="selflink" name="section-3.3" href="#section-3.3">3.3</a>.  Allow Selected Pair Change At Any Time Without Signaling</span>
+
+   Expanding on the requirement above, the need to make dynamic
+   decisions is not limited to call setup.  A multihomed endpoint may
+   need to switch interfaces based on mobility considerations, or a
+   robust endpoint may want to keep multiple network paths warm and
+   switch immediately if connectivity is interrupted on one of them.  As
+   the signaling channel may be affected by the event necessitating the
+   switch, this implies that the controlling endpoint MUST be able to
+   change the selected pair and indicate this to the remote side without
+   signaling.  The need for this functionality has been stated in
+   [<a href="#ref-I-D.wing-mmusic-ice-mobility">I-D.wing-mmusic-ice-mobility</a>] and [<a href="#ref-I-D.singh-avtcore-mprtp">I-D.singh-avtcore-mprtp</a>].
+
+   The rules in [<a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245" title="&quot;Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal for Offer/Answer Protocols&quot;">RFC5245</a>] ensure that the controlled endpoint keeps its
+   candidate needed for the selected pair alive.  However, in order for
+   alternate pairs to remain available, the controlled endpoint must
+   keep the associated candidates alive as well, following the
+   procedures outlined in <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245#section-4.1.1.4">[RFC5245], Section&nbsp;4.1.1.4</a>.  This implies that
+   the controlling endpoint MUST have some way to indicate to the
+   controlled side that specific candidates are to be kept alive.
+
+<span class="h3"><a class="selflink" name="section-3.4" href="#section-3.4">3.4</a>.  Allow Continuous Addition of Candidates</span>
+
+   In certain network mobility scenarios, networks may come up and down
+   while the call is active.  In order to allow candidates gathered on
+   newly available networks to be used for the selected pair or backup
+   pairs, the endpoint MUST be able to gather candidates on these
+   networks and communicate them to the remote side.  While this could
+   be done using an ICE restart, as described in <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245#section-9.1">[RFC5245], Section&nbsp;9.1</a>,
+   the ICE restart may have unintended consequences, such as causing the
+   remote side to regather all candidates.  Instead, it would be best if
+   the new candidates could be trickled, as discussed in
+   [<a href="#ref-I-D.ietf-mmusic-trickle-ice">I-D.ietf-mmusic-trickle-ice</a>], but even after ICE processing has
+   completed.
+
+<span class="h3"><a class="selflink" name="section-3.5" href="#section-3.5">3.5</a>.  Maintain Backwards Compatibility</span>
+
+   To prevent interoperability problems, ICE endpoints that support the
+   functionality listed above MUST still maintain [<a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245" title="&quot;Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal for Offer/Answer Protocols&quot;">RFC5245</a>] compliance
+   when interacting with existing endpoints.  However, the ideal
+   solution SHOULD allow some improvements to occur when only the
+   controlling side supports the new functionality.
+
+
+
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 4]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-5" id="page-5" href="#page-5" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+<span class="h3"><a class="selflink" name="section-3.6" href="#section-3.6">3.6</a>.  Minimize Complexity Increase</span>
+
+   Increased functionality typically leads to increased complexity,
+   which leads to more edge cases, and more implementation bugs.  This
+   suggests that in addition to proposing new ICE functionality, the
+   ideal solution SHOULD deprecate superfluous functionality.
+
+<span class="h2"><a class="selflink" name="section-4" href="#section-4">4</a>.  Deprecating Aggressive Nomination</span>
+
+<span class="h3"><a class="selflink" name="section-4.1" href="#section-4.1">4.1</a>.  Overview</span>
+
+   The main benefits of Regular Nomination are that the controlling side
+   can dynamically choose which candidate pair to use, and a clear
+   signal when the nomination process has completed, via the presence of
+   the USE-CANDIDATE flag in a Binding Request.  The main benefit of
+   Aggressive Nomination is that it is only necessary to send a single
+   Binding Request before starting the transmission of media, reducing
+   setup latency.  Why don't we have both?
+
+   By preserving the dynamic behavior of Regular Nomination, but
+   allowing media transmission to start upon a single successful
+   connectivity check, as in Aggressive Nomination, the requirements of
+   <a href="#section-3.1">Section 3.1</a> and <a href="#section-3.2">Section 3.2</a> can be met, while meeting the
+   compatibility requirement from <a href="#section-3.5">Section 3.5</a> and, since Aggressive
+   Nomination is no longer needed, the complexity requirement from
+   <a href="#section-3.6">Section 3.6</a>.
+
+<span class="h3"><a class="selflink" name="section-4.2" href="#section-4.2">4.2</a>.  Operation</span>
+
+   Since media may be transmitted as soon as all components have a valid
+   pair, as indicated in [<a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245" title="&quot;Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal for Offer/Answer Protocols&quot;">RFC5245</a>], Page 69, an ICE Agent can begin
+   transmitting media as soon as this occurs, even if it has not sent a
+   Binding Request with USE-CANDIDATE.
+
+   This pair can change as more pairs are added to the Valid list on the
+   controlling side.  When nomination completes, and a final pair is
+   selected, this is communicated to the controlled side via the typical
+   Binding Request with USE-CANDIDATE.
+
+   On the controlled side, the same process can occur, with the ICE
+   Agent transmitting media as soon as a valid pair exists.  To
+   encourage use of symmetric RTP, the controlled ICE Agent SHOULD use
+   the same candidate pair on which it received media from the
+   controlling side.  [Doesn't need to be secure media, since the
+   controlling side will finalize this preference through USE-CANDIDATE
+   shortly.]
+
+
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 5]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-6" id="page-6" href="#page-6" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+   As this is legal ICE behavior, no negotiation of this mechanism
+   should be needed.  In the event the receiver drops any packets that
+   arrive before a Binding Request with USE-CANDIDATE set, this will
+   simply lead to brief media clipping and will resolve itself once
+   nomination completes.
+
+<span class="h3"><a class="selflink" name="section-4.3" href="#section-4.3">4.3</a>.  Backwards Compatibility</span>
+
+   When acting in the controlled role, new implementations MUST NOT use
+   Aggressive Nomination.
+
+   When acting in the controlled role, and the controlling side is using
+   Aggressive Nomination (e.g. sending USE-CANDIDATE in its initial
+   Binding Requests), the standard PRIORITY-based mechanism outlined in
+   <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245#section-8.1.1.2">[RFC5245], Section&nbsp;8.1.1.2</a> should be used to determine the reverse
+   media path.
+
+   Note that if implementations would prefer to just avoid Aggressive
+   Nomination altogether, they MAY indicate some TBD pseudo-option in
+   the ice-options attribute.  Because compliant implementations MUST
+   NOT use Aggressive Nomination if an unknown ICE option is
+   encountered, this effectively prohibits the use of Aggressive
+   Nomination.  [N.B. this could be the ice-options:continuous option
+   described below]
+
+<span class="h2"><a class="selflink" name="section-5" href="#section-5">5</a>.  Introducing Continuous Nomination</span>
+
+<span class="h3"><a class="selflink" name="section-5.1" href="#section-5.1">5.1</a>.  Overview</span>
+
+   As discussed above, in mobile environments there can be multiple
+   possible valid candidate pairs, and these can change at various
+   points in the call, as new interfaces go up and down, signal strength
+   for wireless interfaces changes, and new relay servers are
+   discovered.
+
+   However, under 5245 rules, once a candidate pair is selected and
+   confirmed, via USE-CANDIDATE, nomination has completed and cannot be
+   restarted without performing an ICE restart.  This is overly complex
+   in many cases, and especially problematic in some specific ones,
+   namely a wifi-cellular handover, where the signaling path for
+   communicating an ICE restart may be impacted by the handover.
+
+   To address this situation, this section introduces the concept of
+   "continuous nomination", where the controlling ICE endpoint can
+   adjust the selected candidate pair at any time.  By allowing ICE
+   processing to occur continuously during a call, rather than just at
+   call setup, the requirements expressed in <a href="#section-3.3">Section 3.3</a> and <a href="#section-3.4">Section 3.4</a>
+   can be met.
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 6]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-7" id="page-7" href="#page-7" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+<span class="h3"><a class="selflink" name="section-5.2" href="#section-5.2">5.2</a>.  Operation</span>
+
+   Under continuous nomination, ICE never concludes; new candidates can
+   always be trickled, and a new candidate pair can be selected by the
+   controlling side at any time.
+
+   When selecting a new candidate pair, the controlling side informs the
+   controlled side of the chosen pat by sending a new Binding Request
+   with a USE-CANDIDATE attribute.  The decision about which candidate
+   pair to use is fully dynamic; the controlling side can use metrics
+   such as RTT or loss rate to change the selected pair at any time.  If
+   Binding Requests need to be sent for any other reason, such as
+   consent checks [TODO: reference], any checks sent on the selected
+   pair MUST include a USE-CANDIDATE attribute.
+
+   Upon receipt of a Binding Request with USE-CANDIDATE, the controlled
+   side MUST switch its media path to the candidate pair on which the
+   Binding Request was received.
+
+   During continuous nomination, the controlling side may still elect to
+   prune certain candidate pairs; for example, an implementation may
+   choose to drop relay candidates once a successful connection has been
+   established.  The controlled side, however, should follow the
+   controlling side's lead in terms of deciding whether any pairs should
+   be pruned.  The controlling ICE Agent informs the remote side of its
+   preferences by continuing to send Binding Requests to the remote side
+   on each candidate pair that it wants to retain.  The controlled ICE
+   Agent SHOULD prune any candidate pairs that have not received a
+   Binding Request in N seconds (30?), and SHOULD NOT keep alive any
+   candidates that are not associated with a live candidate pair.
+   [TODO: decide if this implicit timeout approach is correct, or if we
+   should have some sort of approach similar to TURN LIFETIME indicating
+   when a pair should be GCed, with LIFETIME==0 indicating immediate
+   GC.]  One side benefit of doing this is that the continuous exchange
+   of Binding Requests across all candidate pairs allows the RTT and
+   loss rate for each to be reliably determined and kept up to date.
+
+   If the endpoints have negotiated Trickle ICE support [TODO:
+   reference], and new candidates become available on either side, the
+   endpoint may send these candidates to the remote side using the
+   existing Trickle ICE mechanisms.  Once all of the new candidates have
+   been transmitted, the endpoint MUST send an end-of-candidates
+   messages, which indicates that no more candidates will be sent in the
+   near future.
+
+   At any point, either side may perform an ICE restart, which will
+   result in both sides gathering new ICE candidates, starting a new
+
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 7]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-8" id="page-8" href="#page-8" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+   continuous nomination sequence, and upon successful completion,
+   discarding all candidates from the previous nomination sequence.
+
+<span class="h3"><a class="selflink" name="section-5.3" href="#section-5.3">5.3</a>.  Backwards Compatibility</span>
+
+   Since standard ICE implementations may not expect the selected pair
+   to change after a USE-CANDIDATE attribute is received, support for
+   continuous nomination is explicitly indicated via a new "continuous"
+   value for ice-options.  If the remote side does not support the
+   "continuous" option, the controlling side MUST fall back to Regular
+   Nomination, as specified in [<a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245" title="&quot;Interactive Connectivity Establishment (ICE): A Protocol for Network Address Translator (NAT) Traversal for Offer/Answer Protocols&quot;">RFC5245</a>], Sectiom 8.1.1.
+
+<span class="h2"><a class="selflink" name="section-6" href="#section-6">6</a>.  Examples</span>
+
+   TODO
+
+<span class="h2"><a class="selflink" name="section-7" href="#section-7">7</a>.  Security Considerations</span>
+
+   TODO
+
+<span class="h2"><a class="selflink" name="section-8" href="#section-8">8</a>.  IANA Considerations</span>
+
+   A new ICE option "continuous" has been [will be] registered in the
+   "ICE Options" registry created by [<a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=6336" title="&quot;IANA Registry for Interactive Connectivity Establishment (ICE) Options&quot;">RFC6336</a>].
+
+<span class="h2"><a class="selflink" name="section-9" href="#section-9">9</a>.  Acknowledgements</span>
+
+   Several people provided significant input into this document,
+   including Martin Thomson, Brandon Williams, and Dan Wing.
+
+<span class="h2"><a class="selflink" name="section-10" href="#section-10">10</a>.  References</span>
+
+<span class="h3"><a class="selflink" name="section-10.1" href="#section-10.1">10.1</a>.  Normative References</span>
+
+   [<a name="ref-RFC2119" id="ref-RFC2119">RFC2119</a>]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?bcp=14">BCP 14</a>, <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=2119">RFC 2119</a>, March 1997.
+
+   [<a name="ref-RFC5245" id="ref-RFC5245">RFC5245</a>]  Rosenberg, J., "Interactive Connectivity Establishment
+              (ICE): A Protocol for Network Address Translator (NAT)
+              Traversal for Offer/Answer Protocols", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=5245">RFC 5245</a>, April
+              2010.
+
+   [<a name="ref-RFC6336" id="ref-RFC6336">RFC6336</a>]  Westerlund, M. and C. Perkins, "IANA Registry for
+              Interactive Connectivity Establishment (ICE) Options", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=6336">RFC</a>
+              <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?rfc=6336">6336</a>, July 2011.
+
+
+
+
+
+
+<span class="grey">Uberti &amp; Lennox           Expires May 10, 2015                  [Page 8]</span>
+</pre><!--NewPage--><pre class='newpage'><a name="page-9" id="page-9" href="#page-9" class="invisible"> </a>
+<span class="grey">Internet-Draft                   IceNom                    November 2014</span>
+
+
+<span class="h3"><a class="selflink" name="section-10.2" href="#section-10.2">10.2</a>.  Informative References</span>
+
+   [<a name="ref-I-D.ietf-mmusic-trickle-ice" id="ref-I-D.ietf-mmusic-trickle-ice">I-D.ietf-mmusic-trickle-ice</a>]
+              Ivov, E., Rescorla, E., and J. Uberti, "Trickle ICE:
+              Incremental Provisioning of Candidates for the Interactive
+              Connectivity Establishment (ICE) Protocol", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-ietf-mmusic-trickle-ice-01">draft-ietf-</a>
+              <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-ietf-mmusic-trickle-ice-01">mmusic-trickle-ice-01</a> (work in progress), February 2014.
+
+   [<a name="ref-I-D.singh-avtcore-mprtp" id="ref-I-D.singh-avtcore-mprtp">I-D.singh-avtcore-mprtp</a>]
+              Singh, V., Karkkainen, T., Ott, J., Ahsan, S., and L.
+              Eggert, "Multipath RTP (MPRTP)", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-singh-avtcore-mprtp-09">draft-singh-avtcore-</a>
+              <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-singh-avtcore-mprtp-09">mprtp-09</a> (work in progress), June 2014.
+
+   [<a name="ref-I-D.williams-peer-redirect" id="ref-I-D.williams-peer-redirect">I-D.williams-peer-redirect</a>]
+              Williams, B. and T. Reddy, "Peer-specific Redirection for
+              Traversal Using Relays around NAT (TURN)", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-williams-peer-redirect-01">draft-williams-</a>
+              <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-williams-peer-redirect-01">peer-redirect-01</a> (work in progress), June 2014.
+
+   [<a name="ref-I-D.wing-mmusic-ice-mobility" id="ref-I-D.wing-mmusic-ice-mobility">I-D.wing-mmusic-ice-mobility</a>]
+              Wing, D., Reddy, T., Patil, P., and P. Martinsen,
+              "Mobility with ICE (MICE)", <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-wing-mmusic-ice-mobility-07">draft-wing-mmusic-ice-</a>
+              <a href="/home/www/tools.ietf.org/tools/rfcmarkup/rfcmarkup?draft=draft-wing-mmusic-ice-mobility-07">mobility-07</a> (work in progress), June 2014.
+
+<span class="h2"><a class="selflink" name="appendix-A" href="#appendix-A">Appendix A</a>.  Change log</span>
+
+   Changes in draft -00:
+
+   o  Initial version, from mailing list discussion post-IETF 90.
+
+Authors' Addresses
+
+   Justin Uberti
+   Google
+   747 6th Ave S
+   Kirkland, WA  98033
+   USA
+
+   Email: justin@uberti.name
+
+
+   Jonathan Lennox
+   Vidyo
+   433 Hackensack Avenue
+   Hackensack, NJ  07601
+   USA
+
+   Email: jonathan@vidyo.com
+
+
+
+
+Uberti &amp; Lennox           Expires May 10, 2015                  [Page 9]
+
+</pre><br />
+<span class="noprint"><small><small>Html markup produced by rfcmarkup 1.109, available from
+<a href="https://tools.ietf.org/tools/rfcmarkup/">https://tools.ietf.org/tools/rfcmarkup/</a>
+</small></small></span>
+</body></html>

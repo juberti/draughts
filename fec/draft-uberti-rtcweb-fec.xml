@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc2198 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2198.xml">
+<!ENTITY rfc5109 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5109.xml">
+<!ENTITY rfc5956 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5956.xml">
+<!ENTITY rfc6716 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6716.xml">
+<!ENTITY fecpayload SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.singh-payload-rtp-1d2d-parity-scheme.xml">
+<!ENTITY opuspayload SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-opus.xml">
+]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <?rfc toc="yes" ?>
 <?rfc symrefs="yes" ?>
@@ -11,7 +19,7 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-uberti-rtcweb-fec" ipr="trust200902">
+<rfc category="std" docName="draft-uberti-rtcweb-fec-00" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
 
@@ -48,8 +56,8 @@
   <middle>
     <section title="Introduction">
       <t>In situations where packet loss is high, or media quality must be perfect,
-      Forward Error Correction (FEC) can be used to recover from packet losses.
-      This document describes what FEC mechanisms are to be used by WebRTC
+      Forward Error Correction (FEC) can be used to proactively recover from packet losses.
+      This document describes what FEC mechanisms should be used by WebRTC
       client implementations.</t>
     </section>
 
@@ -67,38 +75,120 @@
          can be accomplished; this section enumerates the various mechanisms
          and describes their tradeoffs.</t>
       <section title="Separate FEC Stream">
-          <t>This approach, 
-
+          <t>This approach, as described in <xref target="RFC5956"/>, Section 4.3, sends FEC packets as an 
+            independent SSRC-multiplexed stream, with its own SSRC and payload type.
+            While by far the most flexible, each FEC packet will have its own
+            IP+UDP+RTP+FEC header, leading to additional overhead of the FEC stream.
           </t>
       </section>
       <section title="Redundant Encoding">
+          <t>This approach, as descibed in <xref target="RFC2198"/>, allows for redundant data
+            to be piggybacked on an existing primary encoding in a single packet.
+            This redundant data may be an exact copy of a previous packet, or
+            for codecs that support variable-bitrate encodings, possibly a smaller,
+            lower-quality representation. Since there is only a single set of
+            packet headers, this allows for a very efficient representation of
+            primary + redundant data. However, this savings is only realized when
+            the two encodings both fit into a single packet (i.e. less than a MTU).
+            This approach is also only applicable to audio content.
+          </t>
       </section>
        <section title="Codec-Specific In-band FEC">
+          <t>Some audio codecs, notably Opus <xref target="RFC6716"/>, support their own in-band FEC
+            mechanism, where FEC data is included in the codec payload. In the
+            case of Opus specifically, packets deemed as important are re-encoded
+            at a lower bitrate and added to the subsequent packet, allowing partial
+            recovery of a lost packet. See <xref target="RFC6716"/>, Section 2.1.7 for details.
+          </t>
       </section>
     </section>
 
     <section title="FEC for Audio Content">
+      <t>The following section provides guidance on how to best use FEC for transmitting 
+      audio data. As indicated in <xref target="adaptive-fec"/> below, FEC should only
+      be activated if network conditions warrant it, or upon explicit application request.
+      </t>
       <section title="Recommended Mechanism">
+        <t>When using the Opus codec in its default (hybrid) mode, use of
+          the built-in Opus FEC mechanism is RECOMMENDED.
+          This provides reasonable protection of the
+          audio stream against typical losses, with moderate overhead. [TODO: add stats]
+          Note though that this mechanism only protects the SILK layer of the Opus codec;
+          the CELT portion is not protected. This is not an issue when Opus is running in 
+          hybrid mode, as the lower frequencies will still be able to be recovered,
+          with minimal quality impact.
+        </t>
+        <t>When using Opus in CELT mode, or other variable-bitrate codecs,
+        use of <xref target="RFC2198"/> redundant encoding with a lower-fidelity version of the
+        previous packet is RECOMMENDED. When using Opus specifically, the lower-fidelity
+        version can simply be a truncated version of the previous Opus packet.
+        [TODO: decide exact truncated size]
+        This provides reasonable protection of the payload with minimal overhead.
+        </t>
+        <t>When using constant-bitrate codecs, e.g. PCMU, use of <xref target="RFC2198"/> redundant encoding
+        is NOT RECOMMENDED, as this will result in a potentially significant bitrate increase.
+        Furthermore, suddenly increasing the bitrate to deal with packet losses may
+        actually make things worse.
+        </t>
+        <t>Because of the lower packet rate of audio encodings, usually a single packet per
+        frame, use of a separate FEC stream comes with a higher overhead than other
+        mechanisms, and therefore is NOT RECOMMENDED.
+        </t>
       </section>
+
       <section title="Negotiating Support">
+        <t>Support for redundant encoding can be indicated by offering "red" as a
+        supported payload type in the offer. Answerers can reject the use of
+        redundant encoding by not including "red" as a supported payload type in 
+        the answer.</t>
+        <t>Support for codec-specific FEC mechanisms are typically indicated via
+        "a=fmtp" parameters. For Opus specifically, this is controlled by the
+        "useinbandfec=1" parameter, as specified in <xref target="I-D.ietf-payload-rtp-opus"/>.
+        These parameters are declarative and can
+        be negotiated separately for either media direction.</t>
       </section>
-     Single SSRC; RFC2198. Opus inband fec (not CELT)
-        Offer offers RED; answerer can disable by rejecting RED
-        Partial packets - only Opus 
     </section>
 
     <section title="FEC for Video Content">
+      <t>The following section provides guidance on how to best use FEC for transmitting 
+      video data. As indicated in <xref target="adaptive-fec"/> below, FEC should only
+      be activated if network conditions warrant it, or upon explicit application request.
+      </t>
       <section title="Recommended Mechanism">
+        <t>For video content, use of a separate FEC stream with the RTP payload format
+        described in <xref target="I-D.singh-payload-rtp-1d2d-parity-scheme"/> is RECOMMENDED.
+        The receiver can demultiplex the incoming FEC stream by SSRC and correlate it
+        with the primary stream via the ssrc-group mechanism.
+        </t>
+        <t>Note that this only allows the FEC stream to protect a single primary stream.
+        Support for protecting multiple primary streams with a single FEC stream is
+        complicated by WebRTC's 1-m-line-per-stream policy and requires further study.</t>
       </section>
       <section title="Negotiating Support">
-      </section>
-      <t>Transmit on separate SSRC
-        negotiate that SSRC with ssrc-group and FEC semantics
-        details in payload-singh-fec
-        protect one flow at a time
+        <t>To offer support for a separate FEC stream, the offerer MUST offer one of
+        the formats described in <xref target="I-D.singh-payload-rtp-1d2d-parity-scheme"/>, Section 5.1, as well as a
+        ssrc-group with "FEC-FR" semantics as described in <xref target="RFC5956"/>, Section 4.3.</t>
+        <t>Answerers can reject the use of FEC by not including FEC payloads in the answer.</t>
+      </section>   
+    </section>
+
+    <section title="Implementation Requirements">
+        <t>To support the functionality recommended above, implementations MUST support
+        the redundant encoding mechanism described in <xref target="RFC2198"/> and the FEC 
+        mechanism described in <xref target="RFC5956"/> and <xref target="I-D.singh-payload-rtp-1d2d-parity-scheme"/>.</t>
+        <t>Implementations MAY support additional FEC mechanisms if desired, 
+        e.g. <xref target="RFC5109"/>.</t>
+    </section>
+    
+    <section anchor="adaptive-fec" title="Adaptive Use of FEC">
+      <t>Since use of FEC causes redundant data to be transmitted, this will 
+        lead to less bandwidth available for the primary encoding, when in a
+        bandwidth-constrained environment. Given this, WebRTC implementations
+        SHOULD only transmit FEC data when network conditions indicate that
+        this is advisable (e.g. by monitoring transmit packet loss data from
+        RTCP Receiver Reports), or the application indicates it is willing to
+        pay a quality penalty to proactively avoid losses.
       </t>
-      
-      
     </section>
 
     <section title="Security Considerations">
@@ -110,17 +200,28 @@
     </section>
 
     <section title="Acknowledgements">
+      <t>Several people provided significant input into this document, including Jonathan Lennox, Giri Mandyam, Varun Singh, Tim Terriberry, and Mo Zanaty.</t>
     </section>
   </middle>
 
   <back>
     <references title="Normative References">
+      &rfc2119;
+      &rfc2198;
+      &rfc5956;
+      &fecpayload;
     </references>
 
     <references title="Informative References">
+      &rfc5109;
+      &rfc6716;
+      &opuspayload;
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -00: <list style="symbols">
+        <t>Initial version, from sidebar conversation at IETF 90.</t>
+      </list></t>
     </section>
   </back>
 </rfc>
