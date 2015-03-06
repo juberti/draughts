@@ -6,7 +6,7 @@
 <!ENTITY icemob SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wing-mmusic-ice-mobility.xml">
 <!ENTITY mprtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.singh-avtcore-mprtp.xml">
 <!ENTITY redirect SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.williams-peer-redirect.xml">
-<!ENTITY consent SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-consent.xml">
+<!ENTITY consent SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-stun-consent-freshness.xml">
 <!ENTITY trickle SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-mmusic-trickle-ice.xml">
 ]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
@@ -271,7 +271,7 @@ may be impacted by the handover.</t>
         The decision about which candidate pair to use is fully dynamic; the controlling
         side can use metrics such as RTT or loss rate to change the selected pair at any time.
         If Binding Requests need to be sent for any other reason, such as consent checks
-        <xref target="I.D.ietf-rtcweb-consent"/>, any checks sent on
+        <xref target="I.D.ietf-rtcweb-stun-consent-freshness"/>, any checks sent on
         the selected pair MUST include a USE-CANDIDATE attribute.
         </t>
         <t>Upon receipt of a Binding Request with USE-CANDIDATE, the controlled side MUST switch
