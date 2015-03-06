@@ -893,42 +893,6 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
       </section>
     </section>
 
-	<section anchor="layerIntraRequest" title="Layer Intra Request">
-	  <t>Editor's Note: The message described in this section is
-		applicable to other codecs beyond just VP9.  In the future it
-		will be likely be split out into another document.</t>
-
-	  <t>TODO: details of how this is encoded in RTCP.</t>
-
-	  <t>A synchronization frame can be requested by sending a LIR,
-	  which is an RTCP feedback message asking the encoder to encode a frame
-	  which makes it possible to upgrade to a higher layer. The LIR
-	  message contains two tuples, {T1,S1,Q1} and {T2,S2,Q2}, where
-	  the first tuple is the currently highest layer the decoder can
-	  decode, while the second tuple is the layer the decoder wants to
-	  upgrade to.</t>
-
-	  <t>Identification of an upgrade frame can be derived from the
-	  reference IDs of each frame by backtracking the dependency chain
-	  until reaching a point where only decodable frames are being
-	  referenced. Therefore it's recommended both for both the
-	  flexible and the non-flexible mode that, when upgrade frames are
-	  being encoded in response to a LIR, those packets should contain
-	  layer indices and the reference fields so that the decoder or an
-	  MCU can make this derivation.</t>
-
-	  <t>Example:</t>
-	  <t>LIR {1,1,0}, {1,2,1} is sent by an MCU when it is currently
-	  relaying {1,1,0} to a receiver and which wants to upgrade to
-	  {1,2,1}. In response the encoder should encode the next frames
-	  in layers {1,1,1} and {1,2,1} by only referring to frames in
-	  {1,1,0}, {1,0,0} or {0,0,0}.</t>
-
-	  <t>In the non-flexible mode, periodic upgrade frames can be
-	  defined by the layer structure of the SS, thus periodic upgrade
-	  frames can be automatically identified by the picture ID.</t>
-	</section>
-
     <section anchor="payloadFormatParameters"
              title="Payload Format Parameters">
       <t>This payload format has two required parameters.</t>

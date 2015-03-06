@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc3550 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3550.xml">
+<!ENTITY rfc3551 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3551.xml">
+<!ENTITY rfc3711 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3711.xml">
+<!ENTITY rfc3984 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3984.xml">
+<!ENTITY rfc4855 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4855.xml">
+<!ENTITY rfc4566 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4566.xml">
+<!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
+<!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
+<!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
+
+]>
+<rfc category="std" docName="draft-uberti-payload-vp9-00" ipr="trust200902">
+  <?rfc symrefs="yes" ?>
+
+  <?rfc sortrefs="yes" ?>
+
+  <!-- alphabetize the references -->
+
+  <?rfc comments="no"?>
+
+  <!-- show comments -->
+
+  <?rfc inline="yes" ?>
+
+  <!-- comments are inline -->
+
+  <?rfc toc="yes" ?>
+
+  <!-- generate table of contents -->
+
+  <front>
+    <title abbrev="RTP Payload Format for VP9">The Layer Intra Request (LIR) RTCP Feedback Message</title>
+
+    <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
+      <organization abbrev="Vidyo">Vidyo, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>433 Hackensack Avenue</street>
+
+          <street>Seventh Floor</street>
+
+          <city>Hackensack</city>
+
+          <region>NJ</region>
+
+          <code>07601</code>
+
+          <country>US</country>
+        </postal>
+
+        <email>jonathan@vidyo.com</email>
+      </address>
+    </author>
+
+    <author fullname="Justin Uberti" initials="J." surname="Uberti">
+      <organization abbrev="Google">Google, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>747 6th Street South</street>
+
+          <city>Kirkland</city>
+
+          <region>WA</region>
+
+          <code>98033</code>
+
+          <country>USA</country>
+        </postal>
+        <email>justin@uberti.name</email>
+      </address>
+    </author>
+
+    <author fullname="Stefan Holmer" initials="S." surname="Holmer">
+      <organization abbrev="Google">Google, Inc.</organization>
+       <address>
+        <postal>
+          <street>Kungsbron 2</street>
+
+          <code>111 22</code>
+
+          <city>Stockholm</city>
+
+          <country>Sweden</country>
+        </postal>
+      </address>
+    </author>
+
+    <author fullname="Magnus Flodman" initials="M." surname="Flodman">
+      <organization abbrev="Google">Google, Inc.</organization>
+      <address>
+        <postal>
+          <street>Kungsbron 2</street>
+
+          <code>111 22</code>
+
+          <city>Stockholm</city>
+
+          <country>Sweden</country>
+        </postal>
+      </address>
+    </author>
+
+     <author fullname="Danny Hong" initials="D." surname="Hong">
+      <organization abbrev="Vidyo">Vidyo, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>433 Hackensack Avenue</street>
+
+          <street>Seventh Floor</street>
+
+          <city>Hackensack</city>
+
+          <region>NJ</region>
+
+          <code>07601</code>
+
+          <country>US</country>
+        </postal>
+
+        <email>danny@vidyo.com</email>
+      </address>
+    </author>
+
+    <date/>
+
+    <area>RAI</area>
+
+    <workgroup>Payload Working Group</workgroup>
+
+    <keyword>RFC</keyword>
+
+    <keyword>Request for Comments</keyword>
+
+    <keyword>RTP</keyword>
+
+    <abstract>
+      <t>This memo describes the RTP Payload-Specific Feedback Message "Layer Intra Request", which can be used to
+		request a state refresh of one or more substreams of a layered media stream.  It also defines its use
+		with several scalable media formats.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="intro" title="Introduction">
+      <t>This memo describes an RTP payload specification applicable to the
+      transmission of video streams encoded using the VP9 video codec <xref
+      target="I-D.grange-vp9-bitstream"/>. The format described in this document can be used
+      both in peer-to-peer and video conferencing applications.</t>
+
+      <t>TODO: VP9 description.  Please see <xref
+      target="I-D.grange-vp9-bitstream"/>.</t>
+    </section>
+
+    <section anchor="conventions"
+             title="Conventions, Definitions and Acronyms">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"/>.</t>
+    </section>
+
+	<section anchor="layerIntraRequest" title="Layer Intra Request">
+	  <t>Editor's Note: The message described in this section is
+		applicable to other codecs beyond just VP9.  In the future it
+		will be likely be split out into another document.</t>
+
+	  <t>TODO: details of how this is encoded in RTCP.</t>
+
+	  <t>A synchronization frame can be requested by sending a LIR,
+	  which is an RTCP feedback message asking the encoder to encode a frame
+	  which makes it possible to upgrade to a higher layer. The LIR
+	  message contains two tuples, {T1,S1,Q1} and {T2,S2,Q2}, where
+	  the first tuple is the currently highest layer the decoder can
+	  decode, while the second tuple is the layer the decoder wants to
+	  upgrade to.</t>
+
+	  <t>Identification of an upgrade frame can be derived from the
+	  reference IDs of each frame by backtracking the dependency chain
+	  until reaching a point where only decodable frames are being
+	  referenced. Therefore it's recommended both for both the
+	  flexible and the non-flexible mode that, when upgrade frames are
+	  being encoded in response to a LIR, those packets should contain
+	  layer indices and the reference fields so that the decoder or an
+	  MCU can make this derivation.</t>
+
+	  <t>Example:</t>
+	  <t>LIR {1,1,0}, {1,2,1} is sent by an MCU when it is currently
+	  relaying {1,1,0} to a receiver and which wants to upgrade to
+	  {1,2,1}. In response the encoder should encode the next frames
+	  in layers {1,1,1} and {1,2,1} by only referring to frames in
+	  {1,1,0}, {1,0,0} or {0,0,0}.</t>
+
+	  <t>In the non-flexible mode, periodic upgrade frames can be
+	  defined by the layer structure of the SS, thus periodic upgrade
+	  frames can be automatically identified by the picture ID.</t>
+	</section>
+
+    <section anchor="securityConsiderations" title="Security Considerations">
+      <t>RTP packets using the payload format defined in this specification
+      are subject to the security considerations discussed in the RTP
+      specification <xref target="RFC3550"/>, and in any applicable RTP
+      profile. The main security considerations for the RTP packet carrying
+      the RTP payload format defined within this memo are confidentiality,
+      integrity and source authenticity. Confidentiality is achieved by
+      encryption of the RTP payload. Integrity of the RTP packets through
+      suitable cryptographic integrity protection mechanism. Cryptographic
+      system may also allow the authentication of the source of the payload. A
+      suitable security mechanism for this RTP payload format should provide
+      confidentiality, integrity protection and at least source authentication
+      capable of determining if an RTP packet is from a member of the RTP
+      session or not. Note that the appropriate mechanism to provide security
+      to RTP and payloads following this memo may vary. It is dependent on the
+      application, the transport, and the signaling protocol employed.
+      Therefore a single mechanism is not sufficient, although if suitable the
+      usage of SRTP <xref target="RFC3711"/> is recommended. This RTP payload
+      format and its media decoder do not exhibit any significant
+      non-uniformity in the receiver-side computational complexity for packet
+      processing, and thus are unlikely to pose a denial-of-service threat due
+      to the receipt of pathological data. Nor does the RTP payload format
+      contain any active content.</t>
+    </section>
+
+    <section anchor="IANAConsiderations" title="IANA Considerations">
+      <t>The IANA is requested to register the following values:<vspace
+      blankLines="0"/> - TODO.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references>
+      &vp9;
+
+      &rfc2119;
+
+      &rfc4585;
+
+      &rfc3550;
+
+      &rfc3711;
+
+      &rfc4566;
+
+      &rfc6838;
+
+      &rfc4855;
+
+      &rfc3551;
+    </references>
+  </back>
+</rfc>
+<!--  LocalWords:  PictureID DCT Hadamard WHT SSRC CSRC pyld hdr FI VER RPSI
+ -->
+<!--  LocalWords:  stPartitionSize SLI SDP AVPF SRTP IANA PID PICIDX TID
+ -->
