@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/juberti/draughts.svg)](https://travis-ci.org/juberti/draughts)
+
 draughts
 ========
 
