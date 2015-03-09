@@ -380,7 +380,7 @@ V:   | SS            |
           layer frame does not utilize inter-picture prediction.  In this case,
           up-switching to current spatial layer's frame is possible from directly
           lower spatial layer frame.  P SHOULD also be set to zero when
-          encoding a layer synchronization frame in response to an <xref target='I-D.lennox-avtext-lsr'>LSR</xref>.</t>
+          encoding a layer synchronization frame in response to an <xref target='I-D.lennox-avtext-lrr'>LRR</xref>.</t>
 
           <t hangText="L:">Layer indices present.  When set to one,
           the one or two octets following the mandatory first octet and the PID
@@ -1085,17 +1085,17 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
       &rfc3551;
 	  
 	  <!-- Replace with proper ref once it's in the I-D repo -->
-	  <reference anchor="I-D.lennox-avtext-lsr">
+	  <reference anchor="I-D.lennox-avtext-lrr">
 		<front>
-		  <title>The Layer Switchpoint Request (LSR) RTCP Feedback MessageVideo</title>
+		  <title>The Layer Switchpoint Request (LRR) RTCP Feedback MessageVideo</title>
 		  <author initials="J" surname="Lennox" fullname="Jonathan Lennox"><organization/></author>
 		  <author initials="J" surname="Uberti" fullname="Justin Uberti"><organization/></author>
 		  <author initials="S" surname="Holmer" fullname="Stefan Holmer"><organization/></author>
 		  <author initials="M" surname="Flodman" fullname="Magnus Flodman"><organization/></author>
 		  <date month="March" day="9" year="2015"/>
 		</front>
-		<seriesInfo name="Internet-Draft" value="draft-lennox-avtext-lsr-00"/>
-		<format type="TXT" target="http://www.ietf.org/internet-drafts/draft-lennox-avtext-lsr-00.txt"/>
+		<seriesInfo name="Internet-Draft" value="draft-lennox-avtext-lrr-00"/>
+		<format type="TXT" target="http://www.ietf.org/internet-drafts/draft-lennox-avtext-lrr-00.txt"/>
 	  </reference>
 
     </references>
