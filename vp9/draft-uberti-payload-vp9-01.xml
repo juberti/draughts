@@ -12,7 +12,7 @@
 <!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
 
 ]>
-<rfc category="std" docName="draft-uberti-payload-vp9-00" ipr="trust200902">
+<rfc category="std" docName="draft-uberti-payload-vp9-01" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
