@@ -14,6 +14,7 @@
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
 <!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.uberti-payload-vp9.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
+<!ENTITY taxonomy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-rtp-grouping-taxonomy.xml">
 
 ]>
 <rfc category="std" docName="draft-lennox-avtext-lrr-00" ipr="trust200902">
@@ -158,7 +159,7 @@
 		"Layer Refresh Request" (LRR).  It is designed to allow a
 		receiver of a layered media stream to request that one or more
 		of its substreams be refreshed, such that it can then be
-		decoded by an endpoint which previously was not receiving lose
+		decoded by an endpoint which previously was not receiving those
 		layers, without requiring that the
 		entire stream be refreshed (as it would be if the receiver
 		sent a <xref target='RFC5104'>Full Intra Request (FIR)</xref>.</t>
@@ -364,7 +365,7 @@
 		designed to follow the same layout as the third and fourth
 		bytes of the H.264 SVC NAL unit extension, which carry the
 		stream's layer information.  The "R" and "RES"
-		fields MUST be set to 0 on transmission and ingnored on
+		fields MUST be set to 0 on transmission and ignored on
 		reception.  See <xref target='RFC6190'/> Section 1.1.3 for
 		details on the DID, QID, and TID fields.</t>
 
@@ -445,7 +446,7 @@
 		<t><xref target="figureVP9IndexFormat"/> shows the format
 		of the layer index field for VP9 streams.  This is
 		designed to follow the same layout as the "L" byte
-		bytes of the VP9 payload header, which carries the
+		of the VP9 payload header, which carries the
 		stream's layer information.  The "R" and "RES"
 		fields MUST be set to 0 on transmission and ingnored on
 		reception.  See <xref target='I-D.uberti-payload-vp9'/> for
@@ -454,7 +455,7 @@
 	  <t>Identification of a layer refresh frame can be derived from the
 	  reference IDs of each frame by backtracking the dependency chain
 	  until reaching a point where only decodable frames are being
-	  referenced. Therefore it's recommended both for both the
+	  referenced. Therefore it's recommended for both the
 	  flexible and the non-flexible mode that, when upgrade frames are
 	  being encoded in response to a LRR, those packets should contain
 	  layer indices and the reference fields so that the decoder or an
@@ -471,6 +472,36 @@
 	  defined by the layer structure of the SS, thus periodic upgrade
 	  frames can be automatically identified by the picture ID.</t>
 	</section>
+
+	</section>
+
+	<section title="Usage with different scalability transmission mechanisms">
+
+	  <t>Several different mechanisms are defined for how scalable
+	  streams can be transmitted in RTP.
+	  The <xref target="I-D.ietf-avtext-rtp-grouping-taxonomy">RTP
+	  Taxonomy</xref> Section 3.7 defines three mechanisms: Single RTP
+	  Stream on a Single Media Transport (SRST), Multiple RTP Streams
+	  on a Single Media Transport (MRST), and Multiple RTP Streams on
+	  Multiple Media Transports (MRMT).</t>
+
+	  <t>The LRR message is applicable to all these mechanisms.  For
+	  MRST and MRMT mechanisms, the "media source" field of the LRR
+	  FCI is set to the SSRC of the RTP stream containing the layer
+	  indicated by the Current Layer Index (if "C" is 1), or the
+	  stream containing the base encoded stream (if "C" is 0).  For
+	  MRMT, it is sent on the RTP session on which this stream is
+	  sent.  On receipt, the sender MUST refresh all the layers
+	  requested in the stream, simultaneously in decode order.</t>
+
+	  <t>Note: arguably, for the MRST and MRMT mechanisms, FIR
+		feedback messages could instead be used to refresh specific individual
+		layers.  However, the usage of FIR for MRSR/MRMT is not
+		explicitly specified anywhere, and if FIR is interpreted as refreshing
+		layers, there is no way to request an actual full, synchronized refresh of
+		all the layers of an MRST/MRMT layered source.  Thus, the authors feel that
+		interpreting FIR as refreshing the entire source, and using
+		LRR for the individual layers, would be more useful.</t>
 
 	</section>
 
@@ -496,6 +527,8 @@
       &vp9rtp;
 
 	  &h265rtp;
+
+	  &taxonomy;
 
       &rfc2119;
 

@@ -74,10 +74,11 @@ Table of Contents
      4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
      4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
      4.4.  VP9 . . . . . . . . . . . . . . . . . . . . . . . . . . .   7
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+   5.  Usage with different scalability transmission mechanisms  . .   8
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
@@ -85,7 +86,7 @@ Table of Contents
    [RFC4585] "Layer Refresh Request" (LRR).  It is designed to allow a
    receiver of a layered media stream to request that one or more of its
    substreams be refreshed, such that it can then be decoded by an
-   endpoint which previously was not receiving lose layers, without
+   endpoint which previously was not receiving those layers, without
    requiring that the entire stream be refreshed (as it would be if the
    receiver sent a Full Intra Request (FIR) [RFC5104].
 
@@ -105,7 +106,6 @@ Table of Contents
    decoder, which previously had been able to decode only some (possibly
    none) of the available layers of stream, is able to decode a greater
    number of the layers.
-
 
 
 
@@ -299,7 +299,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
    streams.  This is designed to follow the same layout as the third and
    fourth bytes of the H.264 SVC NAL unit extension, which carry the
    stream's layer information.  The "R" and "RES" fields MUST be set to
-   0 on transmission and ingnored on reception.  See [RFC6190]
+   0 on transmission and ignored on reception.  See [RFC6190]
    Section 1.1.3 for details on the DID, QID, and TID fields.
 
    TODO: identifying layer refresh frames in an H.264 bitstream.
@@ -372,19 +372,19 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
                                  Figure 8
 
    Figure 8 shows the format of the layer index field for VP9 streams.
-   This is designed to follow the same layout as the "L" byte bytes of
-   the VP9 payload header, which carries the stream's layer information.
-   The "R" and "RES" fields MUST be set to 0 on transmission and
-   ingnored on reception.  See [I-D.uberti-payload-vp9] for details on
-   the T and S fields.
+   This is designed to follow the same layout as the "L" byte of the VP9
+   payload header, which carries the stream's layer information.  The
+   "R" and "RES" fields MUST be set to 0 on transmission and ingnored on
+   reception.  See [I-D.uberti-payload-vp9] for details on the T and S
+   fields.
 
    Identification of a layer refresh frame can be derived from the
    reference IDs of each frame by backtracking the dependency chain
    until reaching a point where only decodable frames are being
-   referenced.  Therefore it's recommended both for both the flexible
-   and the non-flexible mode that, when upgrade frames are being encoded
-   in response to a LRR, those packets should contain layer indices and
-   the reference fields so that the decoder or an MCU can make this
+   referenced.  Therefore it's recommended for both the flexible and the
+   non-flexible mode that, when upgrade frames are being encoded in
+   response to a LRR, those packets should contain layer indices and the
+   reference fields so that the decoder or an MCU can make this
    derivation.
 
 
@@ -405,7 +405,34 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
    the layer structure of the SS, thus periodic upgrade frames can be
    automatically identified by the picture ID.
 
-5.  Security Considerations
+5.  Usage with different scalability transmission mechanisms
+
+   Several different mechanisms are defined for how scalable streams can
+   be transmitted in RTP.  The RTP Taxonomy
+   [I-D.ietf-avtext-rtp-grouping-taxonomy] Section 3.7 defines three
+   mechanisms: Single RTP Stream on a Single Media Transport (SRST),
+   Multiple RTP Streams on a Single Media Transport (MRST), and Multiple
+   RTP Streams on Multiple Media Transports (MRMT).
+
+   The LRR message is applicable to all these mechanisms.  For MRST and
+   MRMT mechanisms, the "media source" field of the LRR FCI is set to
+   the SSRC of the RTP stream containing the layer indicated by the
+   Current Layer Index (if "C" is 1), or the stream containing the base
+   encoded stream (if "C" is 0).  For MRMT, it is sent on the RTP
+   session on which this stream is sent.  On receipt, the sender MUST
+   refresh all the layers requested in the stream, simultaneously in
+   decode order.
+
+   Note: arguably, for the MRST and MRMT mechanisms, FIR feedback
+   messages could instead be used to refresh specific individual layers.
+   However, the usage of FIR for MRSR/MRMT is not explicitly specified
+   anywhere, and if FIR is interpreted as refreshing layers, there is no
+   way to request an actual full, synchronized refresh of all the layers
+   of an MRST/MRMT layered source.  Thus, the authors feel that
+   interpreting FIR as refreshing the entire source, and using LRR for
+   the individual layers, would be more useful.
+
+6.  Security Considerations
 
    All the security considerations of FIR feedback packets [RFC5104]
    apply to LRR feedback packets as well.  Additionally, media senders
@@ -413,12 +440,28 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
    and layer indices they are receiving are valid for the stream they
    are currently sending, and discard the requests if not.
 
-6.  IANA Considerations
+
+
+
+
+
+Lennox, et al.         Expires September 10, 2015               [Page 8]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+
+
+7.  IANA Considerations
 
    The IANA is requested to register the following values:
    - TODO: PSFB value for LRR
 
-7.  References
+8.  References
+
+   [I-D.ietf-avtext-rtp-grouping-taxonomy]
+              Lennox, J., Gross, K., Nandakumar, S., and G. Salgueiro,
+              "A Taxonomy of Grouping Semantics and Mechanisms for Real-
+              Time Transport Protocol (RTP) Sources", draft-ietf-avtext-
+              rtp-grouping-taxonomy-06 (work in progress), March 2015.
 
    [I-D.ietf-payload-rtp-h265]
               Wang, Y., Sanchez, Y., Schierl, T., Wenger, S., and M.
@@ -439,17 +482,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
-
-
-
-
-
-
-Lennox, et al.         Expires September 10, 2015               [Page 8]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
-
-
    [RFC4585]  Ott, J., Wenger, S., Sato, N., Burmeister, C., and J. Rey,
               "Extended RTP Profile for Real-time Transport Control
               Protocol (RTCP)-Based Feedback (RTP/AVPF)", RFC 4585, July
@@ -462,6 +494,17 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
    [RFC6190]  Wenger, S., Wang, Y., Schierl, T., and A. Eleftheriadis,
               "RTP Payload Format for Scalable Video Coding", RFC 6190,
               May 2011.
+
+
+
+
+
+
+
+Lennox, et al.         Expires September 10, 2015               [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+
 
 Authors' Addresses
 
@@ -494,18 +537,6 @@ Authors' Addresses
    Email: justin@uberti.name
 
 
-
-
-
-
-
-
-
-Lennox, et al.         Expires September 10, 2015               [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
-
-
    Stefan Holmer
    Google, Inc.
    Kungsbron 2
@@ -518,37 +549,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
    Kungsbron 2
    Stockholm  111 22
    Sweden
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
