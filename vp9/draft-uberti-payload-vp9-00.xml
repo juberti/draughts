@@ -1087,7 +1087,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 	  <!-- Replace with proper ref once it's in the I-D repo -->
 	  <reference anchor="I-D.lennox-avtext-lrr">
 		<front>
-		  <title>The Layer Switchpoint Request (LRR) RTCP Feedback MessageVideo</title>
+		  <title>The Layer Refresh Request (LRR) RTCP Feedback MessageVideo</title>
 		  <author initials="J" surname="Lennox" fullname="Jonathan Lennox"><organization/></author>
 		  <author initials="J" surname="Uberti" fullname="Justin Uberti"><organization/></author>
 		  <author initials="S" surname="Holmer" fullname="Stefan Holmer"><organization/></author>
