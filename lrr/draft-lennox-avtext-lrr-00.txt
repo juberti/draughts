@@ -3,13 +3,12 @@
 
 
 Payload Working Group                                          J. Lennox
-Internet-Draft                                                     Vidyo
-Intended status: Standards Track                               J. Uberti
-Expires: September 10, 2015                                    S. Holmer
+Internet-Draft                                                   D. Hong
+Intended status: Standards Track                                   Vidyo
+Expires: September 10, 2015                                    J. Uberti
+                                                               S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                                 D. Hong
-                                                                   Vidyo
                                                            March 9, 2015
 
 
@@ -50,6 +49,7 @@ Copyright Notice
    (http://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
 
 
 
@@ -58,7 +58,6 @@ Lennox, et al.         Expires September 10, 2015               [Page 1]
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
-   to this document.  Code Components extracted from this document must
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
@@ -106,6 +105,7 @@ Table of Contents
    decoder, which previously had been able to decode only some (possibly
    none) of the available layers of stream, is able to decode a greater
    number of the layers.
+
 
 
 
@@ -475,6 +475,16 @@ Authors' Addresses
    Email: jonathan@vidyo.com
 
 
+   Danny Hong
+   Vidyo, Inc.
+   433 Hackensack Avenue
+   Seventh Floor
+   Hackensack, NJ  07601
+   US
+
+   Email: danny@vidyo.com
+
+
    Justin Uberti
    Google, Inc.
    747 6th Street South
@@ -482,6 +492,18 @@ Authors' Addresses
    USA
 
    Email: justin@uberti.name
+
+
+
+
+
+
+
+
+
+Lennox, et al.         Expires September 10, 2015               [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
    Stefan Holmer
@@ -496,28 +518,6 @@ Authors' Addresses
    Kungsbron 2
    Stockholm  111 22
    Sweden
-
-
-
-
-
-Lennox, et al.         Expires September 10, 2015               [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
-
-
-   Danny Hong
-   Vidyo, Inc.
-   433 Hackensack Avenue
-   Seventh Floor
-   Hackensack, NJ  07601
-   US
-
-   Email: danny@vidyo.com
-
-
-
-
 
 
 

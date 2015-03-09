@@ -60,6 +60,28 @@
       </address>
     </author>
 
+     <author fullname="Danny Hong" initials="D." surname="Hong">
+      <organization abbrev="Vidyo">Vidyo, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>433 Hackensack Avenue</street>
+
+          <street>Seventh Floor</street>
+
+          <city>Hackensack</city>
+
+          <region>NJ</region>
+
+          <code>07601</code>
+
+          <country>US</country>
+        </postal>
+
+        <email>danny@vidyo.com</email>
+      </address>
+    </author>
+
     <author fullname="Justin Uberti" initials="J." surname="Uberti">
       <organization abbrev="Google">Google, Inc.</organization>
 
@@ -106,28 +128,6 @@
 
           <country>Sweden</country>
         </postal>
-      </address>
-    </author>
-
-     <author fullname="Danny Hong" initials="D." surname="Hong">
-      <organization abbrev="Vidyo">Vidyo, Inc.</organization>
-
-      <address>
-        <postal>
-          <street>433 Hackensack Avenue</street>
-
-          <street>Seventh Floor</street>
-
-          <city>Hackensack</city>
-
-          <region>NJ</region>
-
-          <code>07601</code>
-
-          <country>US</country>
-        </postal>
-
-        <email>danny@vidyo.com</email>
       </address>
     </author>
 
