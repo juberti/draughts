@@ -154,7 +154,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
                   1     2     3     4     5     6     7
 
-   In this illustration, frame 6 is a layer refresh point for spatial
+   In this illustration, frame 6 is a layer refresh point for temporal
    layer T1; a decoder which had previously only been decoding temporal
    layer T0 would be able to decode layer T1 starting at frame 6.
 
@@ -188,7 +188,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 3.  Layer Refresh Request
 
-   A layer refresh frame can be requested by sending a Layer Request
+   A layer refresh frame can be requested by sending a Layer Refresh
    Request (LRR), which is an RTCP payload-specific feedback message
    [RFC4585] asking the encoder to encode a frame which makes it
    possible to upgrade to a higher layer.  The LRR contains one or two
@@ -211,7 +211,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
    The Feedback Control Information (FCI) for the Layer Refresh Request
    consists of one or more FCI entries, the content of which is depicted
-   in Figure 1.  The length of the LRR feedback message MUST be set to
+   in Figure 4.  The length of the LRR feedback message MUST be set to
    2+3*N, where N is the number of FCI entries.
 
 

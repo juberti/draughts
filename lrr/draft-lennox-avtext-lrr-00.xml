@@ -232,7 +232,7 @@
           ]]></artwork>
 
           <postamble>In this illustration, frame 6 is a layer refresh
-			point for spatial layer T1; a decoder which had previously
+			point for temporal layer T1; a decoder which had previously
 			only been decoding temporal layer T0 would be able to
 			decode layer T1 starting at frame 6.</postamble>
       </figure>
@@ -259,7 +259,7 @@
     </section>
 
 	<section anchor="layerRefreshRequest" title="Layer Refresh Request">
-	  <t>A layer refresh frame can be requested by sending a Layer Request Request (LRR),
+	  <t>A layer refresh frame can be requested by sending a Layer Refresh Request (LRR),
 	  which is an <xref target="RFC4585">RTCP payload-specific feedback message</xref> asking the encoder to encode a frame
 	  which makes it possible to upgrade to a higher layer. The LRR
 	  contains one or two tuples, indicating the layer the decoder
@@ -284,7 +284,7 @@
 
 		<t>The Feedback Control Information (FCI) for the Layer Refresh Request
 		  consists of one or more FCI entries, the content of which is
-   depicted in <xref target="figureSpatialRefresh"/>.  The length of
+   depicted in <xref target="figureFciFormat"/>.  The length of
 		  the LRR feedback message MUST be set to
    2+3*N, where N is the number of FCI entries.</t>
 
