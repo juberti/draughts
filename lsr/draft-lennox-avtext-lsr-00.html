@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
 
-  <title>The Layer Intra Request (LIR) RTCP Feedback Message</title>
+  <title>The Layer Switchpoint Request (LSR) RTCP Feedback Message</title>
 
   <style type="text/css" title="Xml2Rfc (sans serif)">
   /*<![CDATA[*/
@@ -387,10 +387,10 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Lennox, J., Uberti, J., Holmer, S., Flodman, M., and D. Hong" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-uberti-payload-vp9-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-3-6" />
-  <meta name="dct.abstract" content="This memo describes the RTP Payload-Specific Feedback Message &quot;Layer Intra Request&quot;, which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats." />
-  <meta name="description" content="This memo describes the RTP Payload-Specific Feedback Message &quot;Layer Intra Request&quot;, which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-lennox-avtext-ldr-00" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-3-9" />
+  <meta name="dct.abstract" content="This memo describes the RTP Payload-Specific Feedback Message &quot;Layer Switchpoint Request&quot;, which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats." />
+  <meta name="description" content="This memo describes the RTP Payload-Specific Feedback Message &quot;Layer Switchpoint Request&quot;, which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats." />
 
 </head>
 
@@ -412,7 +412,7 @@
   <td class="right">J. Uberti</td>
 </tr>
 <tr>
-  <td class="left">Expires: September 7, 2015</td>
+  <td class="left">Expires: September 10, 2015</td>
   <td class="right">S. Holmer</td>
 </tr>
 <tr>
@@ -433,27 +433,27 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">March 6, 2015</td>
+  <td class="right">March 9, 2015</td>
 </tr>
 
     	
     </tbody>
   </table>
 
-  <p class="title">The Layer Intra Request (LIR) RTCP Feedback Message<br />
-  <span class="filename">draft-uberti-payload-vp9-00</span></p>
+  <p class="title">The Layer Switchpoint Request (LSR) RTCP Feedback Message<br />
+  <span class="filename">draft-lennox-avtext-ldr-00</span></p>
   
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This memo describes the RTP Payload-Specific Feedback Message "Layer Intra Request", which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats.</p>
+<p>This memo describes the RTP Payload-Specific Feedback Message "Layer Switchpoint Request", which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 7, 2015.</p>
+<p>This Internet-Draft will expire on September 10, 2015.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -484,10 +484,10 @@
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#layerIntraRequest" id="layerIntraRequest">Layer Intra Request</a></h1>
 <p id="rfc.section.3.p.1">Editor's Note: The message described in this section is applicable to other codecs beyond just VP9.  In the future it will be likely be split out into another document.</p>
 <p id="rfc.section.3.p.2">TODO: details of how this is encoded in RTCP.</p>
-<p id="rfc.section.3.p.3">A synchronization frame can be requested by sending a LIR, which is an RTCP feedback message asking the encoder to encode a frame which makes it possible to upgrade to a higher layer. The LIR message contains two tuples, {T1,S1,Q1} and {T2,S2,Q2}, where the first tuple is the currently highest layer the decoder can decode, while the second tuple is the layer the decoder wants to upgrade to.</p>
-<p id="rfc.section.3.p.4">Identification of an upgrade frame can be derived from the reference IDs of each frame by backtracking the dependency chain until reaching a point where only decodable frames are being referenced. Therefore it's recommended both for both the flexible and the non-flexible mode that, when upgrade frames are being encoded in response to a LIR, those packets should contain layer indices and the reference fields so that the decoder or an MCU can make this derivation.</p>
+<p id="rfc.section.3.p.3">A synchronization frame can be requested by sending a LSR, which is an RTCP feedback message asking the encoder to encode a frame which makes it possible to upgrade to a higher layer. The LSR message contains two tuples, {T1,S1,Q1} and {T2,S2,Q2}, where the first tuple is the currently highest layer the decoder can decode, while the second tuple is the layer the decoder wants to upgrade to.</p>
+<p id="rfc.section.3.p.4">Identification of an upgrade frame can be derived from the reference IDs of each frame by backtracking the dependency chain until reaching a point where only decodable frames are being referenced. Therefore it's recommended both for both the flexible and the non-flexible mode that, when upgrade frames are being encoded in response to a LSR, those packets should contain layer indices and the reference fields so that the decoder or an MCU can make this derivation.</p>
 <p id="rfc.section.3.p.5">Example:</p>
-<p id="rfc.section.3.p.6">LIR {1,1,0}, {1,2,1} is sent by an MCU when it is currently relaying {1,1,0} to a receiver and which wants to upgrade to {1,2,1}. In response the encoder should encode the next frames in layers {1,1,1} and {1,2,1} by only referring to frames in {1,1,0}, {1,0,0} or {0,0,0}.</p>
+<p id="rfc.section.3.p.6">LSR {1,1,0}, {1,2,1} is sent by an MCU when it is currently relaying {1,1,0} to a receiver and which wants to upgrade to {1,2,1}. In response the encoder should encode the next frames in layers {1,1,1} and {1,2,1} by only referring to frames in {1,1,0}, {1,0,0} or {0,0,0}.</p>
 <p id="rfc.section.3.p.7">In the non-flexible mode, periodic upgrade frames can be defined by the layer structure of the SS, thus periodic upgrade frames can be automatically identified by the picture ID.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#securityConsiderations" id="securityConsiderations">Security Considerations</a></h1>
 <p id="rfc.section.4.p.1">RTP packets using the payload format defined in this specification are subject to the security considerations discussed in the RTP specification <a href="#RFC3550">[RFC3550]</a>, and in any applicable RTP profile. The main security considerations for the RTP packet carrying the RTP payload format defined within this memo are confidentiality, integrity and source authenticity. Confidentiality is achieved by encryption of the RTP payload. Integrity of the RTP packets through suitable cryptographic integrity protection mechanism. Cryptographic system may also allow the authentication of the source of the payload. A suitable security mechanism for this RTP payload format should provide confidentiality, integrity protection and at least source authentication capable of determining if an RTP packet is from a member of the RTP session or not. Note that the appropriate mechanism to provide security to RTP and payloads following this memo may vary. It is dependent on the application, the transport, and the signaling protocol employed.  Therefore a single mechanism is not sufficient, although if suitable the usage of SRTP <a href="#RFC3711">[RFC3711]</a> is recommended. This RTP payload format and its media decoder do not exhibit any significant non-uniformity in the receiver-side computational complexity for packet processing, and thus are unlikely to pose a denial-of-service threat due to the receipt of pathological data. Nor does the RTP payload format contain any active content.</p>

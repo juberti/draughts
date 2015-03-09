@@ -12,7 +12,7 @@
 <!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
 
 ]>
-<rfc category="std" docName="draft-uberti-payload-vp9-00" ipr="trust200902">
+<rfc category="std" docName="draft-lennox-avtext-ldr-00" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -32,7 +32,7 @@
   <!-- generate table of contents -->
 
   <front>
-    <title abbrev="RTP Payload Format for VP9">The Layer Intra Request (LIR) RTCP Feedback Message</title>
+    <title abbrev="Layer Switchpoint Request RTCP Feedback">The Layer Switchpoint Request (LSR) RTCP Feedback Message</title>
 
     <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
       <organization abbrev="Vidyo">Vidyo, Inc.</organization>
@@ -140,7 +140,7 @@
     <keyword>RTP</keyword>
 
     <abstract>
-      <t>This memo describes the RTP Payload-Specific Feedback Message "Layer Intra Request", which can be used to
+      <t>This memo describes the RTP Payload-Specific Feedback Message "Layer Switchpoint Request", which can be used to
 		request a state refresh of one or more substreams of a layered media stream.  It also defines its use
 		with several scalable media formats.</t>
     </abstract>
@@ -172,9 +172,9 @@
 
 	  <t>TODO: details of how this is encoded in RTCP.</t>
 
-	  <t>A synchronization frame can be requested by sending a LIR,
+	  <t>A synchronization frame can be requested by sending a LSR,
 	  which is an RTCP feedback message asking the encoder to encode a frame
-	  which makes it possible to upgrade to a higher layer. The LIR
+	  which makes it possible to upgrade to a higher layer. The LSR
 	  message contains two tuples, {T1,S1,Q1} and {T2,S2,Q2}, where
 	  the first tuple is the currently highest layer the decoder can
 	  decode, while the second tuple is the layer the decoder wants to
@@ -185,12 +185,12 @@
 	  until reaching a point where only decodable frames are being
 	  referenced. Therefore it's recommended both for both the
 	  flexible and the non-flexible mode that, when upgrade frames are
-	  being encoded in response to a LIR, those packets should contain
+	  being encoded in response to a LSR, those packets should contain
 	  layer indices and the reference fields so that the decoder or an
 	  MCU can make this derivation.</t>
 
 	  <t>Example:</t>
-	  <t>LIR {1,1,0}, {1,2,1} is sent by an MCU when it is currently
+	  <t>LSR {1,1,0}, {1,2,1} is sent by an MCU when it is currently
 	  relaying {1,1,0} to a receiver and which wants to upgrade to
 	  {1,2,1}. In response the encoder should encode the next frames
 	  in layers {1,1,1} and {1,2,1} by only referring to frames in
