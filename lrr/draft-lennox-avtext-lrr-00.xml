@@ -8,11 +8,12 @@
 <!ENTITY rfc4855 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4855.xml">
 <!ENTITY rfc4566 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4566.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
+<!ENTITY rfc5104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
 
 ]>
-<rfc category="std" docName="draft-lennox-avtext-ldr-00" ipr="trust200902">
+<rfc category="std" docName="draft-lennox-avtext-lrr-00" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -32,7 +33,7 @@
   <!-- generate table of contents -->
 
   <front>
-    <title abbrev="Layer Switchpoint Request RTCP Feedback">The Layer Switchpoint Request (LSR) RTCP Feedback Message</title>
+    <title abbrev="Layer Refresh Request RTCP Feedback">The Layer Refresh Request (LRR) RTCP Feedback Message</title>
 
     <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
       <organization abbrev="Vidyo">Vidyo, Inc.</organization>
@@ -140,21 +141,29 @@
     <keyword>RTP</keyword>
 
     <abstract>
-      <t>This memo describes the RTP Payload-Specific Feedback Message "Layer Switchpoint Request", which can be used to
-		request a state refresh of one or more substreams of a layered media stream.  It also defines its use
-		with several scalable media formats.</t>
+      <t>This memo describes the RTP Payload-Specific Feedback Message
+		"Layer Refresh Request" (LRR), which can be used to request a
+		state refresh of one or more substreams of a layered media
+		stream.  It also defines its use with several scalable media
+		formats.</t>
     </abstract>
   </front>
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This memo describes an RTP payload specification applicable to the
-      transmission of video streams encoded using the VP9 video codec <xref
-      target="I-D.grange-vp9-bitstream"/>. The format described in this document can be used
-      both in peer-to-peer and video conferencing applications.</t>
+      <t>This memo describes an RTP Payload-Specific Feedback Message
+		"Layer Refresh Request" (LRR).  It is designed to allow a
+		receiver of a layered media stream to request that one or more
+		of its substreams be refreshed, such that it can then be
+		decoded by an endpoint which previously was not receiving lose
+		layers, without requiring that the
+		entire stream be refreshed (as it would be if the receiver
+		sent a <xref target='RFC5104'>Full Intra Request (FIR)</xref>.</t>
 
-      <t>TODO: VP9 description.  Please see <xref
-      target="I-D.grange-vp9-bitstream"/>.</t>
+	  <t>The message is designed to be applicable both to temporally
+	  and spatially scaled streams, and to both single-stream and
+	  multi-stream scalability modes.</t>
+
     </section>
 
     <section anchor="conventions"
@@ -163,18 +172,118 @@
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
       document are to be interpreted as described in <xref
       target="RFC2119"/>.</t>
+
+
+	<section anchor="terminology"
+			 title="Terminology">
+	  <t>A "Layer Refresh Point" is a point in a scalable stream after
+	  which a decoder, which previously had been able to decode only some
+	  (possibly none) of the available layers of stream, is able to
+	  decode a greater number of the layers.</t>
+
+	  <t>For spatial (or quality) layers, layer refresh typically
+	  requires that a spatial layer be encoded in a way that
+	  references only lower-layer subpictures of the current picture,
+	  not any earlier pictures of that spatial layer.  Additionally,
+	  the encoder must promise that no earlier pictures of that
+	  spatial layer will be used as reference in the future.</t>
+
+      <figure anchor="figureSpatialRefresh">
+        <preamble>An illustration of spatial layer refresh is shown
+        below.</preamble>
+          <artwork><![CDATA[
+     ... <--  S1  <--  S1       S1  <--  S1  <-- ...
+               |        |        |        |
+              \/       \/       \/       \/
+     ... <--  S0  <--  S0  <--  S0  <--  S0  <-- ...
+
+               1        2        3        4
+          ]]></artwork>
+
+          <postamble>In this illustration, frame 3 is a layer refresh
+			point for spatial layer S1; a decoder which had previously
+			only been decoding spatial layer S0 would be able to
+			decode layer S1 starting at frame 3.</postamble>
+      </figure>
+
+	  <t>For temporal layers, layer refresh requires that the layer be
+	  "temporally nested", i.e. use as reference only
+	  earlier frames of a lower temporal layer, not any earlier frames of this
+	  temporal layer, and also promise that no future frames
+	  of this temporal layer will reference frames of this temporal
+	  layer before the refresh point.  In many cases, the temporal
+	  structure of the stream will mean that all frames are
+	  temporally nested, in which case decoders will have no need to
+	  send LRR messages for the stream.</t>
+
+      <figure anchor="figureTemporalRefresh">
+        <preamble>An illustration of temporal layer refresh is shown
+        below.</preamble>
+          <artwork><![CDATA[
+        ...  <----- T1  <------ T1          T1  <------ ...
+                   /           /           /
+                 |_          |_          |_
+     ... <--  T0  <------ T0  <------ T0  <------ T0  <--- ...
+
+               1     2     3     4     5     6     7
+          ]]></artwork>
+
+          <postamble>In this illustration, frame 6 is a layer refresh
+			point for spatial layer T1; a decoder which had previously
+			only been decoding temporal layer T0 would be able to
+			decode layer T1 starting at frame 6.</postamble>
+      </figure>
+
+      <figure anchor="figureTemporalNesting">
+        <preamble>An illustration of an inherently temporally nested
+        stream is shown below.</preamble>
+          <artwork><![CDATA[
+                    T1          T1          T1
+                   /           /           /
+                 |_          |_          |_
+     ... <--  T0  <------ T0  <------ T0  <------ T0  <--- ...
+
+               1     2     3     4     5     6     7
+          ]]></artwork>
+
+          <postamble>In this illustration, the stream is temporally
+          nested in its ordinary structure; a decoder receiving layer
+          T0 can begin decoding layer T1 at any point.</postamble>
+      </figure>
+
+	</section>
+
     </section>
 
-	<section anchor="layerIntraRequest" title="Layer Intra Request">
+	<section anchor="layerRefreshRequest" title="Layer Refresh Request">
+	  <t>A layer refresh frame can be requested by sending a LRR,
+	  which is an RTCP feedback message asking the encoder to encode a frame
+	  which makes it possible to upgrade to a higher layer. The LRR
+	  contains one or two tuples, indicating the layer the decoder
+	  wants to upgrade to, and (optionally) the currently highest
+	  layer the decoder can decode.</t>
+
+	  <t>The specific format of the tuples, and the mechanism by which
+	  a receiver recognizes a refresh frame, is
+	  codec-dependent.</t>
+
+
+	  <t>The FIR message is identified by RTCP packet type value
+	  PT=PSFB and
+   FMT=4.
+
+   The FCI field MUST contain one or more FIR entries.  Each entry
+   applies to a different media sender, identified by its SSRC.</t>
+
 	  <t>Editor's Note: The message described in this section is
 		applicable to other codecs beyond just VP9.  In the future it
 		will be likely be split out into another document.</t>
 
 	  <t>TODO: details of how this is encoded in RTCP.</t>
 
-	  <t>A synchronization frame can be requested by sending a LSR,
+	  <t>A synchronization frame can be requested by sending a LRR,
 	  which is an RTCP feedback message asking the encoder to encode a frame
-	  which makes it possible to upgrade to a higher layer. The LSR
+	  which makes it possible to upgrade to a higher layer. The LRR
 	  message contains two tuples, {T1,S1,Q1} and {T2,S2,Q2}, where
 	  the first tuple is the currently highest layer the decoder can
 	  decode, while the second tuple is the layer the decoder wants to
@@ -185,12 +294,12 @@
 	  until reaching a point where only decodable frames are being
 	  referenced. Therefore it's recommended both for both the
 	  flexible and the non-flexible mode that, when upgrade frames are
-	  being encoded in response to a LSR, those packets should contain
+	  being encoded in response to a LRR, those packets should contain
 	  layer indices and the reference fields so that the decoder or an
 	  MCU can make this derivation.</t>
 
 	  <t>Example:</t>
-	  <t>LSR {1,1,0}, {1,2,1} is sent by an MCU when it is currently
+	  <t>LRR {1,1,0}, {1,2,1} is sent by an MCU when it is currently
 	  relaying {1,1,0} to a receiver and which wants to upgrade to
 	  {1,2,1}. In response the encoder should encode the next frames
 	  in layers {1,1,1} and {1,2,1} by only referring to frames in
@@ -245,6 +354,8 @@
       &rfc3711;
 
       &rfc4566;
+
+	  &rfc5104;
 
       &rfc6838;
 
