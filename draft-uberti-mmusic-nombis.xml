@@ -64,7 +64,7 @@
       </address>
     </author>
 
-    <date day="05" month="March" year="2015" />
+    <date day="09" month="March" year="2015" />
 
     <area>RAI</area>
 
@@ -239,8 +239,52 @@ nomination completes.</t>
         </t>
       </section>
       <section title="Examples">
-        <t>A typical call setup is shown below.</t>
-        <t>[TODO: show RTP flowing before USE-CANDIDATE]</t>
+        <t>An example call setup using Regular Nomination as described above
+          is shown here. Alice is in the controlling role, and Bob is in the
+          controlled role; Alice has a single host candidate and Bob has
+          both host and relay candidates.</t>
+        <t>Alice's initial check to Bob's
+          host candidate fails, but the check to his relay candidate succeeds,
+          so Alice starts transmitting media on her host-relay pair. Bob's
+          initial check from his host candidate to Alice's host candidate
+          succeeds, so he starts transmitting media over this host-host pair to
+          Alice. However, when Alice's host check is later retransmitted,
+          it succeeds, and Alice determines that the host-host pair has a better
+          RTT than the host-relay pair, so she cuts media over to use the
+          host-host pair. Eventually, Alice concludes Regular Nomination by
+          sending a final check to Bob with the USE-CANDIDATE flag set. If Bob
+          had selected a different pair to use than Alice, this action would
+          have forced Bob to use the same pair.
+        </t>
+        <t><figure><artwork><![CDATA[
+ Alice                        Network                         Bob
+   |(1) STUN Req (Bob host)      |                             |
+   |---------------------------------------------------------->|
+   |(2) STUN Res (Bob host)      |                             |
+   |                         Lost|<----------------------------|
+   |(3) STUN Req (Bob relay)     |                             |
+   |---------------------------------------------------------->|
+   |(4) STUN Res (Bob relay)     |                             |
+   |<----------------------------------------------------------|
+   |(5) RTP starts (Bob relay)   |                             |
+   |==========================================================>|
+   |(6) STUN Req (Alice host)    |                             |
+   |<----------------------------------------------------------|
+   |(7) STUN Res (Alice host)    |                             |
+   |---------------------------------------------------------->|
+   |(8) RTP starts (Alice host)  |                             |
+   |<==========================================================|
+   |(9) STUN Req (Bob host)      |                             |
+   |---------------------------------------------------------->|
+   |(10) STUN Req (Bob host)     |                             |
+   |<----------------------------------------------------------|
+   |(11) RTP switch (Bob host)   |                             |
+   |==========================================================>|
+   |(12) STUN Req (Bob host, U-C)|                             |
+   |---------------------------------------------------------->|
+   |(13) STUN Res (Bob host)     |                             |
+   |<----------------------------------------------------------|
+]]></artwork></figure></t>
       </section>
     </section>
 
@@ -282,7 +326,9 @@ may be impacted by the handover.</t>
         choose to drop relay candidates once a successful connection has been
         established. The controlled side, however, should follow the
         controlling side's lead in terms of deciding whether any pairs should
-        be pruned. The controlling ICE Agent informs the remote side of its
+        be pruned. [TODO: should the controlled side have any say in the matter,
+        e.g. to eliminate certain candidates?]
+        The controlling ICE Agent informs the remote side of its
         preferences by continuing to send
         Binding Requests to the remote side on each candidate pair that it
         wants to retain. The controlled ICE Agent SHOULD prune any
@@ -317,7 +363,7 @@ indicated via a new "continuous" value for ice-options. If the remote side does 
         specified in <xref target="RFC5245"/>, Sectiom 8.1.1.</t>
       </section>
       <section title="Examples">
-        <section title="Switching From Peer-to-peer To Relayed">
+        <section title="Switching Between Pairs Based on RTT">
           <t>Alice and Bob have set up a call using ICE and have established
             multiple valid pairs. The currently selected pair is for a
             peer-to-peer route, as it had the highest initial priority value.
