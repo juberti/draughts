@@ -10,9 +10,10 @@
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
 <!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
+<!ENTITY lrr SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.lennox-avtext-lrr.xml">
 
 ]>
-<rfc category="std" docName="draft-uberti-payload-vp9-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-payload-vp9-00" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -924,8 +925,6 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
                 and heights up to 1552 pixels (97 macroblocks).</t>
               </list></t>
 
-            <t hangText="Optional parameters:">none</t>
-
             <t hangText="Encoding considerations:"><vspace blankLines="0"/>
             This media type is framed in RTP and contains binary data; see
             Section 4.8 of <xref target="RFC6838"/>.</t>
@@ -947,6 +946,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
             <t hangText="Applications which use this media type:"><vspace
             blankLines="0"/> For example: Video over IP, video
             conferencing.</t>
+
+			<t hangText="Fragment identifier considerations:">N/A.</t>
 
             <t hangText="Additional information:">None.</t>
 
@@ -983,7 +984,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
               <t>The clock rate in the "a=rtpmap" line MUST be 90000.</t>
 
               <t>The parameters "max-fs", and "max-fr", MUST be included in
-              the "a=fmtp" line of SDP. These parameters are expressed as a
+              the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities.
+				These parameters are expressed as a
               media subtype string, in the form of a semicolon separated list
               of parameter=value pairs.</t>
             </list></t>
@@ -1007,14 +1009,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
           target="RFC6386"/>, the max-fs and max-fr parameters MUST be used to
           establish these limits.</t>
 
-          <t>NOTE IN DRAFT: If closer control of width and height is desired,
-          the mechanism described in
-          draft-nandakumar-payload-sdp-max-video-resolution is a possible
-          candidate for signalling, but since that document appears to be far
-          from finalization, this document does not make a reference to that
-          document. This note is only intended for facilitating WG discussion,
-          and should be deleted before publication of this document as an
-          RFC.</t> -->
+           -->
         </section>
       </section>
     </section>
@@ -1065,7 +1060,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
   </middle>
 
   <back>
-    <references>
+    <references title='Normative References'>
+
       &vp9;
 
       &rfc2119;
@@ -1074,31 +1070,23 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
       &rfc3550;
 
-      &rfc3711;
-
       &rfc4566;
 
       &rfc6838;
 
       &rfc4855;
 
-      &rfc3551;
-	  
-	  <!-- Replace with proper ref once it's in the I-D repo -->
-	  <reference anchor="I-D.lennox-avtext-lrr">
-		<front>
-		  <title>The Layer Refresh Request (LRR) RTCP Feedback MessageVideo</title>
-		  <author initials="J" surname="Lennox" fullname="Jonathan Lennox"><organization/></author>
-		  <author initials="J" surname="Uberti" fullname="Justin Uberti"><organization/></author>
-		  <author initials="S" surname="Holmer" fullname="Stefan Holmer"><organization/></author>
-		  <author initials="M" surname="Flodman" fullname="Magnus Flodman"><organization/></author>
-		  <date month="March" day="9" year="2015"/>
-		</front>
-		<seriesInfo name="Internet-Draft" value="draft-lennox-avtext-lrr-00"/>
-		<format type="TXT" target="http://www.ietf.org/internet-drafts/draft-lennox-avtext-lrr-00.txt"/>
-	  </reference>
+	  &lrr;
 
     </references>
+
+    <references title='Informative References'>
+
+      &rfc3551;
+	  
+      &rfc3711;
+
+	</references>
   </back>
 </rfc>
 <!--  LocalWords:  PictureID DCT Hadamard WHT SSRC CSRC pyld hdr FI VER RPSI

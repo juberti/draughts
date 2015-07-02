@@ -13,7 +13,7 @@ Expires: January 3, 2016                                          Google
 
 
                     RTP Payload Format for VP9 Video
-                      draft-uberti-payload-vp9-01
+                       draft-ietf-payload-vp9-00
 
 Abstract
 
@@ -88,6 +88,8 @@ Table of Contents
    8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  18
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  18
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  19
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
@@ -104,8 +106,6 @@ Table of Contents
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
-
-
 
 
 
@@ -863,8 +863,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
          of supporting 640x480 resolution) will support widths and
          heights up to 1552 pixels (97 macroblocks).
 
-   Optional parameters:  none
-
    Encoding considerations:
       This media type is framed in RTP and contains binary data; see
       Section 4.8 of [RFC6838].
@@ -882,6 +880,8 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
 
    Applications which use this media type:
       For example: Video over IP, video conferencing.
+
+   Fragment identifier considerations:  N/A.
 
    Additional information:  None.
 
@@ -924,8 +924,9 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
    o  The clock rate in the "a=rtpmap" line MUST be 90000.
 
    o  The parameters "max-fs", and "max-fr", MUST be included in the
-      "a=fmtp" line of SDP.  These parameters are expressed as a media
-      subtype string, in the form of a semicolon separated list of
+      "a=fmtp" line of SDP if SDP is used to declare receiver
+      capabilities.  These parameters are expressed as a media subtype
+      string, in the form of a semicolon separated list of
       parameter=value pairs.
 
 6.2.1.1.  Example
@@ -945,7 +946,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
    RTP packets using the payload format defined in this specification
    are subject to the security considerations discussed in the RTP
    specification [RFC3550], and in any applicable RTP profile.  The main
-   security considerations for the RTP packet carrying the RTP payload
 
 
 
@@ -954,6 +954,7 @@ Uberti, et al.           Expires January 3, 2016               [Page 17]
 Internet-Draft         RTP Payload Format for VP9              July 2015
 
 
+   security considerations for the RTP packet carrying the RTP payload
    format defined within this memo are confidentiality, integrity and
    source authenticity.  Confidentiality is achieved by encryption of
    the RTP payload.  Integrity of the RTP packets through suitable
@@ -993,15 +994,14 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
 
 10.  References
 
+10.1.  Normative References
+
    [I-D.grange-vp9-bitstream]
               Grange, A. and H. Alvestrand, "A VP9 Bitstream Overview",
               draft-grange-vp9-bitstream-00 (work in progress), February
               2013.
 
-   [I-D.lennox-avtext-lrr]
-              Lennox, J., Uberti, J., Holmer, S., and M. Flodman, "The
-              Layer Refresh Request (LRR) RTCP Feedback MessageVideo",
-              draft-lennox-avtext-lrr-00 (work in progress), March 2015.
+
 
 
 
@@ -1010,20 +1010,18 @@ Uberti, et al.           Expires January 3, 2016               [Page 18]
 Internet-Draft         RTP Payload Format for VP9              July 2015
 
 
+   [I-D.lennox-avtext-lrr]
+              Lennox, J., Hong, D., Uberti, J., Holmer, S., and M.
+              Flodman, "The Layer Refresh Request (LRR) RTCP Feedback
+              Message", draft-lennox-avtext-lrr-00 (work in progress),
+              March 2015.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
               Applications", STD 64, RFC 3550, July 2003.
-
-   [RFC3551]  Schulzrinne, H. and S. Casner, "RTP Profile for Audio and
-              Video Conferences with Minimal Control", STD 65, RFC 3551,
-              July 2003.
-
-   [RFC3711]  Baugher, M., McGrew, D., Naslund, M., Carrara, E., and K.
-              Norrman, "The Secure Real-time Transport Protocol (SRTP)",
-              RFC 3711, March 2004.
 
    [RFC4566]  Handley, M., Jacobson, V., and C. Perkins, "SDP: Session
               Description Protocol", RFC 4566, July 2006.
@@ -1040,6 +1038,16 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
               Specifications and Registration Procedures", BCP 13, RFC
               6838, January 2013.
 
+10.2.  Informative References
+
+   [RFC3551]  Schulzrinne, H. and S. Casner, "RTP Profile for Audio and
+              Video Conferences with Minimal Control", STD 65, RFC 3551,
+              July 2003.
+
+   [RFC3711]  Baugher, M., McGrew, D., Naslund, M., Carrara, E., and K.
+              Norrman, "The Secure Real-time Transport Protocol (SRTP)",
+              RFC 3711, March 2004.
+
 Authors' Addresses
 
    Justin Uberti
@@ -1051,19 +1059,18 @@ Authors' Addresses
    Email: justin@uberti.name
 
 
-   Stefan Holmer
-   Google, Inc.
-   Kungsbron 2
-   Stockholm  111 22
-   Sweden
-
-
-
 
 
 Uberti, et al.           Expires January 3, 2016               [Page 19]
 
 Internet-Draft         RTP Payload Format for VP9              July 2015
+
+
+   Stefan Holmer
+   Google, Inc.
+   Kungsbron 2
+   Stockholm  111 22
+   Sweden
 
 
    Magnus Flodman
@@ -1091,13 +1098,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2015
    US
 
    Email: danny@vidyo.com
-
-
-
-
-
-
-
 
 
 
