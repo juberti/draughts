@@ -68,17 +68,17 @@ Table of Contents
    2.  Conventions, Definitions and Acronyms . . . . . . . . . . . .   2
      2.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   2
    3.  Layer Refresh Request . . . . . . . . . . . . . . . . . . . .   4
-     3.1.  Message Format  . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Usage with specific codecs  . . . . . . . . . . . . . . . . .   5
+     3.1.  Message Format  . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Usage with specific codecs  . . . . . . . . . . . . . . . . .   6
      4.1.  H264 SVC  . . . . . . . . . . . . . . . . . . . . . . . .   6
-     4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-     4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-     4.4.  VP9 . . . . . . . . . . . . . . . . . . . . . . . . . . .   7
-   5.  Usage with different scalability transmission mechanisms  . .   8
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+     4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     4.4.  VP9 . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+   5.  Usage with different scalability transmission mechanisms  . .   9
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
+   8.  Normative References  . . . . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
@@ -121,7 +121,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    earlier pictures of that spatial layer will be used as reference in
    the future.
 
-   An illustration of spatial layer refresh is shown below.
+   In a layer refresh, however, other layers than the ones requested for
+   refresh may still maintain dependency on earlier content of the
+   stream.  This is the difference between a layer refresh and a Full
+   Intra Request [RFC5104].  This minimizes the coding overhead of
+   refresh to only those parts of the stream that actually need to be
+   refreshed at any given time.
+
+   An illustration of spatial layer refresh of an enhancement layer is
+   shown below.
 
         ... <--  S1  <--  S1       S1  <--  S1  <-- ...
                   |        |        |        |
@@ -136,8 +144,32 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
                                  Figure 1
 
+   An illustration of spatial layer refresh of a base layer is shown
+   below.
+
+        ... <--  S1  <--  S1  <--  S1  <--  S1  <-- ...
+                  |        |        |        |
+                 \/       \/       \/       \/
+        ... <--  S0  <--  S0       S0  <--  S0  <-- ...
+
+                  1        2        3        4
+
+   In this illustration, frame 3 is a layer refresh point for spatial
+   layer S0; a decoder which had previously not been decoding the stream
+   at all could decode layer S0 starting at frame 3.
+
+                                 Figure 2
+
    For temporal layers, layer refresh requires that the layer be
    "temporally nested", i.e. use as reference only earlier frames of a
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 3]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
+
    lower temporal layer, not any earlier frames of this temporal layer,
    and also promise that no future frames of this temporal layer will
    reference frames of this temporal layer before the refresh point.  In
@@ -158,17 +190,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    layer T1; a decoder which had previously only been decoding temporal
    layer T0 would be able to decode layer T1 starting at frame 6.
 
-                                 Figure 2
-
-
-
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 3]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
+                                 Figure 3
 
    An illustration of an inherently temporally nested stream is shown
    below.
@@ -184,7 +206,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    structure; a decoder receiving layer T0 can begin decoding layer T1
    at any point.
 
-                                 Figure 3
+                                 Figure 4
 
 3.  Layer Refresh Request
 
@@ -194,6 +216,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    possible to upgrade to a higher layer.  The LRR contains one or two
    tuples, indicating the layer the decoder wants to upgrade to, and
    (optionally) the currently highest layer the decoder can decode.
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 4]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
 
    The specific format of the tuples, and the mechanism by which a
    receiver recognizes a refresh frame, is codec-dependent.  Usage for
@@ -211,20 +242,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
    The Feedback Control Information (FCI) for the Layer Refresh Request
    consists of one or more FCI entries, the content of which is depicted
-   in Figure 4.  The length of the LRR feedback message MUST be set to
+   in Figure 5.  The length of the LRR feedback message MUST be set to
    2+3*N, where N is the number of FCI entries.
-
-
-
-
-
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 4]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
 
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -236,7 +255,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
       | Target Layer Index            | Current Layer Index (opt)     |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                                 Figure 4
+                                 Figure 5
 
    SSRC (32 bits)  The SSRC value of the media sender that is requested
       to send a layer refresh point.
@@ -252,6 +271,16 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
       field is present in the FCI.  If this bit is false, the sender of
       the LRR message is requesting refresh of all layers up to and
       including the target layer.
+
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 5]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
 
    Payload Type (7 bits)  The RTP payload type for which the LRR is
       being requested.  This gives the context in which the target layer
@@ -271,17 +300,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 4.  Usage with specific codecs
 
-
-
-
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 5]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
-
 4.1.  H264 SVC
 
    H.264 SVC [RFC6190] defines temporal, dependency (spatial), and
@@ -293,16 +311,60 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
                |R| DID |  QID  | TID |RES      |
                +---------------+---------------+
 
-                                 Figure 5
+                                 Figure 6
 
-   Figure 5 shows the format of the layer index field for H.264 SVC
+   Figure 6 shows the format of the layer index field for H.264 SVC
    streams.  This is designed to follow the same layout as the third and
    fourth bytes of the H.264 SVC NAL unit extension, which carry the
    stream's layer information.  The "R" and "RES" fields MUST be set to
    0 on transmission and ignored on reception.  See [RFC6190]
    Section 1.1.3 for details on the DID, QID, and TID fields.
 
-   TODO: identifying layer refresh frames in an H.264 bitstream.
+   A dependency or quality layer refresh of a given layer in H.264 SVC
+   can be identified by the "I" bit (idr_flag) in the extended NAL unit
+   header, present in NAL unit types 14 (prefix NAL unit) and 20 (coded
+   scalable slice).  Layer refresh of the base layer can also be
+   identified by its NAL unit type of its coded slices, which is "5"
+   rather than "1".  A dependency or quality layer refresh is complete
+   once this bit has been seen on all the appropriate layers (in
+   decoding order) above the current layer index (if any, or beginning
+   from the base layer if not) through the target layer index.
+
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 6]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
+
+   Note that as the "I" bit in a PACSI header is set if the
+   corresponding bit is set in any of the aggregated NAL units it
+   describes; thus, it is not sufficient to identify layer refresh when
+   NAL units of multiple dependency or quality layers are aggregated.
+
+   In H.264 SVC, temporal layer refresh information can be determined
+   from various Supplemental Encoding Information (SEI) messages in the
+   bitstream.
+
+   Whether an H.264 SVC stream is scalably nested can be determined from
+   the Scalability Information SEI message's temporal_id_nesting flag.
+   If this flag is set in a stream's currently applicable Scalability
+   Information SEI, receivers SHOULD NOT send temporal LRR messages for
+   that stream, as every frame is implicitly a temporal layer refresh
+   point.  (The Scalability Information SEI message may also be
+   available in the signaling negotiation of H.264 SVC, as the sprop-
+   scalability-info parameter.)
+
+   If a stream's temporal_id_nesting flag is not set, the Temporal Level
+   Switching Point SEI message identifies temporal layer switching
+   points.  A temporal layer refresh is satisfied when this SEI message
+   is present in a frame with the target layer index, if the message's
+   delta_frame_num refer to a frame with the requested current layer
+   index.  (Alternately, temporal layer refresh can also be satisfied by
+   a complete state refresh, such as an IDR.)  Senders which support
+   receiving LRR for non-scalably-nested streams MUST insert Temporal
+   Level Switching Point SEI messages as appropriate.
 
 4.2.  VP8
 
@@ -315,31 +377,34 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
                |TID| RES                       |
                +---------------+---------------+
 
-                                 Figure 6
+                                 Figure 7
 
-   Figure 6 shows the format of the layer index field for VP8 streams.
+   Figure 7 shows the format of the layer index field for VP8 streams.
    The "RES" fields MUST be set to 0 on transmission and ingnored on
    reception.  See [I-D.ietf-payload-vp8] Section 4.2 for details on the
    TID field.
 
-   TODO: identifying layer refresh frames in an VP8 bitstream.
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 7]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
+
+   TODO: identifying layer refresh frames in an VP8 bitstream.  Is the
+   "Y" bit sufficient?  Or is VP8 required to always be temporally
+   nested, leaving this unnecessary?
 
 4.3.  H265
 
    The initial version of the H.265 payload format
    [I-D.ietf-payload-rtp-h265] defines temporal scalability, with
    protocol elements reserved for spatial or other scalability modes
-
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 6]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
-
    (which are expected to be defined in a future version of the
-   specification.
+   specification).
 
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
@@ -347,16 +412,43 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
                | RES         |  LayerId  | TID |
                +-------------+-----------------+
 
-                                 Figure 7
+                                 Figure 8
 
-   Figure 7 shows the format of the layer index field for H.265 streams.
+   Figure 8 shows the format of the layer index field for H.265 streams.
    This is designed to follow the same layout as the first and second
    bytes of the H.265 NAL unit header, which carry the stream's layer
    information.  The "RES" field MUST be set to 0 on transmission and
-   ingnored on reception.  See [I-D.ietf-payload-rtp-h265] Section 1.1.3
+   ignored on reception.  See [I-D.ietf-payload-rtp-h265] Section 1.1.4
    for details on the LayerId and TID fields.
 
-   TODO: identifying layer refresh frames in an H.265 bitstream.
+   H.265 streams signal whether they are temporally nested, using the
+   vps_temporal_id_nesting_flag in the Video Parameter Set (VPS), and
+   the sps_temporal_id_nesting_flag in the Sequence Parameter Set (SPS).
+   If this flag is set in a stream's currently applicable VPS or SPS,
+   receivers SHOULD NOT send temporal LRR messages for that stream, as
+   every frame is implicitly a temporal layer refresh point.
+
+   TODO: identifying temporal layer refresh frames in a non-temporally-
+   nested H.265 bitstream.
+
+   In the (future) H.265 payloads that support spatial scalability, a
+   spatial layer refresh of a specific layer can be identified by NAL
+   units with the requested layer ID and NAL unit types between 16 and
+   21 inclusive.  A dependency or quality layer refresh is complete once
+   NAL units of this type have been seen on all the appropriate layers
+   (in decoding order) above the current layer index (if any, or
+   beginning from the base layer if not) through the target layer index.
+
+
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 8]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
 
 4.4.  VP9
 
@@ -369,9 +461,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
                |  T  |R|  S  | RES             |
                +-------------+-----------------+
 
-                                 Figure 8
+                                 Figure 9
 
-   Figure 8 shows the format of the layer index field for VP9 streams.
+   Figure 9 shows the format of the layer index field for VP9 streams.
    This is designed to follow the same layout as the "L" byte of the VP9
    payload header, which carries the stream's layer information.  The
    "R" and "RES" fields MUST be set to 0 on transmission and ingnored on
@@ -386,13 +478,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    response to a LRR, those packets should contain layer indices and the
    reference fields so that the decoder or an MCU can make this
    derivation.
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 7]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
 
    Example:
 
@@ -413,6 +498,13 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    mechanisms: Single RTP Stream on a Single Media Transport (SRST),
    Multiple RTP Streams on a Single Media Transport (MRST), and Multiple
    RTP Streams on Multiple Media Transports (MRMT).
+
+
+
+Lennox, et al.           Expires January 7, 2016                [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
 
    The LRR message is applicable to all these mechanisms.  For MRST and
    MRMT mechanisms, the "media source" field of the LRR FCI is set to
@@ -440,44 +532,45 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    and layer indices they are receiving are valid for the stream they
    are currently sending, and discard the requests if not.
 
-
-
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 8]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
-
 7.  IANA Considerations
 
    The IANA is requested to register the following values:
    - TODO: PSFB value for LRR
 
-8.  References
+8.  Normative References
 
    [I-D.ietf-avtext-rtp-grouping-taxonomy]
-              Lennox, J., Gross, K., Nandakumar, S., and G. Salgueiro,
-              "A Taxonomy of Grouping Semantics and Mechanisms for Real-
-              Time Transport Protocol (RTP) Sources", draft-ietf-avtext-
-              rtp-grouping-taxonomy-06 (work in progress), March 2015.
+              Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
+              B. Burman, "A Taxonomy of Semantics and Mechanisms for
+              Real-Time Transport Protocol (RTP) Sources", draft-ietf-
+              avtext-rtp-grouping-taxonomy-07 (work in progress), June
+              2015.
 
    [I-D.ietf-payload-rtp-h265]
               Wang, Y., Sanchez, Y., Schierl, T., Wenger, S., and M.
               Hannuksela, "RTP Payload Format for High Efficiency Video
-              Coding", draft-ietf-payload-rtp-h265-07 (work in
-              progress), December 2014.
+              Coding", draft-ietf-payload-rtp-h265-13 (work in
+              progress), June 2015.
+
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016               [Page 10]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
+
 
    [I-D.ietf-payload-vp8]
               Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
               Galligan, "RTP Payload Format for VP8 Video", draft-ietf-
-              payload-vp8-14 (work in progress), March 2015.
+              payload-vp8-16 (work in progress), June 2015.
 
    [I-D.uberti-payload-vp9]
-              Uberti, J., Holmer, S., Flodman, M., and J. Lennox, "RTP
-              Payload Format for VP9 Video", draft-uberti-payload-vp9-00
-              (work in progress), October 2014.
+              Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D.
+              Hong, "RTP Payload Format for VP9 Video", draft-uberti-
+              payload-vp9-01 (work in progress), March 2015.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -494,17 +587,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
    [RFC6190]  Wenger, S., Wang, Y., Schierl, T., and A. Eleftheriadis,
               "RTP Payload Format for Scalable Video Coding", RFC 6190,
               May 2011.
-
-
-
-
-
-
-
-Lennox, et al.           Expires January 7, 2016                [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
-
 
 Authors' Addresses
 
@@ -526,6 +608,14 @@ Authors' Addresses
    US
 
    Email: danny@vidyo.com
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016               [Page 11]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
    Justin Uberti
@@ -557,4 +647,26 @@ Authors' Addresses
 
 
 
-Lennox, et al.           Expires January 7, 2016               [Page 10]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lennox, et al.           Expires January 7, 2016               [Page 12]
