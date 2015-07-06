@@ -5,15 +5,15 @@
 Payload Working Group                                          J. Lennox
 Internet-Draft                                                   D. Hong
 Intended status: Standards Track                                   Vidyo
-Expires: September 10, 2015                                    J. Uberti
+Expires: January 7, 2016                                       J. Uberti
                                                                S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                           March 9, 2015
+                                                            July 6, 2015
 
 
          The Layer Refresh Request (LRR) RTCP Feedback Message
-                       draft-lennox-avtext-lrr-00
+                        draft-ietf-avtext-lrr-00
 
 Abstract
 
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 10, 2015.
+   This Internet-Draft will expire on January 7, 2016.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 1]
+Lennox, et al.           Expires January 7, 2016                [Page 1]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
    include Simplified BSD License text as described in Section 4.e of
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 2]
+Lennox, et al.           Expires January 7, 2016                [Page 2]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
    For spatial (or quality) layers, layer refresh typically requires
@@ -165,9 +165,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 3]
+Lennox, et al.           Expires January 7, 2016                [Page 3]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
    An illustration of an inherently temporally nested stream is shown
@@ -221,9 +221,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 4]
+Lennox, et al.           Expires January 7, 2016                [Page 4]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
        0                   1                   2                   3
@@ -277,9 +277,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 5]
+Lennox, et al.           Expires January 7, 2016                [Page 5]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
 4.1.  H264 SVC
@@ -333,9 +333,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 6]
+Lennox, et al.           Expires January 7, 2016                [Page 6]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
    (which are expected to be defined in a future version of the
@@ -389,9 +389,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 7]
+Lennox, et al.           Expires January 7, 2016                [Page 7]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
    Example:
@@ -445,9 +445,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 8]
+Lennox, et al.           Expires January 7, 2016                [Page 8]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
 7.  IANA Considerations
@@ -501,9 +501,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
 
 
 
-Lennox, et al.         Expires September 10, 2015               [Page 9]
+Lennox, et al.           Expires January 7, 2016                [Page 9]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2015
 
 
 Authors' Addresses
@@ -543,6 +543,8 @@ Authors' Addresses
    Stockholm  111 22
    Sweden
 
+   Email: holmer@google.com
+
 
    Magnus Flodman
    Google, Inc.
@@ -550,11 +552,9 @@ Authors' Addresses
    Stockholm  111 22
    Sweden
 
+   Email: mflodman@google.com
 
 
 
 
-
-
-
-Lennox, et al.         Expires September 10, 2015              [Page 10]
+Lennox, et al.           Expires January 7, 2016               [Page 10]
