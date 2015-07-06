@@ -194,9 +194,17 @@
 	  the encoder must promise that no earlier pictures of that
 	  spatial layer will be used as reference in the future.</t>
 
-      <figure anchor="figureSpatialRefresh">
-        <preamble>An illustration of spatial layer refresh is shown
-        below.</preamble>
+	  <t>In a layer refresh, however, other layers than the ones
+	  requested for refresh may still maintain dependency on earlier
+	  content of the stream.  This is the difference between a layer
+	  refresh and a <xref target='RFC5104'>Full Intra
+	  Request</xref>.  This minimizes the coding overhead of refresh
+	  to only those parts of the stream that actually need to be
+	  refreshed at any given time.</t>
+
+      <figure anchor="figureSpatialRefreshEnhanced">
+        <preamble>An illustration of spatial layer refresh of an
+        enhancement layer is shown below.</preamble>
           <artwork><![CDATA[
      ... <--  S1  <--  S1       S1  <--  S1  <-- ...
                |        |        |        |
@@ -210,6 +218,24 @@
 			point for spatial layer S1; a decoder which had previously
 			only been decoding spatial layer S0 would be able to
 			decode layer S1 starting at frame 3.</postamble>
+      </figure>
+
+      <figure anchor="figureSpatialRefreshBase">
+        <preamble>An illustration of spatial layer refresh of a base layer is shown
+        below.</preamble>
+          <artwork><![CDATA[
+     ... <--  S1  <--  S1  <--  S1  <--  S1  <-- ...
+               |        |        |        |
+              \/       \/       \/       \/
+     ... <--  S0  <--  S0       S0  <--  S0  <-- ...
+
+               1        2        3        4
+          ]]></artwork>
+
+          <postamble>In this illustration, frame 3 is a layer refresh
+			point for spatial layer S0; a decoder which had previously
+			not been decoding the stream at all could decode layer S0
+			starting at frame 3.</postamble>
       </figure>
 
 	  <t>For temporal layers, layer refresh requires that the layer be
@@ -371,7 +397,48 @@
 		reception.  See <xref target='RFC6190'/> Section 1.1.3 for
 		details on the DID, QID, and TID fields.</t>
 
-		<t>TODO: identifying layer refresh frames in an H.264 bitstream.</t>
+		<t>A dependency or quality layer refresh of a given layer in
+		H.264 SVC can be identified by the "I" bit (idr_flag) in the
+		extended NAL unit header, present in NAL unit types 14 (prefix
+		NAL unit) and 20 (coded scalable slice).  Layer refresh of the
+		base layer can also be identified by its NAL unit type of
+		its coded slices, which is "5" rather than "1".  A dependency or
+		quality layer refresh is complete once this bit has been seen
+		on all the appropriate layers (in decoding order) above the
+		current layer index (if any, or beginning from the base layer
+		if not) through the target layer index.</t>
+
+		<t>Note that as the "I" bit in a PACSI header is set if the
+		corresponding bit is set in any of the aggregated NAL units it
+		describes; thus, it is not sufficient to identify layer
+		refresh when NAL units of multiple dependency or quality layers
+		are aggregated.</t>
+
+		<t>In H.264 SVC, temporal layer refresh information can be
+		determined from various Supplemental Encoding Information
+		(SEI) messages in the bitstream.</t>
+
+		<t>Whether an H.264 SVC stream is scalably nested can be determined from
+		the Scalability Information SEI message's temporal_id_nesting
+		flag.  If this flag is set in a stream's currently applicable
+		Scalability Information SEI, receivers SHOULD NOT send
+		temporal LRR messages for that stream, as every frame is
+		implicitly a temporal layer refresh point.  (The Scalability
+		Information SEI message may also be available in the signaling
+		negotiation of H.264 SVC, as the sprop-scalability-info
+		parameter.)</t>
+
+		<t>If a stream's temporal_id_nesting flag is not set, the
+		Temporal Level Switching Point SEI message identifies temporal
+		layer switching points.  A temporal layer refresh is satisfied
+		when this SEI message is present in a frame with the target
+		layer index, if the message's delta_frame_num refer to a frame
+		with the requested current layer index.  (Alternately,
+		temporal layer refresh can also be satisfied by a complete
+		state refresh, such as an IDR.)  Senders which support
+		receiving LRR for non-scalably-nested streams MUST insert
+		Temporal Level Switching Point SEI messages as appropriate.</t>
+
 	  </section>
 
 	  <section title="VP8">
@@ -396,7 +463,9 @@
 		reception.  See <xref target='I-D.ietf-payload-vp8'/> Section 4.2 for
 		details on the TID field.</t>
 
-		<t>TODO: identifying layer refresh frames in an VP8 bitstream.</t>
+		<t>TODO: identifying layer refresh frames in an VP8
+		bitstream.  Is the "Y" bit sufficient?  Or is VP8 required to
+		always be temporally nested, leaving this unnecessary?</t>
 	  </section>
 
 	  <section title="H265">
@@ -406,7 +475,7 @@
 		format</xref> defines temporal scalability, with protocol
 		elements reserved for spatial or other scalability modes
 		(which are expected to be defined in a future version of the
-		specification.</t>
+		specification).</t>
 
 		<figure anchor="figureH265IndexFormat">
           <artwork><![CDATA[
@@ -423,11 +492,29 @@
 		designed to follow the same layout as the first and second
 		bytes of the H.265 NAL unit header, which carry the
 		stream's layer information.  The "RES"
-		field MUST be set to 0 on transmission and ingnored on
-		reception.  See <xref target='I-D.ietf-payload-rtp-h265'/> Section 1.1.3 for
+		field MUST be set to 0 on transmission and ignored on
+		reception.  See <xref target='I-D.ietf-payload-rtp-h265'/> Section 1.1.4 for
 		details on the LayerId and TID fields.</t>
 
-		<t>TODO: identifying layer refresh frames in an H.265 bitstream.</t>
+		<t>H.265 streams signal whether they are temporally nested,
+		using the vps_temporal_id_nesting_flag in the Video Parameter
+		Set (VPS), and the sps_temporal_id_nesting_flag in the Sequence
+		Parameter Set (SPS).  If this flag is set in a stream's currently applicable
+		VPS or SPS, receivers SHOULD NOT send temporal LRR messages
+		for that stream, as every frame is implicitly a temporal layer
+		refresh point.</t>
+
+		<t>TODO: identifying temporal layer refresh frames in a
+		non-temporally-nested H.265 bitstream.</t>
+
+		<t>In the (future) H.265 payloads that support spatial
+		scalability, a spatial layer refresh of a specific layer can
+		be identified by NAL units with the requested layer ID and NAL
+		unit types between 16 and 21 inclusive.  A dependency or
+		quality layer refresh is complete once NAL units of this type have been seen
+		on all the appropriate layers (in decoding order) above the
+		current layer index (if any, or beginning from the base layer
+		if not) through the target layer index.</t>
 	  </section>
 
 	  <section title="VP9">
@@ -523,7 +610,7 @@
   </middle>
 
   <back>
-    <references>
+    <references title='Normative References'>
 	  &vp8rtp;
 
       &vp9rtp;
