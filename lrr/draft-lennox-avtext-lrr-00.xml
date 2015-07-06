@@ -114,6 +114,7 @@
 
           <country>Sweden</country>
         </postal>
+		<email>holmer@google.com</email>
       </address>
     </author>
 
@@ -129,6 +130,7 @@
 
           <country>Sweden</country>
         </postal>
+		<email>mflodman@google.com</email>
       </address>
     </author>
 
