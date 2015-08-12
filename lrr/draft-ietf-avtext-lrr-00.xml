@@ -504,8 +504,24 @@
 		for that stream, as every frame is implicitly a temporal layer
 		refresh point.</t>
 
-		<t>TODO: identifying temporal layer refresh frames in a
-		non-temporally-nested H.265 bitstream.</t>
+		<t>If a stream's sps_temporal_id_nesting_flag is not set, the
+		NAL unit types 2 to 5 inclusively identify temporal
+		layer switching points.  A layer refresh to any higher
+		target temporal layer is satisfied when a NAL unit type of 4 or 5 
+		with TID equal to 1 more than current TID is seen.  Alternatively,
+		layer refresh to a target temporal layer can be incrementally 
+		satisfied with NAL unit type of 2 or 3.  In this case, given 
+		current TID = TO and target TID = TN, layer refresh to TN is satisfied
+		when NAL unit type of 2 or 3 is seen for TID = T1, then TID = T2, 
+		all the way up to TID = TN.  During this incremental process, layer
+		referesh to TN can be completely satisfied as soon as a NAL unit type
+		of 2 or 3 is seen.</t>
+
+		<t>Of course, temporal layer refresh can also be satisfied whenever 
+		any Intra Random Access Point (IRAP) NAL unit type (with values 16-23,
+		inclusively) is seen.  An IRAP picture is similar to an IDR picture in
+		H.264 (NAL unit type of 5 in H.264) where decoding of the picture can start
+		without any older pictures.</t>
 
 		<t>In the (future) H.265 payloads that support spatial
 		scalability, a spatial layer refresh of a specific layer can
