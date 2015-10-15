@@ -172,9 +172,13 @@
     </section>
 
     <section title="FEC for Application Content">
-      <t>While WebRTC also supports the ability to send generic application data,
-      the fact that the application can control exactly what data to send allows
-      it to monitor packet statistics and perform its own FEC when necessary.</t>
+      <t>WebRTC also supports the ability to send generic application data, and
+      provides transport-level retransmission mechanisms that the application
+      can use to ensure that its data is delivered reliably. </t>
+      <t>
+      Because the application can control exactly what data to send, it has the
+      ability to monitor packet statistics and perform its own application-level
+      FEC, if necessary.</t>
       <t>As a result, this document makes no recommendations regarding FEC for
       the underlying data transport.</t>
     </section>
@@ -200,10 +204,17 @@
     </section>
 
     <section title="Security Considerations">
-      <t>This document makes recommendations regarding which FEC mechanisms to use.
-      The security considerations for each individual mechanism are enumerated in
-      their respective documents.
+      <t>This document makes recommendations regarding the use of FEC.
+      Generally, it should be noted that although applying redundancy is often useful
+      in protecting a stream against packet loss, if the loss is caused by network
+      congestion, the additional bandwidth used by the redundant data may actually
+      make the situation worse, and can lead to significant degradation of the
+      network.
       </t>
+      <t>Additional security considerations for each individual FEC mechanism
+      are enumerated in their respective documents.
+      </t>
+
     </section>
 
     <section title="IANA Considerations">
