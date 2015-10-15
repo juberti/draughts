@@ -6,6 +6,7 @@
 <!ENTITY icemob SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wing-mmusic-ice-mobility.xml">
 <!ENTITY mprtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.singh-avtcore-mprtp.xml">
 <!ENTITY redirect SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.williams-peer-redirect.xml">
+<!ENTITY consent SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-stun-consent-freshness.xml">
 <!ENTITY trickle SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-mmusic-trickle-ice.xml">
 ]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
@@ -63,7 +64,7 @@
       </address>
     </author>
 
-    <date day="06" month="November" year="2014" />
+    <date day="09" month="March" year="2015" />
 
     <area>RAI</area>
 
@@ -78,7 +79,7 @@
       <t>Interactive Connectivity Establishment (ICE) attempts to find the 'best'
       path for connectivity between two peers; in ICE parlance, these paths are
       known as 'candidate pairs'. During the ICE process, one endpoint,
-      known as the 'controlling' endpoint, selects a candidate pair as the 
+      known as the 'controlling' endpoint, selects a candidate pair as the
       best pair; this action is known as nomination. ICE supports two different
       mechanisms for performing nomination, known as Regular Nomination, and
       Aggressive Nomination.</t>
@@ -91,14 +92,14 @@
       Needless to say, the presence of both modes also adds nontrivial complexity.</t>
       <t>Lastly, ICE is currently defined as a finite process, where the decision on
       the optimal candidate pair is made during call setup and infrequently (if ever)
-      changed. While this may be acceptable for endpoints with static network 
+      changed. While this may be acceptable for endpoints with static network
       configurations, it fails to meet the needs of mobile endpoints, who may need
       to seamlessly move between networks, or be connected to multiple networks
       simultaneously. In these cases, the controlling endpoint may want to maintain
-      multiple potential candidate pairs, and make dynamic decisions to switch 
+      multiple potential candidate pairs, and make dynamic decisions to switch
       between them as conditions change.</t>
-      <t>To address these challenges, this document makes two proposals for 
-      refactoring ICE nomination - merging Regular and Aggressive Nomination, and 
+      <t>To address these challenges, this document makes two proposals for
+      refactoring ICE nomination - merging Regular and Aggressive Nomination, and
       introducing a new mode, known as Continuous Nomination. This makes ICE
       substantially more flexible without increasing complexity.
       </t>
@@ -125,7 +126,7 @@
       </section>
       <section title="Allow Controlling Endpoint to Make Dynamic Decisions" anchor="dynamic-decisions">
           <t>While an ICE endpoint will assign various priority values to its ICE candidates,
-          these priorities are static and can only be based on a priori knowledge; the 
+          these priorities are static and can only be based on a priori knowledge; the
           shortcomings of this approach are discussed in the first paragraph of Section 2.6
           in <xref target="RFC5245"/>. To
           properly make choices in multi-network and multi-server scenarios, the controlling
@@ -134,7 +135,7 @@
           which TURN servers to use, as described in <xref target="I-D.williams-peer-redirect"/>
           To ensure symmetric flows, this implies that
           the controlling endpoint MUST be able to communicate its choice to the controlled
-          side.       
+          side.
           </t>
       </section>
        <section title="Allow Selected Pair Change At Any Time Without Signaling" anchor="continuous-change">
@@ -144,16 +145,16 @@
           warm and switch immediately if connectivity is interrupted on one of them. As the
           signaling channel may be affected by the event necessitating the switch, this
           implies that the controlling endpoint MUST be able to change the selected pair
-          and indicate this to the remote side without signaling. The need for this 
+          and indicate this to the remote side without signaling. The need for this
           functionality has been stated in <xref target="I-D.wing-mmusic-ice-mobility"/> and
           <xref target="I-D.singh-avtcore-mprtp"/>.
           </t>
           <t>The rules in <xref target="RFC5245" /> ensure that the controlled
           endpoint keeps its candidate needed for the selected pair alive. However,
-          in order for alternate pairs to remain available, the controlled endpoint 
+          in order for alternate pairs to remain available, the controlled endpoint
           must keep the associated candidates alive as well, following the
           procedures outlined in <xref target="RFC5245"/>, Section 4.1.1.4. This implies
-          that the controlling endpoint MUST have some way to 
+          that the controlling endpoint MUST have some way to
           indicate to the controlled side that specific candidates are to be kept alive.
           </t>
       </section>
@@ -165,7 +166,7 @@
           remote side. While this could be done using an ICE restart, as described in
           <xref target="RFC5245" />, Section 9.1, the ICE restart may have unintended
           consequences, such as causing the remote side to regather all candidates.
-          Instead, it would be best if the new candidates could be trickled, as 
+          Instead, it would be best if the new candidates could be trickled, as
           discussed in <xref target="I-D.ietf-mmusic-trickle-ice"/>, but even after
           ICE processing has completed.
           </t>
@@ -180,7 +181,7 @@
       <section title="Minimize Complexity Increase" anchor="minimize-complexity">
           <t>Increased functionality typically leads to increased complexity, which
           leads to more edge cases, and more implementation bugs. This suggests that
-          in addition to proposing new ICE functionality, the ideal solution SHOULD 
+          in addition to proposing new ICE functionality, the ideal solution SHOULD
           deprecate superfluous functionality.</t>
       </section>
     </section>
@@ -200,7 +201,7 @@
         as in Aggressive Nomination, the requirements of <xref target="minimize-latency"/>
         and <xref target="dynamic-decisions"/> can be met, while meeting the compatibility
         requirement from <xref target="maintain-backcompat" /> and, since
-        Aggressive Nomination is no longer needed, the complexity requirement from 
+        Aggressive Nomination is no longer needed, the complexity requirement from
         <xref target="minimize-complexity" />.
         </t>
       </section>
@@ -237,12 +238,60 @@ nomination completes.</t>
         [N.B. this could be the ice-options:continuous option described below]
         </t>
       </section>
+      <section title="Examples">
+        <t>An example call setup using Regular Nomination as described above
+          is shown here. Alice is in the controlling role, and Bob is in the
+          controlled role; Alice has a single host candidate and Bob has
+          both host and relay candidates.</t>
+        <t>Alice's initial check to Bob's
+          host candidate fails, but the check to his relay candidate succeeds,
+          so Alice starts transmitting media on her host-relay pair. Bob's
+          initial check from his host candidate to Alice's host candidate
+          succeeds, so he starts transmitting media over this host-host pair to
+          Alice. However, when Alice's host check is later retransmitted,
+          it succeeds, and Alice determines that the host-host pair has a better
+          RTT than the host-relay pair, so she cuts media over to use the
+          host-host pair. Eventually, Alice concludes Regular Nomination by
+          sending a final check to Bob with the USE-CANDIDATE flag set. If Bob
+          had selected a different pair to use than Alice, this action would
+          have forced Bob to use the same pair.
+        </t>
+        <t><figure><artwork><![CDATA[
+ Alice                        Network                         Bob
+   |(1) STUN Req (Bob host)      |                             |
+   |---------------------------------------------------------->|
+   |(2) STUN Res (Bob host)      |                             |
+   |                         Lost|<----------------------------|
+   |(3) STUN Req (Bob relay)     |                             |
+   |---------------------------------------------------------->|
+   |(4) STUN Res (Bob relay)     |                             |
+   |<----------------------------------------------------------|
+   |(5) RTP starts (Bob relay)   |                             |
+   |==========================================================>|
+   |(6) STUN Req (Alice host)    |                             |
+   |<----------------------------------------------------------|
+   |(7) STUN Res (Alice host)    |                             |
+   |---------------------------------------------------------->|
+   |(8) RTP starts (Alice host)  |                             |
+   |<==========================================================|
+   |(9) STUN Req (Bob host)      |                             |
+   |---------------------------------------------------------->|
+   |(10) STUN Req (Bob host)     |                             |
+   |<----------------------------------------------------------|
+   |(11) RTP switch (Bob host)   |                             |
+   |==========================================================>|
+   |(12) STUN Req (Bob host, U-C)|                             |
+   |---------------------------------------------------------->|
+   |(13) STUN Res (Bob host)     |                             |
+   |<----------------------------------------------------------|
+]]></artwork></figure></t>
+      </section>
     </section>
 
     <section title="Introducing Continuous Nomination">
       <section title="Overview">
         <t>As discussed above, in mobile environments there can be multiple possible
-        valid candidate pairs, and  these can change at various points in the call, 
+        valid candidate pairs, and  these can change at various points in the call,
         as new interfaces go up and down, signal strength for wireless interfaces changes,
         and new relay servers are discovered.</t>
         <t>However, under 5245 rules, once a candidate pair is selected and confirmed, via
@@ -258,16 +307,16 @@ may be impacted by the handover.</t>
       </section>
       <section title="Operation">
         <t>Under continuous nomination, ICE never concludes; new candidates can
-        always be trickled, and a new candidate pair can be selected by the 
+        always be trickled, and a new candidate pair can be selected by the
         controlling side at any time.</t>
         <t>When selecting a new candidate pair, the controlling side informs the
-        controlled side of the chosen pat by sending a new Binding Request
+        controlled side of the chosen path by sending a new Binding Request
         with a USE-CANDIDATE attribute.
         The decision about which candidate pair to use is fully dynamic; the controlling
         side can use metrics such as RTT or loss rate to change the selected pair at any time.
         If Binding Requests need to be sent for any other reason, such as consent checks
-        [TODO: reference], any checks sent on the selected pair MUST include a USE-CANDIDATE
-        attribute.
+        <xref target="I-D.ietf-rtcweb-stun-consent-freshness"/>, any checks sent on
+        the selected pair MUST include a USE-CANDIDATE attribute.
         </t>
         <t>Upon receipt of a Binding Request with USE-CANDIDATE, the controlled side MUST switch
         its media path to the candidate pair on which the Binding Request
@@ -275,9 +324,11 @@ may be impacted by the handover.</t>
         <t>During continuous nomination, the controlling side may still elect
         to prune certain candidate pairs; for example, an implementation may
         choose to drop relay candidates once a successful connection has been
-        established. The controlled side, however, should follow the 
+        established. The controlled side, however, should follow the
         controlling side's lead in terms of deciding whether any pairs should
-        be pruned. The controlling ICE Agent informs the remote side of its
+        be pruned. [TODO: should the controlled side have any say in the matter,
+        e.g. to eliminate certain candidates?]
+        The controlling ICE Agent informs the remote side of its
         preferences by continuing to send
         Binding Requests to the remote side on each candidate pair that it
         wants to retain. The controlled ICE Agent SHOULD prune any
@@ -287,11 +338,12 @@ may be impacted by the handover.</t>
         approach is correct, or if we should have some sort of approach
         similar to TURN LIFETIME indicating when a pair should be GCed, with
         LIFETIME==0 indicating immediate GC.] One side benefit of doing this
-        is that the continuous exchange of Binding Requests across all 
+        is that the continuous exchange of Binding Requests across all
         candidate pairs allows the RTT and loss rate for
         each to be reliably determined and kept up to date.</t>
         <t>If the endpoints have negotiated Trickle ICE support
-        [TODO: reference], and new candidates become available on either side,
+        <xref target="I-D.ietf-mmusic-trickle-ice"/>, and new candidates
+        become available on either side,
         the endpoint may send these candidates to the remote side using
         the existing Trickle ICE mechanisms. Once all of the new candidates
         have been transmitted, the endpoint MUST send an end-of-candidates
@@ -302,18 +354,62 @@ may be impacted by the handover.</t>
         continuous nomination sequence, and upon successful
         completion, discarding all candidates from the previous nomination
         sequence.</t>
-      </section> 
+      </section>
       <section title="Backwards Compatibility">
         <t>Since standard ICE implementations may not expect the selected pair to change after a
 USE-CANDIDATE attribute is received, support for continuous nomination is explicitly
 indicated via a new "continuous" value for ice-options. If the remote side does not support the
-"continuous" option, the controlling side MUST fall back to Regular Nomination, as 
+"continuous" option, the controlling side MUST fall back to Regular Nomination, as
         specified in <xref target="RFC5245"/>, Sectiom 8.1.1.</t>
       </section>
-    </section>
-
-    <section title="Examples">
-      <t>TODO</t>
+      <section title="Examples">
+        <section title="Switching Between Pairs Based on RTT">
+          <t>Alice and Bob have set up a call using ICE and have established
+            multiple valid pairs. The currently selected pair is for a
+            peer-to-peer route, as it had the highest initial priority value.
+            However, they have also kept alive a selected pair that goes
+            through their TURN servers. At a certain point, Alice detects, via
+            the connectivity checks that she continues to do on the relayed pair,
+            that it actually has a better RTT than the peer-to-peer path. She
+            then decides to switch media over to this path.</t>
+          <t>As mentioned above, this is easily handled by Alice immediately
+            switching her media to the relayed path; future STUN checks on this
+            path also include the USE-CANDIDATE attribute.</t>
+        </section>
+        <section title="Switching To A New TURN Server">
+          <t>Alice and Bob have set up a call using ICE, and are currently
+            sending their media through Alice's TURN server. At a certain point,
+            Alice's application discovers a new TURN server that it thinks
+            might provide a better path for this call.</t>
+          <t>Alice gathers new candidates from this TURN server, and trickles
+            them to Bob. They perform connectivity checks using these candidates,
+            and Alice determines that the RTT when going through this TURN server is
+            better than the RTT of the current relayed path.</t>
+          <t>As in the previous example, this is easily handled by Alice switching
+            media to the new path, along with sending USE-CANDIDATE. If the old
+            path is no longer needed, Alice can destroy the allocation on the
+            old TURN server, and Bob will stop checking it when it stops working.
+          </t>
+        </section>
+        <section title="Switching From WLAN to WWAN">
+          <t>Alice and Bob have set up a call using ICE, and are currently
+            exchanging their media directly via a peer-to-peer path. Alice is
+            on a mobile device, with both wifi and cellular interfaces, but for
+            power reasons, candidates have only been gathered on the wifi
+            interface. At a certain point, Alice leaves her home while the call
+            is active.</t>
+          <t>In response to the decreasing wifi signal strength, Alice starts
+            to collect candidates on the cellular interface, and trickles them
+            to Bob. They perform connectivity checks using these candidates,
+            and, because of the low wifi signal strength, these candidates are
+            preferred over the existing selected pair.</t>
+          <t>As in the previous examples, Alice can easily switch media to the
+            new selected pair. When Alice walks completely out of wifi range,
+            and the wifi interface goes down, the wifi candidates are pruned,
+            and any valid pairs on Bob's side that use those candidates will
+            time out and be pruned as well.</t>
+        </section>
+      </section>
     </section>
 
     <section title="Security Considerations">
@@ -322,13 +418,14 @@ indicated via a new "continuous" value for ice-options. If the remote side does 
 
     <section title="IANA Considerations">
       <t>A new ICE option "continuous" has been [will be] registered
-      in the "ICE Options" registry created by <xref target="RFC6336"/>.  
+      in the "ICE Options" registry created by <xref target="RFC6336"/>.
       </t>
     </section>
 
     <section title="Acknowledgements">
       <t>Several people provided significant input into this document,
-      including Martin Thomson, Brandon Williams, and Dan Wing.</t>
+      including Martin Thomson, Brandon Williams, and Dan Wing. Emil Ivov also
+      provided several of the examples for continuous nomination.</t>
     </section>
   </middle>
 
@@ -340,6 +437,7 @@ indicated via a new "continuous" value for ice-options. If the remote side does 
     </references>
 
     <references title="Informative References">
+      &consent;
       &trickle;
       &redirect;
       &icemob;
