@@ -8,7 +8,10 @@
 <!ENTITY rfc4855 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4855.xml">
 <!ENTITY rfc4566 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4566.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
+<!ENTITY rfc5124 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5124.xml">
 <!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
+<!ENTITY rfc7201 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7201.xml">
+<!ENTITY rfc7202 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7202.xml">
 <!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
 <!ENTITY lrr SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.lennox-avtext-lrr.xml">
 
@@ -172,6 +175,9 @@
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
       document are to be interpreted as described in <xref
       target="RFC2119"/>.</t>
+
+      <t>TODO: Cite terminology from <xref
+      target="I-D.grange-vp9-bitstream"/>.</t>
     </section>
 
     <section anchor="mediaFormatDescription" title="Media Format Description">
@@ -283,7 +289,7 @@
   |            contributing source (CSRC) identifiers             |
   |                             ....                              |
   +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-  |            VP9 payload descriptor (integer #bytes)            |
+  |            VP9 payload descriptor (integer #octets)           |
   :                                                               :
   |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                               : VP9 pyld hdr  |               |
@@ -298,8 +304,11 @@
           ]]></artwork>
 
           <postamble>The VP9 payload descriptor and VP9 payload header will be
-          described in the next section. OPTIONAL RTP padding MUST NOT be included
-          unless the P bit is set.</postamble>
+          described in <xref target="VP9payloadDescriptor"/> and <xref target="VP9payloadHeader"/>.
+			OPTIONAL RTP padding MUST NOT be included unless the P bit is set.
+			The figure specifically shows the format for the first
+			packet in a frame.  Subsequent packets will not contain the
+			VP8 payload header, and will have later octets in the frame payload.</postamble>
         </figure>
 
         <t><list style="hanging">
@@ -309,16 +318,24 @@
             this will have the same value as the E bit described below.  Note that a
             MANE MUST set this value to 1 for the target spatial layer frame 
             when shaping out higher spatial layers.</t>
+			
+			<t hangText="Payload Type (TP):">In line with the policy
+			  in Section 3 of <xref target='RFC3551'/>, applications using the VP8 RTP payload
+			  profile MUST assign a dynamic payload type number to be
+			  used in each RTP session and provide a mechanism to
+			  indicate the mapping.  See <xref target="SDPParameters"/> for the mechanism
+			  to be used with the <xref target='RFC4566'>Session
+			  Description Protocol (SDP)</xref>.</t>
 
             <t hangText="Timestamp:">The RTP timestamp indicates the time when
             the input frame was sampled, at a clock rate of 90 kHz.  If the
             input frame is encoded with multiple layer frames, all of the
             layer frames of the super frame MUST have the same timestamp.</t>
 
-            <t hangText="Sequence number:">The sequence numbers are
-            monotonically increasing in order of the encoded bitstream.</t>
           </list></t>
-        <t>The remaining RTP header fields are used as specified in <xref
+        <t>The remaining RTP Fixed Header Fields (V, P, X, CC,
+        sequence number, SSRC and CSRC identifiers) are used as
+        specified in Section 5.1 of <xref
         target="RFC3550"/>.</t>
       </section>
 
@@ -609,8 +626,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         been detected by the decoder -- preferably then a reference that the
         decoder knows is perfect -- or, it can be used as positive feedback
         information to acknowledge correct decoding of certain reference
-        pictures. The positive feedback method is useful for VP9 used as
-        unicast. The use of RPSI for VP9 is preferably combined with a special
+        pictures. The positive feedback method is useful for VP9 used for
+        point to point (unicast) communication. The use of RPSI for VP9 is preferably combined with a special
         update pattern of the codec's two special reference frames -- the
         golden frame and the altref frame -- in which they are updated in an
         alternating leapfrog fashion. When a receiver has received and
@@ -640,7 +657,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         </figure>
 
         <t>Here, First is the macroblock address (in scan order) of the first
-        lost block and Number is the number of lost blocks. PictureID is the
+        lost block and Number is the number of lost blocks, as defined
+        in <xref target='RFC4585'/>. PictureID is the
         six least significant bits of the codec-specific picture identifier in
         which the loss or corruption has occurred. For VP9, this
         codec-specific identifier is naturally the PictureID of the current
@@ -648,7 +666,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         of the current frame does not have a PictureID, the receiver MAY send
         the last received PictureID+1 in the SLI message. The receiver MAY set
         the First parameter to 0, and the Number parameter to the total number
-        of macroblocks per frame, even though only parts of the frame is
+        of macroblocks per frame, even though only part of the frame is
         corrupted. When the sender receives an SLI message, it can make use of
         the knowledge from the latest received RPSI message. Knowing that the
         last golden or altref frame was successfully received, it can encode
@@ -890,7 +908,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
     <section anchor="payloadFormatParameters"
              title="Payload Format Parameters">
-      <t>This payload format has two required parameters.</t>
+      <t>This payload format has two optional parameters.</t>
 
       <section anchor="mediaTypeRegistration" title="Media Type Definition">
         <t>This registration is done using the template defined in <xref
@@ -900,9 +918,12 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
             <t hangText="Subtype name:">VP9</t>
 
-            <t hangText="Required parameters:"><vspace blankLines="0"/> These
-            parameters MUST be used to signal the capabilities of a receiver
-            implementation. These parameters MUST NOT be used for any other
+            <t hangText="Required parameters:">None.</t>
+
+            <t hangText="Optional parameters:"><vspace blankLines="0"/> These
+            parameters are used to signal the capabilities of a receiver
+            implementation. If the implementation is willing to
+            receive media, both parameters MUST be provided. These parameters MUST NOT be used for any other
             purpose. <list style="hanging">
                 <t hangText="max-fr:">The value of max-fr is an integer
                 indicating the maximum frame rate in units of frames per
@@ -962,7 +983,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
           </list></t>
       </section>
 
-      <section title="SDP Parameters">
+      <section anchor="SDPParameters" title="SDP Parameters">
         <t>The receiver MUST ignore any fmtp parameter unspecified in this
         memo.</t>
 
@@ -1012,20 +1033,24 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
       <t>RTP packets using the payload format defined in this specification
       are subject to the security considerations discussed in the RTP
       specification <xref target="RFC3550"/>, and in any applicable RTP
-      profile. The main security considerations for the RTP packet carrying
-      the RTP payload format defined within this memo are confidentiality,
-      integrity and source authenticity. Confidentiality is achieved by
-      encryption of the RTP payload. Integrity of the RTP packets through
-      suitable cryptographic integrity protection mechanism. Cryptographic
-      system may also allow the authentication of the source of the payload. A
-      suitable security mechanism for this RTP payload format should provide
-      confidentiality, integrity protection and at least source authentication
-      capable of determining if an RTP packet is from a member of the RTP
-      session or not. Note that the appropriate mechanism to provide security
-      to RTP and payloads following this memo may vary. It is dependent on the
-      application, the transport, and the signaling protocol employed.
-      Therefore a single mechanism is not sufficient, although if suitable the
-      usage of SRTP <xref target="RFC3711"/> is recommended. This RTP payload
+      profile such
+      as <xref target='RFC3551'>RTP/AVP</xref>, <xref target='RFC4585'>RTP/AVPF</xref>,
+      <xref target='RFC3711'>RTP/SAVP</xref>,
+      or <xref target='RFC5124'>RTP/SAVPF</xref>.
+	  SAVPF [RFC5124].  However, as <xref target='RFC7202'>"Securing the RTP Protocol
+      Framework: Why RTP Does Not Mandate a Single Media
+      Security Solution"</xref> discusses, it is not an RTP payload format's responsibility to
+      discuss or mandate what solutions are used to meet the
+      basic security goals like confidentiality, integrity and source
+      authenticity for RTP in general.  This responsibility lays on
+      anyone using RTP in an application.  They can find guidance on available
+      security mechanisms in <xref target='RFC7201'>Options for Securing
+      RTP Sessions</xref>.  Applications SHOULD use one or more appropriate
+      strong security mechanisms.  The rest of this security
+      consideration section discusses the security impacting properties of the
+      payload format itself.</t>
+
+	  <t>This RTP payload
       format and its media decoder do not exhibit any significant
       non-uniformity in the receiver-side computational complexity for packet
       processing, and thus are unlikely to pose a denial-of-service threat due
@@ -1078,6 +1103,12 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
       &rfc3551;
 	  
+	  &rfc5124;
+
+	  &rfc7201;
+
+	  &rfc7202;
+
       &rfc3711;
 
 	</references>

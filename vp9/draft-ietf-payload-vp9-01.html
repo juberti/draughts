@@ -515,6 +515,7 @@
 <p id="rfc.section.1.p.2">TODO: VP9 description.  Please see <a href="#I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</a>.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#conventions" id="conventions">Conventions, Definitions and Acronyms</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
+<p id="rfc.section.2.p.2">TODO: Cite terminology from <a href="#I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</a>.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#mediaFormatDescription" id="mediaFormatDescription">Media Format Description</a></h1>
 <p id="rfc.section.3.p.1">The VP9 codec can maintain up to eight reference frames, of which up to three can be referenced or updated by any new frame.</p>
 <p id="rfc.section.3.p.2">VP9 also allows a reference frame to be resampled and used as a reference for another frame of a different resolution.  This allows internal resolution changes without requiring the use of key frames.</p>
@@ -548,7 +549,7 @@
   |            contributing source (CSRC) identifiers             |
   |                             ....                              |
   +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
-  |            VP9 payload descriptor (integer #bytes)            |
+  |            VP9 payload descriptor (integer #octets)           |
   :                                                               :
   |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                               : VP9 pyld hdr  |               |
@@ -561,19 +562,19 @@
   |                               :    OPTIONAL RTP padding       |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           </pre>
-<p>The VP9 payload descriptor and VP9 payload header will be described in the next section. OPTIONAL RTP padding MUST NOT be included unless the P bit is set.</p>
+<p>The VP9 payload descriptor and VP9 payload header will be described in <a href="#VP9payloadDescriptor">Section 4.2</a> and <a href="#VP9payloadHeader">Section 4.3</a>.  OPTIONAL RTP padding MUST NOT be included unless the P bit is set.  The figure specifically shows the format for the first packet in a frame.  Subsequent packets will not contain the VP8 payload header, and will have later octets in the frame payload.</p>
 <p class="figure">Figure 1</p>
 <p/>
 
 <dl>
   <dt>Marker bit (M):</dt>
   <dd style="margin-left: 8">MUST be set to 1 for the final packet of the highest spatial layer frame (the final packet of the super frame), and 0 otherwise.  Unless spatial scalability is in use for this super frame, this will have the same value as the E bit described below.  Note that a MANE MUST set this value to 1 for the target spatial layer frame when shaping out higher spatial layers.</dd>
+  <dt>Payload Type (TP):</dt>
+  <dd style="margin-left: 8">In line with the policy in Section 3 of <a href="#RFC3551">[RFC3551]</a>, applications using the VP8 RTP payload profile MUST assign a dynamic payload type number to be used in each RTP session and provide a mechanism to indicate the mapping.  See <a href="#SDPParameters">Section 6.2</a> for the mechanism to be used with the <a href="#RFC4566">Session Description Protocol (SDP)</a> <cite title="NONE">[RFC4566]</cite>.</dd>
   <dt>Timestamp:</dt>
   <dd style="margin-left: 8">The RTP timestamp indicates the time when the input frame was sampled, at a clock rate of 90 kHz.  If the input frame is encoded with multiple layer frames, all of the layer frames of the super frame MUST have the same timestamp.</dd>
-  <dt>Sequence number:</dt>
-  <dd style="margin-left: 8">The sequence numbers are monotonically increasing in order of the encoded bitstream.</dd>
 </dl>
-<p id="rfc.section.4.1.p.2">The remaining RTP header fields are used as specified in <a href="#RFC3550">[RFC3550]</a>.</p>
+<p id="rfc.section.4.1.p.2">The remaining RTP Fixed Header Fields (V, P, X, CC, sequence number, SSRC and CSRC identifiers) are used as specified in Section 5.1 of <a href="#RFC3550">[RFC3550]</a>.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#VP9payloadDescriptor" id="VP9payloadDescriptor">VP9 Payload Description</a></h1>
 <div id="rfc.figure.2"/>
 <div id="figureVP9payloadDescriptor"/>
@@ -712,7 +713,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 <p id="rfc.section.5.p.1">The VP9 payload descriptor defined in <a href="#VP9payloadDescriptor">Section 4.2</a> above contains an optional PictureID parameter. One use of this parameter is included to enable use of reference picture selection index (RPSI) and slice loss indication (SLI), both defined in <a href="#RFC4585">[RFC4585]</a>.</p>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#RPSI" id="RPSI">RPSI</a></h1>
 <p id="rfc.section.5.1.p.1">TODO: Update to indicate which frame within the picture.</p>
-<p id="rfc.section.5.1.p.2">The reference picture selection index is a payload-specific feedback message defined within the RTCP-based feedback format. The RPSI message is generated by a receiver and can be used in two ways.  Either it can signal a preferred reference picture when a loss has been detected by the decoder -- preferably then a reference that the decoder knows is perfect -- or, it can be used as positive feedback information to acknowledge correct decoding of certain reference pictures. The positive feedback method is useful for VP9 used as unicast. The use of RPSI for VP9 is preferably combined with a special update pattern of the codec's two special reference frames -- the golden frame and the altref frame -- in which they are updated in an alternating leapfrog fashion. When a receiver has received and correctly decoded a golden or altref frame, and that frame had a PictureID in the payload descriptor, the receiver can acknowledge this simply by sending an RPSI message back to the sender. The message body (i.e., the "native RPSI bit string" in <a href="#RFC4585">[RFC4585]</a>) is simply the PictureID of the received frame.</p>
+<p id="rfc.section.5.1.p.2">The reference picture selection index is a payload-specific feedback message defined within the RTCP-based feedback format. The RPSI message is generated by a receiver and can be used in two ways.  Either it can signal a preferred reference picture when a loss has been detected by the decoder -- preferably then a reference that the decoder knows is perfect -- or, it can be used as positive feedback information to acknowledge correct decoding of certain reference pictures. The positive feedback method is useful for VP9 used for point to point (unicast) communication. The use of RPSI for VP9 is preferably combined with a special update pattern of the codec's two special reference frames -- the golden frame and the altref frame -- in which they are updated in an alternating leapfrog fashion. When a receiver has received and correctly decoded a golden or altref frame, and that frame had a PictureID in the payload descriptor, the receiver can acknowledge this simply by sending an RPSI message back to the sender. The message body (i.e., the "native RPSI bit string" in <a href="#RFC4585">[RFC4585]</a>) is simply the PictureID of the received frame.</p>
 <h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#SLI" id="SLI">SLI</a></h1>
 <p id="rfc.section.5.2.p.1">TODO: Update to indicate which frame within the picture.</p>
 <p id="rfc.section.5.2.p.2">The slice loss indication is another payload-specific feedback message defined within the RTCP-based feedback format. The SLI message is generated by the receiver when a loss or corruption is detected in a frame. The format of the SLI message is as follows <a href="#RFC4585">[RFC4585]</a>:</p>
@@ -726,7 +727,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             </pre>
 <p class="figure">Figure 5</p>
-<p id="rfc.section.5.2.p.3">Here, First is the macroblock address (in scan order) of the first lost block and Number is the number of lost blocks. PictureID is the six least significant bits of the codec-specific picture identifier in which the loss or corruption has occurred. For VP9, this codec-specific identifier is naturally the PictureID of the current frame, as read from the payload descriptor. If the payload descriptor of the current frame does not have a PictureID, the receiver MAY send the last received PictureID+1 in the SLI message. The receiver MAY set the First parameter to 0, and the Number parameter to the total number of macroblocks per frame, even though only parts of the frame is corrupted. When the sender receives an SLI message, it can make use of the knowledge from the latest received RPSI message. Knowing that the last golden or altref frame was successfully received, it can encode the next frame with reference to that established reference.</p>
+<p id="rfc.section.5.2.p.3">Here, First is the macroblock address (in scan order) of the first lost block and Number is the number of lost blocks, as defined in <a href="#RFC4585">[RFC4585]</a>. PictureID is the six least significant bits of the codec-specific picture identifier in which the loss or corruption has occurred. For VP9, this codec-specific identifier is naturally the PictureID of the current frame, as read from the payload descriptor. If the payload descriptor of the current frame does not have a PictureID, the receiver MAY send the last received PictureID+1 in the SLI message. The receiver MAY set the First parameter to 0, and the Number parameter to the total number of macroblocks per frame, even though only part of the frame is corrupted. When the sender receives an SLI message, it can make use of the knowledge from the latest received RPSI message. Knowing that the last golden or altref frame was successfully received, it can encode the next frame with reference to that established reference.</p>
 <h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> Example</h1>
 <p id="rfc.section.5.3.p.1">TODO: this example is copied from the VP8 payload format specification, and has not been updated for VP9.  It may be incorrect.</p>
 <p id="rfc.section.5.3.p.2">The use of RPSI and SLI is best illustrated in an example. In this example, the encoder may not update the altref frame until the last sent golden frame has been acknowledged with an RPSI message. If an update is not received within some time, a new golden frame update is sent instead. Once the new golden frame is established and acknowledged, the same rule applies when updating the altref frame.</p>
@@ -897,7 +898,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 </table>
 <p id="rfc.section.5.3.p.3">Note that the scheme is robust to loss of the feedback messages. If the RPSI is lost, the sender will try to update the golden (or altref) again after a while, without releasing the established reference.  Also, if an SLI is lost, the receiver can keep sending SLI messages at any interval allowed by the RTCP sending timing restrictions as specified in <a href="#RFC4585">[RFC4585]</a>, as long as the picture is corrupted.</p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#payloadFormatParameters" id="payloadFormatParameters">Payload Format Parameters</a></h1>
-<p id="rfc.section.6.p.1">This payload format has two required parameters.</p>
+<p id="rfc.section.6.p.1">This payload format has two optional parameters.</p>
 <h1 id="rfc.section.6.1"><a href="#rfc.section.6.1">6.1.</a> <a href="#mediaTypeRegistration" id="mediaTypeRegistration">Media Type Definition</a></h1>
 <p id="rfc.section.6.1.p.1">This registration is done using the template defined in <a href="#RFC6838">[RFC6838]</a> and following <a href="#RFC4855">[RFC4855]</a>. </p>
 
@@ -907,7 +908,9 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
   <dt>Subtype name:</dt>
   <dd style="margin-left: 8">VP9</dd>
   <dt>Required parameters:</dt>
-  <dd style="margin-left: 8"><br/> These parameters MUST be used to signal the capabilities of a receiver implementation. These parameters MUST NOT be used for any other purpose. <dl><dt>max-fr:</dt><dd style="margin-left: 8">The value of max-fr is an integer indicating the maximum frame rate in units of frames per second that the decoder is capable of decoding.</dd><dt>max-fs:</dt><dd style="margin-left: 8">The value of max-fs is an integer indicating the maximum frame size in units of macroblocks that the decoder is capable of decoding.</dd><dt></dt><dd style="margin-left: 8">The decoder is capable of decoding this frame size as long as the width and height of the frame in macroblocks are less than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable of supporting 640x480 resolution) will support widths and heights up to 1552 pixels (97 macroblocks).</dd></dl></dd>
+  <dd style="margin-left: 8">None.</dd>
+  <dt>Optional parameters:</dt>
+  <dd style="margin-left: 8"><br/> These parameters are used to signal the capabilities of a receiver implementation. If the implementation is willing to receive media, both parameters MUST be provided. These parameters MUST NOT be used for any other purpose. <dl><dt>max-fr:</dt><dd style="margin-left: 8">The value of max-fr is an integer indicating the maximum frame rate in units of frames per second that the decoder is capable of decoding.</dd><dt>max-fs:</dt><dd style="margin-left: 8">The value of max-fs is an integer indicating the maximum frame size in units of macroblocks that the decoder is capable of decoding.</dd><dt></dt><dd style="margin-left: 8">The decoder is capable of decoding this frame size as long as the width and height of the frame in macroblocks are less than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable of supporting 640x480 resolution) will support widths and heights up to 1552 pixels (97 macroblocks).</dd></dl></dd>
   <dt>Encoding considerations:</dt>
   <dd style="margin-left: 8"><br/> This media type is framed in RTP and contains binary data; see Section 4.8 of <a href="#RFC6838">[RFC6838]</a>.</dd>
   <dt>Security considerations:</dt>
@@ -933,7 +936,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
   <dt>Change controller:</dt>
   <dd style="margin-left: 8"><br/> IETF Payload Working Group delegated from the IESG.</dd>
 </dl>
-<h1 id="rfc.section.6.2"><a href="#rfc.section.6.2">6.2.</a> SDP Parameters</h1>
+<h1 id="rfc.section.6.2"><a href="#rfc.section.6.2">6.2.</a> <a href="#SDPParameters" id="SDPParameters">SDP Parameters</a></h1>
 <p id="rfc.section.6.2.p.1">The receiver MUST ignore any fmtp parameter unspecified in this memo.</p>
 <h1 id="rfc.section.6.2.1"><a href="#rfc.section.6.2.1">6.2.1.</a> Mapping of Media Subtype Parameters to SDP</h1>
 <p id="rfc.section.6.2.1.p.1">The media type video/VP9 string is mapped to fields in the Session Description Protocol (SDP) <a href="#RFC4566">[RFC4566]</a> as follows: </p>
@@ -950,7 +953,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 <h1 id="rfc.section.6.2.2"><a href="#rfc.section.6.2.2">6.2.2.</a> Offer/Answer Considerations</h1>
 <p id="rfc.section.6.2.2.p.1">TODO: Update this for VP9</p>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#securityConsiderations" id="securityConsiderations">Security Considerations</a></h1>
-<p id="rfc.section.7.p.1">RTP packets using the payload format defined in this specification are subject to the security considerations discussed in the RTP specification <a href="#RFC3550">[RFC3550]</a>, and in any applicable RTP profile. The main security considerations for the RTP packet carrying the RTP payload format defined within this memo are confidentiality, integrity and source authenticity. Confidentiality is achieved by encryption of the RTP payload. Integrity of the RTP packets through suitable cryptographic integrity protection mechanism. Cryptographic system may also allow the authentication of the source of the payload. A suitable security mechanism for this RTP payload format should provide confidentiality, integrity protection and at least source authentication capable of determining if an RTP packet is from a member of the RTP session or not. Note that the appropriate mechanism to provide security to RTP and payloads following this memo may vary. It is dependent on the application, the transport, and the signaling protocol employed.  Therefore a single mechanism is not sufficient, although if suitable the usage of SRTP <a href="#RFC3711">[RFC3711]</a> is recommended. This RTP payload format and its media decoder do not exhibit any significant non-uniformity in the receiver-side computational complexity for packet processing, and thus are unlikely to pose a denial-of-service threat due to the receipt of pathological data. Nor does the RTP payload format contain any active content.</p>
+<p id="rfc.section.7.p.1">RTP packets using the payload format defined in this specification are subject to the security considerations discussed in the RTP specification <a href="#RFC3550">[RFC3550]</a>, and in any applicable RTP profile such as <a href="#RFC3551">RTP/AVP</a> <cite title="NONE">[RFC3551]</cite>, <a href="#RFC4585">RTP/AVPF</a> <cite title="NONE">[RFC4585]</cite>, <a href="#RFC3711">RTP/SAVP</a> <cite title="NONE">[RFC3711]</cite>, or <a href="#RFC5124">RTP/SAVPF</a> <cite title="NONE">[RFC5124]</cite>.  SAVPF [RFC5124].  However, as <a href="#RFC7202">"Securing the RTP Protocol Framework: Why RTP Does Not Mandate a Single Media Security Solution"</a> <cite title="NONE">[RFC7202]</cite> discusses, it is not an RTP payload format's responsibility to discuss or mandate what solutions are used to meet the basic security goals like confidentiality, integrity and source authenticity for RTP in general.  This responsibility lays on anyone using RTP in an application.  They can find guidance on available security mechanisms in <a href="#RFC7201">Options for Securing RTP Sessions</a> <cite title="NONE">[RFC7201]</cite>.  Applications SHOULD use one or more appropriate strong security mechanisms.  The rest of this security consideration section discusses the security impacting properties of the payload format itself.</p>
+<p id="rfc.section.7.p.2">This RTP payload format and its media decoder do not exhibit any significant non-uniformity in the receiver-side computational complexity for packet processing, and thus are unlikely to pose a denial-of-service threat due to the receipt of pathological data. Nor does the RTP payload format contain any active content.</p>
 <h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#congestionControl" id="congestionControl">Congestion Control</a></h1>
 <p id="rfc.section.8.p.1">Congestion control for RTP SHALL be used in accordance with RFC 3550 <a href="#RFC3550">[RFC3550]</a>, and with any applicable RTP profile; e.g., RFC 3551 <a href="#RFC3551">[RFC3551]</a>. The congestion control mechanism can, in a real-time encoding scenario, adapt the transmission rate by instructing the encoder to encode at a certain target rate. Media aware network elements MAY use the information in the VP9 payload descriptor in <a href="#VP9payloadDescriptor">Section 4.2</a> to identify non-reference frames and discard them in order to reduce network congestion. Note that discarding of non-reference frames cannot be done if the stream is encrypted (because the non-reference marker is encrypted).</p>
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#IANAConsiderations" id="IANAConsiderations">IANA Considerations</a></h1>
@@ -1023,6 +1027,24 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         <b id="RFC3711">[RFC3711]</b>
       </td>
       <td class="top"><a>Baugher, M.</a>, <a>McGrew, D.</a>, <a>Naslund, M.</a>, <a>Carrara, E.</a> and <a>K. Norrman</a>, "<a href="http://tools.ietf.org/html/rfc3711">The Secure Real-time Transport Protocol (SRTP)</a>", RFC 3711, DOI 10.17487/RFC3711, March 2004.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5124">[RFC5124]</b>
+      </td>
+      <td class="top"><a>Ott, J.</a> and <a>E. Carrara</a>, "<a href="http://tools.ietf.org/html/rfc5124">Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)</a>", RFC 5124, DOI 10.17487/RFC5124, February 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7201">[RFC7201]</b>
+      </td>
+      <td class="top"><a>Westerlund, M.</a> and <a>C. Perkins</a>, "<a href="http://tools.ietf.org/html/rfc7201">Options for Securing RTP Sessions</a>", RFC 7201, DOI 10.17487/RFC7201, April 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7202">[RFC7202]</b>
+      </td>
+      <td class="top"><a>Perkins, C.</a> and <a>M. Westerlund</a>, "<a href="http://tools.ietf.org/html/rfc7202">Securing the RTP Framework: Why RTP Does Not Mandate a Single Media Security Solution</a>", RFC 7202, DOI 10.17487/RFC7202, April 2014.</td>
     </tr>
   </tbody>
 </table>
