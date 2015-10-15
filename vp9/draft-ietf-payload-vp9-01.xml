@@ -13,7 +13,7 @@
 <!ENTITY lrr SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.lennox-avtext-lrr.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-payload-vp9-00" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-payload-vp9-01" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>

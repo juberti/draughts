@@ -13,7 +13,7 @@ Expires: April 17, 2016                                           Google
 
 
                     RTP Payload Format for VP9 Video
-                       draft-ietf-payload-vp9-00
+                       draft-ietf-payload-vp9-01
 
 Abstract
 
