@@ -17,7 +17,7 @@
 <!ENTITY taxonomy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-rtp-grouping-taxonomy.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-avtext-lrr-00" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-avtext-lrr-01" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
