@@ -407,7 +407,7 @@
 
   <meta name="dct.creator" content="Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D. Hong" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-10-15" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-10-19" />
   <meta name="dct.abstract" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
   <meta name="description" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
 
@@ -431,7 +431,7 @@
   <td class="right">M. Flodman</td>
 </tr>
 <tr>
-  <td class="left">Expires: April 17, 2016</td>
+  <td class="left">Expires: April 21, 2016</td>
   <td class="right">Google</td>
 </tr>
 <tr>
@@ -448,7 +448,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">October 15, 2015</td>
+  <td class="right">October 19, 2015</td>
 </tr>
 
     	
@@ -468,7 +468,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 17, 2016.</p>
+<p>This Internet-Draft will expire on April 21, 2016.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -562,7 +562,7 @@
   |                               :    OPTIONAL RTP padding       |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           </pre>
-<p>The VP9 payload descriptor and VP9 payload header will be described in <a href="#VP9payloadDescriptor">Section 4.2</a> and <a href="#VP9payloadHeader">Section 4.3</a>.  OPTIONAL RTP padding MUST NOT be included unless the P bit is set.  The figure specifically shows the format for the first packet in a frame.  Subsequent packets will not contain the VP8 payload header, and will have later octets in the frame payload.</p>
+<p>The VP9 payload descriptor and VP9 payload header will be described in <a href="#VP9payloadDescriptor">Section 4.2</a> and <a href="#VP9payloadHeader">Section 4.3</a>.  OPTIONAL RTP padding MUST NOT be included unless the P bit is set.  The figure specifically shows the format for the first packet in a frame.  Subsequent packets will not contain the VP9 payload header, and will have later octets in the frame payload.</p>
 <p class="figure">Figure 1</p>
 <p/>
 
@@ -570,7 +570,7 @@
   <dt>Marker bit (M):</dt>
   <dd style="margin-left: 8">MUST be set to 1 for the final packet of the highest spatial layer frame (the final packet of the super frame), and 0 otherwise.  Unless spatial scalability is in use for this super frame, this will have the same value as the E bit described below.  Note that a MANE MUST set this value to 1 for the target spatial layer frame when shaping out higher spatial layers.</dd>
   <dt>Payload Type (TP):</dt>
-  <dd style="margin-left: 8">In line with the policy in Section 3 of <a href="#RFC3551">[RFC3551]</a>, applications using the VP8 RTP payload profile MUST assign a dynamic payload type number to be used in each RTP session and provide a mechanism to indicate the mapping.  See <a href="#SDPParameters">Section 6.2</a> for the mechanism to be used with the <a href="#RFC4566">Session Description Protocol (SDP)</a> <cite title="NONE">[RFC4566]</cite>.</dd>
+  <dd style="margin-left: 8">In line with the policy in Section 3 of <a href="#RFC3551">[RFC3551]</a>, applications using the VP9 RTP payload profile MUST assign a dynamic payload type number to be used in each RTP session and provide a mechanism to indicate the mapping.  See <a href="#SDPParameters">Section 6.2</a> for the mechanism to be used with the <a href="#RFC4566">Session Description Protocol (SDP)</a> <cite title="NONE">[RFC4566]</cite>.</dd>
   <dt>Timestamp:</dt>
   <dd style="margin-left: 8">The RTP timestamp indicates the time when the input frame was sampled, at a clock rate of 90 kHz.  If the input frame is encoded with multiple layer frames, all of the layer frames of the super frame MUST have the same timestamp.</dd>
 </dl>

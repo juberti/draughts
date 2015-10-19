@@ -308,7 +308,7 @@
 			OPTIONAL RTP padding MUST NOT be included unless the P bit is set.
 			The figure specifically shows the format for the first
 			packet in a frame.  Subsequent packets will not contain the
-			VP8 payload header, and will have later octets in the frame payload.</postamble>
+			VP9 payload header, and will have later octets in the frame payload.</postamble>
         </figure>
 
         <t><list style="hanging">
@@ -320,7 +320,7 @@
             when shaping out higher spatial layers.</t>
 			
 			<t hangText="Payload Type (TP):">In line with the policy
-			  in Section 3 of <xref target='RFC3551'/>, applications using the VP8 RTP payload
+			  in Section 3 of <xref target='RFC3551'/>, applications using the VP9 RTP payload
 			  profile MUST assign a dynamic payload type number to be
 			  used in each RTP session and provide a mechanism to
 			  indicate the mapping.  See <xref target="SDPParameters"/> for the mechanism
