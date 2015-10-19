@@ -210,6 +210,10 @@
       temporal and spatial scalability layers can be described and 
       communicated.</t>
 
+	  <t>Temporal and spatial scalability layers are associated with
+	  non-negative integer IDs. The lowest layer of either type has an
+	  ID of 0.</t>
+
       <t>Layers are designed (and MUST be encoded) such that if
       any layer, and all higher layers, are removed from the bitstream
       along any of the two dimensions, the remaining bitstream is
@@ -222,14 +226,15 @@
       encoding different spatial layers.</t>
 
       <t>Within a super frame, a layer frame with spatial layer ID equal to S,
-      where S > 0, can depend on a frame with a lower spatial layer ID.  This
-      "inter-layer" dependency results in additional coding  gain to the
-      traditional "inter-picture" dependency, where a frame depends on previously
+      where S > 0, can depend on a layer frame of the same super frame with a lower spatial layer ID.  This
+      "inter-layer" dependency can result in additional coding gain
+      compared to the case where only 
+      traditional "inter-picture" dependency is used, where a frame depends on previously
       coded frame in time.  For simplicity, this payload format assumes that,
-      within a super frame if inter-layer dependency is used, a spatial layer S frame
+      within a super frame and if inter-layer dependency is used, a spatial layer S frame
       can only depend on spatial layer S-1 frame when S > 0.  Additionally, if
       inter-picture dependency is used, spatial layer S frame is assumed to only
-      depend on prevously coded spatial layer S frame.</t>
+      depend on previously coded spatial layer S frame.</t>
 
       <t>TODO: Describe how simulcast can be supported?</t>
 
@@ -244,11 +249,12 @@
       layer ID equal to 0.</t>
 
       <t>In flexible mode, each packet can contain up to 3 reference
-      indices, which identifies all frames referenced by the frame
+      indices, which identify all frames referenced by the frame
       transmitted in the current packet for inter-picture prediction. 
       This (along with the D bit) enables a receiver to identify if a frame 
-      is decodable or not and helps it understand the temporal layer structure 
-      so that it can drop packets as it sees fit. Since this is signaled in 
+      is decodable or not and helps it understand the temporal layer
+      structure.
+      Since this is signaled in 
       each packet it makes it possible to have very flexible temporal layer
       hierarchies and patterns which are changing dynamically.</t>
 
@@ -315,9 +321,9 @@
             <t hangText="Marker bit (M):">MUST be set to 1 for the final packet
             of the highest spatial layer frame (the final packet of the super frame),
             and 0 otherwise.  Unless spatial scalability is in use for this super frame,
-            this will have the same value as the E bit described below.  Note that a
-            MANE MUST set this value to 1 for the target spatial layer frame 
-            when shaping out higher spatial layers.</t>
+            this will have the same value as the E bit described below.  Note this bit
+            MUST be set to 1 for the target spatial layer frame 
+            if a stream is being rewritten to remove higher spatial layers.</t>
 			
 			<t hangText="Payload Type (TP):">In line with the policy
 			  in Section 3 of <xref target='RFC3551'/>, applications using the VP9 RTP payload
@@ -449,8 +455,9 @@ V:   | SS            |
           <t hangText="Picture ID (PID):">Picture ID represented in 7 or 15 bits,
           depending on the M bit. This is a running index of the pictures. The
           field MUST be present if the I bit is equal to one. If M is set to zero,
-          7 bits carry the PID; else if M is set to one, 15 bits carry the PID.
-          The sender may choose between 7 or 15 bits index. The PID SHOULD start on a
+          7 bits carry the PID; else if M is set to one, 15 bits carry
+          the PID in network byte order.
+          The sender may choose between a 7- or 15-bit index. The PID SHOULD start on a
           random number, and MUST wrap after reaching the maximum ID. The receiver
           MUST NOT assume that the number of bits in PID stay the same through the
           session.</t>
@@ -465,7 +472,7 @@ V:   | SS            |
           whenever encoding with layers.  For both flexible and non-flexible modes,
           one octet is used to specify a layer frame's temporal layer ID (T) and spatial layer ID (S)
           as shown both in <xref target="figureVP9payloadDescriptor"/> and <xref target="figureVP9payloadDescriptorNonFlexible"/>.
-          Additionally, a bit (U) is used to indcate that the current frame is a
+          Additionally, a bit (U) is used to indicate that the current frame is a
           "switching up point" frame.  Another bit (D) is used to indicate whether inter-layer 
           prediction is used for the current layer frame.</t>
 
@@ -473,13 +480,11 @@ V:   | SS            |
           to represent temporal layer 0 index (TL0PICIDX), as depicted in <xref target="figureVP9payloadDescriptorNonFlexible"/>.
           The TL0PICIDX is present so that all minimally required frames - the base temporal layer frames - can be tracked.</t>
 
-          <t>The T and S fields, indicate the temporal and spatial layers and can help MCUs measure bitrates 
-          per layer and can help them make a quick decision on whether to relay a packet 
-          or not.  They can also help receivers determine what layers they are currently
-          decoding.
+          <t>The T and S fields indicate the temporal and spatial layers and can help middleboxes and
+		  and endpoints quickly identify which layer a packet belongs to.
 
           <list style="hanging">
-            <t hangText="T:">The temporal layer ID of currenent frame.  In the case of non-flexible mode,
+            <t hangText="T:">The temporal layer ID of current frame.  In the case of non-flexible mode,
             if PID is mapped to a frame in a specified GOF, then 
             the value of T MUST match the corresponding T value of the mapped frame in the GOF.</t>
 
@@ -601,7 +606,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 		<t>VP9 frames are fragmented into packets, in RTP sequence
 		number order, beginning with a
 		packet with the B bit set, and ending with a packet with the
-		RTP marker bit set.  There is no mechanism for finer-grained
+		RTP marker bit M set.  There is no mechanism for finer-grained
 		access to parts of a VP9 frame.</t>
       </section>
 
@@ -613,8 +618,9 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
     <section anchor="RPSIandSLI" title="Using VP9 with RPSI and SLI Feedback">
       <t>The VP9 payload descriptor defined in <xref
       target="VP9payloadDescriptor"/> above contains an optional PictureID
-      parameter. One use of this parameter is included to enable use of reference
-      picture selection index (RPSI) and slice loss indication (SLI), both
+      parameter. One use of this parameter is to enable use of the reference
+      picture selection index (RPSI) and slice loss indication (SLI)
+      RTCP feedback messages, both
       defined in <xref target="RFC4585"/>.</t>
 
       <section anchor="RPSI" title="RPSI">
