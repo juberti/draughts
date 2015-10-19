@@ -254,7 +254,7 @@
       <t>Changes in draft -02: <list style="symbols">
         <t>Expanded discussion of FEC-only m-lines, and how they should be
         handled in offers and answers.</t>
-      </t>
+      </list></t>
       <t>Changes in draft -01: <list style="symbols">
         <t>Tweaked abstract/intro text that was ambiguously normative.</t>
         <t>Removed text on FEC for Opus in CELT mode.</t>
