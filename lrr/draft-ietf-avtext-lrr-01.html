@@ -623,7 +623,8 @@
           </pre>
 <p class="figure">Figure 7</p>
 <p><a href="#figureVP8IndexFormat">Figure 7</a> shows the format of the layer index field for VP8 streams.  The "RES" fields MUST be set to 0 on transmission and ingnored on reception.  See <a href="#I-D.ietf-payload-vp8">[I-D.ietf-payload-vp8]</a> Section 4.2 for details on the TID field.</p>
-<p id="rfc.section.4.2.p.3">TODO: identifying layer refresh frames in an VP8 bitstream.  Is the "Y" bit sufficient?  Or is VP8 required to always be temporally nested, leaving this unnecessary?</p>
+<p id="rfc.section.4.2.p.3">A VP8 layer refresh point can be identified by the presence of the "Y" bit in the VP8 payload header.  When this bit is set, this and all subsequent frames depend only on the current base temporal layer.  On receipt of an LRR for a VP8 stream, A sender which supports LRR MUST encode the stream so it can set the Y bit in a packet whose temporal layer is at or below the target layer index.</p>
+<p id="rfc.section.4.2.p.4">Note that in VP8, not every layer switch point can be identified by the Y bit, since the Y bit implies layer switch of all layers, not just the layer in which it is sent.  Thus the use of LRR with VP8 can result in some inefficiency in transmision.  However, this is not expected to be a major issue for temporal structures in normal use.</p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> H265</h1>
 <p id="rfc.section.4.3.p.1">The initial version of <a href="#I-D.ietf-payload-rtp-h265">the H.265 payload format</a> <cite title="NONE">[I-D.ietf-payload-rtp-h265]</cite> defines temporal scalability, with protocol elements reserved for spatial or other scalability modes (which are expected to be defined in a future version of the specification).</p>
 <div id="rfc.figure.8"/>
