@@ -19,7 +19,7 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-ietf-rtcweb-fec-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-02" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
 
@@ -43,7 +43,7 @@
       </address>
     </author>
 
-    <date day="5" month="March" year="2015" />
+    <date day="18" month="October" year="2015" />
 
     <area>RAI</area>
 
@@ -158,16 +158,25 @@
         The receiver can demultiplex the incoming FEC stream by SSRC and correlate it
         with the primary stream via the ssrc-group mechanism.
         </t>
-        <t>Note that this only allows the FEC stream to protect a single primary stream.
-        Support for protecting multiple primary streams with a single FEC stream is
-        complicated by WebRTC's 1-m-line-per-stream policy and requires further study.</t>
+        <t>Support for protecting multiple primary streams with a single FEC stream is
+        complicated by WebRTC's 1-m-line-per-stream policy,
+        which does not allow for a m-line dedicated specifically to FEC.</t>
       </section>
       <section title="Negotiating Support">
-        <t>To offer support for a separate FEC stream, the offerer MUST offer one of
-        the formats described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>,
-        Section 5.1, as well as a
-        ssrc-group with "FEC-FR" semantics as described in <xref target="RFC5956"/>, Section 4.3.</t>
-        <t>Answerers can reject the use of FEC by not including FEC payloads in the answer.</t>
+        <t>To offer support for a separate SSRC-multiplexed FEC stream, the
+        offerer MUST offer one of the formats described in
+        <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1,
+        as well as a ssrc-group with "FEC-FR" semantics as described in
+        <xref target="RFC5956"/>, Section 4.3.</t>
+        <t>Use of FEC-only m-lines, and grouping using the SDP group mechanism,
+          is not currently defined for WebRTC, and SHOULD NOT be offered.</t>
+        <t>Answerers can reject the use of SSRC-multiplexed FEC, by not
+          including FEC payload types in the answer.</t>
+        <t>Answerers SHOULD reject any FEC-only m-lines, unless they
+        specifically know how to handle such a thing in a WebRTC context (perhaps
+        defined by a future version of the WebRTC specifications). This ensures
+        that implementations will not malfunction when said future version of WebRTC
+        enables offers of FEC-only m-lines.</t>
       </section>
     </section>
 
@@ -242,6 +251,10 @@
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -02: <list style="symbols">
+        <t>Expanded discussion of FEC-only m-lines, and how they should be
+        handled in offers and answers.</t>
+      </list></t>
       <t>Changes in draft -01: <list style="symbols">
         <t>Tweaked abstract/intro text that was ambiguously normative.</t>
         <t>Removed text on FEC for Opus in CELT mode.</t>
