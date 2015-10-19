@@ -2,15 +2,9 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc3550 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3550.xml">
-<!ENTITY rfc3551 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3551.xml">
-<!ENTITY rfc3711 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3711.xml">
-<!ENTITY rfc3984 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3984.xml">
-<!ENTITY rfc4855 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4855.xml">
-<!ENTITY rfc4566 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4566.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
 <!ENTITY rfc5104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
-<!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
 <!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.uberti-payload-vp9.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
@@ -147,7 +141,7 @@
     <keyword>RTP</keyword>
 
     <abstract>
-      <t>This memo describes the RTP Payload-Specific Feedback Message
+      <t>This memo describes the RTCP Payload-Specific Feedback Message
 		"Layer Refresh Request" (LRR), which can be used to request a
 		state refresh of one or more substreams of a layered media
 		stream.  It also defines its use with several scalable media
@@ -157,7 +151,7 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This memo describes an RTP <xref target="RFC4585">Payload-Specific Feedback Message</xref>
+      <t>This memo describes an <xref target="RFC3550">RTCP</xref> <xref target="RFC4585">Payload-Specific Feedback Message</xref>
 		"Layer Refresh Request" (LRR).  It is designed to allow a
 		receiver of a layered media stream to request that one or more
 		of its substreams be refreshed, such that it can then be
@@ -645,15 +639,21 @@
 
 	  &h265rtp;
 
-	  &taxonomy;
-
       &rfc2119;
+
+	  &rfc3550;
 
       &rfc4585;
 
+	  &rfc6190;
+    </references>
+
+    <references title='Informative References'>
+
 	  &rfc5104;
 
-	  &rfc6190;
+	  &taxonomy;
+
     </references>
   </back>
 </rfc>
