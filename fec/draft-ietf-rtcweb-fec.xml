@@ -19,7 +19,7 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-ietf-rtcweb-fec-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-02" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
 
@@ -251,12 +251,21 @@
     </references>
 
     <section title="Change log">
-      <t>Changes in draft -01: <list style="symbols">
+      <t>Changes in draft -02: <list style="symbols">
         <t>Expanded discussion of FEC-only m-lines, and how they should be
         handled in offers and answers.</t>
+      </t>
+      <t>Changes in draft -01: <list style="symbols">
+        <t>Tweaked abstract/intro text that was ambiguously normative.</t>
+        <t>Removed text on FEC for Opus in CELT mode.</t>
+        <t>Changed RFC 2198 recommendation for PCMU to be MAY instead of
+           NOT RECOMMENDED, based on list feedback.</t>
+        <t>Explicitly called out application data as something not addressed
+           in this document.</t>
+        <t>Updated flexible-fec reference.</t>
       </list></t>
       <t>Changes in draft -00: <list style="symbols">
-        <t>Publication as a WG document.</t>
+        <t>Initial version, from sidebar conversation at IETF 90.</t>
       </list></t>
     </section>
   </back>
