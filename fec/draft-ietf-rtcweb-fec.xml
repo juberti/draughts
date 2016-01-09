@@ -2,9 +2,11 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc2198 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2198.xml">
+<!ENTITY rfc4867 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4867.xml">
 <!ENTITY rfc5109 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5109.xml">
 <!ENTITY rfc5956 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5956.xml">
 <!ENTITY rfc6716 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6716.xml">
+<!ENTITY datachannel SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-data-channel.xml">
 <!ENTITY fecpayload SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-flexible-fec-scheme.xml">
 <!ENTITY opuspayload SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-opus.xml">
 ]>
@@ -19,7 +21,7 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-ietf-rtcweb-fec-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-03" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
 
@@ -43,7 +45,7 @@
       </address>
     </author>
 
-    <date day="18" month="October" year="2015" />
+    <date day="8" month="January" year="2016" />
 
     <area>RAI</area>
 
@@ -97,28 +99,48 @@
           </t>
       </section>
        <section title="Codec-Specific In-band FEC">
-          <t>Some audio codecs, notably Opus <xref target="RFC6716"/>, support their own in-band FEC
-            mechanism, where FEC data is included in the codec payload. In the
-            case of Opus specifically, packets deemed as important are re-encoded
+          <t>Some audio codecs, notably Opus <xref target="RFC6716"/> and AMR
+            <xref target="RFC4867"/> support their own in-band FEC
+            mechanism, where redundant data is included in the codec payload.</t>
+          <t>For Opus, packets deemed as important are re-encoded
             at a lower bitrate and added to the subsequent packet, allowing partial
-            recovery of a lost packet. See <xref target="RFC6716"/>, Section 2.1.7 for details.
+            recovery of a lost packet. This scheme is fairly efficient;
+            experiments performed indicate that when Opus FEC is used, the overhead
+            imposed is about 20-30%, depending on the amount of protection needed.
+            Note that this mechanism can only carry redundancy information for the
+            immediately preceding packet; as such the decoder cannot fully
+            recover multiple consecutive lost packets. See <xref target="RFC6716"/>,
+            Section 2.1.7 for complete details.
+          </t>
+          <t>For AMR/AMR-WB, packets can contain copies or lower-quality encodings
+            of multiple prior audio frames. This mechanism is similar to the
+            <xref target="RFC2198"/> mechanism described above, but as it adds
+            no additional framing, it can be slightly more efficient. See
+            <xref target="RFC4867"/>, Section 3.7.1 for details on this mechanism.
           </t>
       </section>
     </section>
 
-    <section title="FEC for Audio Content">
+    <section title="FEC for Audio Content" anchor="audio-fec">
       <t>The following section provides guidance on how to best use FEC for transmitting
       audio data. As indicated in <xref target="adaptive-fec"/> below, FEC should only
       be activated if network conditions warrant it, or upon explicit application request.
       </t>
       <section title="Recommended Mechanism">
-        <t>When using the Opus codec in its default (hybrid) mode, use of
+        <t>When using the Opus codec, use of
           the built-in Opus FEC mechanism is RECOMMENDED. This provides reasonable
-          protection of the audio stream against typical losses, with minimal
-          overhead. [TODO: add stats]
+          protection of the audio stream against typical losses, with modest
+          overhead. Note that as indicated above the built-in Opus FEC only
+          provides single-frame redundancy; if multi-packet protection is needed,
+          the built-in FEC should be combined with <xref target="RFC2198"/>
+          redundancy to protect the N-2th, N-3rd, etc. packets.
         </t>
-        <t>When using variable-bitrate codecs without an internal FEC, use of
-        <xref target="RFC2198"/> redundant encoding with a lower-fidelity version
+        <t>When using the AMR/AMR-WB codecs, use of their built-in FEC
+          mechanism is RECOMMENDED. This provides slightly more efficient
+          protection of the audio stream than <xref target="RFC2198"/>.
+        </t>
+        <t>When using variable-bitrate codecs without an internal FEC,
+        <xref target="RFC2198"/> redundant encoding with lower-fidelity version(s)
         of previous packet(s) is RECOMMENDED.
         This provides reasonable protection of the payload with moderate overhead.
         </t>
@@ -140,14 +162,19 @@
         redundant encoding by not including "red" as a supported payload type in
         the answer.</t>
         <t>Support for codec-specific FEC mechanisms are typically indicated via
-        "a=fmtp" parameters. For Opus specifically, this is controlled by the
+        "a=fmtp" parameters.</t>
+        <t>For Opus, support for FEC at the received side is controlled by the
         "useinbandfec=1" parameter, as specified in <xref target="I-D.ietf-payload-rtp-opus"/>.
-        These parameters are declarative and can
+        This parameter is declarative and can
         be negotiated separately for either media direction.</t>
+        <t>For AMR/AMR-WB, support for redundant encoding, and the maximum
+        supported depth, are controlled by the 'max-red' parameter, as specified
+        in <xref target="RFC4867"/>, Section 8.1.
+        [TODO: figure out any additional recommendations are needed.]</t>
       </section>
     </section>
 
-    <section title="FEC for Video Content">
+    <section title="FEC for Video Content" anchor="video-fec">
       <t>The following section provides guidance on how to best use FEC for transmitting
       video data. As indicated in <xref target="adaptive-fec"/> below, FEC should only
       be activated if network conditions warrant it, or upon explicit application request.
@@ -156,7 +183,7 @@
         <t>For video content, use of a separate FEC stream with the RTP payload format
         described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is RECOMMENDED.
         The receiver can demultiplex the incoming FEC stream by SSRC and correlate it
-        with the primary stream via the ssrc-group mechanism.
+        with the primary stream via the ssrc-group mechanism. [TODO: replace with RID]
         </t>
         <t>Support for protecting multiple primary streams with a single FEC stream is
         complicated by WebRTC's 1-m-line-per-stream policy,
@@ -167,7 +194,7 @@
         offerer MUST offer one of the formats described in
         <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1,
         as well as a ssrc-group with "FEC-FR" semantics as described in
-        <xref target="RFC5956"/>, Section 4.3.</t>
+        <xref target="RFC5956"/>, Section 4.3. [TODO: replace with RID]</t>
         <t>Use of FEC-only m-lines, and grouping using the SDP group mechanism,
           is not currently defined for WebRTC, and SHOULD NOT be offered.</t>
         <t>Answerers can reject the use of SSRC-multiplexed FEC, by not
@@ -182,8 +209,9 @@
 
     <section title="FEC for Application Content">
       <t>WebRTC also supports the ability to send generic application data, and
-      provides transport-level retransmission mechanisms that the application
-      can use to ensure that its data is delivered reliably. </t>
+      provides transport-level retransmission mechanisms to support full and
+      partial (e.g. timed) reliability.
+      See <xref target="I-D.ietf-rtcweb-data-channel"/> for details.</t>
       <t>
       Because the application can control exactly what data to send, it has the
       ability to monitor packet statistics and perform its own application-level
@@ -194,9 +222,9 @@
 
     <section title="Implementation Requirements">
         <t>To support the functionality recommended above, implementations MUST support
-        the redundant encoding mechanism described in <xref target="RFC2198"/> and the FEC
-        mechanism described in <xref target="RFC5956"/> and
-        <xref target="I-D.ietf-payload-flexible-fec-scheme"/>.</t>
+        the relevant mechanisms for their supported audio codecs, as described in
+        <xref target="audio-fec"/>, and the general FEC
+        mechanism described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>.</t>
         <t>Implementations MAY support additional FEC mechanisms if desired,
         e.g. <xref target="RFC5109"/>.</t>
     </section>
@@ -205,9 +233,10 @@
       <t>Since use of FEC causes redundant data to be transmitted, this will
         lead to less bandwidth available for the primary encoding, when in a
         bandwidth-constrained environment. Given this, WebRTC implementations
-        SHOULD only transmit FEC data when network conditions indicate that
-        this is advisable (e.g. by monitoring transmit packet loss data from
-        RTCP Receiver Reports), or the application indicates it is willing to
+        SHOULD only transmit the amount of FEC needed to protect against the
+        observed packet loss (which can be determined, e.g., by monitoring
+        transmit packet loss data from RTCP Receiver Reports), or the
+        application indicates it is willing to
         pay a quality penalty to proactively avoid losses.
       </t>
     </section>
@@ -245,12 +274,21 @@
     </references>
 
     <references title="Informative References">
+      &rfc4867;
       &rfc5109;
       &rfc6716;
+      &datachannel;
       &opuspayload;
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -03: <list style="symbols">
+        <t>Added overhead stats for Opus.</t>
+        <t>Expanded discussion of multi-packet FEC for Opus.</t>
+        <t>Added discussion of AMR/AMR-WB.</t>
+        <t>Referenced the data channel doc.</t>
+        <t>Several small edits based on feedback from Magnus.</t>
+      </list></t>
       <t>Changes in draft -02: <list style="symbols">
         <t>Expanded discussion of FEC-only m-lines, and how they should be
         handled in offers and answers.</t>
