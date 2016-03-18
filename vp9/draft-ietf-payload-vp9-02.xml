@@ -8,6 +8,7 @@
 <!ENTITY rfc4855 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4855.xml">
 <!ENTITY rfc4566 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4566.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
+<!ENTITY rfc5109 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5109.xml">
 <!ENTITY rfc5124 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5124.xml">
 <!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7201.xml">
@@ -615,15 +616,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 	  </section>
     </section>
 
-    <section anchor="RPSIandSLI" title="Using VP9 with RPSI and SLI Feedback">
-      <t>The VP9 payload descriptor defined in <xref
-      target="VP9payloadDescriptor"/> above contains an optional PictureID
-      parameter. One use of this parameter is to enable use of the reference
-      picture selection index (RPSI) and slice loss indication (SLI)
-      RTCP feedback messages, both
-      defined in <xref target="RFC4585"/>.</t>
-
-      <section anchor="RPSI" title="RPSI">
+    <section anchor="Feedback" title="Feedback Messages">
+      <section anchor="RPSI" title="Reference Picture Selection Indication (RPSI)">
 		<t>TODO: Update to indicate which frame within the picture.</t>
         <t>The reference picture selection index is a payload-specific
         feedback message defined within the RTCP-based feedback format. The
@@ -644,7 +638,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         simply the PictureID of the received frame.</t>
       </section>
 
-      <section anchor="SLI" title="SLI">
+      <section anchor="SLI" title="Slice Loss Indication (SLI)">
 		<t>TODO: Update to indicate which frame within the picture.</t>
         <t>The slice loss indication is another payload-specific feedback
         message defined within the RTCP-based feedback format. The SLI message
@@ -679,237 +673,16 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         the next frame with reference to that established reference.</t>
       </section>
 
-      <section title="Example">
-		<t>TODO: this example is copied from the VP8 payload format specification,
-		and has not been updated for VP9.  It may be incorrect.</t>
+	  <section title='Full Intra Request (FIR)'>
 
-        <t>The use of RPSI and SLI is best illustrated in an example. In this
-        example, the encoder may not update the altref frame until the last
-        sent golden frame has been acknowledged with an RPSI message. If an
-        update is not received within some time, a new golden frame update is
-        sent instead. Once the new golden frame is established and
-        acknowledged, the same rule applies when updating the altref
-        frame.</t>
+		<t>Upon receipt of a <xref target='RFC5109'>Full Intra Request
+		(FIR)</xref>, a sender MUST send a picture with a keyframe for
+		its spatial layer 0 frame, and then send frames without
+		inter-picture prediction (P=0) for any higher spatial layers
+		of that frame.</t>
 
-        <texttable anchor="table_example_timing"
-                   title="Example signaling between sender and receiver">
-          <ttcol align="left">Event</ttcol>
+	  </section>
 
-          <ttcol align="left">Sender</ttcol>
-
-          <ttcol align="left">Receiver</ttcol>
-
-          <ttcol align="left">Established reference</ttcol>
-
-          <c>1000</c>
-
-          <c>Send golden frame PictureID = 0</c>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c>Receive and decode golden frame</c>
-
-          <c/>
-
-          <c>1001</c>
-
-          <c/>
-
-          <c>Send RPSI(0)</c>
-
-          <c/>
-
-          <c>1002</c>
-
-          <c>Receive RPSI(0)</c>
-
-          <c/>
-
-          <c>golden</c>
-
-          <c>...</c>
-
-          <c>(sending regular frames)</c>
-
-          <c/>
-
-          <c/>
-
-          <c>1100</c>
-
-          <c>Send altref frame PictureID = 100</c>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c>Altref corrupted or lost</c>
-
-          <c>golden</c>
-
-          <c>1101</c>
-
-          <c/>
-
-          <c>Send SLI(100)</c>
-
-          <c>golden</c>
-
-          <c>1102</c>
-
-          <c>Receive SLI(100)</c>
-
-          <c/>
-
-          <c/>
-
-          <c>1103</c>
-
-          <c>Send frame with reference to golden</c>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c>Receive and decode frame (decoder state restored)</c>
-
-          <c>golden</c>
-
-          <c>...</c>
-
-          <c>(sending regular frames)</c>
-
-          <c/>
-
-          <c/>
-
-          <c>1200</c>
-
-          <c>Send altref frame PictureID = 200</c>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c>Receive and decode altref frame</c>
-
-          <c>golden</c>
-
-          <c>1201</c>
-
-          <c/>
-
-          <c>Send RPSI(200)</c>
-
-          <c/>
-
-          <c>1202</c>
-
-          <c>Receive RPSI(200)</c>
-
-          <c/>
-
-          <c>altref</c>
-
-          <c>...</c>
-
-          <c>(sending regular frames)</c>
-
-          <c/>
-
-          <c/>
-
-          <c>1300</c>
-
-          <c>Send golden frame PictureID = 300</c>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c>Receive and decode golden frame</c>
-
-          <c>altref</c>
-
-          <c>1301</c>
-
-          <c/>
-
-          <c>Send RPSI(300)</c>
-
-          <c>altref</c>
-
-          <c>1302</c>
-
-          <c>RPSI lost</c>
-
-          <c/>
-
-          <c/>
-
-          <c>1400</c>
-
-          <c>Send golden frame PictureID = 400</c>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c/>
-
-          <c>Receive and decode golden frame</c>
-
-          <c>altref</c>
-
-          <c>1401</c>
-
-          <c/>
-
-          <c>Send RPSI(400)</c>
-
-          <c/>
-
-          <c>1402</c>
-
-          <c>Receive RPSI(400)</c>
-
-          <c/>
-
-          <c>golden</c>
-        </texttable>
-
-        <t>Note that the scheme is robust to loss of the feedback messages. If
-        the RPSI is lost, the sender will try to update the golden (or altref)
-        again after a while, without releasing the established reference.
-        Also, if an SLI is lost, the receiver can keep sending SLI messages at
-        any interval allowed by the RTCP sending timing restrictions as
-        specified in <xref target="RFC4585"/>, as long as the picture is
-        corrupted.</t>
-      </section>
     </section>
 
     <section anchor="payloadFormatParameters"
@@ -1100,6 +873,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
       &rfc6838;
 
       &rfc4855;
+
+	  &rfc5109;
 
 	  &lrr;
 
