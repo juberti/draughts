@@ -237,8 +237,6 @@
       inter-picture dependency is used, spatial layer S frame is assumed to only
       depend on previously coded spatial layer S frame.</t>
 
-      <t>TODO: Describe how simulcast can be supported?</t>
-
       <t>Given above simplifications for inter-layer and inter-picture
       dependencies, a flag (the D bit described below) is used to indicate whether a
       spatial layer S frame depends on spatial layer S-1 frame.  Given the D bit, a receiver
