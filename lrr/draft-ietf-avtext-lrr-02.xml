@@ -6,9 +6,10 @@
 <!ENTITY rfc5104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
-<!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.uberti-payload-vp9.xml">
+<!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp9.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
 <!ENTITY taxonomy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-rtp-grouping-taxonomy.xml">
+<!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wenger-avtext-avpf-ccm-layered.xml">
 
 ]>
 <rfc category="std" docName="draft-ietf-avtext-lrr-02" ipr="trust200902">
@@ -144,8 +145,8 @@
       <t>This memo describes the RTCP Payload-Specific Feedback Message
 		"Layer Refresh Request" (LRR), which can be used to request a
 		state refresh of one or more substreams of a layered media
-		stream.  It also defines its use with several scalable media
-		formats.</t>
+		stream.  It also defines its use with several RTP payloads for
+		scalable media formats.</t>
     </abstract>
   </front>
 
@@ -158,9 +159,10 @@
 		decoded by an endpoint which previously was not receiving those
 		layers, without requiring that the
 		entire stream be refreshed (as it would be if the receiver
-		sent a <xref target='RFC5104'>Full Intra Request (FIR)</xref>.</t>
+		sent a <xref target='RFC5104'>Full Intra Request (FIR)</xref>
+		(see also <xref target='I-D.wenger-avtext-avpf-ccm-layered' />).</t>
 
-	  <t>The message is designed to be applicable both to temporally
+	  <t>The feedback message is applicable both to temporally
 	  and spatially scaled streams, and to both single-stream and
 	  multi-stream scalability modes.</t>
 
@@ -300,7 +302,7 @@
 	  TODO: expand these here.</t>
 
 	  <t>The LRR message is identified by RTCP packet type value
-	  PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more FIR entries.  Each entry
+	  PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more LRR entries.  Each entry
    applies to a different media sender, identified by its SSRC.</t>
 
 	  <section anchor="MessageFormat" title="Message Format">
@@ -426,11 +428,11 @@
 		Temporal Level Switching Point SEI message identifies temporal
 		layer switching points.  A temporal layer refresh is satisfied
 		when this SEI message is present in a frame with the target
-		layer index, if the message's delta_frame_num refer to a frame
+		layer index, if the message's delta_frame_num refers to a frame
 		with the requested current layer index.  (Alternately,
 		temporal layer refresh can also be satisfied by a complete
 		state refresh, such as an IDR.)  Senders which support
-		receiving LRR for non-scalably-nested streams MUST insert
+		receiving LRR for non-temporally-nested streams MUST insert
 		Temporal Level Switching Point SEI messages as appropriate.</t>
 
 	  </section>
@@ -540,7 +542,7 @@
 	  </section>
 
 	  <section title="VP9">
-		<t><xref target="I-D.uberti-payload-vp9">The RTP payload format
+		<t><xref target="I-D.ietf-payload-vp9">The RTP payload format
 		for VP9</xref> defines how it can be used for spatial and
 		temporal scalability.</t>
 
@@ -560,7 +562,7 @@
 		of the VP9 payload header, which carries the
 		stream's layer information.  The "R" and "RES"
 		fields MUST be set to 0 on transmission and ingnored on
-		reception.  See <xref target='I-D.uberti-payload-vp9'/> for
+		reception.  See <xref target='I-D.ietf-payload-vp9'/> for
 		details on the T and S fields.</t>
 
 	  <t>Identification of a layer refresh frame can be derived from the
@@ -605,15 +607,6 @@
 	  sent.  On receipt, the sender MUST refresh all the layers
 	  requested in the stream, simultaneously in decode order.</t>
 
-	  <t>Note: arguably, for the MRST and MRMT mechanisms, FIR
-		feedback messages could instead be used to refresh specific individual
-		layers.  However, the usage of FIR for MRSR/MRMT is not
-		explicitly specified anywhere, and if FIR is interpreted as refreshing
-		layers, there is no way to request an actual full, synchronized refresh of
-		all the layers of an MRST/MRMT layered source.  Thus, the authors feel that
-		interpreting FIR as refreshing the entire source, and using
-		LRR for the individual layers, would be more useful.</t>
-
 	</section>
 
     <section anchor="securityConsiderations" title="Security Considerations">
@@ -653,6 +646,8 @@
 	  &rfc5104;
 
 	  &taxonomy;
+
+	  &ccm-layered;
 
     </references>
   </back>
