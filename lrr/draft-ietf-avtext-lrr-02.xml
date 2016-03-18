@@ -7,7 +7,6 @@
 <!ENTITY rfc5234 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml">
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
-<!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp9.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
 <!ENTITY taxonomy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-rtp-grouping-taxonomy.xml">
 <!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wenger-avtext-avpf-ccm-layered.xml">
@@ -560,51 +559,6 @@
 		if not) through the target layer index.</t>
 	  </section>
 
-	  <section title="VP9">
-		<t><xref target="I-D.ietf-payload-vp9">The RTP payload format
-		for VP9</xref> defines how it can be used for spatial and
-		temporal scalability.</t>
-
-		<figure anchor="figureVP9IndexFormat">
-          <artwork><![CDATA[
-            +---------------+---------------+
-            |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
-            +-------------+-----------------+
-            |  T  |R|  S  | RES             |
-            +-------------+-----------------+
-          ]]></artwork>
-		</figure>
-
-		<t><xref target="figureVP9IndexFormat"/> shows the format
-		of the layer index field for VP9 streams.  This is
-		designed to follow the same layout as the "L" byte
-		of the VP9 payload header, which carries the
-		stream's layer information.  The "R" and "RES"
-		fields MUST be set to 0 on transmission and ingnored on
-		reception.  See <xref target='I-D.ietf-payload-vp9'/> for
-		details on the T and S fields.</t>
-
-	  <t>Identification of a layer refresh frame can be derived from the
-	  reference IDs of each frame by backtracking the dependency chain
-	  until reaching a point where only decodable frames are being
-	  referenced. Therefore it's recommended for both the
-	  flexible and the non-flexible mode that, when upgrade frames are
-	  being encoded in response to a LRR, those packets should contain
-	  layer indices and the reference fields so that the decoder or an
-	  MCU can make this derivation.</t>
-
-	  <t>Example:</t>
-	  <t>LRR {1,0}, {2,1} is sent by an MCU when it is currently
-	  relaying {1,0} to a receiver and which wants to upgrade to
-	  {2,1}. In response the encoder should encode the next frames
-	  in layers {1,1} and {2,1} by only referring to frames in
-	  {1,0}, or {0,0}.</t>
-
-	  <t>In the non-flexible mode, periodic upgrade frames can be
-	  defined by the layer structure of the SS, thus periodic upgrade
-	  frames can be automatically identified by the picture ID.</t>
-	</section>
-
 	</section>
 
 	<section title="Usage with different scalability transmission mechanisms">
@@ -695,8 +649,6 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
   <back>
     <references title='Normative References'>
 	  &vp8rtp;
-
-      &vp9rtp;
 
 	  &h265rtp;
 

@@ -8,13 +8,13 @@
 <!ENTITY rfc4855 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4855.xml">
 <!ENTITY rfc4566 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4566.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
-<!ENTITY rfc5109 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5109.xml">
+<!ENTITY rfc5104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc5124 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5124.xml">
 <!ENTITY rfc6838 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7202.xml">
 <!ENTITY vp9 SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
-<!ENTITY lrr SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.lennox-avtext-lrr.xml">
+<!ENTITY lrr SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
 
 ]>
 <rfc category="std" docName="draft-ietf-payload-vp9-02" ipr="trust200902">
@@ -404,7 +404,7 @@ V:   | SS            |
           layer frame does not utilize inter-picture prediction.  In this case,
           up-switching to current spatial layer's frame is possible from directly
           lower spatial layer frame.  P SHOULD also be set to zero when
-          encoding a layer synchronization frame in response to an <xref target='I-D.lennox-avtext-lrr'>LRR</xref>.
+          encoding a layer synchronization frame in response to an <xref target='I-D.ietf-avtext-lrr'>LRR</xref> message (see <xref target='LRR'/>).
           When P is set to zero, the T bit (described below) MUST also be set to 0 (if present).</t>
 
           <t hangText="L:">Layer indices present.  When set to one,
@@ -671,15 +671,63 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         the next frame with reference to that established reference.</t>
       </section>
 
-	  <section title='Full Intra Request (FIR)'>
+	  <section title='Full Intra Request (FIR)' anchor="FIR">
 
-		<t>Upon receipt of a <xref target='RFC5109'>Full Intra Request
-		(FIR)</xref>, a sender MUST send a picture with a keyframe for
-		its spatial layer 0 frame, and then send frames without
-		inter-picture prediction (P=0) for any higher spatial layers
-		of that frame.</t>
+		<t>The <xref target='RFC5104'>Full Intra Request (FIR)</xref>
+		RTCP feedback message allows a receiver to request a full state refresh of an encoded stream.</t>
+
+		<t>Upon receipt of an FIR request, a VP9 sender MUST send a
+		super frame with a keyframe for its spatial layer 0 layer
+		frame, and then send frames without inter-picture prediction
+		(P=0) for any higher layer frames.</t>
 
 	  </section>
+
+	  <section title="Layer Refresh Request (LRR)" anchor="LRR">
+		<t>The <xref target="I-D.ietf-avtext-lrr">Layer Refresh Request</xref>
+		  allows a receiver to request a single layer of a spatially or
+		  temporally encoded stream to be refreshed, without necessarily
+		  affecting the stream's other layers.</t>
+
+		<figure anchor="figureLRRIndexFormat">
+          <artwork><![CDATA[
+            +---------------+---------------+
+            |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
+            +-------------+-----------------+
+            |  T  |R|  S  | RES             |
+            +-------------+-----------------+
+          ]]></artwork>
+		</figure>
+
+		<t><xref target="figureLRRIndexFormat"/> shows the format
+		of LRR's layer index field for VP9 streams.  This is
+		designed to follow the same layout as the "L" byte
+		of the VP9 payload header, which carries the
+		stream's layer information.  The "R" and "RES"
+		fields MUST be set to 0 on transmission and ingnored on
+		reception.  See <xref target="VP9payloadDescriptor"/> for
+		details on the T and S fields.</t>
+
+	  <t>Identification of a layer refresh frame can be derived from the
+	  reference IDs of each frame by backtracking the dependency chain
+	  until reaching a point where only decodable frames are being
+	  referenced. Therefore it's recommended for both the
+	  flexible and the non-flexible mode that, when upgrade frames are
+	  being encoded in response to a LRR, those packets should contain
+	  layer indices and the reference fields so that the decoder or an
+	  MCU can make this derivation.</t>
+
+	  <t>Example:</t>
+	  <t>LRR {1,0}, {2,1} is sent by an MCU when it is currently
+	  relaying {1,0} to a receiver and which wants to upgrade to
+	  {2,1}. In response the encoder should encode the next frames
+	  in layers {1,1} and {2,1} by only referring to frames in
+	  {1,0}, or {0,0}.</t>
+
+	  <t>In the non-flexible mode, periodic upgrade frames can be
+	  defined by the layer structure of the SS, thus periodic upgrade
+	  frames can be automatically identified by the picture ID.</t>
+	</section>
 
     </section>
 
@@ -872,7 +920,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
       &rfc4855;
 
-	  &rfc5109;
+	  &rfc5104;
 
 	  &lrr;
 
