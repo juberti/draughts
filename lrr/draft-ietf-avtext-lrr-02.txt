@@ -5,15 +5,15 @@
 Payload Working Group                                          J. Lennox
 Internet-Draft                                                   D. Hong
 Intended status: Standards Track                                   Vidyo
-Expires: April 21, 2016                                        J. Uberti
+Expires: September 19, 2016                                    J. Uberti
                                                                S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                        October 19, 2015
+                                                          March 18, 2016
 
 
          The Layer Refresh Request (LRR) RTCP Feedback Message
-                        draft-ietf-avtext-lrr-01
+                        draft-ietf-avtext-lrr-02
 
 Abstract
 
@@ -37,11 +37,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 21, 2016.
+   This Internet-Draft will expire on September 19, 2016.
 
 Copyright Notice
 
-   Copyright (c) 2015 IETF Trust and the persons identified as the
+   Copyright (c) 2016 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 1]
+Lennox, et al.         Expires September 19, 2016               [Page 1]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    include Simplified BSD License text as described in Section 4.e of
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 2]
+Lennox, et al.         Expires September 19, 2016               [Page 2]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 2.1.  Terminology
@@ -165,9 +165,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 3]
+Lennox, et al.         Expires September 19, 2016               [Page 3]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    An illustration of spatial layer refresh of a base layer is shown
@@ -221,9 +221,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 4]
+Lennox, et al.         Expires September 19, 2016               [Page 4]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    An illustration of an inherently temporally nested stream is shown
@@ -277,9 +277,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 5]
+Lennox, et al.         Expires September 19, 2016               [Page 5]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
        0                   1                   2                   3
@@ -333,9 +333,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 6]
+Lennox, et al.         Expires September 19, 2016               [Page 6]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 4.1.  H264 SVC
@@ -389,9 +389,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 7]
+Lennox, et al.         Expires September 19, 2016               [Page 7]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    If a stream's temporal_id_nesting flag is not set, the Temporal Level
@@ -445,9 +445,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 8]
+Lennox, et al.         Expires September 19, 2016               [Page 8]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
                +---------------+---------------+
@@ -501,9 +501,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                 [Page 9]
+Lennox, et al.         Expires September 19, 2016               [Page 9]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 4.4.  VP9
@@ -557,9 +557,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                [Page 10]
+Lennox, et al.         Expires September 19, 2016              [Page 10]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    The LRR message is applicable to all these mechanisms.  For MRST and
@@ -600,8 +600,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
    [I-D.ietf-payload-rtp-h265]
               Wang, Y., Sanchez, Y., Schierl, T., Wenger, S., and M.
               Hannuksela, "RTP Payload Format for H.265/HEVC Video",
-              draft-ietf-payload-rtp-h265-14 (work in progress), August
-              2015.
+              draft-ietf-payload-rtp-h265-15 (work in progress),
+              November 2015.
 
    [I-D.ietf-payload-vp8]
               Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
@@ -613,9 +613,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                [Page 11]
+Lennox, et al.         Expires September 19, 2016              [Page 11]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    [I-D.uberti-payload-vp9]
@@ -669,9 +669,9 @@ Authors' Addresses
 
 
 
-Lennox, et al.           Expires April 21, 2016                [Page 12]
+Lennox, et al.         Expires September 19, 2016              [Page 12]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    Jonathan Lennox
@@ -725,4 +725,4 @@ Internet-Draft     Layer Refresh Request RTCP Feedback      October 2015
 
 
 
-Lennox, et al.           Expires April 21, 2016                [Page 13]
+Lennox, et al.         Expires September 19, 2016              [Page 13]
