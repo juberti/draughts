@@ -379,17 +379,18 @@
 <link href="#rfc.section.2.1" rel="Chapter" title="2.1 Terminology"/>
 <link href="#rfc.section.3" rel="Chapter" title="3 Layer Refresh Request"/>
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Message Format"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Semantics"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Usage with specific codecs"/>
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 H264 SVC"/>
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 VP8"/>
 <link href="#rfc.section.4.3" rel="Chapter" title="4.3 H265"/>
-<link href="#rfc.section.4.4" rel="Chapter" title="4.4 VP9"/>
 <link href="#rfc.section.5" rel="Chapter" title="5 Usage with different scalability transmission mechanisms"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 Security Considerations"/>
-<link href="#rfc.section.7" rel="Chapter" title="7 IANA Considerations"/>
-<link href="#rfc.references" rel="Chapter" title="8 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 SDP Definitions"/>
+<link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations"/>
+<link href="#rfc.references" rel="Chapter" title="9 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="9.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="9.2 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
@@ -399,8 +400,8 @@
   <meta name="dct.creator" content="Lennox, J., Hong, D., Uberti, J., Holmer, S., and M. Flodman" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-avtext-lrr-02" />
   <meta name="dct.issued" scheme="ISO8601" content="2016-3-18" />
-  <meta name="dct.abstract" content="This memo describes the RTCP Payload-Specific Feedback Message &quot;Layer Refresh Request&quot; (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats." />
-  <meta name="description" content="This memo describes the RTCP Payload-Specific Feedback Message &quot;Layer Refresh Request&quot; (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats." />
+  <meta name="dct.abstract" content="This memo describes the RTCP Payload-Specific Feedback Message &quot;Layer Refresh Request&quot; (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several RTP payloads for scalable media formats." />
+  <meta name="description" content="This memo describes the RTCP Payload-Specific Feedback Message &quot;Layer Refresh Request&quot; (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several RTP payloads for scalable media formats." />
 
 </head>
 
@@ -452,7 +453,7 @@
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This memo describes the RTCP Payload-Specific Feedback Message "Layer Refresh Request" (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several scalable media formats.</p>
+<p>This memo describes the RTCP Payload-Specific Feedback Message "Layer Refresh Request" (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several RTP payloads for scalable media formats.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
@@ -476,25 +477,26 @@
 <ul><li>2.1.   <a href="#rfc.section.2.1">Terminology</a></li>
 </ul><li>3.   <a href="#rfc.section.3">Layer Refresh Request</a></li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">Message Format</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">Semantics</a></li>
 </ul><li>4.   <a href="#rfc.section.4">Usage with specific codecs</a></li>
 <ul><li>4.1.   <a href="#rfc.section.4.1">H264 SVC</a></li>
 <li>4.2.   <a href="#rfc.section.4.2">VP8</a></li>
 <li>4.3.   <a href="#rfc.section.4.3">H265</a></li>
-<li>4.4.   <a href="#rfc.section.4.4">VP9</a></li>
 </ul><li>5.   <a href="#rfc.section.5">Usage with different scalability transmission mechanisms</a></li>
 <li>6.   <a href="#rfc.section.6">Security Considerations</a></li>
-<li>7.   <a href="#rfc.section.7">IANA Considerations</a></li>
-<li>8.   <a href="#rfc.references">References</a></li>
-<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>8.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li>7.   <a href="#rfc.section.7">SDP Definitions</a></li>
+<li>8.   <a href="#rfc.section.8">IANA Considerations</a></li>
+<li>9.   <a href="#rfc.references">References</a></li>
+<ul><li>9.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>9.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
 
 
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
-<p id="rfc.section.1.p.1">This memo describes an <a href="#RFC3550">RTCP</a> <cite title="NONE">[RFC3550]</cite> <a href="#RFC4585">Payload-Specific Feedback Message</a> <cite title="NONE">[RFC4585]</cite> "Layer Refresh Request" (LRR).  It is designed to allow a receiver of a layered media stream to request that one or more of its substreams be refreshed, such that it can then be decoded by an endpoint which previously was not receiving those layers, without requiring that the entire stream be refreshed (as it would be if the receiver sent a <a href="#RFC5104">Full Intra Request (FIR)</a> <cite title="NONE">[RFC5104]</cite>.</p>
-<p id="rfc.section.1.p.2">The message is designed to be applicable both to temporally and spatially scaled streams, and to both single-stream and multi-stream scalability modes.</p>
+<p id="rfc.section.1.p.1">This memo describes an <a href="#RFC3550">RTCP</a> <cite title="NONE">[RFC3550]</cite> <a href="#RFC4585">Payload-Specific Feedback Message</a> <cite title="NONE">[RFC4585]</cite> "Layer Refresh Request" (LRR).  It is designed to allow a receiver of a layered media stream to request that one or more of its substreams be refreshed, such that it can then be decoded by an endpoint which previously was not receiving those layers, without requiring that the entire stream be refreshed (as it would be if the receiver sent a <a href="#RFC5104">Full Intra Request (FIR)</a> <cite title="NONE">[RFC5104]</cite> (see also <a href="#I-D.wenger-avtext-avpf-ccm-layered">[I-D.wenger-avtext-avpf-ccm-layered]</a>).</p>
+<p id="rfc.section.1.p.2">The feedback message is applicable both to temporally and spatially scaled streams, and to both single-stream and multi-stream scalability modes.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#conventions" id="conventions">Conventions, Definitions and Acronyms</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
@@ -557,8 +559,8 @@
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#layerRefreshRequest" id="layerRefreshRequest">Layer Refresh Request</a></h1>
 <p id="rfc.section.3.p.1">A layer refresh frame can be requested by sending a Layer Refresh Request (LRR), which is an <a href="#RFC4585">RTCP payload-specific feedback message</a> <cite title="NONE">[RFC4585]</cite> asking the encoder to encode a frame which makes it possible to upgrade to a higher layer. The LRR contains one or two tuples, indicating the layer the decoder wants to upgrade to, and (optionally) the currently highest layer the decoder can decode.</p>
 <p id="rfc.section.3.p.2">The specific format of the tuples, and the mechanism by which a receiver recognizes a refresh frame, is codec-dependent.  Usage for several codecs is discussed in <a href="#codec-details">Section 4</a>.</p>
-<p id="rfc.section.3.p.3">LRR follows the model of the <a href="#RFC5104">Full Intra Request (FIR)</a> <cite title="NONE">[RFC5104]</cite>(Section 3.5.1) for its retransmission, reliability, and use in multipoint conferences.  TODO: expand these here.</p>
-<p id="rfc.section.3.p.4">The LRR message is identified by RTCP packet type value PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more FIR entries.  Each entry applies to a different media sender, identified by its SSRC.</p>
+<p id="rfc.section.3.p.3">LRR follows the model of the <a href="#RFC5104">Full Intra Request (FIR)</a> <cite title="NONE">[RFC5104]</cite>(Section 3.5.1) for its retransmission, reliability, and use in multipoint conferences.</p>
+<p id="rfc.section.3.p.4">The LRR message is identified by RTCP packet type value PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more LRR entries.  Each entry applies to a different media sender, identified by its SSRC.</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#MessageFormat" id="MessageFormat">Message Format</a></h1>
 <p id="rfc.section.3.1.p.1">The Feedback Control Information (FCI) for the Layer Refresh Request consists of one or more FCI entries, the content of which is depicted in <a href="#figureFciFormat">Figure 5</a>.  The length of the LRR feedback message MUST be set to 2+3*N, where N is the number of FCI entries.</p>
 <div id="rfc.figure.5"/>
@@ -595,6 +597,10 @@
 </dl>
 
 <p> </p>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> Semantics</h1>
+<p id="rfc.section.3.2.p.1">Within the common packet header for feedback messages (as defined in section 6.1 of <a href="#RFC4585">[RFC4585]</a>), the "SSRC of packet sender" field indicates the source of the request, and the "SSRC of media source" is not used and SHALL be set to 0.  The SSRCs of the media senders to which the LRR command applies are in the corresponding FCI entries.  A LRR message MAY contain requests to multiple media senders, using one FCI entry per target media sender.</p>
+<p id="rfc.section.3.2.p.2">Upon reception of LRR, the encoder MUST send a decoder refresh point (see section <a href="#terminology">Section 2.1</a>) as soon as possible.</p>
+<p id="rfc.section.3.2.p.3">The sender MUST consider congestion control as outlined in section 5 of <a href="#RFC5104">[RFC5104]</a>, which MAY restrict its ability to send a layer refresh point quickly.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#codec-details" id="codec-details">Usage with specific codecs</a></h1>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> H264 SVC</h1>
 <p><a href="#RFC6190">H.264 SVC</a> <cite title="NONE">[RFC6190]</cite> defines temporal, dependency (spatial), and quality scalability modes.</p>
@@ -613,7 +619,7 @@
 <p id="rfc.section.4.1.p.4">Note that as the "I" bit in a PACSI header is set if the corresponding bit is set in any of the aggregated NAL units it describes; thus, it is not sufficient to identify layer refresh when NAL units of multiple dependency or quality layers are aggregated.</p>
 <p id="rfc.section.4.1.p.5">In H.264 SVC, temporal layer refresh information can be determined from various Supplemental Encoding Information (SEI) messages in the bitstream.</p>
 <p id="rfc.section.4.1.p.6">Whether an H.264 SVC stream is scalably nested can be determined from the Scalability Information SEI message's temporal_id_nesting flag.  If this flag is set in a stream's currently applicable Scalability Information SEI, receivers SHOULD NOT send temporal LRR messages for that stream, as every frame is implicitly a temporal layer refresh point.  (The Scalability Information SEI message may also be available in the signaling negotiation of H.264 SVC, as the sprop-scalability-info parameter.)</p>
-<p id="rfc.section.4.1.p.7">If a stream's temporal_id_nesting flag is not set, the Temporal Level Switching Point SEI message identifies temporal layer switching points.  A temporal layer refresh is satisfied when this SEI message is present in a frame with the target layer index, if the message's delta_frame_num refer to a frame with the requested current layer index.  (Alternately, temporal layer refresh can also be satisfied by a complete state refresh, such as an IDR.)  Senders which support receiving LRR for non-scalably-nested streams MUST insert Temporal Level Switching Point SEI messages as appropriate.</p>
+<p id="rfc.section.4.1.p.7">If a stream's temporal_id_nesting flag is not set, the Temporal Level Switching Point SEI message identifies temporal layer switching points.  A temporal layer refresh is satisfied when this SEI message is present in a frame with the target layer index, if the message's delta_frame_num refers to a frame with the requested current layer index.  (Alternately, temporal layer refresh can also be satisfied by a complete state refresh, such as an IDR.)  Senders which support receiving LRR for non-temporally-nested streams MUST insert Temporal Level Switching Point SEI messages as appropriate.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> VP8</h1>
 <p><a href="#I-D.ietf-payload-vp8">The VP8 RTP payload format</a> <cite title="NONE">[I-D.ietf-payload-vp8]</cite> defines temporal scalability modes.  It does not support spatial scalability.</p>
 <div id="rfc.figure.7"/>
@@ -646,33 +652,54 @@
 <p id="rfc.section.4.3.p.4">If a stream's sps_temporal_id_nesting_flag is not set, the NAL unit types 2 to 5 inclusively identify temporal layer switching points.  A layer refresh to any higher target temporal layer is satisfied when a NAL unit type of 4 or 5 with TID equal to 1 more than current TID is seen.  Alternatively, layer refresh to a target temporal layer can be incrementally satisfied with NAL unit type of 2 or 3.  In this case, given current TID = TO and target TID = TN, layer refresh to TN is satisfied when NAL unit type of 2 or 3 is seen for TID = T1, then TID = T2, all the way up to TID = TN.  During this incremental process, layer referesh to TN can be completely satisfied as soon as a NAL unit type of 2 or 3 is seen.</p>
 <p id="rfc.section.4.3.p.5">Of course, temporal layer refresh can also be satisfied whenever any Intra Random Access Point (IRAP) NAL unit type (with values 16-23, inclusively) is seen.  An IRAP picture is similar to an IDR picture in H.264 (NAL unit type of 5 in H.264) where decoding of the picture can start without any older pictures.</p>
 <p id="rfc.section.4.3.p.6">In the (future) H.265 payloads that support spatial scalability, a spatial layer refresh of a specific layer can be identified by NAL units with the requested layer ID and NAL unit types between 16 and 21 inclusive.  A dependency or quality layer refresh is complete once NAL units of this type have been seen on all the appropriate layers (in decoding order) above the current layer index (if any, or beginning from the base layer if not) through the target layer index.</p>
-<h1 id="rfc.section.4.4"><a href="#rfc.section.4.4">4.4.</a> VP9</h1>
-<p><a href="#I-D.uberti-payload-vp9">The RTP payload format for VP9</a> <cite title="NONE">[I-D.uberti-payload-vp9]</cite> defines how it can be used for spatial and temporal scalability.</p>
-<div id="rfc.figure.9"/>
-<div id="figureVP9IndexFormat"/>
-<pre>
-            +---------------+---------------+
-            |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
-            +-------------+-----------------+
-            |  T  |R|  S  | RES             |
-            +-------------+-----------------+
-          </pre>
-<p class="figure">Figure 9</p>
-<p><a href="#figureVP9IndexFormat">Figure 9</a> shows the format of the layer index field for VP9 streams.  This is designed to follow the same layout as the "L" byte of the VP9 payload header, which carries the stream's layer information.  The "R" and "RES" fields MUST be set to 0 on transmission and ingnored on reception.  See <a href="#I-D.uberti-payload-vp9">[I-D.uberti-payload-vp9]</a> for details on the T and S fields.</p>
-<p id="rfc.section.4.4.p.3">Identification of a layer refresh frame can be derived from the reference IDs of each frame by backtracking the dependency chain until reaching a point where only decodable frames are being referenced. Therefore it's recommended for both the flexible and the non-flexible mode that, when upgrade frames are being encoded in response to a LRR, those packets should contain layer indices and the reference fields so that the decoder or an MCU can make this derivation.</p>
-<p id="rfc.section.4.4.p.4">Example:</p>
-<p id="rfc.section.4.4.p.5">LRR {1,0}, {2,1} is sent by an MCU when it is currently relaying {1,0} to a receiver and which wants to upgrade to {2,1}. In response the encoder should encode the next frames in layers {1,1} and {2,1} by only referring to frames in {1,0}, or {0,0}.</p>
-<p id="rfc.section.4.4.p.6">In the non-flexible mode, periodic upgrade frames can be defined by the layer structure of the SS, thus periodic upgrade frames can be automatically identified by the picture ID.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Usage with different scalability transmission mechanisms</h1>
-<p id="rfc.section.5.p.1">Several different mechanisms are defined for how scalable streams can be transmitted in RTP.  The <a href="#I-D.ietf-avtext-rtp-grouping-taxonomy">RTP Taxonomy</a> <cite title="NONE">[I-D.ietf-avtext-rtp-grouping-taxonomy]</cite> Section 3.7 defines three mechanisms: Single RTP Stream on a Single Media Transport (SRST), Multiple RTP Streams on a Single Media Transport (MRST), and Multiple RTP Streams on Multiple Media Transports (MRMT).</p>
+<p id="rfc.section.5.p.1">Several different mechanisms are defined for how scalable streams can be transmitted in RTP.  The <a href="#RFC7656">RTP Taxonomy</a> <cite title="NONE">[RFC7656]</cite> Section 3.7 defines three mechanisms: Single RTP Stream on a Single Media Transport (SRST), Multiple RTP Streams on a Single Media Transport (MRST), and Multiple RTP Streams on Multiple Media Transports (MRMT).</p>
 <p id="rfc.section.5.p.2">The LRR message is applicable to all these mechanisms.  For MRST and MRMT mechanisms, the "media source" field of the LRR FCI is set to the SSRC of the RTP stream containing the layer indicated by the Current Layer Index (if "C" is 1), or the stream containing the base encoded stream (if "C" is 0).  For MRMT, it is sent on the RTP session on which this stream is sent.  On receipt, the sender MUST refresh all the layers requested in the stream, simultaneously in decode order.</p>
-<p id="rfc.section.5.p.3">Note: arguably, for the MRST and MRMT mechanisms, FIR feedback messages could instead be used to refresh specific individual layers.  However, the usage of FIR for MRSR/MRMT is not explicitly specified anywhere, and if FIR is interpreted as refreshing layers, there is no way to request an actual full, synchronized refresh of all the layers of an MRST/MRMT layered source.  Thus, the authors feel that interpreting FIR as refreshing the entire source, and using LRR for the individual layers, would be more useful.</p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#securityConsiderations" id="securityConsiderations">Security Considerations</a></h1>
 <p id="rfc.section.6.p.1">All the security considerations of <a href="#RFC5104">FIR feedback packets</a> <cite title="NONE">[RFC5104]</cite> apply to LRR feedback packets as well.  Additionally, media senders receiving LRR feedback packets MUST validate that the payload types and layer indices they are receiving are valid for the stream they are currently sending, and discard the requests if not.</p>
-<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#IANAConsiderations" id="IANAConsiderations">IANA Considerations</a></h1>
-<p id="rfc.section.7.p.1">The IANA is requested to register the following values:<br/> - TODO: PSFB value for LRR</p>
-<h1 id="rfc.references"><a href="#rfc.references">8.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">8.1.</a> Normative References</h1>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> SDP Definitions</h1>
+<p id="rfc.section.7.p.1">Section 7 of <a href="#RFC5104">[RFC5104]</a> defines SDP procedures for indicating and negotiating support for codec control messages (CCM) in SDP.  This document extends this with a new codec control command, "lrr", which indicates support of the Layer Refresh Request (LRR).</p>
+<p><a href="#lrr_grammar">Figure 9</a> gives a formal <a href="#RFC5234">Augmented Backus-Naur Form (ABNF)</a> <cite title="NONE">[RFC5234]</cite> showing this grammar extension, extending the grammar defined in <a href="#RFC5104">[RFC5104]</a>.</p>
+<div id="rfc.figure.9"/>
+<div id="lrr_grammar"/>
+<pre>
+rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
+</pre>
+<p class="figure">Figure 9: Syntax of the "lrr" ccm</p>
+<p id="rfc.section.7.p.3">The Offer-Answer considerations defined in <a href="#RFC5104">[RFC5104]</a> Section 7.2 apply.</p>
+<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#IANAConsiderations" id="IANAConsiderations">IANA Considerations</a></h1>
+<p id="rfc.section.8.p.1">This document defines a new entry to the "Codec Control Messages" subregistry of the "Session Description Protocol (SDP) Parameters" registry, according to the following data:</p>
+<p/>
+
+<dl>
+  <dt>Value name:</dt>
+  <dd style="margin-left: 8">lrr</dd>
+  <dt>Long name:</dt>
+  <dd style="margin-left: 8">Layer Refresh Request Command</dd>
+  <dt>Usable with:</dt>
+  <dd style="margin-left: 8">ccm</dd>
+  <dt>Reference:</dt>
+  <dd style="margin-left: 8">RFC XXXX</dd>
+</dl>
+
+<p> </p>
+<p id="rfc.section.8.p.3">This document also defines a new entry to the "FMT Values for PSFB Payload Types" subregistry of the "Real-Time Transport Protocol (RTP) Parameters" registry, according to the following data:</p>
+<p/>
+
+<dl>
+  <dt>Name:</dt>
+  <dd style="margin-left: 8">LRR</dd>
+  <dt>Long Name:</dt>
+  <dd style="margin-left: 8">Layer Refresh Request Command</dd>
+  <dt>Value:</dt>
+  <dd style="margin-left: 8">TBD</dd>
+  <dt>Reference:</dt>
+  <dd style="margin-left: 8">RFC XXXX</dd>
+</dl>
+
+<p> </p>
+<h1 id="rfc.references"><a href="#rfc.references">9.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">9.1.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -686,12 +713,6 @@
         <b id="I-D.ietf-payload-vp8">[I-D.ietf-payload-vp8]</b>
       </td>
       <td class="top"><a>Westin, P.</a>, <a>Lundin, H.</a>, <a>Glover, M.</a>, <a>Uberti, J.</a> and <a>F. Galligan</a>, "<a href="http://tools.ietf.org/html/draft-ietf-payload-vp8-17">RTP Payload Format for VP8 Video</a>", Internet-Draft draft-ietf-payload-vp8-17, September 2015.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="I-D.uberti-payload-vp9">[I-D.uberti-payload-vp9]</b>
-      </td>
-      <td class="top"><a>Uberti, J.</a>, <a>Holmer, S.</a>, <a>Flodman, M.</a>, <a>Lennox, J.</a> and <a>D. Hong</a>, "<a href="http://tools.ietf.org/html/draft-uberti-payload-vp9-01">RTP Payload Format for VP9 Video</a>", Internet-Draft draft-uberti-payload-vp9-01, March 2015.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -713,26 +734,38 @@
     </tr>
     <tr>
       <td class="reference">
+        <b id="RFC5104">[RFC5104]</b>
+      </td>
+      <td class="top"><a>Wenger, S.</a>, <a>Chandra, U.</a>, <a>Westerlund, M.</a> and <a>B. Burman</a>, "<a href="http://tools.ietf.org/html/rfc5104">Codec Control Messages in the RTP Audio-Visual Profile with Feedback (AVPF)</a>", RFC 5104, DOI 10.17487/RFC5104, February 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5234">[RFC5234]</b>
+      </td>
+      <td class="top"><a>Crocker, D.</a> and <a>P. Overell</a>, "<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>", STD 68, RFC 5234, DOI 10.17487/RFC5234, January 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC6190">[RFC6190]</b>
       </td>
       <td class="top"><a>Wenger, S.</a>, <a>Wang, Y.</a>, <a>Schierl, T.</a> and <a>A. Eleftheriadis</a>, "<a href="http://tools.ietf.org/html/rfc6190">RTP Payload Format for Scalable Video Coding</a>", RFC 6190, DOI 10.17487/RFC6190, May 2011.</td>
     </tr>
   </tbody>
 </table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">8.2.</a> Informative References</h1>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">9.2.</a> Informative References</h1>
 <table>
   <tbody>
     <tr>
       <td class="reference">
-        <b id="I-D.ietf-avtext-rtp-grouping-taxonomy">[I-D.ietf-avtext-rtp-grouping-taxonomy]</b>
+        <b id="I-D.wenger-avtext-avpf-ccm-layered">[I-D.wenger-avtext-avpf-ccm-layered]</b>
       </td>
-      <td class="top"><a>Lennox, J.</a>, <a>Gross, K.</a>, <a>Nandakumar, S.</a>, <a>Salgueiro, G.</a> and <a>B. Burman</a>, "<a href="http://tools.ietf.org/html/draft-ietf-avtext-rtp-grouping-taxonomy-08">A Taxonomy of Semantics and Mechanisms for Real-Time Transport Protocol (RTP) Sources</a>", Internet-Draft draft-ietf-avtext-rtp-grouping-taxonomy-08, July 2015.</td>
+      <td class="top"><a>Wenger, S.</a>, <a>Lennox, J.</a>, <a>Burman, B.</a> and <a>M. Westerlund</a>, "<a href="http://tools.ietf.org/html/draft-wenger-avtext-avpf-ccm-layered-00">Using Codec Control Messages in the RTP Audio-Visual Profile with Feedback with Layered Codecs</a>", Internet-Draft draft-wenger-avtext-avpf-ccm-layered-00, December 2015.</td>
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC5104">[RFC5104]</b>
+        <b id="RFC7656">[RFC7656]</b>
       </td>
-      <td class="top"><a>Wenger, S.</a>, <a>Chandra, U.</a>, <a>Westerlund, M.</a> and <a>B. Burman</a>, "<a href="http://tools.ietf.org/html/rfc5104">Codec Control Messages in the RTP Audio-Visual Profile with Feedback (AVPF)</a>", RFC 5104, DOI 10.17487/RFC5104, February 2008.</td>
+      <td class="top"><a>Lennox, J.</a>, <a>Gross, K.</a>, <a>Nandakumar, S.</a>, <a>Salgueiro, G.</a> and <a>B. Burman</a>, "<a href="http://tools.ietf.org/html/rfc7656">A Taxonomy of Semantics and Mechanisms for Real-Time Transport Protocol (RTP) Sources</a>", RFC 7656, DOI 10.17487/RFC7656, November 2015.</td>
     </tr>
   </tbody>
 </table>
