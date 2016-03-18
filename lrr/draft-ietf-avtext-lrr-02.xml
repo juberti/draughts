@@ -6,9 +6,9 @@
 <!ENTITY rfc5104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc5234 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml">
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
+<!ENTITY rfc7656 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7656.xml">
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
-<!ENTITY taxonomy SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-rtp-grouping-taxonomy.xml">
 <!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wenger-avtext-avpf-ccm-layered.xml">
 
 ]>
@@ -565,7 +565,7 @@
 
 	  <t>Several different mechanisms are defined for how scalable
 	  streams can be transmitted in RTP.
-	  The <xref target="I-D.ietf-avtext-rtp-grouping-taxonomy">RTP
+	  The <xref target="RFC7656">RTP
 	  Taxonomy</xref> Section 3.7 defines three mechanisms: Single RTP
 	  Stream on a Single Media Transport (SRST), Multiple RTP Streams
 	  on a Single Media Transport (MRST), and Multiple RTP Streams on
@@ -667,7 +667,7 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 
     <references title='Informative References'>
 
-	  &taxonomy;
+	  &rfc7656;
 
 	  &ccm-layered;
 
