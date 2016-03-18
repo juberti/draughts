@@ -4,6 +4,7 @@
 <!ENTITY rfc3550 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3550.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4585.xml">
 <!ENTITY rfc5104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5104.xml">
+<!ENTITY rfc5234 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml">
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
 <!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp9.xml">
@@ -298,8 +299,7 @@
 
 	  <t>LRR follows the model of the <xref target="RFC5104">Full
 	  Intra Request (FIR)</xref>(Section 3.5.1) for its
-	  retransmission, reliability, and use in multipoint conferences.
-	  TODO: expand these here.</t>
+	  retransmission, reliability, and use in multipoint conferences.</t>
 
 	  <t>The LRR message is identified by RTCP packet type value
 	  PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more LRR entries.  Each entry
@@ -363,6 +363,25 @@
 		  SHALL be ignored on reception.</t>
 		</list>
 	  </t>
+
+	  </section>
+
+	  <section title="Semantics">
+
+		<t>Within the common packet header for feedback messages (as defined in
+   section 6.1 of <xref target='RFC4585' />), the "SSRC of packet sender" field
+   indicates the source of the request, and the "SSRC of media source"
+   is not used and SHALL be set to 0.  The SSRCs of the media senders to
+   which the LRR command applies are in the corresponding FCI entries.
+   A LRR message MAY contain requests to multiple media senders, using
+   one FCI entry per target media sender.</t>
+
+   <t>Upon reception of LRR, the encoder MUST send a decoder refresh point
+   (see section <xref target='terminology' />) as soon as possible.</t>
+
+   <t>The sender MUST consider congestion control as outlined in section 5 of <xref target='RFC5104' />,
+   which MAY restrict its ability to send a layer refresh point
+   quickly.</t>
 
 	  </section>
 	</section>
@@ -618,9 +637,58 @@
 	  and discard the requests if not.</t>
     </section>
 
+
+	<section title="SDP Definitions">
+
+	  <t>Section 7 of <xref target='RFC5104' /> defines SDP procedures
+	  for indicating and negotiating support for codec control
+	  messages (CCM) in SDP.  This document extends this with a new
+	  codec control command, "lrr", which indicates support of the
+	  Layer Refresh Request (LRR).</t>
+
+	  <t><xref target='lrr_grammar' /> gives a formal
+	  <xref target='RFC5234'>Augmented Backus-Naur Form (ABNF)</xref>
+	  showing this grammar extension, extending the grammar defined in
+	  <xref target='RFC5104'/>.</t>
+
+<figure anchor="lrr_grammar" title="Syntax of the &quot;lrr&quot;
+ccm">
+<artwork type="abnf">
+rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
+</artwork>
+</figure>
+
+	  <t>The Offer-Answer considerations defined in
+	  <xref target='RFC5104' /> Section 7.2 apply.</t>
+	</section>
+
     <section anchor="IANAConsiderations" title="IANA Considerations">
-      <t>The IANA is requested to register the following values:<vspace
-      blankLines="0"/> - TODO: PSFB value for LRR</t>
+	  <t>This document defines a new entry to the "Codec Control
+	  Messages" subregistry of the "Session Description Protocol (SDP)
+	  Parameters" registry, according to the following data:</t>
+		
+	  <t>
+		<list style='hanging'>
+		  <t hangText='Value name:'>lrr</t>
+		  <t hangText='Long name:'>Layer Refresh Request Command</t>
+		  <t hangText='Usable with:'>ccm</t>
+		  <t hangText='Reference:'>RFC &rfc.number;</t>
+		</list>
+	  </t>
+
+	  <t>This document also defines a new entry to the "FMT Values for
+	  PSFB Payload Types" subregistry of the "Real-Time Transport
+	  Protocol (RTP) Parameters" registry, according to the following
+	  data:</t>
+
+	  <t>
+		<list style='hanging'>
+		  <t hangText='Name:'>LRR</t>
+		  <t hangText='Long Name:'>Layer Refresh Request Command</t>
+		  <t hangText='Value:'>TBD</t>
+		  <t hangText='Reference:'>RFC &rfc.number;</t>
+		</list>
+	  </t>
     </section>
   </middle>
 
@@ -638,12 +706,14 @@
 
       &rfc4585;
 
+	  &rfc5104;
+
+	  &rfc5234;
+
 	  &rfc6190;
     </references>
 
     <references title='Informative References'>
-
-	  &rfc5104;
 
 	  &taxonomy;
 
