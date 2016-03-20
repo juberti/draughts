@@ -2,6 +2,7 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc2198 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2198.xml">
+<!ENTITY rfc3550 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3550.xml">
 <!ENTITY rfc4867 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4867.xml">
 <!ENTITY rfc5109 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5109.xml">
 <!ENTITY rfc5956 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5956.xml">
@@ -30,7 +31,7 @@
 
       <address>
         <postal>
-          <street>747 6th Ave S</street>
+          <street>747 6th St S</street>
 
           <city>Kirkland</city>
 
@@ -45,7 +46,7 @@
       </address>
     </author>
 
-    <date day="8" month="January" year="2016" />
+    <date day="20" month="March" year="2016" />
 
     <area>RAI</area>
 
@@ -183,22 +184,23 @@
         <t>For video content, use of a separate FEC stream with the RTP payload format
         described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is RECOMMENDED.
         The receiver can demultiplex the incoming FEC stream by SSRC and correlate it
-        with the primary stream via the ssrc-group mechanism. [TODO: replace with RID]
+        with the primary stream via the SSRC field present in the FEC header.
         </t>
         <t>Support for protecting multiple primary streams with a single FEC stream is
         complicated by WebRTC's 1-m-line-per-stream policy,
         which does not allow for a m-line dedicated specifically to FEC.</t>
       </section>
       <section title="Negotiating Support">
-        <t>To offer support for a separate SSRC-multiplexed FEC stream, the
-        offerer MUST offer one of the formats described in
-        <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1,
-        as well as a ssrc-group with "FEC-FR" semantics as described in
-        <xref target="RFC5956"/>, Section 4.3. [TODO: replace with RID]</t>
-        <t>Use of FEC-only m-lines, and grouping using the SDP group mechanism,
+        <t>To offer support for a SSRC-multiplexed FEC stream that is
+          associated with a given primary stream, the offerer MUST offer the
+          formats supported for the primary stream, as well as one of the
+          formats described in
+          <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1.</t>
+        <t>Use of FEC-only m-lines, and grouping using the SDP group mechanism
+          as described in <xref target="RFC5956"/>, Section 4.1
           is not currently defined for WebRTC, and SHOULD NOT be offered.</t>
         <t>Answerers can reject the use of SSRC-multiplexed FEC, by not
-          including FEC payload types in the answer.</t>
+          including FEC formats in the answer.</t>
         <t>Answerers SHOULD reject any FEC-only m-lines, unless they
         specifically know how to handle such a thing in a WebRTC context (perhaps
         defined by a future version of the WebRTC specifications). This ensures
@@ -235,7 +237,8 @@
         bandwidth-constrained environment. Given this, WebRTC implementations
         SHOULD only transmit the amount of FEC needed to protect against the
         observed packet loss (which can be determined, e.g., by monitoring
-        transmit packet loss data from RTCP Receiver Reports), or the
+        transmit packet loss data from RTCP Receiver Reports
+        <xref target="RFC3550"/>), or the
         application indicates it is willing to
         pay a quality penalty to proactively avoid losses.
       </t>
@@ -274,6 +277,7 @@
     </references>
 
     <references title="Informative References">
+      &rfc3550;
       &rfc4867;
       &rfc5109;
       &rfc6716;
@@ -286,7 +290,9 @@
         <t>Added overhead stats for Opus.</t>
         <t>Expanded discussion of multi-packet FEC for Opus.</t>
         <t>Added discussion of AMR/AMR-WB.</t>
+        <t>Removed discussion of ssrc-group.</t>
         <t>Referenced the data channel doc.</t>
+        <t>Referenced the RTP/RTCP RFC.</t>
         <t>Several small edits based on feedback from Magnus.</t>
       </list></t>
       <t>Changes in draft -02: <list style="symbols">
