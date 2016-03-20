@@ -16,7 +16,7 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-shieh-rtcweb-ip-handling-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-00" ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling Recommendations</title>
 
@@ -25,7 +25,7 @@
 
       <address>
         <postal>
-          <street>747 6th Ave S</street>
+          <street>747 6th St S</street>
 
           <city>Kirkland</city>
 
@@ -45,7 +45,7 @@
 
       <address>
         <postal>
-          <street>747 6th Ave S</street>
+          <street>747 6th St S</street>
 
           <city>Kirkland</city>
 
@@ -60,7 +60,7 @@
       </address>
     </author>
 
-    <date day="8" month="January" year="2016" />
+    <date day="20" month="March" year="2016" />
 
     <area>RAI</area>
 
@@ -177,12 +177,8 @@
     </references>
 
     <section title="Change log">
-      <t>Changes in draft -01: <list style="symbols">
-        <t>Added references.</t>
-        <t>Discussed handling of RETURN proxies.</t>
-      </list></t>
       <t>Changes in draft -00: <list style="symbols">
-        <t>Initial version.</t>
+        <t>Published as WG draft.</t>
       </list></t>
     </section>
   </back>
