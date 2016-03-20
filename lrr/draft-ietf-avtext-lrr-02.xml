@@ -540,7 +540,7 @@
 		current TID = TO and target TID = TN, layer refresh to TN is satisfied
 		when NAL unit type of 2 or 3 is seen for TID = T1, then TID = T2, 
 		all the way up to TID = TN.  During this incremental process, layer
-		referesh to TN can be completely satisfied as soon as a NAL unit type
+		refresh to TN can be completely satisfied as soon as a NAL unit type
 		of 2 or 3 is seen.</t>
 
 		<t>Of course, temporal layer refresh can also be satisfied whenever 
