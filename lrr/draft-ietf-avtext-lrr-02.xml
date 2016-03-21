@@ -483,7 +483,7 @@
 
 		<t><xref target="figureVP8IndexFormat"/> shows the format
 		of the layer index field for VP8 streams.  The "RES"
-		fields MUST be set to 0 on transmission and ingnored on
+		fields MUST be set to 0 on transmission and be ignored on
 		reception.  See <xref target='I-D.ietf-payload-vp8'/> Section 4.2 for
 		details on the TID field.</t>
 

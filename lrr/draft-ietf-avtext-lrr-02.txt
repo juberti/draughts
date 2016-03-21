@@ -440,7 +440,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
                                  Figure 7
 
    Figure 7 shows the format of the layer index field for VP8 streams.
-   The "RES" fields MUST be set to 0 on transmission and ingnored on
+   The "RES" fields MUST be set to 0 on transmission and be ignored on
 
 
 
