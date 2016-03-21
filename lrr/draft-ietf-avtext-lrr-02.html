@@ -399,7 +399,7 @@
 
   <meta name="dct.creator" content="Lennox, J., Hong, D., Uberti, J., Holmer, S., and M. Flodman" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-avtext-lrr-02" />
-  <meta name="dct.issued" scheme="ISO8601" content="2016-3-18" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-3-21" />
   <meta name="dct.abstract" content="This memo describes the RTCP Payload-Specific Feedback Message &quot;Layer Refresh Request&quot; (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several RTP payloads for scalable media formats." />
   <meta name="description" content="This memo describes the RTCP Payload-Specific Feedback Message &quot;Layer Refresh Request&quot; (LRR), which can be used to request a state refresh of one or more substreams of a layered media stream.  It also defines its use with several RTP payloads for scalable media formats." />
 
@@ -423,7 +423,7 @@
   <td class="right">Vidyo</td>
 </tr>
 <tr>
-  <td class="left">Expires: September 19, 2016</td>
+  <td class="left">Expires: September 22, 2016</td>
   <td class="right">J. Uberti</td>
 </tr>
 <tr>
@@ -440,7 +440,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">March 18, 2016</td>
+  <td class="right">March 21, 2016</td>
 </tr>
 
     	
@@ -460,7 +460,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 19, 2016.</p>
+<p>This Internet-Draft will expire on September 22, 2016.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -602,6 +602,7 @@
 <p id="rfc.section.3.2.p.2">Upon reception of LRR, the encoder MUST send a decoder refresh point (see section <a href="#terminology">Section 2.1</a>) as soon as possible.</p>
 <p id="rfc.section.3.2.p.3">The sender MUST consider congestion control as outlined in section 5 of <a href="#RFC5104">[RFC5104]</a>, which MAY restrict its ability to send a layer refresh point quickly.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#codec-details" id="codec-details">Usage with specific codecs</a></h1>
+<p id="rfc.section.4.p.1">In order for LRR to be used with a scalable codec, the format of the target layer and current target layer fields needs to be specified for that codec's RTP packetization.  New RTP packetization specifications for scalable codecs SHOULD define how this is done. (The <a href="#I-D.ietf-payload-vp9">VP9 payload</a> <cite title="NONE">[I-D.ietf-payload-vp9]</cite>, for instance, has done so.)  This section defines the layer index fields for use with several existing scalable codecs.</p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> H264 SVC</h1>
 <p><a href="#RFC6190">H.264 SVC</a> <cite title="NONE">[RFC6190]</cite> defines temporal, dependency (spatial), and quality scalability modes.</p>
 <div id="rfc.figure.6"/>
@@ -649,7 +650,7 @@
 <p class="figure">Figure 8</p>
 <p><a href="#figureH265IndexFormat">Figure 8</a> shows the format of the layer index field for H.265 streams.  This is designed to follow the same layout as the first and second bytes of the H.265 NAL unit header, which carry the stream's layer information.  The "RES" field MUST be set to 0 on transmission and ignored on reception.  See <a href="#I-D.ietf-payload-rtp-h265">[I-D.ietf-payload-rtp-h265]</a> Section 1.1.4 for details on the LayerId and TID fields.</p>
 <p id="rfc.section.4.3.p.3">H.265 streams signal whether they are temporally nested, using the vps_temporal_id_nesting_flag in the Video Parameter Set (VPS), and the sps_temporal_id_nesting_flag in the Sequence Parameter Set (SPS).  If this flag is set in a stream's currently applicable VPS or SPS, receivers SHOULD NOT send temporal LRR messages for that stream, as every frame is implicitly a temporal layer refresh point.</p>
-<p id="rfc.section.4.3.p.4">If a stream's sps_temporal_id_nesting_flag is not set, the NAL unit types 2 to 5 inclusively identify temporal layer switching points.  A layer refresh to any higher target temporal layer is satisfied when a NAL unit type of 4 or 5 with TID equal to 1 more than current TID is seen.  Alternatively, layer refresh to a target temporal layer can be incrementally satisfied with NAL unit type of 2 or 3.  In this case, given current TID = TO and target TID = TN, layer refresh to TN is satisfied when NAL unit type of 2 or 3 is seen for TID = T1, then TID = T2, all the way up to TID = TN.  During this incremental process, layer referesh to TN can be completely satisfied as soon as a NAL unit type of 2 or 3 is seen.</p>
+<p id="rfc.section.4.3.p.4">If a stream's sps_temporal_id_nesting_flag is not set, the NAL unit types 2 to 5 inclusively identify temporal layer switching points.  A layer refresh to any higher target temporal layer is satisfied when a NAL unit type of 4 or 5 with TID equal to 1 more than current TID is seen.  Alternatively, layer refresh to a target temporal layer can be incrementally satisfied with NAL unit type of 2 or 3.  In this case, given current TID = TO and target TID = TN, layer refresh to TN is satisfied when NAL unit type of 2 or 3 is seen for TID = T1, then TID = T2, all the way up to TID = TN.  During this incremental process, layer refresh to TN can be completely satisfied as soon as a NAL unit type of 2 or 3 is seen.</p>
 <p id="rfc.section.4.3.p.5">Of course, temporal layer refresh can also be satisfied whenever any Intra Random Access Point (IRAP) NAL unit type (with values 16-23, inclusively) is seen.  An IRAP picture is similar to an IDR picture in H.264 (NAL unit type of 5 in H.264) where decoding of the picture can start without any older pictures.</p>
 <p id="rfc.section.4.3.p.6">In the (future) H.265 payloads that support spatial scalability, a spatial layer refresh of a specific layer can be identified by NAL units with the requested layer ID and NAL unit types between 16 and 21 inclusive.  A dependency or quality layer refresh is complete once NAL units of this type have been seen on all the appropriate layers (in decoding order) above the current layer index (if any, or beginning from the base layer if not) through the target layer index.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Usage with different scalability transmission mechanisms</h1>
@@ -755,6 +756,12 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 <h1 id="rfc.references.2"><a href="#rfc.references.2">9.2.</a> Informative References</h1>
 <table>
   <tbody>
+    <tr>
+      <td class="reference">
+        <b id="I-D.ietf-payload-vp9">[I-D.ietf-payload-vp9]</b>
+      </td>
+      <td class="top"><a>Uberti, J.</a>, <a>Holmer, S.</a>, <a>Flodman, M.</a>, <a>Lennox, J.</a> and <a>D. Hong</a>, "<a href="http://tools.ietf.org/html/draft-ietf-payload-vp9-01">RTP Payload Format for VP9 Video</a>", Internet-Draft draft-ietf-payload-vp9-01, October 2015.</td>
+    </tr>
     <tr>
       <td class="reference">
         <b id="I-D.wenger-avtext-avpf-ccm-layered">[I-D.wenger-avtext-avpf-ccm-layered]</b>

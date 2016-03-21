@@ -5,11 +5,11 @@
 Payload Working Group                                          J. Lennox
 Internet-Draft                                                   D. Hong
 Intended status: Standards Track                                   Vidyo
-Expires: September 19, 2016                                    J. Uberti
+Expires: September 22, 2016                                    J. Uberti
                                                                S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                          March 18, 2016
+                                                          March 21, 2016
 
 
          The Layer Refresh Request (LRR) RTCP Feedback Message
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 19, 2016.
+   This Internet-Draft will expire on September 22, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Lennox, et al.         Expires September 19, 2016               [Page 1]
+Lennox, et al.         Expires September 22, 2016               [Page 1]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
@@ -76,11 +76,11 @@ Table of Contents
      4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
    5.  Usage with different scalability transmission mechanisms  . .  10
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   7.  SDP Definitions . . . . . . . . . . . . . . . . . . . . . . .  10
+   7.  SDP Definitions . . . . . . . . . . . . . . . . . . . . . . .  11
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  13
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Lennox, et al.         Expires September 19, 2016               [Page 2]
+Lennox, et al.         Expires September 22, 2016               [Page 2]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
@@ -165,7 +165,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 
-Lennox, et al.         Expires September 19, 2016               [Page 3]
+Lennox, et al.         Expires September 22, 2016               [Page 3]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
@@ -221,7 +221,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 
-Lennox, et al.         Expires September 19, 2016               [Page 4]
+Lennox, et al.         Expires September 22, 2016               [Page 4]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
@@ -277,7 +277,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 
-Lennox, et al.         Expires September 19, 2016               [Page 5]
+Lennox, et al.         Expires September 22, 2016               [Page 5]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
@@ -333,7 +333,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 
-Lennox, et al.         Expires September 19, 2016               [Page 6]
+Lennox, et al.         Expires September 22, 2016               [Page 6]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
@@ -351,6 +351,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
    point quickly.
 
 4.  Usage with specific codecs
+
+   In order for LRR to be used with a scalable codec, the format of the
+   target layer and current target layer fields needs to be specified
+   for that codec's RTP packetization.  New RTP packetization
+   specifications for scalable codecs SHOULD define how this is done.
+   (The VP9 payload [I-D.ietf-payload-vp9], for instance, has done so.)
+   This section defines the layer index fields for use with several
+   existing scalable codecs.
 
 4.1.  H264 SVC
 
@@ -378,6 +386,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
    scalable slice).  Layer refresh of the base layer can also be
    identified by its NAL unit type of its coded slices, which is "5"
    rather than "1".  A dependency or quality layer refresh is complete
+
+
+
+Lennox, et al.         Expires September 22, 2016               [Page 7]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
    once this bit has been seen on all the appropriate layers (in
    decoding order) above the current layer index (if any, or beginning
    from the base layer if not) through the target layer index.
@@ -386,13 +402,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
    corresponding bit is set in any of the aggregated NAL units it
    describes; thus, it is not sufficient to identify layer refresh when
    NAL units of multiple dependency or quality layers are aggregated.
-
-
-
-Lennox, et al.         Expires September 19, 2016               [Page 7]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
-
 
    In H.264 SVC, temporal layer refresh information can be determined
    from various Supplemental Encoding Information (SEI) messages in the
@@ -432,6 +441,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
    Figure 7 shows the format of the layer index field for VP8 streams.
    The "RES" fields MUST be set to 0 on transmission and ingnored on
+
+
+
+
+Lennox, et al.         Expires September 22, 2016               [Page 8]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
    reception.  See [I-D.ietf-payload-vp8] Section 4.2 for details on the
    TID field.
 
@@ -441,14 +459,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
    On receipt of an LRR for a VP8 stream, A sender which supports LRR
    MUST encode the stream so it can set the Y bit in a packet whose
    temporal layer is at or below the target layer index.
-
-
-
-
-Lennox, et al.         Expires September 19, 2016               [Page 8]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
-
 
    Note that in VP8, not every layer switch point can be identified by
    the Y bit, since the Y bit implies layer switch of all layers, not
@@ -488,6 +498,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
    If a stream's sps_temporal_id_nesting_flag is not set, the NAL unit
    types 2 to 5 inclusively identify temporal layer switching points.  A
+
+
+
+Lennox, et al.         Expires September 22, 2016               [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
    layer refresh to any higher target temporal layer is satisfied when a
    NAL unit type of 4 or 5 with TID equal to 1 more than current TID is
    seen.  Alternatively, layer refresh to a target temporal layer can be
@@ -495,16 +513,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
    given current TID = TO and target TID = TN, layer refresh to TN is
    satisfied when NAL unit type of 2 or 3 is seen for TID = T1, then TID
    = T2, all the way up to TID = TN.  During this incremental process,
-   layer referesh to TN can be completely satisfied as soon as a NAL
-   unit type of 2 or 3 is seen.
-
-
-
-
-Lennox, et al.         Expires September 19, 2016               [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
-
+   layer refresh to TN can be completely satisfied as soon as a NAL unit
+   type of 2 or 3 is seen.
 
    Of course, temporal layer refresh can also be satisfied whenever any
    Intra Random Access Point (IRAP) NAL unit type (with values 16-23,
@@ -545,22 +555,19 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
    and layer indices they are receiving are valid for the stream they
    are currently sending, and discard the requests if not.
 
+
+
+Lennox, et al.         Expires September 22, 2016              [Page 10]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
 7.  SDP Definitions
 
    Section 7 of [RFC5104] defines SDP procedures for indicating and
    negotiating support for codec control messages (CCM) in SDP.  This
    document extends this with a new codec control command, "lrr", which
    indicates support of the Layer Refresh Request (LRR).
-
-
-
-
-
-
-Lennox, et al.         Expires September 19, 2016              [Page 10]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
-
 
    Figure 9 gives a formal Augmented Backus-Naur Form (ABNF) [RFC5234]
    showing this grammar extension, extending the grammar defined in
@@ -599,6 +606,18 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
    Reference:  RFC XXXX
 
+
+
+
+
+
+
+
+Lennox, et al.         Expires September 22, 2016              [Page 11]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
 9.  References
 
 9.1.  Normative References
@@ -608,15 +627,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
               Hannuksela, "RTP Payload Format for H.265/HEVC Video",
               draft-ietf-payload-rtp-h265-15 (work in progress),
               November 2015.
-
-
-
-
-
-Lennox, et al.         Expires September 19, 2016              [Page 11]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
-
 
    [I-D.ietf-payload-vp8]
               Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
@@ -654,7 +664,22 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
               DOI 10.17487/RFC6190, May 2011,
               <http://www.rfc-editor.org/info/rfc6190>.
 
+
+
+
+
+
+Lennox, et al.         Expires September 22, 2016              [Page 12]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
 9.2.  Informative References
+
+   [I-D.ietf-payload-vp9]
+              Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D.
+              Hong, "RTP Payload Format for VP9 Video", draft-ietf-
+              payload-vp9-01 (work in progress), October 2015.
 
    [I-D.wenger-avtext-avpf-ccm-layered]
               Wenger, S., Lennox, J., Burman, B., and M. Westerlund,
@@ -662,17 +687,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
               Profile with Feedback with Layered Codecs", draft-wenger-
               avtext-avpf-ccm-layered-00 (work in progress), December
               2015.
-
-
-
-
-
-
-
-Lennox, et al.         Expires September 19, 2016              [Page 12]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
-
 
    [RFC7656]  Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
               B. Burman, Ed., "A Taxonomy of Semantics and Mechanisms
@@ -702,6 +716,20 @@ Authors' Addresses
    Email: danny@vidyo.com
 
 
+
+
+
+
+
+
+
+
+
+Lennox, et al.         Expires September 22, 2016              [Page 13]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
+
+
    Justin Uberti
    Google, Inc.
    747 6th Street South
@@ -718,16 +746,6 @@ Authors' Addresses
    Sweden
 
    Email: holmer@google.com
-
-
-
-
-
-
-
-Lennox, et al.         Expires September 19, 2016              [Page 13]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
    Magnus Flodman
@@ -763,22 +781,4 @@ Internet-Draft     Layer Refresh Request RTCP Feedback        March 2016
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Lennox, et al.         Expires September 19, 2016              [Page 14]
+Lennox, et al.         Expires September 22, 2016              [Page 14]

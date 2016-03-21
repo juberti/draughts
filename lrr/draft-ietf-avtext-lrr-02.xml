@@ -8,6 +8,7 @@
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
 <!ENTITY rfc7656 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7656.xml">
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
+<!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp9.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
 <!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wenger-avtext-avpf-ccm-layered.xml">
 
@@ -387,6 +388,15 @@
 
 	<section anchor="codec-details" title="Usage with specific codecs">
 
+	  <t>In order for LRR to be used with a scalable codec, the format
+	  of the target layer and current target layer fields needs to be
+	  specified for that codec's RTP packetization.  New RTP
+	  packetization specifications for scalable codecs SHOULD define
+	  how this is done. (The <xref target='I-D.ietf-payload-vp9'>VP9
+	  payload</xref>, for instance, has done so.)  This section
+	  defines the layer index fields for use with several existing
+	  scalable codecs.</t>
+
 	  <section title="H264 SVC">
 
 		<t><xref target="RFC6190">H.264 SVC</xref> defines temporal,
@@ -670,6 +680,8 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 	  &rfc7656;
 
 	  &ccm-layered;
+
+	  &vp9rtp;
 
     </references>
   </back>
