@@ -627,7 +627,7 @@
 <p id="rfc.section.4.1.p.6">Whether an H.264 SVC stream is scalably nested can be determined from the Scalability Information SEI message's temporal_id_nesting flag.  If this flag is set in a stream's currently applicable Scalability Information SEI, receivers SHOULD NOT send temporal LRR messages for that stream, as every frame is implicitly a temporal layer refresh point.  (The Scalability Information SEI message may also be available in the signaling negotiation of H.264 SVC, as the sprop-scalability-info parameter.)</p>
 <p id="rfc.section.4.1.p.7">If a stream's temporal_id_nesting flag is not set, the Temporal Level Switching Point SEI message identifies temporal layer switching points.  A temporal layer refresh is satisfied when this SEI message is present in a frame with the target layer index, if the message's delta_frame_num refers to a frame with the requested current layer index.  (Alternately, temporal layer refresh can also be satisfied by a complete state refresh, such as an IDR.)  Senders which support receiving LRR for non-temporally-nested streams MUST insert Temporal Level Switching Point SEI messages as appropriate.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> VP8</h1>
-<p><a href="#I-D.ietf-payload-vp8">The VP8 RTP payload format</a> <cite title="NONE">[I-D.ietf-payload-vp8]</cite> defines temporal scalability modes.  It does not support spatial scalability.</p>
+<p><a href="#RFC7741">The VP8 RTP payload format</a> <cite title="NONE">[RFC7741]</cite> defines temporal scalability modes.  It does not support spatial scalability.</p>
 <div id="rfc.figure.7"/>
 <div id="figureVP8IndexFormat"/>
 <pre>
@@ -638,11 +638,11 @@
             +---------------+---------------+
           </pre>
 <p class="figure">Figure 7</p>
-<p><a href="#figureVP8IndexFormat">Figure 7</a> shows the format of the layer index field for VP8 streams.  The "RES" fields MUST be set to 0 on transmission and be ignored on reception.  See <a href="#I-D.ietf-payload-vp8">[I-D.ietf-payload-vp8]</a> Section 4.2 for details on the TID field.</p>
+<p><a href="#figureVP8IndexFormat">Figure 7</a> shows the format of the layer index field for VP8 streams.  The "RES" fields MUST be set to 0 on transmission and be ignored on reception.  See <a href="#RFC7741">[RFC7741]</a> Section 4.2 for details on the TID field.</p>
 <p id="rfc.section.4.2.p.3">A VP8 layer refresh point can be identified by the presence of the "Y" bit in the VP8 payload header.  When this bit is set, this and all subsequent frames depend only on the current base temporal layer.  On receipt of an LRR for a VP8 stream, A sender which supports LRR MUST encode the stream so it can set the Y bit in a packet whose temporal layer is at or below the target layer index.</p>
 <p id="rfc.section.4.2.p.4">Note that in VP8, not every layer switch point can be identified by the Y bit, since the Y bit implies layer switch of all layers, not just the layer in which it is sent.  Thus the use of LRR with VP8 can result in some inefficiency in transmision.  However, this is not expected to be a major issue for temporal structures in normal use.</p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> H265</h1>
-<p id="rfc.section.4.3.p.1">The initial version of <a href="#I-D.ietf-payload-rtp-h265">the H.265 payload format</a> <cite title="NONE">[I-D.ietf-payload-rtp-h265]</cite> defines temporal scalability, with protocol elements reserved for spatial or other scalability modes (which are expected to be defined in a future version of the specification).</p>
+<p id="rfc.section.4.3.p.1">The initial version of <a href="#RFC7798">the H.265 payload format</a> <cite title="NONE">[RFC7798]</cite> defines temporal scalability, with protocol elements reserved for spatial or other scalability modes (which are expected to be defined in a future version of the specification).</p>
 <div id="rfc.figure.8"/>
 <div id="figureH265IndexFormat"/>
 <pre>
@@ -653,7 +653,7 @@
             +---------------+---------------+
           </pre>
 <p class="figure">Figure 8</p>
-<p><a href="#figureH265IndexFormat">Figure 8</a> shows the format of the layer index field for H.265 streams.  The "RES" fields MUST be set to 0 on transmission and ignored on reception.  See <a href="#I-D.ietf-payload-rtp-h265">[I-D.ietf-payload-rtp-h265]</a> Section 1.1.4 for details on the LayerId and TID fields.</p>
+<p><a href="#figureH265IndexFormat">Figure 8</a> shows the format of the layer index field for H.265 streams.  The "RES" fields MUST be set to 0 on transmission and ignored on reception.  See <a href="#RFC7798">[RFC7798]</a> Section 1.1.4 for details on the LayerId and TID fields.</p>
 <p id="rfc.section.4.3.p.3">H.265 streams signal whether they are temporally nested, using the vps_temporal_id_nesting_flag in the Video Parameter Set (VPS), and the sps_temporal_id_nesting_flag in the Sequence Parameter Set (SPS).  If this flag is set in a stream's currently applicable VPS or SPS, receivers SHOULD NOT send temporal LRR messages for that stream, as every frame is implicitly a temporal layer refresh point.</p>
 <p id="rfc.section.4.3.p.4">If a stream's sps_temporal_id_nesting_flag is not set, the NAL unit types 2 to 5 inclusively identify temporal layer switching points.  A layer refresh to any higher target temporal layer is satisfied when a NAL unit type of 4 or 5 with TID equal to 1 more than current TID is seen.  Alternatively, layer refresh to a target temporal layer can be incrementally satisfied with NAL unit type of 2 or 3.  In this case, given current TID = TO and target TID = TN, layer refresh to TN is satisfied when NAL unit type of 2 or 3 is seen for TID = T1, then TID = T2, all the way up to TID = TN.  During this incremental process, layer refresh to TN can be completely satisfied as soon as a NAL unit type of 2 or 3 is seen.</p>
 <p id="rfc.section.4.3.p.5">Of course, temporal layer refresh can also be satisfied whenever any Intra Random Access Point (IRAP) NAL unit type (with values 16-23, inclusively) is seen.  An IRAP picture is similar to an IDR picture in H.264 (NAL unit type of 5 in H.264) where decoding of the picture can start without any older pictures.</p>
@@ -716,18 +716,6 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
     </tr>
     <tr>
       <td class="reference">
-        <b id="I-D.ietf-payload-rtp-h265">[I-D.ietf-payload-rtp-h265]</b>
-      </td>
-      <td class="top"><a>Wang, Y.</a>, <a>Sanchez, Y.</a>, <a>Schierl, T.</a>, <a>Wenger, S.</a> and <a>M. Hannuksela</a>, "<a href="http://tools.ietf.org/html/draft-ietf-payload-rtp-h265-15">RTP Payload Format for H.265/HEVC Video</a>", Internet-Draft draft-ietf-payload-rtp-h265-15, November 2015.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="I-D.ietf-payload-vp8">[I-D.ietf-payload-vp8]</b>
-      </td>
-      <td class="top"><a>Westin, P.</a>, <a>Lundin, H.</a>, <a>Glover, M.</a>, <a>Uberti, J.</a> and <a>F. Galligan</a>, "<a href="http://tools.ietf.org/html/draft-ietf-payload-vp8-17">RTP Payload Format for VP8 Video</a>", Internet-Draft draft-ietf-payload-vp8-17, September 2015.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
@@ -761,6 +749,18 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
         <b id="RFC6190">[RFC6190]</b>
       </td>
       <td class="top"><a>Wenger, S.</a>, <a>Wang, Y.</a>, <a>Schierl, T.</a> and <a>A. Eleftheriadis</a>, "<a href="http://tools.ietf.org/html/rfc6190">RTP Payload Format for Scalable Video Coding</a>", RFC 6190, DOI 10.17487/RFC6190, May 2011.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7741">[RFC7741]</b>
+      </td>
+      <td class="top"><a>Westin, P.</a>, <a>Lundin, H.</a>, <a>Glover, M.</a>, <a>Uberti, J.</a> and <a>F. Galligan</a>, "<a href="http://tools.ietf.org/html/rfc7741">RTP Payload Format for VP8 Video</a>", RFC 7741, DOI 10.17487/RFC7741, March 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7798">[RFC7798]</b>
+      </td>
+      <td class="top"><a>Wang, Y.</a>, <a>Sanchez, Y.</a>, <a>Schierl, T.</a>, <a>Wenger, S.</a> and <a>M. Hannuksela</a>, "<a href="http://tools.ietf.org/html/rfc7798">RTP Payload Format for High Efficiency Video Coding (HEVC)</a>", RFC 7798, DOI 10.17487/RFC7798, March 2016.</td>
     </tr>
   </tbody>
 </table>

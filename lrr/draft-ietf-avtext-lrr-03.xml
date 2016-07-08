@@ -7,9 +7,9 @@
 <!ENTITY rfc5234 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml">
 <!ENTITY rfc6190 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6190.xml">
 <!ENTITY rfc7656 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7656.xml">
-<!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
+<!ENTITY rfc7741 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7741.xml">
+<!ENTITY rfc7798 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7798.xml">
 <!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp9.xml">
-<!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
 <!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-avpf-ccm-layered.xml">
 <!ENTITY framemarking SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
@@ -480,7 +480,7 @@
 
 	  <section title="VP8">
 
-		<t><xref target="I-D.ietf-payload-vp8">The VP8 RTP payload
+		<t><xref target="RFC7741">The VP8 RTP payload
 		format</xref> defines temporal scalability modes.  It does not
 		support spatial scalability.</t>
 
@@ -497,7 +497,7 @@
 		<t><xref target="figureVP8IndexFormat"/> shows the format
 		of the layer index field for VP8 streams.  The "RES"
 		fields MUST be set to 0 on transmission and be ignored on
-		reception.  See <xref target='I-D.ietf-payload-vp8'/> Section 4.2 for
+		reception.  See <xref target='RFC7741'/> Section 4.2 for
 		details on the TID field.</t>
 
 		<t>A VP8 layer refresh point can be identified by the presence
@@ -520,7 +520,7 @@
 	  <section title="H265">
 
 		<t>The initial version
-		of <xref target="I-D.ietf-payload-rtp-h265">the H.265 payload
+		of <xref target="RFC7798">the H.265 payload
 		format</xref> defines temporal scalability, with protocol
 		elements reserved for spatial or other scalability modes
 		(which are expected to be defined in a future version of the
@@ -539,7 +539,7 @@
 		<t><xref target="figureH265IndexFormat"/> shows the format
 		of the layer index field for H.265 streams.  The "RES"
 		fields MUST be set to 0 on transmission and ignored on
-		reception.  See <xref target='I-D.ietf-payload-rtp-h265'/> Section 1.1.4 for
+		reception.  See <xref target='RFC7798'/> Section 1.1.4 for
 		details on the LayerId and TID fields.</t>
 
 		<t>H.265 streams signal whether they are temporally nested,
@@ -668,10 +668,6 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 
   <back>
     <references title='Normative References'>
-	  &vp8rtp;
-
-	  &h265rtp;
-
       &rfc2119;
 
 	  &rfc3550;
@@ -683,6 +679,10 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 	  &rfc5234;
 
 	  &rfc6190;
+
+	  &rfc7741;
+
+	  &rfc7798;
 
 	  &framemarking;
     </references>

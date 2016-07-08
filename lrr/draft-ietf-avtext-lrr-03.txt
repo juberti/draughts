@@ -74,14 +74,14 @@ Table of Contents
      4.1.  H264 SVC  . . . . . . . . . . . . . . . . . . . . . . . .   7
      4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
      4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
-   5.  Usage with different scalability transmission mechanisms  . .  11
+   5.  Usage with different scalability transmission mechanisms  . .  10
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
    7.  SDP Definitions . . . . . . . . . . . . . . . . . . . . . . .  11
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  13
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction
 
@@ -455,8 +455,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 4.2.  VP8
 
-   The VP8 RTP payload format [I-D.ietf-payload-vp8] defines temporal
-   scalability modes.  It does not support spatial scalability.
+   The VP8 RTP payload format [RFC7741] defines temporal scalability
+   modes.  It does not support spatial scalability.
 
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
@@ -468,8 +468,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
    Figure 7 shows the format of the layer index field for VP8 streams.
    The "RES" fields MUST be set to 0 on transmission and be ignored on
-   reception.  See [I-D.ietf-payload-vp8] Section 4.2 for details on the
-   TID field.
+   reception.  See [RFC7741] Section 4.2 for details on the TID field.
 
    A VP8 layer refresh point can be identified by the presence of the
    "Y" bit in the VP8 payload header.  When this bit is set, this and
@@ -486,25 +485,10 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 4.3.  H265
 
-   The initial version of the H.265 payload format
-   [I-D.ietf-payload-rtp-h265] defines temporal scalability, with
-   protocol elements reserved for spatial or other scalability modes
-   (which are expected to be defined in a future version of the
-   specification).
-
-
-
-
-
-
-
-
-
-
-Lennox, et al.           Expires January 9, 2017                [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
-
+   The initial version of the H.265 payload format [RFC7798] defines
+   temporal scalability, with protocol elements reserved for spatial or
+   other scalability modes (which are expected to be defined in a future
+   version of the specification).
 
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
@@ -514,10 +498,18 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
                                  Figure 8
 
+
+
+
+Lennox, et al.           Expires January 9, 2017                [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+
+
    Figure 8 shows the format of the layer index field for H.265 streams.
    The "RES" fields MUST be set to 0 on transmission and ignored on
-   reception.  See [I-D.ietf-payload-rtp-h265] Section 1.1.4 for details
-   on the LayerId and TID fields.
+   reception.  See [RFC7798] Section 1.1.4 for details on the LayerId
+   and TID fields.
 
    H.265 streams signal whether they are temporally nested, using the
    vps_temporal_id_nesting_flag in the Video Parameter Set (VPS), and
@@ -552,16 +544,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
    (in decoding order) above the current layer index (if any, or
    beginning from the base layer if not) through the target layer index.
 
-
-
-
-
-
-Lennox, et al.           Expires January 9, 2017               [Page 10]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
-
-
 5.  Usage with different scalability transmission mechanisms
 
    Several different mechanisms are defined for how scalable streams can
@@ -572,6 +554,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
    The LRR message is applicable to all these mechanisms.  For MRST and
    MRMT mechanisms, the "media source" field of the LRR FCI is set to
+
+
+
+Lennox, et al.           Expires January 9, 2017               [Page 10]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+
+
    the SSRC of the RTP stream containing the layer indicated by the
    Current Layer Index (if "C" is 1), or the stream containing the base
    encoded stream (if "C" is 0).  For MRMT, it is sent on the RTP
@@ -611,13 +601,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
    subregistry of the "Session Description Protocol (SDP) Parameters"
    registry, according to the following data:
 
-
-
-Lennox, et al.           Expires January 9, 2017               [Page 11]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
-
-
    Value name:  lrr
 
    Long name:  Layer Refresh Request Command
@@ -625,6 +608,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
    Usable with:  ccm
 
    Reference:  RFC XXXX
+
+
+
+
+
+Lennox, et al.           Expires January 9, 2017               [Page 11]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+
 
    This document also defines a new entry to the "FMT Values for PSFB
    Payload Types" subregistry of the "Real-Time Transport Protocol (RTP)
@@ -647,32 +639,10 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
               RTP Header Extension", draft-ietf-avtext-framemarking-01
               (work in progress), March 2016.
 
-   [I-D.ietf-payload-rtp-h265]
-              Wang, Y., Sanchez, Y., Schierl, T., Wenger, S., and M.
-              Hannuksela, "RTP Payload Format for H.265/HEVC Video",
-              draft-ietf-payload-rtp-h265-15 (work in progress),
-              November 2015.
-
-   [I-D.ietf-payload-vp8]
-              Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
-              Galligan, "RTP Payload Format for VP8 Video", draft-ietf-
-              payload-vp8-17 (work in progress), September 2015.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
               RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
-
-
-
-
-
-
-
-Lennox, et al.           Expires January 9, 2017               [Page 12]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
-
 
    [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
@@ -695,10 +665,29 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
               RFC5234, January 2008,
               <http://www.rfc-editor.org/info/rfc5234>.
 
+
+
+
+
+Lennox, et al.           Expires January 9, 2017               [Page 12]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+
+
    [RFC6190]  Wenger, S., Wang, Y., Schierl, T., and A. Eleftheriadis,
               "RTP Payload Format for Scalable Video Coding", RFC 6190,
               DOI 10.17487/RFC6190, May 2011,
               <http://www.rfc-editor.org/info/rfc6190>.
+
+   [RFC7741]  Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
+              Galligan, "RTP Payload Format for VP8 Video", RFC 7741,
+              DOI 10.17487/RFC7741, March 2016,
+              <http://www.rfc-editor.org/info/rfc7741>.
+
+   [RFC7798]  Wang, Y., Sanchez, Y., Schierl, T., Wenger, S., and M.
+              Hannuksela, "RTP Payload Format for High Efficiency Video
+              Coding (HEVC)", RFC 7798, DOI 10.17487/RFC7798, March
+              2016, <http://www.rfc-editor.org/info/rfc7798>.
 
 9.2.  Informative References
 
@@ -719,17 +708,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
               DOI 10.17487/RFC7656, November 2015,
               <http://www.rfc-editor.org/info/rfc7656>.
 
-
-
-
-
-
-
-Lennox, et al.           Expires January 9, 2017               [Page 13]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
-
-
 Authors' Addresses
 
    Jonathan Lennox
@@ -740,6 +718,16 @@ Authors' Addresses
    US
 
    Email: jonathan@vidyo.com
+
+
+
+
+
+
+
+Lennox, et al.           Expires January 9, 2017               [Page 13]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
    Danny Hong
@@ -777,6 +765,18 @@ Authors' Addresses
    Sweden
 
    Email: mflodman@google.com
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
