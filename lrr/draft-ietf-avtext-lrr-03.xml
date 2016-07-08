@@ -10,10 +10,11 @@
 <!ENTITY vp8rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp8.xml">
 <!ENTITY vp9rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-vp9.xml">
 <!ENTITY h265rtp SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-h265.xml">
-<!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.wenger-avtext-avpf-ccm-layered.xml">
+<!ENTITY ccm-layered SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-avpf-ccm-layered.xml">
+<!ENTITY framemarking SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-avtext-lrr-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-avtext-lrr-03" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -160,8 +161,8 @@
 		decoded by an endpoint which previously was not receiving those
 		layers, without requiring that the
 		entire stream be refreshed (as it would be if the receiver
-		sent a <xref target='RFC5104'>Full Intra Request (FIR)</xref>
-		(see also <xref target='I-D.wenger-avtext-avpf-ccm-layered' />).</t>
+		sent a <xref target='RFC5104'>Full Intra Request (FIR); </xref>
+		see also <xref target='I-D.ietf-avtext-avpf-ccm-layered' />).</t>
 
 	  <t>The feedback message is applicable both to temporally
 	  and spatially scaled streams, and to both single-stream and
@@ -322,7 +323,7 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    | Seq nr.       |C| Payload Type| Reserved                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | Target Layer Index            | Current Layer Index (opt)     |
+   | RES     | TTID| TLID          | RES     | CTID| CLID (opt)    |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           ]]></artwork>
 	  </figure>
@@ -349,20 +350,33 @@
 		  which the LRR is being requested.  This gives the context in
 		  which the target layer index is to be interpreted.</t>
 
-		  <t hangText="Reserved (16 bits)"> All bits SHALL be set to 0
+		  <t hangText="Reserved (RES) (16 bits / 5 bits / 5 bits)"> All bits SHALL be set to 0
 			by the sender and SHALL be ignored on reception.</t>
 
-		  <t hangText="Target Layer Index (16 bits)">The target layer
+		  <t hangText="Target Temporal Layer ID (TTID) (3 bits)">The temporal ID
+			of the target layer for which the receiver wishes a refresh point.</t>
+
+		  <t hangText="Target Layer ID (TLID) (8 bits)">The layer ID of the target layer
 			for which the receiver wishes a refresh point.  Its format
 			is dependent on the payload type field.</t>
 
-		  <t hangText="Current Layer Index (16 bits)">If C is 1, the
-		  current layer being decoded by the receiver.  This message
+		  <t hangText="Current Temporal Layer ID (CTID) (3 bits)">If C is 1,
+			the ID of the current temporal layer being decoded by the receiver. 
+			This message is not requesting refresh of layers at or below this layer.
+			If C is 0, this field SHALL be set to 0 by the sender and
+			SHALL be ignored on reception.</t>
+
+		  <t hangText="Current Layer ID (CLID) (8 bits)">If C is 1, the
+		  layer ID of the current layer being decoded by the receiver.  This message
 		  is not requesting refresh of layers at or below this layer.
 		  If C is 0, this field SHALL be set to 0 by the sender and
 		  SHALL be ignored on reception.</t>
 		</list>
 	  </t>
+
+	  <t>Note: the syntax of the TTID, TLID, CTID, and TLID fields are
+	  designed to match the TID and LID fields in
+	  <xref target='I-D.ietf-avtext-framemarking' />.</t>
 
 	  </section>
 
@@ -393,9 +407,11 @@
 	  specified for that codec's RTP packetization.  New RTP
 	  packetization specifications for scalable codecs SHOULD define
 	  how this is done. (The <xref target='I-D.ietf-payload-vp9'>VP9
-	  payload</xref>, for instance, has done so.)  This section
-	  defines the layer index fields for use with several existing
-	  scalable codecs.</t>
+	  payload</xref>, for instance, has done so.)  If the payload also
+	  specifies how it is used with
+	  <xref target='I-D.ietf-avtext-framemarking'>the Frame Marking
+		RTP Header Extension</xref>, the syntax MUST be defined
+		in the same manner as the TID and LID fields in that header.</t>
 
 	  <section title="H264 SVC">
 
@@ -407,16 +423,13 @@
             +---------------+---------------+
             |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
             +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |R| DID |  QID  | TID |RES      |
+            | RES     | TID |R|  DID  | QID |
             +---------------+---------------+
           ]]></artwork>
 		</figure>
 
 		<t><xref target="figureH264SvcIndexFormat"/> shows the format
-		of the layer index field for H.264 SVC streams.  This is
-		designed to follow the same layout as the third and fourth
-		bytes of the H.264 SVC NAL unit extension, which carry the
-		stream's layer information.  The "R" and "RES"
+		of the layer index field for H.264 SVC streams.  The "R" and "RES"
 		fields MUST be set to 0 on transmission and ignored on
 		reception.  See <xref target='RFC6190'/> Section 1.1.3 for
 		details on the DID, QID, and TID fields.</t>
@@ -476,7 +489,7 @@
             +---------------+---------------+
             |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
             +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |TID| RES                       |
+            | RES     | TID | RES           |
             +---------------+---------------+
           ]]></artwork>
 		</figure>
@@ -518,17 +531,14 @@
             +---------------+---------------+
             |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
             +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            | RES         |  LayerId  | TID |
-            +-------------+-----------------+
+            | RES     | TID |RES|  LayerId  |
+            +---------------+---------------+
           ]]></artwork>
 		</figure>
 
 		<t><xref target="figureH265IndexFormat"/> shows the format
-		of the layer index field for H.265 streams.  This is
-		designed to follow the same layout as the first and second
-		bytes of the H.265 NAL unit header, which carry the
-		stream's layer information.  The "RES"
-		field MUST be set to 0 on transmission and ignored on
+		of the layer index field for H.265 streams.  The "RES"
+		fields MUST be set to 0 on transmission and ignored on
 		reception.  See <xref target='I-D.ietf-payload-rtp-h265'/> Section 1.1.4 for
 		details on the LayerId and TID fields.</t>
 
@@ -673,6 +683,8 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 	  &rfc5234;
 
 	  &rfc6190;
+
+	  &framemarking;
     </references>
 
     <references title='Informative References'>
