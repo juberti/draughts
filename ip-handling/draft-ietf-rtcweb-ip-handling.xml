@@ -22,9 +22,9 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-01" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-02" ipr="trust200902">
   <front>
-    <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling Recommendations</title>
+    <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling Requirements</title>
 
     <author fullname="Justin Uberti" initials="J." surname="Uberti">
       <organization>Google</organization>
@@ -66,7 +66,7 @@
       </address>
     </author>
 
-    <date day="20" month="March" year="2016" />
+    <date day="31" month="October" year="2016" />
 
     <area>RAI</area>
 
@@ -128,8 +128,8 @@
           <t>By default, WebRTC should follow normal IP routing rules, to the extent that this is easy to determine (i.e., not considering proxies). This can be accomplished by binding local sockets to the wildcard addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to route WebRTC traffic the same way as it would HTTP traffic, and allows only the 'typical' public addresses to be discovered.</t>
           <t>By default, support for direct connections between hosts (i.e., without traversing a NAT or relay server) should be maintained. To accomplish this, the local IPv4 and IPv6 addresses of the interface used for outgoing STUN traffic should still be surfaced as candidates, even when binding to the wildcard addresses as mentioned above. The appropriate addresses here can be discovered by the common trick of binding sockets to the wildcard addresses, connect()ing those sockets to some well-known public IP address (one particular example being "8.8.8.8"), and then reading the bound local addresses via getsockname(). This approach
           requires no data exchange; it simply provides a mechanism for applications to retrieve the desired information from the kernel routing table.</t>
-          <t>When used with audio and video devices, WebRTC requires explicit user permission to access those devices. We propose that this permission grant be expanded to include consent to allow WebRTC to access all IP addresses associated with the user agent, for the purpose of finding the absolute best route for media traffic. Combining these permission grants, rather than having the user grant permission individually, is a considered balance; this balance takes into account that the user has placed enough trust into the application to allow it to access their devices, that when doing so the user typically wants to engage in a conversational session, which benefits most from an optimal network path, and lastly, the fact that the underlying issue is complex, and
-          difficult to explain meaningfully to the user.</t>
+          <t>Gathering all possible candidates SHOULD only be performed when
+          some form of user consent has been provided; this thwarts the typical drive-by enumeration attacks. The details of this consent are left to the implementation; one potential mechanism is to key this off getUserMedia consent. The getUserMedia suggestion takes into account that the user has provided some consent to the application already; that when doing so the user typically wants to engage in a conversational session, which benefits most from an optimal network path, and lastly, the fact that the underlying issue is complex and difficult to explain, making explicit consent for enumeration troublesome.</t>
           <t>Determining whether a web proxy is in use is a complex process, as the answer can depend on the exact site or address being contacted. Furthermore, web proxies that support UDP are not widely deployed today. As a result, when WebRTC is
           made to go through a proxy, it typically must use TCP, either ICE-TCP
           <xref target="RFC6544"/> or TURN-over-TCP <xref target="RFC5766"/>. Naturally, this has attendant costs on media quality and also proxy performance.</t>
@@ -154,7 +154,8 @@
         </list>
       </t>
 
-      <t>We recommend Mode 1 as the default behavior only if cam/mic permission has been granted, or Mode 2 if this is not the case.</t>
+      <t>We recommend Mode 1 as the default behavior only if the user has provided
+      some form of consent, as discussed above, or Mode 2 if not.</t>
 
       <t>Users who prefer Mode 3 or 4 should be able to select a preference or install an extension to force their browser to operate in the specified mode.
       </t>
@@ -203,6 +204,10 @@
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -02: <list style="symbols">
+        <t>Recommendations -> Requirements</t>
+        <t>Updated text regarding consent.</t>
+      </list></t>
       <t>Changes in draft -01: <list style="symbols">
         <t>Incorporated feedback from Adam Roach; changes to discussion
           of cam/mic permission, as well as use of proxies, and various
