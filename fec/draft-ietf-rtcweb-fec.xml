@@ -161,21 +161,22 @@
       </section>
 
       <section title="Negotiating Support">
-        <t>Support for redundant encoding can be indicated by offering "red" as a
-        supported payload type in the offer. Answerers can reject the use of
+        <t>Support for redundant encoding MUST be indicated by offering "red" as
+        a supported payload type in the offer. Answerers can reject the use of
         redundant encoding by not including "red" as a supported payload type in
         the answer.</t>
         <t>Support for codec-specific FEC mechanisms are typically indicated via
         "a=fmtp" parameters.</t>
-        <t>For Opus, a receiver can indicate that it is prepared to use incoming
-        FEC data with the "useinbandfec=1" parameter, as specified in
+        <t>For Opus, a receiver MUST indicate that it is prepared to use
+        incoming FEC data with the "useinbandfec=1" parameter, as specified in
         <xref target="RFC7587"/>.
         This parameter is declarative and can
         be negotiated separately for either media direction.</t>
         <t>For AMR/AMR-WB, support for redundant encoding, and the maximum
         supported depth, are controlled by the 'max-red' parameter, as specified
-        in <xref target="RFC4867"/>, Section 8.1.
-        [TODO: figure out any additional recommendations are needed.]</t>
+        in <xref target="RFC4867"/>, Section 8.1. Receivers MUST include this
+        parameter, and set it to an appropriate value, as specified in
+        [3GPP.26.114], Table 6.3.</t>
       </section>
     </section>
 
