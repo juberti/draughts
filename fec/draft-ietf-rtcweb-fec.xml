@@ -22,7 +22,7 @@
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
 
-<rfc category="std" docName="draft-ietf-rtcweb-fec-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-04" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
 
@@ -46,7 +46,7 @@
       </address>
     </author>
 
-    <date day="20" month="March" year="2016" />
+    <date day="31" month="October" year="2016" />
 
     <area>RAI</area>
 
@@ -164,8 +164,9 @@
         the answer.</t>
         <t>Support for codec-specific FEC mechanisms are typically indicated via
         "a=fmtp" parameters.</t>
-        <t>For Opus, support for FEC at the received side is controlled by the
-        "useinbandfec=1" parameter, as specified in <xref target="I-D.ietf-payload-rtp-opus"/>.
+        <t>For Opus, a receiver can indicate that it is prepared to use incoming
+        FEC data with the "useinbandfec=1" parameter, as specified in
+        <xref target="RFC7587"/>.
         This parameter is declarative and can
         be negotiated separately for either media direction.</t>
         <t>For AMR/AMR-WB, support for redundant encoding, and the maximum
@@ -223,10 +224,14 @@
     </section>
 
     <section title="Implementation Requirements">
-        <t>To support the functionality recommended above, implementations MUST support
-        the relevant mechanisms for their supported audio codecs, as described in
-        <xref target="audio-fec"/>, and the general FEC
-        mechanism described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>.</t>
+        <t>To support the functionality recommended above, implementations MUST
+        be able to receive and make use of the relevant FEC formats for
+        their supported audio codecs, and MUST indicate this support,
+        as described in <xref target="audio-fec"/>.
+        Use of these formats when sending, as mentioned above, is RECOMMENDED.</t>
+        <t>The general FEC
+        mechanism described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>
+        SHOULD also be supported, as mentioned in <xref target="video-fec"/>.</t>
         <t>Implementations MAY support additional FEC mechanisms if desired,
         e.g. <xref target="RFC5109"/>.</t>
     </section>
@@ -264,7 +269,8 @@
 
     <section title="Acknowledgements">
       <t>Several people provided significant input into this document, including
-      Jonathan Lennox, Giri Mandyam, Varun Singh, Tim Terriberry, and Mo Zanaty.</t>
+      Bernard Aboba, Jonathan Lennox, Giri Mandyam, Varun Singh, Tim Terriberry,
+      Magnus Westerlund, and Mo Zanaty.</t>
     </section>
   </middle>
 
@@ -281,8 +287,8 @@
       &rfc4867;
       &rfc5109;
       &rfc6716;
+      &rfc7587;
       &datachannel;
-      &opuspayload;
     </references>
 
     <section title="Change log">
