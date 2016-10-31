@@ -3,13 +3,15 @@
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc2198 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2198.xml">
 <!ENTITY rfc3550 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3550.xml">
+<!ENTITY rfc4588 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4588.xml">
 <!ENTITY rfc4867 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4867.xml">
 <!ENTITY rfc5109 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5109.xml">
 <!ENTITY rfc5956 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5956.xml">
+<!ENTITY rfc6386 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6386.xml">
 <!ENTITY rfc6716 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6716.xml">
+<!ENTITY rfc7587 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7587.xml">
 <!ENTITY datachannel SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-data-channel.xml">
 <!ENTITY fecpayload SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-flexible-fec-scheme.xml">
-<!ENTITY opuspayload SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-payload-rtp-opus.xml">
 ]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <?rfc toc="yes" ?>
@@ -110,7 +112,8 @@
             imposed is about 20-30%, depending on the amount of protection needed.
             Note that this mechanism can only carry redundancy information for the
             immediately preceding packet; as such the decoder cannot fully
-            recover multiple consecutive lost packets. See <xref target="RFC6716"/>,
+            recover multiple consecutive lost packets, which can be a problem
+            on wireless networks. See <xref target="RFC6716"/>,
             Section 2.1.7 for complete details.
           </t>
           <t>For AMR/AMR-WB, packets can contain copies or lower-quality encodings
@@ -224,28 +227,33 @@
     </section>
 
     <section title="Implementation Requirements">
-        <t>To support the functionality recommended above, implementations MUST
-        be able to receive and make use of the relevant FEC formats for
-        their supported audio codecs, and MUST indicate this support,
-        as described in <xref target="audio-fec"/>.
-        Use of these formats when sending, as mentioned above, is RECOMMENDED.</t>
-        <t>The general FEC
-        mechanism described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>
-        SHOULD also be supported, as mentioned in <xref target="video-fec"/>.</t>
-        <t>Implementations MAY support additional FEC mechanisms if desired,
-        e.g. <xref target="RFC5109"/>.</t>
+      <t>To support the functionality recommended above, implementations MUST
+      be able to receive and make use of the relevant FEC formats for
+      their supported audio codecs, and MUST indicate this support,
+      as described in <xref target="audio-fec"/>.
+      Use of these formats when sending, as mentioned above, is RECOMMENDED.</t>
+      <t>The general FEC
+      mechanism described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>
+      SHOULD also be supported, as mentioned in <xref target="video-fec"/>.</t>
+      <t>Implementations MAY support additional FEC mechanisms if desired,
+      e.g. <xref target="RFC5109"/>.</t>
     </section>
 
     <section anchor="adaptive-fec" title="Adaptive Use of FEC">
-      <t>Since use of FEC causes redundant data to be transmitted, this will
-        lead to less bandwidth available for the primary encoding, when in a
-        bandwidth-constrained environment. Given this, WebRTC implementations
-        SHOULD only transmit the amount of FEC needed to protect against the
-        observed packet loss (which can be determined, e.g., by monitoring
-        transmit packet loss data from RTCP Receiver Reports
-        <xref target="RFC3550"/>), or the
-        application indicates it is willing to
-        pay a quality penalty to proactively avoid losses.
+      <t>Since use of FEC always causes redundant data to be transmitted, this
+      will lead to less bandwidth available for the primary encoding when in a
+      bandwidth-constrained environment. This is in contrast to methods like
+      RTX <xref target="RFC4588"/>, which only transmits redundant data when
+      necessary, at the cost of an extra roundtrip.</t>
+      <t>Given this, WebRTC implementations SHOULD consider using RTX instead
+      of FEC when RTT is low, and SHOULD only transmit the amount of FEC needed
+      to protect against the observed packet loss (which can be determined,
+      e.g., by monitoring transmit packet loss data from RTCP Receiver Reports
+      <xref target="RFC3550"/>), unless the application indicates it is willing
+      to pay a quality penalty to proactively avoid losses.</t>
+      <t>When using FEC with layered codecs, e.g., <xref target="RFC6386"/>,
+      where only base layer frames are critical to the decoding of future
+      frames, implementations SHOULD only apply FEC to these base layer frames.
       </t>
     </section>
 
@@ -284,14 +292,24 @@
 
     <references title="Informative References">
       &rfc3550;
+      &rfc4588;
       &rfc4867;
       &rfc5109;
+      &rfc6386;
       &rfc6716;
       &rfc7587;
       &datachannel;
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -04: <list style="symbols">
+        <t>Discussion of layered codecs.</t>
+        <t>Discussion of RTX.</t>
+        <t>Clarified implementation requirements.</t>
+        <t>FlexFEC MUST -> SHOULD.</t>
+        <t>Clarified AMR max-red handling.</t>
+        <t>Updated references.</t>
+      </list></t>
       <t>Changes in draft -03: <list style="symbols">
         <t>Added overhead stats for Opus.</t>
         <t>Expanded discussion of multi-packet FEC for Opus.</t>
