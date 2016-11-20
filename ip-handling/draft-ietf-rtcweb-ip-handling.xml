@@ -133,7 +133,7 @@
         </list>
       </t>
       
-      <t>We define four modes of WebRTC behavior, reflecting different privacy/media tradeoffs:
+      <t>Based on these ideas, we define four modes of WebRTC behavior, reflecting different privacy/media tradeoffs:
         <list style="format Mode %d:">
           <t>Enumerate all addresses: WebRTC will bind to all interfaces individually and use them all to attempt communication with STUN servers, TURN servers, or peers.  This will converge on the best media path, and is ideal when media performance is the highest priority, but it discloses the most information.</t>
           <t>Enumerate all addresses: WebRTC will bind to all interfaces individually and use them all to attempt communication with STUN servers, TURN servers, or peers.  This will converge on the best media path, and is ideal when media performance is the highest priority, but it discloses the most information.</t>
