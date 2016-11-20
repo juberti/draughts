@@ -143,7 +143,8 @@
         </list>
       </t>
 
-      <t>Mode 1 MUST NOT be used without user consent; this thwarts the typical drive-by enumeration attacks.  The details of this consent are left to the implementation. One potential mechanism is to tie this consent to getUserMedia consent. Unless user consent has been obtained, user agents SHOULD use Mode 2, though they might choose a stricter default policy in certain circumstances.</t>
+      <t>Mode 1 MUST only be used when user consent has been provided; this thwarts the typical drive-by enumeration attacks.  The details of this consent are left to the implementation; one potential mechanism is to tie this consent to getUserMedia consent.</t>
+      <t>In cases where user consent has not been obtained, Mode 2 SHOULD be used, although user agents MAY choose a stricter default policy in certain circumstances.</t>
 
       <t>Note that when a RETURN proxy is configured for the interface associated with the default route, Mode 2 and 3 will cause any external media traffic to go through the RETURN proxy. This provides a way to ensure the proxy is used for external traffic, but without the performance issues of forcing all media through said proxy.</t>
     </section>
