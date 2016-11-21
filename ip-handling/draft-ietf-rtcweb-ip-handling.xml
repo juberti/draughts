@@ -128,12 +128,10 @@
           <t>By default, WebRTC should follow normal IP routing rules, to the extent that this is easy to determine (i.e., not considering proxies). This can be accomplished by binding local sockets to the wildcard addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to route WebRTC traffic the same way as it would HTTP traffic, and allows only the 'typical' public addresses to be discovered.</t>
           <t>By default, support for direct connections between hosts (i.e., without traversing a NAT or relay server) should be maintained. To accomplish this, the local IPv4 and IPv6 addresses of the interface used for outgoing STUN traffic should still be surfaced as candidates, even when binding to the wildcard addresses as mentioned above. The appropriate addresses here can be discovered by the common trick of binding sockets to the wildcard addresses, connect()ing those sockets to some well-known public IP address (one particular example being "8.8.8.8"), and then reading the bound local addresses via getsockname(). This approach
           requires no data exchange; it simply provides a mechanism for applications to retrieve the desired information from the kernel routing table.</t>
-          <t>Gathering all possible candidates SHOULD only be performed when
-          some form of user consent has been provided; this thwarts the typical drive-by enumeration attacks. The details of this consent are left to the implementation; one potential mechanism is to key this off getUserMedia consent. The getUserMedia suggestion takes into account that the user has provided some consent to the application already; that when doing so the user typically wants to engage in a conversational session, which benefits most from an optimal network path, and lastly, the fact that the underlying issue is complex and difficult to explain, making explicit consent for enumeration troublesome.</t>
           <t>Determining whether a web proxy is in use is a complex process, as the answer can depend on the exact site or address being contacted. Furthermore, web proxies that support UDP are not widely deployed today. As a result, when WebRTC is
-          made to go through a proxy, it typically must use TCP, either ICE-TCP
+          made to go through a proxy, it typically needs to use TCP, either ICE-TCP 
           <xref target="RFC6544"/> or TURN-over-TCP <xref target="RFC5766"/>. Naturally, this has attendant costs on media quality and also proxy performance.</t>
-          <t>RETURN <xref target="I-D.ietf-rtcweb-return"/> is a new proposal for explicit proxying of WebRTC media traffic. When RETURN proxies are
+          <t>RETURN <xref target="I-D.ietf-rtcweb-return"/> is a proposal for explicit proxying of WebRTC media traffic. When RETURN proxies are
           deployed, media and STUN checks will go through the proxy, but without the performance issues associated with sending through a typical web proxy.</t>
         </list>
       </t>
@@ -141,7 +139,7 @@
       <t>Based on these ideas, we define four modes of WebRTC behavior, reflecting different privacy/media tradeoffs:
         <list style="format Mode %d:">
           <t>Enumerate all addresses: WebRTC will bind to all interfaces individually and use them all to attempt communication with STUN servers, TURN servers, or peers.
-          This will converge on the best media path, and is ideal when media performance is the highest priority, but it discloses the most information. As such, this should only be performed when the user has explicitly given consent for local media access, as indicated in design idea #3 above.</t>
+          This will converge on the best media path, and is ideal when media performance is the highest priority, but it discloses the most information.</t>
           <t>Default route + the single associated local address: By binding solely to the wildcard address, media packets will follow the kernel routing table rules,
           which will typically result in the same route as the application's HTTP traffic. In addition, the associated private address will be discovered through getsockname, as mentioned above. This ensures that direct connections can still be established even when local media access is not granted, e.g., for data channel applications.</t>
           <t>Default route only: This is the the same as Mode 2, except that the associated private address is not provided, which may cause traffic to hairpin through a NAT, fall back to the application TURN server, or fail altogether, with resulting quality implications.</t>
@@ -154,11 +152,8 @@
         </list>
       </t>
 
-      <t>We recommend Mode 1 as the default behavior only if the user has provided
-      some form of consent, as discussed above, or Mode 2 if not.</t>
-
-      <t>Users who prefer Mode 3 or 4 should be able to select a preference or install an extension to force their browser to operate in the specified mode.
-      </t>
+      <t>Mode 1 MUST only be used when user consent has been provided; this thwarts the typical drive-by enumeration attacks. The details of this consent are left to the implementation; one potential mechanism is to tie this consent to getUserMedia consent.</t>
+      <t>In cases where user consent has not been obtained, Mode 2 SHOULD be used, although user agents MAY choose a stricter default policy in certain circumstances.</t>
 
       <t>Note that when a RETURN proxy is configured for the interface associated with the default route, Mode 2 and 3 will cause any external media traffic to go through the RETURN proxy. This provides a way to ensure the proxy is used for external
       traffic, but without the performance issues of forcing all media through
