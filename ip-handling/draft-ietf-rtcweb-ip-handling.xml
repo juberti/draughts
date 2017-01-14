@@ -2,7 +2,7 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd"
 [
 <!ENTITY rfc1918 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1918.xml">
-<!ENTITY rfc1918 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1919.xml">
+<!ENTITY rfc1919 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1919.xml">
 <!ENTITY rfc1928 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1928.xml">
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY rfc4941 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml">
