@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd"
+[
 <!ENTITY rfc1918 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1918.xml">
 <!ENTITY rfc1928 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1928.xml">
 <!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
@@ -21,170 +22,226 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-02"
+ipr="trust200902">
   <front>
-    <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling Requirements</title>
-
+    <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
+    Requirements</title>
     <author fullname="Justin Uberti" initials="J." surname="Uberti">
       <organization>Google</organization>
-
       <address>
         <postal>
           <street>747 6th St S</street>
-
           <city>Kirkland</city>
-
           <region>WA</region>
-
           <code>98033</code>
-
           <country>USA</country>
         </postal>
-
         <email>justin@uberti.name</email>
       </address>
     </author>
-
-     <author fullname="Guo-wei Shieh" initials="G." surname="Shieh">
+    <author fullname="Guo-wei Shieh" initials="G." surname="Shieh">
       <organization>Google</organization>
-
       <address>
         <postal>
           <street>747 6th St S</street>
-
           <city>Kirkland</city>
-
           <region>WA</region>
-
           <code>98033</code>
-
           <country>USA</country>
         </postal>
-
         <email>guoweis@google.com</email>
       </address>
     </author>
-
     <date day="31" month="October" year="2016" />
-
     <area>RAI</area>
-
     <abstract>
-      <t>This document provides best practices for how
-      IP addresses should be handled by WebRTC applications.</t>
+      <t>This document provides best practices for how IP addresses should be
+      handled by WebRTC applications.</t>
     </abstract>
   </front>
-
   <middle>
     <section title="Introduction">
-      <t>As a technology that supports peer-to-peer connections, WebRTC may send data over different network paths than the path used for HTTP traffic. This may allow a web application to learn additional information about the user, which may be problematic in certain cases. This document summarizes the concerns, and makes recommendations on how best to handle the tradeoff between privacy and media performance.</t>
+      <t>As a technology that supports peer-to-peer connections, WebRTC may
+      send data over different network paths than the path used for HTTP
+      traffic. This may allow a web application to learn additional information
+      about the user, which may be problematic in certain cases. This document
+      summarizes the concerns, and makes recommendations on how best to handle
+      the tradeoff between privacy and media performance.</t>
     </section>
-
     <section title="Problem Statement">
-      <t>WebRTC enables real-time peer-to-peer communications by enumerating network interfaces and discovering the best route
-        through the ICE <xref target="RFC5245"/> protocol. During the ICE process, the peers involved in a session gather and exchange all the IP addresses
-        they can discover, so that the connectivity of each IP pair can be checked, and the best path chosen. The addresses that
-        are gathered usually consist of an endpoint's private physical/virtual addresses, and its public Internet addresses.
-      </t>
-
-      <t>These addresses are exposed upwards to the web application, so that they can be communicated to the remote endpoint. This allows the application to learn more about the local network configuration than it would from a typical HTTP scenario, in which the web server would only see a single public Internet address, i.e. the address from which the HTTP request was sent.
-      </t>
-
+      <t>WebRTC enables real-time peer-to-peer communications by enumerating
+      network interfaces and discovering the best route through the ICE
+      <xref target="RFC5245" />protocol. During the ICE process, the peers
+      involved in a session gather and exchange all the IP addresses they can
+      discover, so that the connectivity of each IP pair can be checked, and
+      the best path chosen. The addresses that are gathered usually consist of
+      an endpoint's private physical/virtual addresses, and its public Internet
+      addresses.</t>
+      <t>These addresses are exposed upwards to the web application, so that
+      they can be communicated to the remote endpoint. This allows the
+      application to learn more about the local network configuration than it
+      would from a typical HTTP scenario, in which the web server would only
+      see a single public Internet address, i.e. the address from which the
+      HTTP request was sent.</t>
       <t>The information revealed falls into three categories:
-        <list style="numbers">
-          <t>If the client is behind a NAT, the client's private IP addresses, typically <xref target="RFC1918"/> addresses, can be learned.</t>
-          <t>If the client tries to hide its physical location through a VPN, and the VPN and local OS support routing over multiple interfaces, WebRTC will discover the public address for the VPN as well as the ISP public address that the VPN runs over.</t>
-          <t>If the client is behind a proxy, but direct access to the Internet is also supported, WebRTC's STUN <xref target="RFC5389"/> checks will bypass the proxy and reveal the public address of the client.</t>
-        </list>
-      </t>
-
-      <t>Of these three concerns, #2 is the most significant concern, since for some users, the purpose of using a VPN is for anonymity. However, different VPN users will have different needs, and some VPN users (e.g. corporate VPN users) may in fact prefer WebRTC to send media traffic directly, i.e. not through the VPN.
-      </t>
-
-      <t>#3 is a less common concern, as proxy administrators can control this behavior through local firewall policy if desired, coupled with the fact that forcing WebRTC traffic through a proxy will have negative effects on both the proxy and on media quality. For situations where
-      this is an important consideration, use of a RETURN proxy, as described below, can be an effective solution.
-      </t>
-
-      <t>#1 is considered to be the least significant concern, given that the local address values often contain minimal information (e.g. 192.168.0.2), or have built-in privacy protection (e.g. <xref target="RFC4941"/> IPv6 addresses).
-      </t>
-
-      <t>Note also that these concerns predate WebRTC; Adobe Flash Player has provided similar functionality since the introduction of RTMFP <xref target="RFC7016"/> in 2008.
-      </t>
+      <list style="numbers">
+        <t>If the client is behind a NAT, the client's private IP addresses,
+        typically
+        <xref target="RFC1918" />addresses, can be learned.</t>
+        <t>If the client tries to hide its physical location through a VPN, and
+        the VPN and local OS support routing over multiple interfaces, WebRTC
+        will discover the public address for the VPN as well as the ISP public
+        address that the VPN runs over.</t>
+        <t>If the client is behind a proxy, but direct access to the Internet
+        is also supported, WebRTC's STUN
+        <xref target="RFC5389" />checks will bypass the proxy and reveal the
+        public address of the client.</t>
+      </list></t>
+      <t>Of these three concerns, #2 is the most significant concern, since for
+      some users, the purpose of using a VPN is for anonymity. However,
+      different VPN users will have different needs, and some VPN users (e.g.
+      corporate VPN users) may in fact prefer WebRTC to send media traffic
+      directly, i.e. not through the VPN.</t>
+      <t>#3 is a less common concern, as proxy administrators can control this
+      behavior through local firewall policy if desired, coupled with the fact
+      that forcing WebRTC traffic through a proxy will have negative effects on
+      both the proxy and on media quality. For situations where this is an
+      important consideration, use of a RETURN proxy, as described below, can
+      be an effective solution.</t>
+      <t>#1 is considered to be the least significant concern, given that the
+      local address values often contain minimal information (e.g.
+      192.168.0.2), or have built-in privacy protection (e.g.
+      <xref target="RFC4941" />IPv6 addresses).</t>
+      <t>Note also that these concerns predate WebRTC; Adobe Flash Player has
+      provided similar functionality since the introduction of RTMFP
+      <xref target="RFC7016" />in 2008.</t>
     </section>
-
     <section title="Goals">
-      <t>Being peer-to-peer, WebRTC represents a privacy-enabling technology, and therefore we want to avoid solutions that disable WebRTC or make it harder to use. This means that WebRTC should be configured by default to only reveal the minimum amount of information needed to establish a performant WebRTC session, while providing options to reveal additional information upon user consent, or further limit this information if the user has specifically requested this. Specifically, WebRTC should:
-        <list style="symbols">
-          <t>Provide a privacy-friendly default behavior which strikes the right balance between privacy and media performance for most users and use cases.</t>
-          <t>For users who care more about one versus the other, provide a means to customize the experience.</t>
-        </list>
-      </t>
+      <t>Being peer-to-peer, WebRTC represents a privacy-enabling technology,
+      and therefore we want to avoid solutions that disable WebRTC or make it
+      harder to use. This means that WebRTC should be configured by default to
+      only reveal the minimum amount of information needed to establish a
+      performant WebRTC session, while providing options to reveal additional
+      information upon user consent, or further limit this information if the
+      user has specifically requested this. Specifically, WebRTC should:
+      <list style="symbols">
+        <t>Provide a privacy-friendly default behavior which strikes the right
+        balance between privacy and media performance for most users and use
+        cases.</t>
+        <t>For users who care more about one versus the other, provide a means
+        to customize the experience.</t>
+      </list></t>
     </section>
-
     <section title="Detailed Design">
       <t>The main ideas for the design are the following:
-        <list style="numbers">
-          <t>By default, WebRTC should follow normal IP routing rules, to the extent that this is easy to determine (i.e., not considering proxies). This can be accomplished by binding local sockets to the wildcard addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to route WebRTC traffic the same way as it would HTTP traffic, and allows only the 'typical' public addresses to be discovered.</t>
-          <t>By default, support for direct connections between hosts (i.e., without traversing a NAT or relay server) should be maintained. To accomplish this, the local IPv4 and IPv6 addresses of the interface used for outgoing STUN traffic should still be surfaced as candidates, even when binding to the wildcard addresses as mentioned above. The appropriate addresses here can be discovered by the common trick of binding sockets to the wildcard addresses, connect()ing those sockets to some well-known public IP address (one particular example being "8.8.8.8"), and then reading the bound local addresses via getsockname(). This approach
-          requires no data exchange; it simply provides a mechanism for applications to retrieve the desired information from the kernel routing table.</t>
-          <t>Determining whether a web proxy is in use is a complex process, as the answer can depend on the exact site or address being contacted. Furthermore, web proxies that support UDP are not widely deployed today. As a result, when WebRTC is
-          made to go through a proxy, it typically needs to use TCP, either ICE-TCP 
-          <xref target="RFC6544"/> or TURN-over-TCP <xref target="RFC5766"/>. Naturally, this has attendant costs on media quality and also proxy performance.</t>
-          <t>RETURN <xref target="I-D.ietf-rtcweb-return"/> is a proposal for explicit proxying of WebRTC media traffic. When RETURN proxies are
-          deployed, media and STUN checks will go through the proxy, but without the performance issues associated with sending through a typical web proxy.</t>
-        </list>
-      </t>
-
-      <t>Based on these ideas, we define four modes of WebRTC behavior, reflecting different privacy/media tradeoffs:
-        <list style="format Mode %d:">
-          <t>Enumerate all addresses: WebRTC will bind to all interfaces individually and use them all to attempt communication with STUN servers, TURN servers, or peers.
-          This will converge on the best media path, and is ideal when media performance is the highest priority, but it discloses the most information.</t>
-          <t>Default route + the single associated local address: By binding solely to the wildcard address, media packets will follow the kernel routing table rules,
-          which will typically result in the same route as the application's HTTP traffic. In addition, the associated private address will be discovered through getsockname, as mentioned above. This ensures that direct connections can still be established even when local media access is not granted, e.g., for data channel applications.</t>
-          <t>Default route only: This is the the same as Mode 2, except that the associated private address is not provided, which may cause traffic to hairpin through a NAT, fall back to the application TURN server, or fail altogether, with resulting quality implications.</t>
-          <t>Force proxy: This forces all WebRTC media traffic through a proxy, if
-          one is configured. If the proxy does not support UDP (as is the case for all HTTP and most SOCKS <xref target="RFC1928"/> proxies), or the WebRTC implementation does not support UDP
-          proxying, the use of UDP will be disabled, and TCP will be used to send
-          and receive media through the proxy. Use of TCP will result in reduced
-          quality, in addition to any performance considerations associated with
-          sending all WebRTC media through the proxy server.</t>
-        </list>
-      </t>
-
-      <t>Mode 1 MUST only be used when user consent has been provided; this thwarts the typical drive-by enumeration attacks. The details of this consent are left to the implementation; one potential mechanism is to tie this consent to getUserMedia consent.</t>
-      <t>In cases where user consent has not been obtained, Mode 2 SHOULD be used, although user agents MAY choose a stricter default policy in certain circumstances.</t>
-
-      <t>Note that when a RETURN proxy is configured for the interface associated with the default route, Mode 2 and 3 will cause any external media traffic to go through the RETURN proxy. This provides a way to ensure the proxy is used for external
-      traffic, but without the performance issues of forcing all media through
-      said proxy.</t>
+      <list style="numbers">
+        <t>By default, WebRTC should follow normal IP routing rules, to the
+        extent that this is easy to determine (i.e., not considering proxies).
+        This can be accomplished by binding local sockets to the wildcard
+        addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to route
+        WebRTC traffic the same way as it would HTTP traffic, and allows only
+        the 'typical' public addresses to be discovered.</t>
+        <t>By default, support for direct connections between hosts (i.e.,
+        without traversing a NAT or relay server) should be maintained. To
+        accomplish this, the local IPv4 and IPv6 addresses of the interface
+        used for outgoing STUN traffic should still be surfaced as candidates,
+        even when binding to the wildcard addresses as mentioned above. The
+        appropriate addresses here can be discovered by the common trick of
+        binding sockets to the wildcard addresses, connect()ing those sockets
+        to some well-known public IP address (one particular example being
+        "8.8.8.8"), and then reading the bound local addresses via
+        getsockname(). This approach requires no data exchange; it simply
+        provides a mechanism for applications to retrieve the desired
+        information from the kernel routing table.</t>
+        <t>Determining whether a web proxy is in use is a complex process, as
+        the answer can depend on the exact site or address being contacted.
+        Furthermore, web proxies that support UDP are not widely deployed
+        today. As a result, when WebRTC is made to go through a proxy, it
+        typically needs to use TCP, either ICE-TCP
+        <xref target="RFC6544" />or TURN-over-TCP
+        <xref target="RFC5766" />. Naturally, this has attendant costs on media
+        quality and also proxy performance.</t>
+        <t>RETURN
+        <xref target="I-D.ietf-rtcweb-return" />is a proposal for explicit
+        proxying of WebRTC media traffic. When RETURN proxies are deployed,
+        media and STUN checks will go through the proxy, but without the
+        performance issues associated with sending through a typical web
+        proxy.</t>
+      </list></t>
+      <t>Based on these ideas, we define four modes of WebRTC behavior,
+      reflecting different privacy/media tradeoffs:
+      <list style="format Mode %d:">
+        <t>Enumerate all addresses: WebRTC will bind to all interfaces
+        individually and use them all to attempt communication with STUN
+        servers, TURN servers, or peers. This will converge on the best media
+        path, and is ideal when media performance is the highest priority, but
+        it discloses the most information.</t>
+        <t>Default route + the single associated local address: By binding
+        solely to the wildcard address, media packets will follow the kernel
+        routing table rules, which will typically result in the same route as
+        the application's HTTP traffic. In addition, the associated private
+        address will be discovered through getsockname, as mentioned above.
+        This ensures that direct connections can still be established even when
+        local media access is not granted, e.g., for data channel
+        applications.</t>
+        <t>Default route only: This is the the same as Mode 2, except that the
+        associated private address is not provided, which may cause traffic to
+        hairpin through a NAT, fall back to the application TURN server, or
+        fail altogether, with resulting quality implications.</t>
+        <t>Force proxy: This forces all WebRTC media traffic through a proxy,
+        if one is configured. If the proxy does not support UDP (as is the case
+        for all HTTP and most SOCKS
+        <xref target="RFC1928" />proxies), or the WebRTC implementation does
+        not support UDP proxying, the use of UDP will be disabled, and TCP will
+        be used to send and receive media through the proxy. Use of TCP will
+        result in reduced quality, in addition to any performance
+        considerations associated with sending all WebRTC media through the
+        proxy server.</t>
+      </list></t>
+      <t>Mode 1 MUST only be used when user consent has been provided; this
+      thwarts the typical drive-by enumeration attacks. The details of this
+      consent are left to the implementation; one potential mechanism is to tie
+      this consent to getUserMedia consent.</t>
+      <t>In cases where user consent has not been obtained, Mode 2 SHOULD be
+      used, although user agents MAY choose a stricter default policy in
+      certain circumstances.</t>
+      <t>Note that when a RETURN proxy is configured for the interface
+      associated with the default route, Mode 2 and 3 will cause any external
+      media traffic to go through the RETURN proxy. This provides a way to
+      ensure the proxy is used for external traffic, but without the
+      performance issues of forcing all media through said proxy.</t>
     </section>
-
     <section title="Application Guidance">
-      <t>The recommendations mentioned in this document may cause certain WebRTC applications to malfunction. In order to be robust in all scenarios, applications should follow the following guidelines:
-        <list style="symbols">
-          <t>Applications should deploy a TURN server with support for both UDP and TCP connections to the server. This ensures that connectivity can still be established, even when Mode 3 or 4 are in use, assuming the TURN server
-          can be reached.</t>
-          <t>Applications can detect when they don't have access to the full set of ICE candidates by checking for the presence of host candidates. If no host candidates are present, Mode 3 or 4 above is in use.</t>
-          <t>Future versions of browsers may present an indicator to signify that the page is using WebRTC to set up a peer-to-peer connection. Applications should be careful to only use WebRTC in a fashion that is consistent with user expectations.</t>
-        </list>
-      </t>
+      <t>The recommendations mentioned in this document may cause certain
+      WebRTC applications to malfunction. In order to be robust in all
+      scenarios, applications should follow the following guidelines:
+      <list style="symbols">
+        <t>Applications should deploy a TURN server with support for both UDP
+        and TCP connections to the server. This ensures that connectivity can
+        still be established, even when Mode 3 or 4 are in use, assuming the
+        TURN server can be reached.</t>
+        <t>Applications can detect when they don't have access to the full set
+        of ICE candidates by checking for the presence of host candidates. If
+        no host candidates are present, Mode 3 or 4 above is in use.</t>
+        <t>Future versions of browsers may present an indicator to signify that
+        the page is using WebRTC to set up a peer-to-peer connection.
+        Applications should be careful to only use WebRTC in a fashion that is
+        consistent with user expectations.</t>
+      </list></t>
     </section>
-
     <section title="Security Considerations">
       <t>This document is entirely devoted to security considerations.</t>
     </section>
-
     <section title="IANA Considerations">
       <t>This document requires no actions from IANA.</t>
     </section>
-
     <section title="Acknowledgements">
       <t>Several people provided input into this document, including
-      Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla, and Adam Roach.</t>
+      Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
+      Adam Roach, and Martin Thomson.</t>
     </section>
   </middle>
-
   <back>
     <references title="Informative References">
       &rfc1918;
@@ -197,19 +254,28 @@
       &rfc7016;
       &return;
     </references>
-
     <section title="Change log">
-      <t>Changes in draft -02: <list style="symbols">
-        <t>Recommendations -> Requirements</t>
+      <t>Changes in draft -03:
+      <list style="symbols">
+        <t>Clarified when to use which modes.</t>
+        <t>Use 2119 qualifiers to make normative statements.</t>
+        <t>Defined 'proxy'.</t>
+        <t>Mentioned split tunnels in problem statement.</t>
+        <t>Reflowed doc.</t>
+      </list></t>
+      <list style="symbols">
+        <t>Recommendations -&gt; Requirements</t>
         <t>Updated text regarding consent.</t>
       </list></t>
-      <t>Changes in draft -01: <list style="symbols">
-        <t>Incorporated feedback from Adam Roach; changes to discussion
-          of cam/mic permission, as well as use of proxies, and various
-          editorial changes.</t>
+      <t>Changes in draft -01:
+      <list style="symbols">
+        <t>Incorporated feedback from Adam Roach; changes to discussion of
+        cam/mic permission, as well as use of proxies, and various editorial
+        changes.</t>
         <t>Added several more references.</t>
       </list></t>
-      <t>Changes in draft -00: <list style="symbols">
+      <t>Changes in draft -00:
+      <list style="symbols">
         <t>Published as WG draft.</t>
       </list></t>
     </section>
