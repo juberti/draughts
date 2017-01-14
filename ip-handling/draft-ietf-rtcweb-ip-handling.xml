@@ -105,13 +105,13 @@ ipr="trust200902">
       some users, the purpose of using a VPN is for anonymity. However,
       different VPN users will have different needs, and some VPN users (e.g.
       corporate VPN users) may in fact prefer WebRTC to send media traffic
-      directly, i.e. not through the VPN.</t>
+      directly, i.e., not through the VPN.</t>
       <t>#3 is a less common concern, as proxy administrators can control this
-      behavior through local firewall policy if desired, coupled with the fact
-      that forcing WebRTC traffic through a proxy will have negative effects on
-      both the proxy and on media quality. For situations where this is an
-      important consideration, use of a RETURN proxy, as described below, can
-      be an effective solution.</t>
+      behavior through organization firewall policy if desired, coupled with the
+      fact that forcing WebRTC traffic through a proxy will have negative
+      effects on both the proxy and on media quality. For situations where this
+      is an important consideration, use of a RETURN proxy, as described below,
+      can be an effective solution.</t>
       <t>#1 is considered to be the least significant concern, given that the
       local address values often contain minimal information (e.g.
       192.168.0.2), or have built-in privacy protection (e.g.
@@ -137,7 +137,7 @@ ipr="trust200902">
       </list></t>
     </section>
     <section title="Detailed Design">
-      <t>The main ideas for the design are the following:
+      <t>The key principles for the design are listed below:
       <list style="numbers">
         <t>By default, WebRTC should follow normal IP routing rules, to the
         extent that this is easy to determine (i.e., not considering proxies).
@@ -164,7 +164,8 @@ ipr="trust200902">
         typically needs to use TCP, either ICE-TCP
         <xref target="RFC6544" />or TURN-over-TCP
         <xref target="RFC5766" />. Naturally, this has attendant costs on media
-        quality and also proxy performance.</t>
+        quality as well as proxy performance, and should be avoided where
+        possible.</t>
         <t>RETURN
         <xref target="I-D.ietf-rtcweb-return" />is a proposal for explicit
         proxying of WebRTC media traffic. When RETURN proxies are deployed,
@@ -172,25 +173,25 @@ ipr="trust200902">
         performance issues associated with sending through a typical web
         proxy.</t>
       </list></t>
-      <t>Based on these ideas, we define four modes of WebRTC behavior,
-      reflecting different privacy/media tradeoffs:
+      <t>Based on these ideas, we define four specific modes of WebRTC behavior,
+      reflecting different media quality/privacy tradeoffs:
       <list style="format Mode %d:">
-        <t>Enumerate all addresses: WebRTC will bind to all interfaces
+        <t>Enumerate all addresses: WebRTC MUST bind to all interfaces
         individually and use them all to attempt communication with STUN
         servers, TURN servers, or peers. This will converge on the best media
         path, and is ideal when media performance is the highest priority, but
         it discloses the most information.</t>
-        <t>Default route + the single associated local address: By binding
-        solely to the wildcard address, media packets will follow the kernel
-        routing table rules, which will typically result in the same route as
-        the application's HTTP traffic. In addition, the associated private
-        address will be discovered through getsockname, as mentioned above.
-        This ensures that direct connections can still be established even when
-        local media access is not granted, e.g., for data channel
-        applications.</t>
+        <t>Default route + associated local addresses: WebRTC MUST follow the
+        kernel routing table rules (e.g., by binding solely to the wildcard
+        address), which will typically cause media packets to take the same
+        route as the application's HTTP traffic. In addition, any private IPv4
+        and IPv6 addresses associated with the kernel-chosen interface MUST
+        be discovered through getsockname, as mentioned above, and provided
+        to the application. This ensures that direct connections can still be
+        established in this mode.</t>
         <t>Default route only: This is the the same as Mode 2, except that the
-        associated private address is not provided, which may cause traffic to
-        hairpin through a NAT, fall back to the application TURN server, or
+        associated private address MUST NOT be provided. This may cause traffic
+        to hairpin through a NAT, fall back to the application TURN server, or
         fail altogether, with resulting quality implications.</t>
         <t>Force proxy: This forces all WebRTC media traffic through a proxy,
         if one is configured. If the proxy does not support UDP (as is the case
@@ -207,29 +208,36 @@ ipr="trust200902">
       consent are left to the implementation; one potential mechanism is to tie
       this consent to getUserMedia consent.</t>
       <t>In cases where user consent has not been obtained, Mode 2 SHOULD be
-      used, although user agents MAY choose a stricter default policy in
-      certain circumstances.</t>
+      used. This allows applications to still achieve direct connections in many
+      cases, even without consent (e.g., data channel applications). However,
+      user agents MAY choose a stricter default policy in certain circumstances.
+      </t>
       <t>Note that when a RETURN proxy is configured for the interface
       associated with the default route, Mode 2 and 3 will cause any external
-      media traffic to go through the RETURN proxy. This provides a way to
-      ensure the proxy is used for external traffic, but without the
-      performance issues of forcing all media through said proxy.</t>
+      media traffic to go through the RETURN proxy. While the RETURN approach
+      gives the best performance, a similar result can be achieved for
+      non-RETURN proxies via an organization firewall policy that only allows
+      external WebRTC traffic to leave through the proxy (typically, over TCP).
+      This provides a way to ensure the proxy is used for any external traffic,
+      but avoids the performance issues of Mode 4, where all media is forced
+      through said proxy, for intra-organization traffic.</t>
     </section>
     <section title="Application Guidance">
       <t>The recommendations mentioned in this document may cause certain
       WebRTC applications to malfunction. In order to be robust in all
-      scenarios, applications should follow the following guidelines:
+      scenarios, the following guidelines are provided for applications:
       <list style="symbols">
-        <t>Applications should deploy a TURN server with support for both UDP
+        <t>Applications SHOULD deploy a TURN server with support for both UDP
         and TCP connections to the server. This ensures that connectivity can
         still be established, even when Mode 3 or 4 are in use, assuming the
         TURN server can be reached.</t>
-        <t>Applications can detect when they don't have access to the full set
-        of ICE candidates by checking for the presence of host candidates. If
-        no host candidates are present, Mode 3 or 4 above is in use.</t>
+        <t>Applications SHOULD detect when they don't have access to the full
+        set of ICE candidates by checking for the presence of host candidates.
+        If no host candidates are present, Mode 3 or 4 above is in use; this
+        knowledge can be useful for diagnostic purposes.</t>
         <t>Future versions of browsers may present an indicator to signify that
         the page is using WebRTC to set up a peer-to-peer connection.
-        Applications should be careful to only use WebRTC in a fashion that is
+        Applications MUST only use WebRTC in a fashion that is
         consistent with user expectations.</t>
       </list></t>
     </section>
@@ -265,7 +273,6 @@ ipr="trust200902">
         <t>Use 2119 qualifiers to make normative statements.</t>
         <t>Defined 'proxy'.</t>
         <t>Mentioned split tunnels in problem statement.</t>
-        <t>Reflowed doc.</t>
       </list></t>
       <list style="symbols">
         <t>Recommendations -&gt; Requirements</t>
