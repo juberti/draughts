@@ -57,8 +57,8 @@ ipr="trust200902">
     <date day="14" month="January" year="2017" />
     <area>RAI</area>
     <abstract>
-      <t>This document provides best practices for how IP addresses should be
-      handled by WebRTC applications.</t>
+      <t>This document provides information and requirements for how
+      IP addresses should be handled by WebRTC applications.</t>
     </abstract>
   </front>
   <middle>
