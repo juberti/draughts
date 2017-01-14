@@ -23,7 +23,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-02"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-03"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -54,7 +54,7 @@ ipr="trust200902">
         <email>guoweis@google.com</email>
       </address>
     </author>
-    <date day="31" month="October" year="2016" />
+    <date day="14" month="January" year="2017" />
     <area>RAI</area>
     <abstract>
       <t>This document provides best practices for how IP addresses should be
@@ -274,6 +274,7 @@ ipr="trust200902">
         <t>Defined 'proxy'.</t>
         <t>Mentioned split tunnels in problem statement.</t>
       </list></t>
+      <t>Changes in draft -02:
       <list style="symbols">
         <t>Recommendations -&gt; Requirements</t>
         <t>Updated text regarding consent.</t>
