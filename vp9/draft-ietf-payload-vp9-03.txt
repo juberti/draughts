@@ -5,15 +5,15 @@
 Payload Working Group                                          J. Uberti
 Internet-Draft                                                 S. Holmer
 Intended status: Standards Track                              M. Flodman
-Expires: September 19, 2016                                       Google
+Expires: September 14, 2017                                       Google
                                                                J. Lennox
                                                                  D. Hong
                                                                    Vidyo
-                                                          March 18, 2016
+                                                          March 13, 2017
 
 
                     RTP Payload Format for VP9 Video
-                       draft-ietf-payload-vp9-02
+                       draft-ietf-payload-vp9-03
 
 Abstract
 
@@ -38,11 +38,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 19, 2016.
+   This Internet-Draft will expire on September 14, 2017.
 
 Copyright Notice
 
-   Copyright (c) 2016 IETF Trust and the persons identified as the
+   Copyright (c) 2017 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 1]
+Uberti, et al.         Expires September 14, 2017               [Page 1]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 2]
+Uberti, et al.         Expires September 14, 2017               [Page 2]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 2.  Conventions, Definitions and Acronyms
@@ -165,9 +165,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 3]
+Uberti, et al.         Expires September 14, 2017               [Page 3]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    Within a super frame, a layer frame with spatial layer ID equal to S,
@@ -221,9 +221,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 4]
+Uberti, et al.         Expires September 14, 2017               [Page 4]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    RECOMMENDED.  All integer fields in the specifications are encoded as
@@ -277,9 +277,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 5]
+Uberti, et al.         Expires September 14, 2017               [Page 5]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    Payload Type (TP):  In line with the policy in Section 3 of
@@ -333,9 +333,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 6]
+Uberti, et al.         Expires September 14, 2017               [Page 6]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    In non-flexible mode (with the F bit below set to 0), The first
@@ -389,9 +389,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 7]
+Uberti, et al.         Expires September 14, 2017               [Page 7]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
       1 if the I bit is also set to one; if the I bit is set to zero,
@@ -445,9 +445,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 8]
+Uberti, et al.         Expires September 14, 2017               [Page 8]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
       specified frame in the GOF.  Then subsequent PIDs are mapped to
@@ -501,9 +501,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 9]
+Uberti, et al.         Expires September 14, 2017               [Page 9]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
          T set to 0.  If T is larger than 0, TL0PICIDX indicates which
@@ -557,9 +557,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 10]
+Uberti, et al.         Expires September 14, 2017              [Page 10]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
         +-+-+-+-+-+-+-+-+
@@ -613,9 +613,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 11]
+Uberti, et al.         Expires September 14, 2017              [Page 11]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
       Note that for a given super frame, all layer frames follow the
@@ -669,9 +669,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 12]
+Uberti, et al.         Expires September 14, 2017              [Page 12]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    and that frame had a PictureID in the payload descriptor, the
@@ -725,9 +725,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 13]
+Uberti, et al.         Expires September 14, 2017              [Page 13]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 5.4.  Layer Refresh Request (LRR)
@@ -781,9 +781,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 14]
+Uberti, et al.         Expires September 14, 2017              [Page 14]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 6.1.  Media Type Definition
@@ -837,9 +837,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 15]
+Uberti, et al.         Expires September 14, 2017              [Page 15]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    Fragment identifier considerations:  N/A.
@@ -893,9 +893,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 16]
+Uberti, et al.         Expires September 14, 2017              [Page 16]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 6.2.2.  Offer/Answer Considerations
@@ -949,9 +949,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 17]
+Uberti, et al.         Expires September 14, 2017              [Page 17]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 10.  References
@@ -966,8 +966,8 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    [I-D.ietf-avtext-lrr]
               Lennox, J., Hong, D., Uberti, J., Holmer, S., and M.
               Flodman, "The Layer Refresh Request (LRR) RTCP Feedback
-              Message", draft-ietf-avtext-lrr-01 (work in progress),
-              October 2015.
+              Message", draft-ietf-avtext-lrr-03 (work in progress),
+              July 2016.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
@@ -1005,9 +1005,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 18]
+Uberti, et al.         Expires September 14, 2017              [Page 18]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 10.2.  Informative References
@@ -1061,9 +1061,9 @@ Authors' Addresses
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 19]
+Uberti, et al.         Expires September 14, 2017              [Page 19]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
    Magnus Flodman
@@ -1117,4 +1117,4 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 20]
+Uberti, et al.         Expires September 14, 2017              [Page 20]
