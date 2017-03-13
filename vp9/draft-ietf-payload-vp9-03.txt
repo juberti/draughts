@@ -97,10 +97,10 @@ Table of Contents
 
    This memo describes an RTP payload specification applicable to the
    transmission of video streams encoded using the VP9 video codec
-   [I-D.grange-vp9-bitstream].  The format described in this document
-   can be used both in peer-to-peer and video conferencing applications.
+   [VP9-BITSTREAM].  The format described in this document can be used
+   both in peer-to-peer and video conferencing applications.
 
-   TODO: VP9 description.  Please see [I-D.grange-vp9-bitstream].
+   TODO: VP9 description.  Please see [VP9-BITSTREAM].
 
 
 
@@ -120,7 +120,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2017
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
 
-   TODO: Cite terminology from [I-D.grange-vp9-bitstream].
+   TODO: Cite terminology from [VP9-BITSTREAM].
 
 3.  Media Format Description
 
@@ -827,8 +827,8 @@ Internet-Draft         RTP Payload Format for VP9             March 2017
 
    Interoperability considerations:  None.
 
-   Published specification:  VP9 bitstream format
-      [I-D.grange-vp9-bitstream] and RFC XXXX.
+   Published specification:  VP9 bitstream format [VP9-BITSTREAM] and
+      RFC XXXX.
       [RFC Editor: Upon publication as an RFC, please replace "XXXX"
       with the number assigned to this document and remove this note.]
 
@@ -958,11 +958,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2017
 
 10.1.  Normative References
 
-   [I-D.grange-vp9-bitstream]
-              Grange, A. and H. Alvestrand, "A VP9 Bitstream Overview",
-              draft-grange-vp9-bitstream-00 (work in progress), February
-              2013.
-
    [I-D.ietf-avtext-lrr]
               Lennox, J., Hong, D., Uberti, J., Holmer, S., and M.
               Flodman, "The Layer Refresh Request (LRR) RTCP Feedback
@@ -1005,10 +1000,22 @@ Internet-Draft         RTP Payload Format for VP9             March 2017
 
 
 
+
+
+
+
+
 Uberti, et al.         Expires September 14, 2017              [Page 18]
 
 Internet-Draft         RTP Payload Format for VP9             March 2017
 
+
+   [VP9-BITSTREAM]
+              Grange, A., de Rivaz, P., and J. Hunt, "VP9 Bitstream &
+              Decoding Process Specification", Version 0.6, March 2016,
+              <https://storage.googleapis.com/downloads.webmproject.org/
+              docs/vp9/vp9-bitstream-specification-
+              v0.6-20160331-draft.pdf>.
 
 10.2.  Informative References
 
@@ -1047,13 +1054,6 @@ Authors' Addresses
    Email: justin@uberti.name
 
 
-   Stefan Holmer
-   Google, Inc.
-   Kungsbron 2
-   Stockholm  111 22
-   Sweden
-
-   Email: holmer@google.com
 
 
 
@@ -1064,6 +1064,15 @@ Authors' Addresses
 Uberti, et al.         Expires September 14, 2017              [Page 19]
 
 Internet-Draft         RTP Payload Format for VP9             March 2017
+
+
+   Stefan Holmer
+   Google, Inc.
+   Kungsbron 2
+   Stockholm  111 22
+   Sweden
+
+   Email: holmer@google.com
 
 
    Magnus Flodman
@@ -1093,15 +1102,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2017
    US
 
    Email: danny@vidyo.com
-
-
-
-
-
-
-
-
-
 
 
 

@@ -13,7 +13,6 @@
 <!ENTITY rfc6838 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7202.xml">
-<!ENTITY vp9 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.grange-vp9-bitstream.xml">
 <!ENTITY lrr SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
 
 ]>
@@ -163,11 +162,11 @@
     <section anchor="intro" title="Introduction">
       <t>This memo describes an RTP payload specification applicable to the
       transmission of video streams encoded using the VP9 video codec <xref
-      target="I-D.grange-vp9-bitstream"/>. The format described in this document can be used
+      target="VP9-BITSTREAM"/>. The format described in this document can be used
       both in peer-to-peer and video conferencing applications.</t>
 
       <t>TODO: VP9 description.  Please see <xref
-      target="I-D.grange-vp9-bitstream"/>.</t>
+      target="VP9-BITSTREAM"/>.</t>
     </section>
 
     <section anchor="conventions"
@@ -178,7 +177,7 @@
       target="RFC2119"/>.</t>
 
       <t>TODO: Cite terminology from <xref
-      target="I-D.grange-vp9-bitstream"/>.</t>
+      target="VP9-BITSTREAM"/>.</t>
     </section>
 
     <section anchor="mediaFormatDescription" title="Media Format Description">
@@ -778,7 +777,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
             <t hangText="Interoperability considerations:">None.</t>
 
             <t hangText="Published specification:">VP9 bitstream format <xref
-            target="I-D.grange-vp9-bitstream"/> and RFC XXXX. <vspace blankLines="0"/> [RFC
+            target="VP9-BITSTREAM"/> and RFC XXXX. <vspace blankLines="0"/> [RFC
             Editor: Upon publication as an RFC, please replace "XXXX" with the
             number assigned to this document and remove this note.] <vspace
             blankLines="0"/></t>
@@ -906,7 +905,30 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
   <back>
     <references title='Normative References'>
 
-      &vp9;
+	  <reference anchor='VP9-BITSTREAM' target='https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp9-bitstream-specification-v0.6-20160331-draft.pdf'>
+		<front>
+		  <title>VP9 Bitstream &amp; Decoding Process Specification</title>
+
+		  <author initials='A' surname='Grange' fullname='Adrian Grange'>
+			<organization>Google</organization>
+		  </author>
+		  <author initials='P' surname='de Rivaz' fullname='Peter de Rivaz'>
+			<organization>Argon Design</organization>
+		  </author>
+		  <author initials='J' surname='Hunt' fullname='Jonathan Hunt'>
+			<organization>Argon Design</organization>
+		  </author>
+		  <date month='March' day='31' year='2016' />
+		  <abstract>
+			<t>
+			  This document defines the bitstream format and decoding process for the
+			  Google VP9 video codec.
+			</t>
+		  </abstract>
+		  
+		  </front>
+		<seriesInfo name='Version' value='0.6' />
+	  </reference>
 
       &rfc2119;
 

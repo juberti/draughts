@@ -513,11 +513,11 @@
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
-<p id="rfc.section.1.p.1">This memo describes an RTP payload specification applicable to the transmission of video streams encoded using the VP9 video codec <a href="#I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</a>. The format described in this document can be used both in peer-to-peer and video conferencing applications.</p>
-<p id="rfc.section.1.p.2">TODO: VP9 description.  Please see <a href="#I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</a>.</p>
+<p id="rfc.section.1.p.1">This memo describes an RTP payload specification applicable to the transmission of video streams encoded using the VP9 video codec <a href="#VP9-BITSTREAM">[VP9-BITSTREAM]</a>. The format described in this document can be used both in peer-to-peer and video conferencing applications.</p>
+<p id="rfc.section.1.p.2">TODO: VP9 description.  Please see <a href="#VP9-BITSTREAM">[VP9-BITSTREAM]</a>.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#conventions" id="conventions">Conventions, Definitions and Acronyms</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.</p>
-<p id="rfc.section.2.p.2">TODO: Cite terminology from <a href="#I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</a>.</p>
+<p id="rfc.section.2.p.2">TODO: Cite terminology from <a href="#VP9-BITSTREAM">[VP9-BITSTREAM]</a>.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#mediaFormatDescription" id="mediaFormatDescription">Media Format Description</a></h1>
 <p id="rfc.section.3.p.1">The VP9 codec can maintain up to eight reference frames, of which up to three can be referenced or updated by any new frame.</p>
 <p id="rfc.section.3.p.2">VP9 also allows a reference frame to be resampled and used as a reference for another frame of a different resolution.  This allows internal resolution changes without requiring the use of key frames.</p>
@@ -770,7 +770,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
   <dt>Interoperability considerations:</dt>
   <dd style="margin-left: 8">None.</dd>
   <dt>Published specification:</dt>
-  <dd style="margin-left: 8">VP9 bitstream format <a href="#I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</a> and RFC XXXX. <br/> [RFC Editor: Upon publication as an RFC, please replace "XXXX" with the number assigned to this document and remove this note.] <br/></dd>
+  <dd style="margin-left: 8">VP9 bitstream format <a href="#VP9-BITSTREAM">[VP9-BITSTREAM]</a> and RFC XXXX. <br/> [RFC Editor: Upon publication as an RFC, please replace "XXXX" with the number assigned to this document and remove this note.] <br/></dd>
   <dt>Applications which use this media type:</dt>
   <dd style="margin-left: 8"><br/> For example: Video over IP, video conferencing.</dd>
   <dt>Fragment identifier considerations:</dt>
@@ -815,12 +815,6 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 <h1 id="rfc.references.1"><a href="#rfc.references.1">10.1.</a> Normative References</h1>
 <table>
   <tbody>
-    <tr>
-      <td class="reference">
-        <b id="I-D.grange-vp9-bitstream">[I-D.grange-vp9-bitstream]</b>
-      </td>
-      <td class="top"><a>Grange, A.</a> and <a>H. Alvestrand</a>, "<a href="http://tools.ietf.org/html/draft-grange-vp9-bitstream-00">A VP9 Bitstream Overview</a>", Internet-Draft draft-grange-vp9-bitstream-00, February 2013.</td>
-    </tr>
     <tr>
       <td class="reference">
         <b id="I-D.ietf-avtext-lrr">[I-D.ietf-avtext-lrr]</b>
@@ -868,6 +862,12 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         <b id="RFC6838">[RFC6838]</b>
       </td>
       <td class="top"><a>Freed, N.</a>, <a>Klensin, J.</a> and <a>T. Hansen</a>, "<a href="http://tools.ietf.org/html/rfc6838">Media Type Specifications and Registration Procedures</a>", BCP 13, RFC 6838, DOI 10.17487/RFC6838, January 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="VP9-BITSTREAM">[VP9-BITSTREAM]</b>
+      </td>
+      <td class="top"><a title="Google">Grange, A.</a>, <a title="Argon Design">de Rivaz, P.</a> and <a title="Argon Design">J. Hunt</a>, "<a href="https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp9-bitstream-specification-v0.6-20160331-draft.pdf">VP9 Bitstream &amp; Decoding Process Specification</a>", Version 0.6, March 2016.</td>
     </tr>
   </tbody>
 </table>
