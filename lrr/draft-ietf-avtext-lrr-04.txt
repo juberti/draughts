@@ -5,15 +5,15 @@
 Payload Working Group                                          J. Lennox
 Internet-Draft                                                   D. Hong
 Intended status: Standards Track                                   Vidyo
-Expires: January 9, 2017                                       J. Uberti
+Expires: September 14, 2017                                    J. Uberti
                                                                S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                            July 8, 2016
+                                                          March 13, 2017
 
 
          The Layer Refresh Request (LRR) RTCP Feedback Message
-                        draft-ietf-avtext-lrr-03
+                        draft-ietf-avtext-lrr-04
 
 Abstract
 
@@ -37,11 +37,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 9, 2017.
+   This Internet-Draft will expire on September 14, 2017.
 
 Copyright Notice
 
-   Copyright (c) 2016 IETF Trust and the persons identified as the
+   Copyright (c) 2017 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 1]
+Lennox, et al.         Expires September 14, 2017               [Page 1]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    include Simplified BSD License text as described in Section 4.e of
@@ -92,7 +92,7 @@ Table of Contents
    by an endpoint which previously was not receiving those layers,
    without requiring that the entire stream be refreshed (as it would be
    if the receiver sent a Full Intra Request (FIR); [RFC5104] see also
-   [I-D.ietf-avtext-avpf-ccm-layered]).
+   [RFC8082]).
 
    The feedback message is applicable both to temporally and spatially
    scaled streams, and to both single-stream and multi-stream
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 2]
+Lennox, et al.         Expires September 14, 2017               [Page 2]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
 2.1.  Terminology
@@ -165,9 +165,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 3]
+Lennox, et al.         Expires September 14, 2017               [Page 3]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    An illustration of spatial layer refresh of a base layer is shown
@@ -221,9 +221,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 4]
+Lennox, et al.         Expires September 14, 2017               [Page 4]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    An illustration of an inherently temporally nested stream is shown
@@ -277,9 +277,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 5]
+Lennox, et al.         Expires September 14, 2017               [Page 5]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
        0                   1                   2                   3
@@ -333,9 +333,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 6]
+Lennox, et al.         Expires September 14, 2017               [Page 6]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    Current Layer ID (CLID) (8 bits)  If C is 1, the layer ID of the
@@ -389,9 +389,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 7]
+Lennox, et al.         Expires September 14, 2017               [Page 7]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
                +---------------+---------------+
@@ -445,9 +445,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 8]
+Lennox, et al.         Expires September 14, 2017               [Page 8]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    receiving LRR for non-temporally-nested streams MUST insert Temporal
@@ -501,9 +501,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017                [Page 9]
+Lennox, et al.         Expires September 14, 2017               [Page 9]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    Figure 8 shows the format of the layer index field for H.265 streams.
@@ -557,9 +557,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017               [Page 10]
+Lennox, et al.         Expires September 14, 2017              [Page 10]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    the SSRC of the RTP stream containing the layer indicated by the
@@ -613,9 +613,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017               [Page 11]
+Lennox, et al.         Expires September 14, 2017              [Page 11]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    This document also defines a new entry to the "FMT Values for PSFB
@@ -636,8 +636,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
    [I-D.ietf-avtext-framemarking]
               Berger, E., Nandakumar, S., and M. Zanaty, "Frame Marking
-              RTP Header Extension", draft-ietf-avtext-framemarking-01
-              (work in progress), March 2016.
+              RTP Header Extension", draft-ietf-avtext-framemarking-03
+              (work in progress), October 2016.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
@@ -669,9 +669,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017               [Page 12]
+Lennox, et al.         Expires September 14, 2017              [Page 12]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    [RFC6190]  Wenger, S., Wang, Y., Schierl, T., and A. Eleftheriadis,
@@ -691,12 +691,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 9.2.  Informative References
 
-   [I-D.ietf-avtext-avpf-ccm-layered]
-              Wenger, S., Lennox, J., Burman, B., and M. Westerlund,
-              "Using Codec Control Messages in the RTP Audio-Visual
-              Profile with Feedback with Layered Codecs", draft-ietf-
-              avtext-avpf-ccm-layered-01 (work in progress), May 2016.
-
    [I-D.ietf-payload-vp9]
               Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D.
               Hong, "RTP Payload Format for VP9 Video", draft-ietf-
@@ -707,6 +701,12 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
               for Real-Time Transport Protocol (RTP) Sources", RFC 7656,
               DOI 10.17487/RFC7656, November 2015,
               <http://www.rfc-editor.org/info/rfc7656>.
+
+   [RFC8082]  Wenger, S., Lennox, J., Burman, B., and M. Westerlund,
+              "Using Codec Control Messages in the RTP Audio-Visual
+              Profile with Feedback with Layered Codecs", RFC 8082, DOI
+              10.17487/RFC8082, March 2017,
+              <http://www.rfc-editor.org/info/rfc8082>.
 
 Authors' Addresses
 
@@ -725,9 +725,9 @@ Authors' Addresses
 
 
 
-Lennox, et al.           Expires January 9, 2017               [Page 13]
+Lennox, et al.         Expires September 14, 2017              [Page 13]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
+Internet-Draft     Layer Refresh Request RTCP Feedback        March 2017
 
 
    Danny Hong
@@ -781,4 +781,4 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         July 2016
 
 
 
-Lennox, et al.           Expires January 9, 2017               [Page 14]
+Lennox, et al.         Expires September 14, 2017              [Page 14]
