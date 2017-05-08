@@ -69,18 +69,18 @@ Table of Contents
      2.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
    3.  Layer Refresh Request . . . . . . . . . . . . . . . . . . . .   5
      3.1.  Message Format  . . . . . . . . . . . . . . . . . . . . .   5
-     3.2.  Semantics . . . . . . . . . . . . . . . . . . . . . . . .   7
+     3.2.  Semantics . . . . . . . . . . . . . . . . . . . . . . . .   6
    4.  Usage with specific codecs  . . . . . . . . . . . . . . . . .   7
      4.1.  H264 SVC  . . . . . . . . . . . . . . . . . . . . . . . .   7
-     4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   8
      4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
    5.  Usage with different scalability transmission mechanisms  . .  10
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
-   7.  SDP Definitions . . . . . . . . . . . . . . . . . . . . . . .  11
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
+   7.  SDP Definitions . . . . . . . . . . . . . . . . . . . . . . .  10
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  13
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction
@@ -145,30 +145,11 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
                   1        2        3        4
 
-   In this illustration, frame 3 is a layer refresh point for spatial
-   layer S1; a decoder which had previously only been decoding spatial
-   layer S0 would be able to decode layer S1 starting at frame 3.
-
                                  Figure 1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Lennox, et al.          Expires November 9, 2017                [Page 3]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
+   In Figure 1, frame 3 is a layer refresh point for spatial layer S1; a
+   decoder which had previously only been decoding spatial layer S0
+   would be able to decode layer S1 starting at frame 3.
 
    An illustration of spatial layer refresh of a base layer is shown
    below.
@@ -180,11 +161,18 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
                   1        2        3        4
 
-   In this illustration, frame 3 is a layer refresh point for spatial
-   layer S0; a decoder which had previously not been decoding the stream
-   at all could decode layer S0 starting at frame 3.
-
                                  Figure 2
+
+
+
+Lennox, et al.          Expires November 9, 2017                [Page 3]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
+
+   In Figure 2, frame 3 is a layer refresh point for spatial layer S0; a
+   decoder which had previously not been decoding the stream at all
+   could decode layer S0 starting at frame 3.
 
    For temporal layers, layer refresh requires that the layer be
    "temporally nested", i.e. use as reference only earlier frames of a
@@ -204,15 +192,27 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
                   1     2     3     4     5     6     7
 
-   In this illustration, frame 6 is a layer refresh point for temporal
-   layer T1; a decoder which had previously only been decoding temporal
-   layer T0 would be able to decode layer T1 starting at frame 6.
-
                                  Figure 3
 
+   In Figure 3, frame 6 is a layer refresh point for temporal layer T1;
+   a decoder which had previously only been decoding temporal layer T0
+   would be able to decode layer T1 starting at frame 6.
 
+   An illustration of an inherently temporally nested stream is shown
+   below.
 
+                       T1          T1          T1
+                      /           /           /
+                    |_          |_          |_
+        ... <--  T0  <------ T0  <------ T0  <------ T0  <--- ...
 
+                  1     2     3     4     5     6     7
+
+                                 Figure 4
+
+   In Figure 4, the stream is temporally nested in its ordinary
+   structure; a decoder receiving layer T0 can begin decoding layer T1
+   at any point.
 
 
 
@@ -226,30 +226,15 @@ Lennox, et al.          Expires November 9, 2017                [Page 4]
 Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
-   An illustration of an inherently temporally nested stream is shown
-   below.
-
-                       T1          T1          T1
-                      /           /           /
-                    |_          |_          |_
-        ... <--  T0  <------ T0  <------ T0  <------ T0  <--- ...
-
-                  1     2     3     4     5     6     7
-
-   In this illustration, the stream is temporally nested in its ordinary
-   structure; a decoder receiving layer T0 can begin decoding layer T1
-   at any point.
-
-                                 Figure 4
-
 3.  Layer Refresh Request
 
    A layer refresh frame can be requested by sending a Layer Refresh
-   Request (LRR), which is an RTCP payload-specific feedback message
-   [RFC4585] asking the encoder to encode a frame which makes it
-   possible to upgrade to a higher layer.  The LRR contains one or two
-   tuples, indicating the layer the decoder wants to upgrade to, and
-   (optionally) the currently highest layer the decoder can decode.
+   Request (LRR), which is an Real-Time Transport Control Protocol
+   (RTCP) [RFC3550] payload-specific feedback message [RFC4585] asking
+   the encoder to encode a frame which makes it possible to upgrade to a
+   higher layer.  The LRR contains one or two tuples, indicating the
+   layer the decoder wants to upgrade to, and (optionally) the currently
+   highest layer the decoder can decode.
 
    The specific format of the tuples, and the mechanism by which a
    receiver recognizes a refresh frame, is codec-dependent.  Usage for
@@ -263,24 +248,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    FMT=TBD.  The FCI field MUST contain one or more LRR entries.  Each
    entry applies to a different media sender, identified by its SSRC.
 
+   [NOTE TO RFC Editor: Please replace "TBD" with the IANA-assigned
+   payload-specific feedback number.]
+
 3.1.  Message Format
 
    The Feedback Control Information (FCI) for the Layer Refresh Request
    consists of one or more FCI entries, the content of which is depicted
    in Figure 5.  The length of the LRR feedback message MUST be set to
    2+3*N, where N is the number of FCI entries.
-
-
-
-
-
-
-
-
-Lennox, et al.          Expires November 9, 2017                [Page 5]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
 
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -296,6 +272,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
    SSRC (32 bits)  The SSRC value of the media sender that is requested
       to send a layer refresh point.
+
+
+
+
+
+Lennox, et al.          Expires November 9, 2017                [Page 5]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
 
    Seq nr. (8 bits)  Command sequence number.  The sequence number space
       is unique for each pairing of the SSRC of command source and the
@@ -329,24 +314,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
       layer.  If C is 0, this field SHALL be set to 0 by the sender and
       SHALL be ignored on reception.
 
-
-
-
-
-Lennox, et al.          Expires November 9, 2017                [Page 6]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    Current Layer ID (CLID) (8 bits)  If C is 1, the layer ID of the
       current layer being decoded by the receiver.  This message is not
       requesting refresh of layers at or below this layer.  If C is 0,
       this field SHALL be set to 0 by the sender and SHALL be ignored on
       reception.
 
-   Note: the syntax of the TTID, TLID, CTID, and TLID fields are
-   designed to match the TID and LID fields in
-   [I-D.ietf-avtext-framemarking].
+   Note: the syntax of the TTID, TLID, CTID, and TLID fields match, by
+   design, the TID and LID fields in [I-D.ietf-avtext-framemarking].
 
 3.2.  Semantics
 
@@ -355,6 +330,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    indicates the source of the request, and the "SSRC of media source"
    is not used and SHALL be set to 0.  The SSRCs of the media senders to
    which the LRR command applies are in the corresponding FCI entries.
+
+
+
+Lennox, et al.          Expires November 9, 2017                [Page 6]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
+
    A LRR message MAY contain requests to multiple media senders, using
    one FCI entry per target media sender.
 
@@ -382,18 +365,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    H.264 SVC [RFC6190] defines temporal, dependency (spatial), and
    quality scalability modes.
 
-
-
-
-
-
-
-
-Lennox, et al.          Expires November 9, 2017                [Page 7]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -414,6 +385,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    identified by its NAL unit type of its coded slices, which is "5"
    rather than "1".  A dependency or quality layer refresh is complete
    once this bit has been seen on all the appropriate layers (in
+
+
+
+
+Lennox, et al.          Expires November 9, 2017                [Page 7]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
+
    decoding order) above the current layer index (if any, or beginning
    from the base layer if not) through the target layer index.
 
@@ -442,14 +422,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    delta_frame_num refers to a frame with the requested current layer
    index.  (Alternately, temporal layer refresh can also be satisfied by
    a complete state refresh, such as an IDR.)  Senders which support
-
-
-
-Lennox, et al.          Expires November 9, 2017                [Page 8]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    receiving LRR for non-temporally-nested streams MUST insert Temporal
    Level Switching Point SEI messages as appropriate.
 
@@ -469,6 +441,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    Figure 7 shows the format of the layer index field for VP8 streams.
    The "RES" fields MUST be set to 0 on transmission and be ignored on
    reception.  See [RFC7741] Section 4.2 for details on the TID field.
+
+
+
+
+Lennox, et al.          Expires November 9, 2017                [Page 8]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
 
    A VP8 layer refresh point can be identified by the presence of the
    "Y" bit in the VP8 payload header.  When this bit is set, this and
@@ -498,14 +478,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
                                  Figure 8
 
-
-
-
-Lennox, et al.          Expires November 9, 2017                [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    Figure 8 shows the format of the layer index field for H.265 streams.
    The "RES" fields MUST be set to 0 on transmission and ignored on
    reception.  See [RFC7798] Section 1.1.4 for details on the LayerId
@@ -526,6 +498,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    incrementally satisfied with NAL unit type of 2 or 3.  In this case,
    given current TID = TO and target TID = TN, layer refresh to TN is
    satisfied when NAL unit type of 2 or 3 is seen for TID = T1, then TID
+
+
+
+Lennox, et al.          Expires November 9, 2017                [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
+
    = T2, all the way up to TID = TN.  During this incremental process,
    layer refresh to TN can be completely satisfied as soon as a NAL unit
    type of 2 or 3 is seen.
@@ -554,14 +534,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
    The LRR message is applicable to all these mechanisms.  For MRST and
    MRMT mechanisms, the "media source" field of the LRR FCI is set to
-
-
-
-Lennox, et al.          Expires November 9, 2017               [Page 10]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    the SSRC of the RTP stream containing the layer indicated by the
    Current Layer Index (if "C" is 1), or the stream containing the base
    encoded stream (if "C" is 0).  For MRMT, it is sent on the RTP
@@ -581,6 +553,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
    Section 7 of [RFC5104] defines SDP procedures for indicating and
    negotiating support for codec control messages (CCM) in SDP.  This
+
+
+
+
+Lennox, et al.          Expires November 9, 2017               [Page 10]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
+
    document extends this with a new codec control command, "lrr", which
    indicates support of the Layer Refresh Request (LRR).
 
@@ -609,15 +590,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
    Reference:  RFC XXXX
 
-
-
-
-
-Lennox, et al.          Expires November 9, 2017               [Page 11]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    This document also defines a new entry to the "FMT Values for PSFB
    Payload Types" subregistry of the "Real-Time Transport Protocol (RTP)
    Parameters" registry, according to the following data:
@@ -638,6 +610,13 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
               Berger, E., Nandakumar, S., and M. Zanaty, "Frame Marking
               RTP Header Extension", draft-ietf-avtext-framemarking-04
               (work in progress), March 2017.
+
+
+
+Lennox, et al.          Expires November 9, 2017               [Page 11]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
@@ -665,15 +644,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
               RFC5234, January 2008,
               <http://www.rfc-editor.org/info/rfc5234>.
 
-
-
-
-
-Lennox, et al.          Expires November 9, 2017               [Page 12]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    [RFC6190]  Wenger, S., Wang, Y., Schierl, T., and A. Eleftheriadis,
               "RTP Payload Format for Scalable Video Coding", RFC 6190,
               DOI 10.17487/RFC6190, May 2011,
@@ -695,6 +665,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
               Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D.
               Hong, "RTP Payload Format for VP9 Video", draft-ietf-
               payload-vp9-03 (work in progress), March 2017.
+
+
+
+
+Lennox, et al.          Expires November 9, 2017               [Page 12]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
 
    [RFC7656]  Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
               B. Burman, Ed., "A Taxonomy of Semantics and Mechanisms
@@ -720,16 +698,6 @@ Authors' Addresses
    Email: jonathan@vidyo.com
 
 
-
-
-
-
-
-Lennox, et al.          Expires November 9, 2017               [Page 13]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
-
-
    Danny Hong
    Vidyo, Inc.
    433 Hackensack Avenue
@@ -749,6 +717,19 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    Email: justin@uberti.name
 
 
+
+
+
+
+
+
+
+
+Lennox, et al.          Expires November 9, 2017               [Page 13]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+
+
    Stefan Holmer
    Google, Inc.
    Kungsbron 2
@@ -765,6 +746,25 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
    Sweden
 
    Email: mflodman@google.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

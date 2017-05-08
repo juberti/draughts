@@ -212,11 +212,12 @@
                1        2        3        4
           ]]></artwork>
 
-          <postamble>In this illustration, frame 3 is a layer refresh
+      </figure>
+
+      <t>In <xref target='figureSpatialRefreshEnhanced'/>, frame 3 is a layer refresh
 			point for spatial layer S1; a decoder which had previously
 			only been decoding spatial layer S0 would be able to
-			decode layer S1 starting at frame 3.</postamble>
-      </figure>
+			decode layer S1 starting at frame 3.</t>
 
       <figure anchor="figureSpatialRefreshBase">
         <preamble>An illustration of spatial layer refresh of a base layer is shown
@@ -230,11 +231,12 @@
                1        2        3        4
           ]]></artwork>
 
-          <postamble>In this illustration, frame 3 is a layer refresh
-			point for spatial layer S0; a decoder which had previously
-			not been decoding the stream at all could decode layer S0
-			starting at frame 3.</postamble>
       </figure>
+
+      <t>In <xref target="figureSpatialRefreshBase"/>, frame 3 is a layer refresh
+		point for spatial layer S0; a decoder which had previously
+		not been decoding the stream at all could decode layer S0
+		starting at frame 3.</t>
 
 	  <t>For temporal layers, layer refresh requires that the layer be
 	  "temporally nested", i.e. use as reference only
@@ -257,12 +259,12 @@
 
                1     2     3     4     5     6     7
           ]]></artwork>
-
-          <postamble>In this illustration, frame 6 is a layer refresh
-			point for temporal layer T1; a decoder which had previously
-			only been decoding temporal layer T0 would be able to
-			decode layer T1 starting at frame 6.</postamble>
       </figure>
+
+      <t>In <xref target="figureTemporalRefresh"/>, frame 6 is a layer refresh
+		point for temporal layer T1; a decoder which had previously
+		only been decoding temporal layer T0 would be able to
+		decode layer T1 starting at frame 6.</t>
 
       <figure anchor="figureTemporalNesting">
         <preamble>An illustration of an inherently temporally nested
@@ -276,10 +278,11 @@
                1     2     3     4     5     6     7
           ]]></artwork>
 
-          <postamble>In this illustration, the stream is temporally
-          nested in its ordinary structure; a decoder receiving layer
-          T0 can begin decoding layer T1 at any point.</postamble>
       </figure>
+
+      <t>In <xref target="figureTemporalNesting"/>, the stream is temporally
+        nested in its ordinary structure; a decoder receiving layer
+        T0 can begin decoding layer T1 at any point.</t>
 
 	</section>
 
@@ -287,7 +290,8 @@
 
 	<section anchor="layerRefreshRequest" title="Layer Refresh Request">
 	  <t>A layer refresh frame can be requested by sending a Layer Refresh Request (LRR),
-	  which is an <xref target="RFC4585">RTCP payload-specific feedback message</xref> asking the encoder to encode a frame
+	  which is an <xref target="RFC3550">Real-Time Transport Control Protocol (RTCP)</xref>
+	  <xref target="RFC4585">payload-specific feedback message</xref> asking the encoder to encode a frame
 	  which makes it possible to upgrade to a higher layer. The LRR
 	  contains one or two tuples, indicating the layer the decoder
 	  wants to upgrade to, and (optionally) the currently highest
@@ -305,6 +309,9 @@
 	  <t>The LRR message is identified by RTCP packet type value
 	  PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more LRR entries.  Each entry
    applies to a different media sender, identified by its SSRC.</t>
+
+	  <t>[NOTE TO RFC Editor: Please replace "TBD" with the IANA-assigned payload-specific feedback
+		number.]</t>
 
 	  <section anchor="MessageFormat" title="Message Format">
 
@@ -374,8 +381,8 @@
 		</list>
 	  </t>
 
-	  <t>Note: the syntax of the TTID, TLID, CTID, and TLID fields are
-	  designed to match the TID and LID fields in
+	  <t>Note: the syntax of the TTID, TLID, CTID, and TLID fields 
+	  match, by design, the TID and LID fields in
 	  <xref target='I-D.ietf-avtext-framemarking' />.</t>
 
 	  </section>
