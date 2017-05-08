@@ -363,7 +363,8 @@
 		  <t hangText="Target Temporal Layer ID (TTID) (3 bits)">The temporal ID
 			of the target layer for which the receiver wishes a refresh point.</t>
 
-		  <t hangText="Target Layer ID (TLID) (8 bits)">The layer ID of the target layer
+		  <t hangText="Target Layer ID (TLID) (8 bits)">The layer ID of the target spatial or quality
+			layer
 			for which the receiver wishes a refresh point.  Its format
 			is dependent on the payload type field.</t>
 
@@ -374,14 +375,14 @@
 			SHALL be ignored on reception.</t>
 
 		  <t hangText="Current Layer ID (CLID) (8 bits)">If C is 1, the
-		  layer ID of the current layer being decoded by the receiver.  This message
+		  layer ID of the current spatial or quality layer being decoded by the receiver.  This message
 		  is not requesting refresh of layers at or below this layer.
 		  If C is 0, this field SHALL be set to 0 by the sender and
 		  SHALL be ignored on reception.</t>
 		</list>
 	  </t>
 
-	  <t>Note: the syntax of the TTID, TLID, CTID, and TLID fields 
+	  <t>Note: the syntax of the TTID, TLID, CTID, and CLID fields 
 	  match, by design, the TID and LID fields in
 	  <xref target='I-D.ietf-avtext-framemarking' />.</t>
 
