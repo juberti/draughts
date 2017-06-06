@@ -344,9 +344,11 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    Upon reception of LRR, the encoder MUST send a decoder refresh point
    (see section Section 2.1) as soon as possible.
 
-   The sender MUST consider congestion control as outlined in section 5
-   of [RFC5104], which MAY restrict its ability to send a layer refresh
-   point quickly.
+   The sender MUST respect bandwidth limits provided by the application
+   of congestion control, as described in Section 5 of [RFC5104].  As
+   layer refresh points will often be larger than non-refreshing frames,
+   this may restrict a sender's ability to send a layer refresh point
+   quickly.
 
 4.  Usage with specific codecs
 
@@ -384,8 +386,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    scalable slice).  Layer refresh of the base layer can also be
    identified by its NAL unit type of its coded slices, which is "5"
    rather than "1".  A dependency or quality layer refresh is complete
-   once this bit has been seen on all the appropriate layers (in
-
 
 
 
@@ -394,6 +394,7 @@ Lennox, et al.          Expires December 8, 2017                [Page 7]
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
+   once this bit has been seen on all the appropriate layers (in
    decoding order) above the current layer index (if any, or beginning
    from the base layer if not) through the target layer index.
 
@@ -441,7 +442,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    Figure 7 shows the format of the layer index field for VP8 streams.
    The "RES" fields MUST be set to 0 on transmission and be ignored on
    reception.  See [RFC7741] Section 4.2 for details on the TID field.
-
 
 
 

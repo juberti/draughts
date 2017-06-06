@@ -401,9 +401,11 @@
    <t>Upon reception of LRR, the encoder MUST send a decoder refresh point
    (see section <xref target='terminology' />) as soon as possible.</t>
 
-   <t>The sender MUST consider congestion control as outlined in section 5 of <xref target='RFC5104' />,
-   which MAY restrict its ability to send a layer refresh point
-   quickly.</t>
+   <t>The sender MUST respect bandwidth limits provided by the
+	 application of congestion control, as described in Section 5 of
+	 <xref target='RFC5104' />.  As layer refresh points will often be
+	 larger than non-refreshing frames, this may restrict a sender's
+	 ability to send a layer refresh point quickly.</t>
 
 	  </section>
 	</section>
