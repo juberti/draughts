@@ -5,15 +5,15 @@
 Payload Working Group                                          J. Lennox
 Internet-Draft                                                   D. Hong
 Intended status: Standards Track                                   Vidyo
-Expires: November 9, 2017                                      J. Uberti
+Expires: December 8, 2017                                      J. Uberti
                                                                S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                             May 8, 2017
+                                                            June 6, 2017
 
 
          The Layer Refresh Request (LRR) RTCP Feedback Message
-                        draft-ietf-avtext-lrr-05
+                        draft-ietf-avtext-lrr-06
 
 Abstract
 
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 9, 2017.
+   This Internet-Draft will expire on December 8, 2017.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 1]
+Lennox, et al.          Expires December 8, 2017                [Page 1]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    include Simplified BSD License text as described in Section 4.e of
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 2]
+Lennox, et al.          Expires December 8, 2017                [Page 2]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 2.1.  Terminology
@@ -165,9 +165,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 3]
+Lennox, et al.          Expires December 8, 2017                [Page 3]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    In Figure 2, frame 3 is a layer refresh point for spatial layer S0; a
@@ -221,9 +221,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 4]
+Lennox, et al.          Expires December 8, 2017                [Page 4]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 3.  Layer Refresh Request
@@ -277,9 +277,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 5]
+Lennox, et al.          Expires December 8, 2017                [Page 5]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    Seq nr. (8 bits)  Command sequence number.  The sequence number space
@@ -333,9 +333,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 6]
+Lennox, et al.          Expires December 8, 2017                [Page 6]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    A LRR message MAY contain requests to multiple media senders, using
@@ -389,9 +389,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 7]
+Lennox, et al.          Expires December 8, 2017                [Page 7]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    decoding order) above the current layer index (if any, or beginning
@@ -445,9 +445,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 8]
+Lennox, et al.          Expires December 8, 2017                [Page 8]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    A VP8 layer refresh point can be identified by the presence of the
@@ -501,9 +501,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017                [Page 9]
+Lennox, et al.          Expires December 8, 2017                [Page 9]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    = T2, all the way up to TID = TN.  During this incremental process,
@@ -557,9 +557,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017               [Page 10]
+Lennox, et al.          Expires December 8, 2017               [Page 10]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    document extends this with a new codec control command, "lrr", which
@@ -613,9 +613,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017               [Page 11]
+Lennox, et al.          Expires December 8, 2017               [Page 11]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -669,9 +669,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017               [Page 12]
+Lennox, et al.          Expires December 8, 2017               [Page 12]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    [RFC7656]  Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
@@ -725,9 +725,9 @@ Authors' Addresses
 
 
 
-Lennox, et al.          Expires November 9, 2017               [Page 13]
+Lennox, et al.          Expires December 8, 2017               [Page 13]
 
-Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    Stefan Holmer
@@ -781,4 +781,4 @@ Internet-Draft     Layer Refresh Request RTCP Feedback          May 2017
 
 
 
-Lennox, et al.          Expires November 9, 2017               [Page 14]
+Lennox, et al.          Expires December 8, 2017               [Page 14]
