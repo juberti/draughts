@@ -229,12 +229,12 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 3.  Layer Refresh Request
 
    A layer refresh frame can be requested by sending a Layer Refresh
-   Request (LRR), which is an Real-Time Transport Control Protocol
-   (RTCP) [RFC3550] payload-specific feedback message [RFC4585] asking
-   the encoder to encode a frame which makes it possible to upgrade to a
-   higher layer.  The LRR contains one or two tuples, indicating the
-   layer the decoder wants to upgrade to, and (optionally) the currently
-   highest layer the decoder can decode.
+   Request (LRR), which is an RTP Control Protocol (RTCP) [RFC3550]
+   payload-specific feedback message [RFC4585] asking the encoder to
+   encode a frame which makes it possible to upgrade to a higher layer.
+   The LRR contains one or two tuples, indicating the layer the decoder
+   wants to upgrade to, and (optionally) the currently highest layer the
+   decoder can decode.
 
    The specific format of the tuples, and the mechanism by which a
    receiver recognizes a refresh frame, is codec-dependent.  Usage for

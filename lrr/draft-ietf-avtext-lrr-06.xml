@@ -290,7 +290,7 @@
 
 	<section anchor="layerRefreshRequest" title="Layer Refresh Request">
 	  <t>A layer refresh frame can be requested by sending a Layer Refresh Request (LRR),
-	  which is an <xref target="RFC3550">Real-Time Transport Control Protocol (RTCP)</xref>
+	  which is an <xref target="RFC3550">RTP Control Protocol (RTCP)</xref>
 	  <xref target="RFC4585">payload-specific feedback message</xref> asking the encoder to encode a frame
 	  which makes it possible to upgrade to a higher layer. The LRR
 	  contains one or two tuples, indicating the layer the decoder
