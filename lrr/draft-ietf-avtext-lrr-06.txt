@@ -5,11 +5,11 @@
 Payload Working Group                                          J. Lennox
 Internet-Draft                                                   D. Hong
 Intended status: Standards Track                                   Vidyo
-Expires: December 8, 2017                                      J. Uberti
+Expires: December 17, 2017                                     J. Uberti
                                                                S. Holmer
                                                               M. Flodman
                                                                   Google
-                                                            June 6, 2017
+                                                           June 15, 2017
 
 
          The Layer Refresh Request (LRR) RTCP Feedback Message
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 8, 2017.
+   This Internet-Draft will expire on December 17, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Lennox, et al.          Expires December 8, 2017                [Page 1]
+Lennox, et al.          Expires December 17, 2017               [Page 1]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
@@ -72,7 +72,7 @@ Table of Contents
      3.2.  Semantics . . . . . . . . . . . . . . . . . . . . . . . .   7
    4.  Usage with specific codecs  . . . . . . . . . . . . . . . . .   7
      4.1.  H264 SVC  . . . . . . . . . . . . . . . . . . . . . . . .   7
-     4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     4.2.  VP8 . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
      4.3.  H265  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
    5.  Usage with different scalability transmission mechanisms  . .  10
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Lennox, et al.          Expires December 8, 2017                [Page 2]
+Lennox, et al.          Expires December 17, 2017               [Page 2]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
@@ -165,7 +165,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 
-Lennox, et al.          Expires December 8, 2017                [Page 3]
+Lennox, et al.          Expires December 17, 2017               [Page 3]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
@@ -221,7 +221,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 
-Lennox, et al.          Expires December 8, 2017                [Page 4]
+Lennox, et al.          Expires December 17, 2017               [Page 4]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
@@ -277,7 +277,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 
-Lennox, et al.          Expires December 8, 2017                [Page 5]
+Lennox, et al.          Expires December 17, 2017               [Page 5]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
@@ -333,7 +333,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 
-Lennox, et al.          Expires December 8, 2017                [Page 6]
+Lennox, et al.          Expires December 17, 2017               [Page 6]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
@@ -360,6 +360,11 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    this may restrict a sender's ability to send a layer refresh point
    quickly.
 
+   LRR MUST NOT be sent as a reaction to picture losses -- it is
+   RECOMMENDED to use PLI [RFC4585] instead.  LRR SHOULD be used only in
+   situations where not sending a layer refresh point would render the
+   video unusable for the users.
+
 4.  Usage with specific codecs
 
    In order for LRR to be used with a scalable codec, the format of the
@@ -377,6 +382,18 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    H.264 SVC [RFC6190] defines temporal, dependency (spatial), and
    quality scalability modes.
 
+
+
+
+
+
+
+
+Lennox, et al.          Expires December 17, 2017               [Page 7]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -384,15 +401,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
                +---------------+---------------+
 
                                  Figure 6
-
-
-
-
-
-Lennox, et al.          Expires December 8, 2017                [Page 7]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
-
 
    Figure 6 shows the format of the layer index fields for H.264 SVC
    streams.  The "R" and "RES" fields MUST be set to 0 on transmission
@@ -434,6 +442,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    delta_frame_num refers to a frame with the requested current layer
    index.  (Alternately, temporal layer refresh can also be satisfied by
    a complete state refresh, such as an IDR.)  Senders which support
+
+
+
+Lennox, et al.          Expires December 17, 2017               [Page 8]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
    receiving LRR for non-temporally-nested streams MUST insert Temporal
    Level Switching Point SEI messages as appropriate.
 
@@ -441,14 +457,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
    The VP8 RTP payload format [RFC7741] defines temporal scalability
    modes.  It does not support spatial scalability.
-
-
-
-
-Lennox, et al.          Expires December 8, 2017                [Page 8]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
-
 
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
@@ -490,6 +498,14 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
                                  Figure 8
 
+
+
+
+Lennox, et al.          Expires December 17, 2017               [Page 9]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
    Figure 8 shows the format of the layer index field for H.265 streams.
    The "RES" fields MUST be set to 0 on transmission and ignored on
    reception.  See [RFC7798] Section 1.1.4 for details on the LayerId
@@ -498,14 +514,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    H.265 streams signal whether they are temporally nested, using the
    vps_temporal_id_nesting_flag in the Video Parameter Set (VPS), and
    the sps_temporal_id_nesting_flag in the Sequence Parameter Set (SPS).
-
-
-
-Lennox, et al.          Expires December 8, 2017                [Page 9]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
-
-
    If this flag is set in a stream's currently applicable VPS or SPS,
    receivers SHOULD NOT send temporal LRR messages for that stream, as
    every frame is implicitly a temporal layer refresh point.
@@ -546,21 +554,20 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
    The LRR message is applicable to all these mechanisms.  For MRST and
    MRMT mechanisms, the "media source" field of the LRR FCI is set to
+
+
+
+Lennox, et al.          Expires December 17, 2017              [Page 10]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
    the SSRC of the RTP stream containing the layer indicated by the
    Current Layer Index (if "C" is 1), or the stream containing the base
    encoded stream (if "C" is 0).  For MRMT, it is sent on the RTP
    session on which this stream is sent.  On receipt, the sender MUST
    refresh all the layers requested in the stream, simultaneously in
    decode order.
-
-
-
-
-
-Lennox, et al.          Expires December 8, 2017               [Page 10]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
-
 
 6.  Security Considerations
 
@@ -602,6 +609,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
    Reference:  RFC XXXX
 
+
+
+
+
+Lennox, et al.          Expires December 17, 2017              [Page 11]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
    This document also defines a new entry to the "FMT Values for PSFB
    Payload Types" subregistry of the "Real-Time Transport Protocol (RTP)
    Parameters" registry, according to the following data:
@@ -609,14 +625,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    Name:  LRR
 
    Long Name:  Layer Refresh Request Command
-
-
-
-
-Lennox, et al.          Expires December 8, 2017               [Page 11]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
-
 
    Value:  TBD
 
@@ -657,6 +665,15 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
               RFC5234, January 2008,
               <http://www.rfc-editor.org/info/rfc5234>.
 
+
+
+
+
+Lennox, et al.          Expires December 17, 2017              [Page 12]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
    [RFC6190]  Wenger, S., Wang, Y., Schierl, T., and A. Eleftheriadis,
               "RTP Payload Format for Scalable Video Coding", RFC 6190,
               DOI 10.17487/RFC6190, May 2011,
@@ -666,13 +683,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
               Galligan, "RTP Payload Format for VP8 Video", RFC 7741,
               DOI 10.17487/RFC7741, March 2016,
               <http://www.rfc-editor.org/info/rfc7741>.
-
-
-
-Lennox, et al.          Expires December 8, 2017               [Page 12]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
-
 
    [RFC7798]  Wang, Y., Sanchez, Y., Schierl, T., Wenger, S., and M.
               Hannuksela, "RTP Payload Format for High Efficiency Video
@@ -710,6 +720,16 @@ Authors' Addresses
    Email: jonathan@vidyo.com
 
 
+
+
+
+
+
+Lennox, et al.          Expires December 17, 2017              [Page 13]
+
+Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
+
+
    Danny Hong
    Vidyo, Inc.
    433 Hackensack Avenue
@@ -718,16 +738,6 @@ Authors' Addresses
    US
 
    Email: danny@vidyo.com
-
-
-
-
-
-
-
-Lennox, et al.          Expires December 8, 2017               [Page 13]
-
-Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
    Justin Uberti
@@ -771,14 +781,4 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
 
-
-
-
-
-
-
-
-
-
-
-Lennox, et al.          Expires December 8, 2017               [Page 14]
+Lennox, et al.          Expires December 17, 2017              [Page 14]

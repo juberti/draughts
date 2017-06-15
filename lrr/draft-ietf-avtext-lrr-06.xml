@@ -424,6 +424,11 @@
 	 larger than non-refreshing frames, this may restrict a sender's
 	 ability to send a layer refresh point quickly.</t>
 
+   <t>LRR MUST NOT be sent as a reaction to picture losses -- it is
+	 RECOMMENDED to use <xref target="RFC4585">PLI</xref> instead.
+	 LRR SHOULD be used only in situations where not sending a layer
+	 refresh point would render the video unusable for the users.</t>
+
 	  </section>
 	</section>
 
