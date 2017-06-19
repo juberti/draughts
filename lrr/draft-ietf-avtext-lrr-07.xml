@@ -14,7 +14,7 @@
 <!ENTITY framemarking SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-avtext-lrr-06" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-avtext-lrr-07" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
