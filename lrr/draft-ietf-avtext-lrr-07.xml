@@ -185,15 +185,18 @@
 	  (possibly none) of the available layers of stream, is able to
 	  decode a greater number of the layers.</t>
 
-	  <t>For spatial (or quality) layers, layer refresh typically
-	  requires that a spatial layer be encoded in a way that
-	  references only lower-layer subpictures of the current picture,
+	  <t>For spatial (or quality) layers, in normal encoding, 
+		a subpicture can depend both on earlier pictures of that
+		spatial layer and also on lower-layer pictures of the current picture.
+		A layer refresh, however, typically
+	  requires that a spatial layer picture be encoded in a way that
+	  references only the lower-layer subpictures of the current picture,
 	  not any earlier pictures of that spatial layer.  Additionally,
 	  the encoder must promise that no earlier pictures of that
 	  spatial layer will be used as reference in the future.</t>
 
-	  <t>However, in a layer refresh, layers other than the ones
-	  requested for refresh may still maintain dependency on earlier
+	  <t>However, even in a layer refresh, layers other than the ones
+	  being refreshed may still maintain dependency on earlier
 	  content of the stream.  This is the difference between a layer
 	  refresh and a <xref target='RFC5104'>Full Intra
 	  Request</xref>.  This minimizes the coding overhead of refresh
@@ -239,7 +242,9 @@
 		not been decoding the stream at all could decode layer S0
 		starting at frame 3.</t>
 
-	  <t>For temporal layers, layer refresh requires that the layer be
+	  <t>For temporal layers, while normal encoding allows frames to
+		depend on earlier frames of the same temporal layer, 
+		layer refresh requires that the layer be
 	  "temporally nested", i.e. use as reference only
 	  earlier frames of a lower temporal layer, not any earlier frames of this
 	  temporal layer, and also promise that no future frames
@@ -353,8 +358,9 @@
 		  <t hangText="Seq nr. (8 bits)"> Command sequence number.  The sequence number
               space is unique for each pairing of the SSRC of command
               source and the SSRC of the command target.  The sequence
-              number SHALL be increased by 1 modulo 256 for each new
-              command.  A repetition SHALL NOT increase the sequence
+              number SHALL be increased by 1 for each new
+              command (modulo 256, so the value after 255 is 0). 
+			  A repetition SHALL NOT increase the sequence
               number.  The initial value is arbitrary.</t>
 
 		  <t hangText="C (1 bit)">A flag bit indicating whether the
@@ -430,10 +436,13 @@
 	 larger than non-refreshing frames, this may restrict a sender's
 	 ability to send a layer refresh point quickly.</t>
 
-   <t>LRR MUST NOT be sent as a reaction to picture losses -- it is
+   <t>LRR MUST NOT be sent as a reaction to picture losses due to
+	 packet loss or corruption -- it is
 	 RECOMMENDED to use <xref target="RFC4585">PLI</xref> instead.
-	 LRR SHOULD be used only in situations where not sending a layer
-	 refresh point would render the video unusable for the users.</t>
+	 LRR SHOULD be used only in situations where there is an explicit change
+	 in decoders' behavior, for
+	 example when a receiver will start decoding a layer which it
+	 previously had been discarding.</t>
 
 	  </section>
 	</section>
