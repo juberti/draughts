@@ -128,7 +128,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    earlier pictures of that spatial layer will be used as reference in
    the future.
 
-   In a layer refresh, however, layers other than the ones requested for
+   However, in a layer refresh, layers other than the ones requested for
    refresh may still maintain dependency on earlier content of the
    stream.  This is the difference between a layer refresh and a Full
    Intra Request [RFC5104].  This minimizes the coding overhead of
@@ -136,7 +136,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    refreshed at any given time.
 
    An illustration of spatial layer refresh of an enhancement layer is
-   shown below.
+   shown below.  <-- indicates a coding dependency.
 
         ... <--  S1  <--  S1       S1  <--  S1  <-- ...
                   |        |        |        |
@@ -152,7 +152,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    would be able to decode layer S1 starting at frame 3.
 
    An illustration of spatial layer refresh of a base layer is shown
-   below.
+   below.  <-- indicates a coding dependency.
 
         ... <--  S1  <--  S1  <--  S1  <--  S1  <-- ...
                   |        |        |        |
@@ -183,7 +183,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    frames are temporally nested, in which case decoders will have no
    need to send LRR messages for the stream.
 
-   An illustration of temporal layer refresh is shown below.
+   An illustration of temporal layer refresh is shown below.  <--
+   indicates a coding dependency.
 
            ...  <----- T1  <------ T1          T1  <------ ...
                       /           /           /
@@ -199,7 +200,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    would be able to decode layer T1 starting at frame 6.
 
    An illustration of an inherently temporally nested stream is shown
-   below.
+   below.  <-- indicates a coding dependency.
 
                        T1          T1          T1
                       /           /           /
@@ -217,7 +218,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    A "Layer Index" is a numeric label for a specific spatial and
    temporal layer of a scalable stream.  It consists of the pair of a
    "temporal ID" identifying the temporal layer, and a "layer ID"
-   identifying the spatial or quality layer.  The details of how layers
 
 
 
@@ -226,6 +226,7 @@ Lennox, et al.          Expires December 31, 2017               [Page 4]
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
+   identifying the spatial or quality layer.  The details of how layers
    of a scalable stream are labeled are codec-specific.  Details for
    several codecs are defined in Section 4.
 
@@ -259,7 +260,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    The Feedback Control Information (FCI) for the Layer Refresh Request
    consists of one or more FCI entries, the content of which is depicted
    in Figure 5.  The length of the LRR feedback message MUST be set to
-   2+3*N, where N is the number of FCI entries.
+   2+3*N 32-bit words, where N is the number of FCI entries.
 
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -268,11 +269,10 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       | Seq nr.       |C| Payload Type| Reserved                      |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      | RES     | TTID| TLID          | RES     | CTID| CLID (opt)    |
+      | RES     | TTID| TLID          | RES     | CTID| CLID          |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                                  Figure 5
-
 
 
 
@@ -302,8 +302,9 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
       being requested.  This gives the context in which the target layer
       index is to be interpreted.
 
-   Reserved (RES) (16 bits / 5 bits / 5 bits)  All bits SHALL be set to
-      0 by the sender and SHALL be ignored on reception.
+   Reserved (RES) (three separate fields, 16 bits / 5 bits / 5 bits)
+      All bits SHALL be set to 0 by the sender and SHALL be ignored on
+      reception.
 
    Target Temporal Layer ID (TTID) (3 bits)  The temporal ID of the
       target layer for which the receiver wishes a refresh point.
@@ -328,8 +329,7 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    less than CLID; at least one of TTID or TLID MUST be greater than
    CTID or CLID respectively.  That is to say, the target layer index
    <TTID, TLID> MUST be a layer upgrade from the current layer index
-   <CTID, CLID>.  A sender MAY request an upgrade in both temporal and
-   spatial/quality layers simultaneously.
+
 
 
 
@@ -337,6 +337,9 @@ Lennox, et al.          Expires December 31, 2017               [Page 6]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
+
+   <CTID, CLID>.  A sender MAY request an upgrade in both temporal and
+   spatial/quality layers simultaneously.
 
    A receiver receiving an LRR feedback packet which does not satisfy
    the requirements of the previous paragraph, i.e. one where the C bit
@@ -381,9 +384,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    used with the Frame Marking RTP Header Extension
    [I-D.ietf-avtext-framemarking], the syntax MUST be defined in the
    same manner as the TID and LID fields in that header.
-
-
-
 
 
 

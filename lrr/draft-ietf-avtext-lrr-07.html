@@ -502,10 +502,10 @@
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
 <p id="rfc.section.2.1.p.1">A "Layer Refresh Point" is a point in a scalable stream after which a decoder, which previously had been able to decode only some (possibly none) of the available layers of stream, is able to decode a greater number of the layers.</p>
 <p id="rfc.section.2.1.p.2">For spatial (or quality) layers, layer refresh typically requires that a spatial layer be encoded in a way that references only lower-layer subpictures of the current picture, not any earlier pictures of that spatial layer.  Additionally, the encoder must promise that no earlier pictures of that spatial layer will be used as reference in the future.</p>
-<p id="rfc.section.2.1.p.3">In a layer refresh, however, layers other than the ones requested for refresh may still maintain dependency on earlier content of the stream.  This is the difference between a layer refresh and a <a href="#RFC5104">Full Intra Request</a> <cite title="NONE">[RFC5104]</cite>.  This minimizes the coding overhead of refresh to only those parts of the stream that actually need to be refreshed at any given time.</p>
+<p id="rfc.section.2.1.p.3">However, in a layer refresh, layers other than the ones requested for refresh may still maintain dependency on earlier content of the stream.  This is the difference between a layer refresh and a <a href="#RFC5104">Full Intra Request</a> <cite title="NONE">[RFC5104]</cite>.  This minimizes the coding overhead of refresh to only those parts of the stream that actually need to be refreshed at any given time.</p>
 <div id="rfc.figure.1"/>
 <div id="figureSpatialRefreshEnhanced"/>
-<p>An illustration of spatial layer refresh of an enhancement layer is shown below.</p>
+<p>An illustration of spatial layer refresh of an enhancement layer is shown below.  &lt;-- indicates a coding dependency.</p>
 <pre>
      ... &lt;--  S1  &lt;--  S1       S1  &lt;--  S1  &lt;-- ...
                |        |        |        |
@@ -518,7 +518,7 @@
 <p id="rfc.section.2.1.p.4">In <a href="#figureSpatialRefreshEnhanced">Figure 1</a>, frame 3 is a layer refresh point for spatial layer S1; a decoder which had previously only been decoding spatial layer S0 would be able to decode layer S1 starting at frame 3.</p>
 <div id="rfc.figure.2"/>
 <div id="figureSpatialRefreshBase"/>
-<p>An illustration of spatial layer refresh of a base layer is shown below.</p>
+<p>An illustration of spatial layer refresh of a base layer is shown below.  &lt;-- indicates a coding dependency.</p>
 <pre>
      ... &lt;--  S1  &lt;--  S1  &lt;--  S1  &lt;--  S1  &lt;-- ...
                |        |        |        |
@@ -532,7 +532,7 @@
 <p id="rfc.section.2.1.p.6">For temporal layers, layer refresh requires that the layer be "temporally nested", i.e. use as reference only earlier frames of a lower temporal layer, not any earlier frames of this temporal layer, and also promise that no future frames of this temporal layer will reference frames of this temporal layer before the refresh point.  In many cases, the temporal structure of the stream will mean that all frames are temporally nested, in which case decoders will have no need to send LRR messages for the stream.</p>
 <div id="rfc.figure.3"/>
 <div id="figureTemporalRefresh"/>
-<p>An illustration of temporal layer refresh is shown below.</p>
+<p>An illustration of temporal layer refresh is shown below.  &lt;-- indicates a coding dependency.</p>
 <pre>
         ...  &lt;----- T1  &lt;------ T1          T1  &lt;------ ...
                    /           /           /
@@ -545,7 +545,7 @@
 <p id="rfc.section.2.1.p.7">In <a href="#figureTemporalRefresh">Figure 3</a>, frame 6 is a layer refresh point for temporal layer T1; a decoder which had previously only been decoding temporal layer T0 would be able to decode layer T1 starting at frame 6.</p>
 <div id="rfc.figure.4"/>
 <div id="figureTemporalNesting"/>
-<p>An illustration of an inherently temporally nested stream is shown below.</p>
+<p>An illustration of an inherently temporally nested stream is shown below.  &lt;-- indicates a coding dependency.</p>
 <pre>
                     T1          T1          T1
                    /           /           /
@@ -564,7 +564,7 @@
 <p id="rfc.section.3.p.4">The LRR message is identified by RTCP packet type value PT=PSFB and FMT=TBD.  The FCI field MUST contain one or more LRR entries.  Each entry applies to a different media sender, identified by its SSRC.</p>
 <p id="rfc.section.3.p.5">[NOTE TO RFC Editor: Please replace "TBD" with the IANA-assigned payload-specific feedback number.]</p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#MessageFormat" id="MessageFormat">Message Format</a></h1>
-<p id="rfc.section.3.1.p.1">The Feedback Control Information (FCI) for the Layer Refresh Request consists of one or more FCI entries, the content of which is depicted in <a href="#figureFciFormat">Figure 5</a>.  The length of the LRR feedback message MUST be set to 2+3*N, where N is the number of FCI entries.</p>
+<p id="rfc.section.3.1.p.1">The Feedback Control Information (FCI) for the Layer Refresh Request consists of one or more FCI entries, the content of which is depicted in <a href="#figureFciFormat">Figure 5</a>.  The length of the LRR feedback message MUST be set to 2+3*N 32-bit words, where N is the number of FCI entries.</p>
 <div id="rfc.figure.5"/>
 <div id="figureFciFormat"/>
 <pre>
@@ -575,7 +575,7 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    | Seq nr.       |C| Payload Type| Reserved                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | RES     | TTID| TLID          | RES     | CTID| CLID (opt)    |
+   | RES     | TTID| TLID          | RES     | CTID| CLID          |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           </pre>
 <p class="figure">Figure 5</p>
@@ -590,7 +590,7 @@
   <dd style="margin-left: 8">A flag bit indicating whether the "Current Temporal Layer ID (CTID)" and "Current Layer ID (CLID)" fields are present in the FCI.  If this bit is 0, the sender of the LRR message is requesting refresh of all layers up to and including the target layer.</dd>
   <dt>Payload Type (7 bits)</dt>
   <dd style="margin-left: 8">The RTP payload type for which the LRR is being requested.  This gives the context in which the target layer index is to be interpreted.</dd>
-  <dt>Reserved (RES) (16 bits / 5 bits / 5 bits)</dt>
+  <dt>Reserved (RES) (three separate fields, 16 bits / 5 bits / 5 bits)</dt>
   <dd style="margin-left: 8">All bits SHALL be set to 0 by the sender and SHALL be ignored on reception.</dd>
   <dt>Target Temporal Layer ID (TTID) (3 bits)</dt>
   <dd style="margin-left: 8">The temporal ID of the target layer for which the receiver wishes a refresh point.</dd>

@@ -192,7 +192,7 @@
 	  the encoder must promise that no earlier pictures of that
 	  spatial layer will be used as reference in the future.</t>
 
-	  <t>In a layer refresh, however, layers other than the ones
+	  <t>However, in a layer refresh, layers other than the ones
 	  requested for refresh may still maintain dependency on earlier
 	  content of the stream.  This is the difference between a layer
 	  refresh and a <xref target='RFC5104'>Full Intra
@@ -202,7 +202,8 @@
 
       <figure anchor="figureSpatialRefreshEnhanced">
         <preamble>An illustration of spatial layer refresh of an
-        enhancement layer is shown below.</preamble>
+        enhancement layer is shown below.  &lt;-- indicates a coding
+		  dependency.</preamble>
           <artwork><![CDATA[
      ... <--  S1  <--  S1       S1  <--  S1  <-- ...
                |        |        |        |
@@ -221,7 +222,7 @@
 
       <figure anchor="figureSpatialRefreshBase">
         <preamble>An illustration of spatial layer refresh of a base layer is shown
-        below.</preamble>
+        below.  &lt;-- indicates a coding dependency.</preamble>
           <artwork><![CDATA[
      ... <--  S1  <--  S1  <--  S1  <--  S1  <-- ...
                |        |        |        |
@@ -250,7 +251,7 @@
 
       <figure anchor="figureTemporalRefresh">
         <preamble>An illustration of temporal layer refresh is shown
-        below.</preamble>
+        below.  &lt;-- indicates a coding dependency.</preamble>
           <artwork><![CDATA[
         ...  <----- T1  <------ T1          T1  <------ ...
                    /           /           /
@@ -268,7 +269,7 @@
 
       <figure anchor="figureTemporalNesting">
         <preamble>An illustration of an inherently temporally nested
-        stream is shown below.</preamble>
+        stream is shown below.  &lt;-- indicates a coding dependency.</preamble>
           <artwork><![CDATA[
                     T1          T1          T1
                    /           /           /
@@ -328,7 +329,7 @@
 		  consists of one or more FCI entries, the content of which is
    depicted in <xref target="figureFciFormat"/>.  The length of
 		  the LRR feedback message MUST be set to
-   2+3*N, where N is the number of FCI entries.</t>
+   2+3*N 32-bit words, where N is the number of FCI entries.</t>
 
       <figure anchor="figureFciFormat">
           <artwork><![CDATA[
@@ -339,7 +340,7 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    | Seq nr.       |C| Payload Type| Reserved                      |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | RES     | TTID| TLID          | RES     | CTID| CLID (opt)    |
+   | RES     | TTID| TLID          | RES     | CTID| CLID          |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           ]]></artwork>
 	  </figure>
@@ -367,7 +368,7 @@
 		  which the LRR is being requested.  This gives the context in
 		  which the target layer index is to be interpreted.</t>
 
-		  <t hangText="Reserved (RES) (16 bits / 5 bits / 5 bits)"> All bits SHALL be set to 0
+		  <t hangText="Reserved (RES) (three separate fields, 16 bits / 5 bits / 5 bits)"> All bits SHALL be set to 0
 			by the sender and SHALL be ignored on reception.</t>
 
 		  <t hangText="Target Temporal Layer ID (TTID) (3 bits)">The temporal ID
