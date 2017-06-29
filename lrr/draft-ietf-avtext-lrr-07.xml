@@ -192,7 +192,7 @@
 	  the encoder must promise that no earlier pictures of that
 	  spatial layer will be used as reference in the future.</t>
 
-	  <t>In a layer refresh, however, other layers than the ones
+	  <t>In a layer refresh, however, layers other than the ones
 	  requested for refresh may still maintain dependency on earlier
 	  content of the stream.  This is the difference between a layer
 	  refresh and a <xref target='RFC5104'>Full Intra
@@ -398,6 +398,11 @@
 	  TLID&gt; MUST be a layer upgrade from the current layer index &lt;CTID, CLID&gt;.
 	  A sender MAY request an upgrade in both temporal and
 	  spatial/quality layers simultaneously.</t>
+
+	  <t>A receiver receiving an LRR feedback packet which does not satisfy the
+		requirements of the previous paragraph, i.e. one where the C
+		bit is present but TTID is less than CTID or TLID is less
+		than CLID, MUST discard the request.</t>
 
 	  <t>Note: the syntax of the TTID, TLID, CTID, and CLID fields 
 	  match, by design, the TID and LID fields in
@@ -635,16 +640,6 @@
 
 	</section>
 
-    <section anchor="securityConsiderations" title="Security Considerations">
-	  <t>All the security considerations of <xref target="RFC5104">FIR
-	  feedback packets</xref> apply to LRR feedback packets as well.
-	  Additionally, media senders receiving LRR feedback packets MUST
-	  validate that the payload types and layer indices they are
-	  receiving are valid for the stream they are currently sending,
-	  and discard the requests if not.</t>
-    </section>
-
-
 	<section title="SDP Definitions">
 
 	  <t>Section 7 of <xref target='RFC5104' /> defines SDP procedures
@@ -668,6 +663,16 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 	  <t>The Offer-Answer considerations defined in
 	  <xref target='RFC5104' /> Section 7.2 apply.</t>
 	</section>
+
+    <section anchor="securityConsiderations" title="Security Considerations">
+	  <t>All the security considerations of <xref target="RFC5104">FIR
+	  feedback packets</xref> apply to LRR feedback packets as well.
+	  Additionally, media senders receiving LRR feedback packets MUST
+	  validate that the payload types and layer indices they are
+	  receiving are valid for the stream they are currently sending,
+	  and discard the requests if not.</t>
+    </section>
+
 
     <section anchor="IANAConsiderations" title="IANA Considerations">
 	  <t>This document defines a new entry to the "Codec Control
