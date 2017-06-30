@@ -638,6 +638,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
    Usable with:  ccm
 
+   Mux:  IDENTICAL-PER-PT
+
    Reference:  RFC XXXX
 
    This document also defines a new entry to the "FMT Values for PSFB
@@ -661,10 +663,8 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
               RTP Header Extension", draft-ietf-avtext-framemarking-04
               (work in progress), March 2017.
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
-              RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+
+
 
 
 
@@ -673,6 +673,11 @@ Lennox, et al.          Expires December 31, 2017              [Page 12]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
+              RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
 
    [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
@@ -717,11 +722,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
               Hong, "RTP Payload Format for VP9 Video", draft-ietf-
               payload-vp9-03 (work in progress), March 2017.
 
-   [RFC7656]  Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
-              B. Burman, Ed., "A Taxonomy of Semantics and Mechanisms
-              for Real-Time Transport Protocol (RTP) Sources", RFC 7656,
-              DOI 10.17487/RFC7656, November 2015,
-              <http://www.rfc-editor.org/info/rfc7656>.
 
 
 
@@ -729,6 +729,12 @@ Lennox, et al.          Expires December 31, 2017              [Page 13]
 
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
+
+   [RFC7656]  Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
+              B. Burman, Ed., "A Taxonomy of Semantics and Mechanisms
+              for Real-Time Transport Protocol (RTP) Sources", RFC 7656,
+              DOI 10.17487/RFC7656, November 2015,
+              <http://www.rfc-editor.org/info/rfc7656>.
 
    [RFC8082]  Wenger, S., Lennox, J., Burman, B., and M. Westerlund,
               "Using Codec Control Messages in the RTP Audio-Visual
@@ -767,13 +773,7 @@ Authors' Addresses
    Email: justin@uberti.name
 
 
-   Stefan Holmer
-   Google, Inc.
-   Kungsbron 2
-   Stockholm  111 22
-   Sweden
 
-   Email: holmer@google.com
 
 
 
@@ -786,6 +786,15 @@ Lennox, et al.          Expires December 31, 2017              [Page 14]
 Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
 
 
+   Stefan Holmer
+   Google, Inc.
+   Kungsbron 2
+   Stockholm  111 22
+   Sweden
+
+   Email: holmer@google.com
+
+
    Magnus Flodman
    Google, Inc.
    Kungsbron 2
@@ -793,15 +802,6 @@ Internet-Draft     Layer Refresh Request RTCP Feedback         June 2017
    Sweden
 
    Email: mflodman@google.com
-
-
-
-
-
-
-
-
-
 
 
 

@@ -694,6 +694,7 @@ rtcp-fb-ccm-param =/ SP "lrr"    ; Layer Refresh Request
 		  <t hangText='Value name:'>lrr</t>
 		  <t hangText='Long name:'>Layer Refresh Request Command</t>
 		  <t hangText='Usable with:'>ccm</t>
+		  <t hangText='Mux:'>IDENTICAL-PER-PT</t>
 		  <t hangText='Reference:'>RFC &rfc.number;</t>
 		</list>
 	  </t>
