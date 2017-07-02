@@ -41,7 +41,7 @@
 
     <abstract>
       <t>This document provides information and requirements for how
-      Forward Error Correction (FEC) should be used by WebRTC applications.</t>
+      Forward Error Correction (FEC) should be used by WebRTC implementations.</t>
     </abstract>
   </front>
 
@@ -50,7 +50,7 @@
       <t>In situations where packet loss is high, or perfect media quality is essential,
       Forward Error Correction (FEC) can be used to proactively recover from packet losses.
       This specification provides guidance on which FEC mechanisms to use, and
-      how to use them, for WebRTC client implementations.</t>
+      how to use them, for WebRTC implementations.</t>
     </section>
 
     <section title="Terminology">
