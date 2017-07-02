@@ -294,6 +294,8 @@
       <?rfc include='reference.RFC.3550.xml'?>
       <?rfc include='reference.RFC.4588.xml'?>
       <?rfc include='reference.RFC.5109.xml'?>
+      <?rfc include='reference.RFC.5763.xml'?>
+      <?rfc include='reference.RFC.5764.xml'?>
       <?rfc include='reference.RFC.6386.xml'?>
       <?rfc include='reference.RFC.6716.xml'?>
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
