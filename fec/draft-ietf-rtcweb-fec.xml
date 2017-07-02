@@ -118,22 +118,24 @@
       be activated if network conditions warrant it, or upon explicit application request.
       </t>
       <section title="Recommended Mechanism">
+        <t>When using variable-bitrate codecs without an internal FEC,
+        <xref target="RFC2198"/> redundant encoding with lower-fidelity version(s)
+        of the previous packet(s) is RECOMMENDED. This provides reasonable
+        protection of the payload with only moderate bitrate increase, as the
+        redundant encodings can be significantly smaller than the primary
+        encoding.
+        </t>
         <t>When using the Opus codec, use of
           the built-in Opus FEC mechanism is RECOMMENDED. This provides reasonable
-          protection of the audio stream against typical losses, with modest
+          protection of the audio stream against individual losses, with minimal
           overhead. Note that as indicated above the built-in Opus FEC only
           provides single-frame redundancy; if multi-packet protection is needed,
-          the built-in FEC should be combined with <xref target="RFC2198"/>
-          redundancy to protect the N-2th, N-3rd, etc. packets.
+          the aforementioned <xref target="RFC2198"/> redundancy with
+          reduced-bitrate Opus encodings SHOULD be used instead.
         </t>
         <t>When using the AMR/AMR-WB codecs, use of their built-in FEC
           mechanism is RECOMMENDED. This provides slightly more efficient
           protection of the audio stream than <xref target="RFC2198"/>.
-        </t>
-        <t>When using variable-bitrate codecs without an internal FEC,
-        <xref target="RFC2198"/> redundant encoding with lower-fidelity version(s)
-        of previous packet(s) is RECOMMENDED.
-        This provides reasonable protection of the payload with moderate overhead.
         </t>
         <t>When using constant-bitrate codecs, e.g. PCMU, use of
         <xref target="RFC2198"/> redundant encoding MAY be used, but note that
@@ -148,7 +150,7 @@
       </section>
 
       <section title="Negotiating Support">
-        <t>Support for redundant encoding MUST be indicated by offering "red" as
+        <t>Support for redundant encoding SHOULD be indicated by offering "red" as
         a supported payload type in the offer. Answerers can reject the use of
         redundant encoding by not including "red" as a supported payload type in
         the answer.</t>
