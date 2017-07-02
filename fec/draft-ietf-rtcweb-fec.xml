@@ -173,10 +173,13 @@
       be activated if network conditions warrant it, or upon explicit application request.
       </t>
       <section title="Recommended Mechanism">
-        <t>For video content, use of a separate FEC stream with the RTP payload format
-        described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is RECOMMENDED.
+        <t>For video content, use of a separate FEC stream with the "flexfec"
+        RTP payload format described in
+        <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is RECOMMENDED.
         The receiver can demultiplex the incoming FEC stream by SSRC and correlate it
-        with the primary stream via the SSRC field present in the FEC header.
+        with the primary stream via the CSRC(s) present in the RTP header of
+        flexfec repair packets, or the SSRC field present in the FEC header of
+        flexfec retransmission packets.
         </t>
         <t>Support for protecting multiple primary streams with a single FEC stream is
         complicated by WebRTC's 1-m-line-per-stream policy,
@@ -231,10 +234,13 @@
       <t>Since use of FEC always causes redundant data to be transmitted, this
       will lead to less bandwidth available for the primary encoding when in a
       bandwidth-constrained environment. This is in contrast to methods like
-      RTX <xref target="RFC4588"/>, which only transmits redundant data when
+      RTX <xref target="RFC4588"/> or flexfec
+      <xref target="I-D.ietf-payload-flexible-fec-scheme"/> retransmissions,
+      which only transmit redundant data when
       necessary, at the cost of an extra roundtrip.</t>
-      <t>Given this, WebRTC implementations SHOULD consider using RTX instead
-      of FEC when RTT is low, and SHOULD only transmit the amount of FEC needed
+      <t>Given this, WebRTC implementations SHOULD consider using RTX or
+      flexfec retransmissions instead of FEC when RTT is low, and SHOULD
+      only transmit the amount of FEC needed
       to protect against the observed packet loss (which can be determined,
       e.g., by monitoring transmit packet loss data from RTCP Receiver Reports
       <xref target="RFC3550"/>), unless the application indicates it is willing
