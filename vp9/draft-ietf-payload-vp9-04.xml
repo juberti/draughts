@@ -212,7 +212,7 @@
 
 	  <t>Temporal and spatial scalability layers are associated with
 	  non-negative integer IDs. The lowest layer of either type has an
-	  ID of 0.</t>
+	  ID of 0, and is refered to as the "base" temporal or spatial layer.</t>
 
       <t>Layers are designed (and MUST be encoded) such that if
       any layer, and all higher layers, are removed from the bitstream
@@ -410,7 +410,8 @@ V:   | SS            |
           encoding a layer synchronization frame in response to an <xref target='I-D.ietf-avtext-lrr'>LRR</xref> message (see <xref target='LRR'/>).
           When P is set to zero, the T field (described below) MUST also
           be set to 0 (if present).  Note that the P bit does not
-          forbid inter-layer prediction within a picture.</t>
+          forbid intra-picture, inter-layer prediction from earlier
+          frames of the same picture, if any.</t>
 
           <t hangText="L:">Layer indices present.  When set to one,
           the one or two octets following the mandatory first octet and the PID
@@ -424,8 +425,12 @@ V:   | SS            |
           the mandatory first octet, the PID, and layer indices (if present) are 
           as described by "Reference indices" below.  This MUST only be set to 1 if the I 
           bit is also set to one; if the I bit is set to zero, then this MUST also be 
-          set to zero and ignored by receivers.  The value of this F bit CAN ONLY CHANGE 
-          on the first packet of a key picture.  This is a packet with the P bit
+          set to zero and ignored by receivers.  The value of this F
+          bit MUST only change 
+          on the first packet of a key picture.  A key picture is a
+          picture whose base spatial layer frame is a key frame, and
+          which thus completely resets the encoder state.  This
+          packet will have its P bit
           equal to zero, S or D bit (described below) equal to zero, and B bit (described below) 
           equal to 1.</t>
 
@@ -614,6 +619,35 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 		E bit set.  There is no mechanism for finer-grained
 		access to parts of a VP9 frame.</t>
       </section>
+
+	  <section title="Scalable encoding considerations">
+
+		<t>In addition to the use of reference frames, VP9 has several
+		additional forms of inter-frame dependencies, largely
+		involving probability tables for the entropy and tree
+		encoders.  In VP9 syntax, the syntax element
+		"error_resilient_mode" resets this additional inter-frame
+		data, allowing a frame's syntax to be decoded
+		independently.</t>
+
+		<t>Due to the requirements of scalable streams, a VP9 encoder
+		producing a scalable stream needs to ensure that a frame does
+		not depend on a previous frame (of the same or a previous
+		picture) that can legitimately be removed from the stream.
+		Thus, a frame that follows a removable frame (in full decode
+		order) MUST be encoded with "error_resilient_mode" to
+		true.</t>
+
+		<t>For spatially-scalable streams, this means that
+		"error_resilient_mode" needs to be turned on for the base
+		spatial layer; it can however be turned off for higher spatial
+		layers, assuming they are sent with inter-layer dependency
+		(i.e. with the "D" bit set).  For streams that are only
+		temporally-scalable without spatial scalability,
+		"error_resilient_mode" can additionally be turned off for any
+		picture that immediately follows a temporal layer 0 frame.</t>
+
+	  </section>
 
       <section title="Examples of VP9 RTP Stream">
 		<t>TODO</t>
