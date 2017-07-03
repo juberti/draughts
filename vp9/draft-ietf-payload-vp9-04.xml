@@ -16,7 +16,7 @@
 <!ENTITY lrr SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-payload-vp9-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-payload-vp9-04" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -216,25 +216,25 @@
 
       <t>Layers are designed (and MUST be encoded) such that if
       any layer, and all higher layers, are removed from the bitstream
-      along any of the two dimensions, the remaining bitstream is
+      along either of the two dimensions, the remaining bitstream is
       still correctly decodable.</t>
 
-      <t>For terminology, this document uses the term "layer frame" to refer
+      <t>For terminology, this document uses the term "frame" to refer
       to a single encoded VP9 frame for a particular resolution/quality, and
-      "super frame" to refer to all the representations (layer frames) at a single
-      instant in time.  A super frame thus consists of one or more layer frames,
+      "picture" to refer to all the representations (frames) at a single
+      instant in time.  A picture thus consists of one or more frames,
       encoding different spatial layers.</t>
 
-      <t>Within a super frame, a layer frame with spatial layer ID equal to S,
-      where S > 0, can depend on a layer frame of the same super frame with a lower spatial layer ID.  This
+      <t>Within a picture, a frame with spatial layer ID equal to S,
+      where S > 0, can depend on a frame of the same picture with a lower spatial layer ID.  This
       "inter-layer" dependency can result in additional coding gain
       compared to the case where only 
       traditional "inter-picture" dependency is used, where a frame depends on previously
       coded frame in time.  For simplicity, this payload format assumes that,
-      within a super frame and if inter-layer dependency is used, a spatial layer S frame
+      within a picture and if inter-layer dependency is used, a spatial layer S frame
       can only depend on spatial layer S-1 frame when S > 0.  Additionally, if
       inter-picture dependency is used, spatial layer S frame is assumed to only
-      depend on previously coded spatial layer S frame.</t>
+      depend on a previously coded spatial layer S frame.</t>
 
       <t>Given above simplifications for inter-layer and inter-picture
       dependencies, a flag (the D bit described below) is used to indicate whether a
@@ -243,7 +243,7 @@
       spatial layer frame in order to determine its decodability.  Two modes
       of describing the inter-picture dependency structure are possible:
       "flexible mode" and "non-flexible mode".  An encoder can only switch
-      between the two on the very first packet of a key frame with temporal 
+      between the two on the first packet of a key frame with temporal 
       layer ID equal to 0.</t>
 
       <t>In flexible mode, each packet can contain up to 3 reference
@@ -257,11 +257,15 @@
       hierarchies and patterns which are changing dynamically.</t>
 
       <t>In non-flexible mode, the inter-picture dependency (the reference
-      indices) of a group of frames (GOF) MUST be pre-specified as part of the 
+      indices) of a Picture Group (PG) MUST be pre-specified as part of the 
       scalability structure (SS) data.  In this mode, each 
-      packet MUST have an index to refer to one of the described frames
-      in the GOF, from which the frames referenced by the frame transmitted in the current packet 
+      packet MUST have an index to refer to one of the described pictures
+      in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.</t>
+
+	  <t>(Editor's Note: A "Picture Group", as used in this document,
+	  is not the same thing as a "Group of Pictures" as traditionally
+	  used in video coding.  Suggestions for better terminology are welcome.)</t>
 
       <t>The SS data can also be used to specify the resolution of each
       spatial layer present in the VP9 stream for both flexible and non-flexible modes.</t>
@@ -317,13 +321,13 @@
 
         <t><list style="hanging">
             <t hangText="Marker bit (M):">MUST be set to 1 for the final packet
-            of the highest spatial layer frame (the final packet of the super frame),
-            and 0 otherwise.  Unless spatial scalability is in use for this super frame,
+            of the highest spatial layer frame (the final packet of the picture),
+            and 0 otherwise.  Unless spatial scalability is in use for this picture,
             this will have the same value as the E bit described below.  Note this bit
             MUST be set to 1 for the target spatial layer frame 
             if a stream is being rewritten to remove higher spatial layers.</t>
 			
-			<t hangText="Payload Type (TP):">In line with the policy
+			<t hangText="Payload Type (PT):">In line with the policy
 			  in Section 3 of <xref target='RFC3551'/>, applications using the VP9 RTP payload
 			  profile MUST assign a dynamic payload type number to be
 			  used in each RTP session and provide a mechanism to
@@ -399,12 +403,14 @@ V:   | SS            |
           OPTIONAL PID MUST be present after the mandatory first octet and
           specified as below. Otherwise, PID MUST NOT be present.</t>
 
-          <t hangText="P:">Inter-picture predicted layer frame.  When set to zero, the
-          layer frame does not utilize inter-picture prediction.  In this case,
-          up-switching to current spatial layer's frame is possible from directly
+          <t hangText="P:">Inter-picture predicted picture.  When set to zero, the
+          picture does not utilize inter-picture prediction.  In this case,
+          up-switching to a current spatial layer's frame is possible from directly
           lower spatial layer frame.  P SHOULD also be set to zero when
           encoding a layer synchronization frame in response to an <xref target='I-D.ietf-avtext-lrr'>LRR</xref> message (see <xref target='LRR'/>).
-          When P is set to zero, the T bit (described below) MUST also be set to 0 (if present).</t>
+          When P is set to zero, the T field (described below) MUST also
+          be set to 0 (if present).  Note that the P bit does not
+          forbid inter-layer prediction within a picture.</t>
 
           <t hangText="L:">Layer indices present.  When set to one,
           the one or two octets following the mandatory first octet and the PID
@@ -419,21 +425,21 @@ V:   | SS            |
           as described by "Reference indices" below.  This MUST only be set to 1 if the I 
           bit is also set to one; if the I bit is set to zero, then this MUST also be 
           set to zero and ignored by receivers.  The value of this F bit CAN ONLY CHANGE 
-          on the very first packet of a key picture.  This is a packet with the P bit
+          on the first packet of a key picture.  This is a packet with the P bit
           equal to zero, S or D bit (described below) equal to zero, and B bit (described below) 
           equal to 1.</t>
 
-          <t hangText="B:">Start of a layer frame. MUST be set to 1 if
+          <t hangText="B:">Start of a frame. MUST be set to 1 if
           the first payload octet of the RTP packet is the beginning of a
-          new VP9 layer frame, and MUST NOT be 1 otherwise. Note that this
-          layer frame might not be the very first layer frame of a super frame.</t>
+          new VP9 frame, and MUST NOT be 1 otherwise. Note that this
+          frame might not be the first frame of a picture.</t>
 
-          <t hangText="E:">End of a layer frame.  MUST be set to 1 for the final
-          RTP packet of a VP9 layer frame, and 0 otherwise.  This enables a
-          decoder to finish decoding the layer frame, where it otherwise may need to
-          wait for the next packet to explicitly know that the layer frame is complete.
-          Note that, if spatial scalability is in use, more layer frames from the
-          same super frame may follow; see the description of the M bit above.</t>
+          <t hangText="E:">End of a frame.  MUST be set to 1 for the final
+          RTP packet of a VP9 frame, and 0 otherwise.  This enables a
+          decoder to finish decoding the frame, where it otherwise may need to
+          wait for the next packet to explicitly know that the frame is complete.
+          Note that, if spatial scalability is in use, more frames from the
+          same picture may follow; see the description of the M bit above.</t>
 
           <t hangText="V:">Scalability structure (SS) data present. When set
           to one, the OPTIONAL SS data MUST be present in the payload descriptor.
@@ -461,10 +467,10 @@ V:   | SS            |
           session.</t>
 
           <t>In the non-flexible mode (when the F bit is set to 0), this PID is used
-          as an index to the GOF specified in the SS data bleow.  In this mode, the 
-          PID of the key frame corresponds to the very first specified frame in the
-          GOF.  Then subsequent PIDs are mapped to subsequently specified frames in 
-          the GOF (modulo N_G, specified in the SS data below), respectively.</t>
+          as an index to the picture group (PG) specified in the SS data below.  In this mode, the 
+          PID of the key frame corresponds to the first specified frame in the
+          PG.  Then subsequent PIDs are mapped to subsequently specified frames in 
+          the PG (modulo N_G, specified in the SS data below), respectively.</t>
 
           <t hangText="Layer indices:">This information is optional but recommended
           whenever encoding with layers.  For both flexible and non-flexible modes,
@@ -472,7 +478,7 @@ V:   | SS            |
           as shown both in <xref target="figureVP9payloadDescriptor"/> and <xref target="figureVP9payloadDescriptorNonFlexible"/>.
           Additionally, a bit (U) is used to indicate that the current frame is a
           "switching up point" frame.  Another bit (D) is used to indicate whether inter-layer 
-          prediction is used for the current layer frame.</t>
+          prediction is used for the current frame.</t>
 
           <t>In the non-flexible mode (when the F bit is set to 0), another octet is used
           to represent temporal layer 0 index (TL0PICIDX), as depicted in <xref target="figureVP9payloadDescriptorNonFlexible"/>.
@@ -483,26 +489,26 @@ V:   | SS            |
 
           <list style="hanging">
             <t hangText="T:">The temporal layer ID of current frame.  In the case of non-flexible mode,
-            if PID is mapped to a frame in a specified GOF, then 
-            the value of T MUST match the corresponding T value of the mapped frame in the GOF.</t>
+            if PID is mapped to a picture in a specified PG, then 
+            the value of T MUST match the corresponding T value of the mapped picture in the PG.</t>
 
-            <t hangText="U:">Switching up point.  If this bit is set to 1 for the current frame with temporal
+            <t hangText="U:">Switching up point.  If this bit is set to 1 for the current picture with temporal
             layer ID equal to T, then "switch up" to a higher frame rate is possible as subsequent higher temporal
-            layer frames will not depend on any frame before the current frame (in coding time) with temporal layer
+            layer pictures will not depend on any picture before the current picture (in coding order) with temporal layer
             ID greater than T.</t>
 
             <t hangText="S:">The spatial layer ID of current frame.  Note that frames with spatial layer S > 0
-            may be dependent on decoded spatial layer S-1 frame within the same super frame.</t>
+            may be dependent on decoded spatial layer S-1 frame within the same picture.</t>
 
             <t hangText="D:">Inter-layer dependency used.  MUST be set to one if current spatial layer S frame
-            depends on spatial layer S-1 frame of the same super frame.  MUST only be set to zero if current spatial
-            layer S frame does not depend on spatial layer S-1 frame of the same super frame.  For the base layer frame
+            depends on spatial layer S-1 frame of the same picture.  MUST only be set to zero if current spatial
+            layer S frame does not depend on spatial layer S-1 frame of the same picture.  For the base layer frame
             with S equal to 0, this D bit MUST be set to zero.</t>
 
             <t hangText="TL0PICIDX:">8 bits temporal layer zero index. TL0PICIDX is only present
             in the non-flexible mode (F = 0).  This is a running index for the temporal
-            base layer frames, i.e., the frames with T set to 0.  If T is larger than 0,
-            TL0PICIDX indicates which temporal base layer frame the current frame depends on.  TL0PICIDX MUST be
+            base layer pictures, i.e., the pictures with T set to 0.  If T is larger than 0,
+            TL0PICIDX indicates which temporal base layer picture the current picture depends on.  TL0PICIDX MUST be
             incremented when T is equal to 0.  The index SHOULD start on a random number, and MUST restart
             at 0 after reaching the maximum number 255.</t>
           </list></t>
@@ -514,9 +520,9 @@ V:   | SS            |
           set to zero, then no reference index is specified.
           <list style="hanging">
             <t hangText="P_DIFF:">The reference index (in 7 bits) specified as the
-            relative PID from the current frame.  For example, when P_DIFF=3
-            on a packet containing the frame with PID 112 means
-            that the frame refers back to the frame with PID
+            relative PID from the current picture.  For example, when P_DIFF=3
+            on a packet containing the picture with PID 112 means
+            that the picture refers back to the picture with PID
             109. This calculation is done modulo the size of the PID field,
             i.e., either 7 or 15 bits.</t>
             <t hangText="N:">1 if there is additional P_DIFF following the current P_DIFF.</t>
@@ -526,7 +532,7 @@ V:   | SS            |
       <section anchor="VP9payloadDescriptorSS" title="Scalability Structure (SS):">
         <t>The scalability structure (SS) data describes the resolution of
         each layer frame within a super frame as well as the inter-picture dependencies
-        for a group of frames (GOF).  If the VP9 payload descriptor's "V"
+        for a picture group (PG).  If the VP9 payload descriptor's "V"
         bit is set, the SS data is present in the position indicated in
         <xref target="figureVP9payloadDescriptor"/> and <xref target="figureVP9payloadDescriptorNonFlexible"/>.</t>
         <figure anchor="figureVP9ScalabilityStructure">
@@ -560,26 +566,27 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
           (2 octets) MUST be present for each layer frame.  Otherwise, the
           resolution MUST NOT be present.</t>
 
-          <t hangText="G:">GOF description present flag.</t>
+          <t hangText="G:">PG description present flag.</t>
 
           <t hangText="-:">Bit reserved for future use. MUST be set to
           zero and MUST be ignored by the receiver.</t>
 
-          <t hangText="N_G:">N_G indicates the number of frames in a GOF.
+          <t hangText="N_G:">N_G indicates the number of pictures in a
+          Picture Group (PG).
           If N_G is greater than 0, then the SS data allows
           the inter-picture dependency structure of the VP9 stream to
           be pre-declared, rather than indicating it on the fly with
           every packet.  If N_G is greater than 0, then for N_G
-          pictures in the GOF, each frame's temporal layer ID (T), switch up point (U), 
+          pictures in the PG, each picture's temporal layer ID (T), switch up point (U), 
           and the R reference indices (P_DIFFs) are specified.</t>
 
-          <t>The very first frame specified in the GOF MUST have T set to 0.</t>
+          <t>The first picture specified in the PG MUST have T set to 0.</t>
 
           <t>G set to 0 or N_G set to 0 indicates that either there is only one temporal
           layer or no fixed inter-picture dependency information is present
           going forward in the bitstream.</t>
 
-          <t>Note that for a given super frame, all layer frames follow the
+          <t>Note that for a given picture, all frames follow the
           same inter-picture dependency structure.  However, the frame rate
           of each spatial layer can be different from each other and this can
           be controlled with the use of the D bit described above.  The 
@@ -590,8 +597,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         <t>In a scalable stream sent with a fixed pattern, the SS data
         SHOULD be included in the first packet of every key frame. This is a packet 
         with P bit equal to zero, S or D bit equal to zero, and B bit equal to 1.
-        The SS data MUST only be changed on the frame that corresponds to the very 
-        first frame specified in the previous SS data's GOF
+        The SS data MUST only be changed on the picture that corresponds to the 
+        first picture specified in the previous SS data's PG
         (if the previous SS data's N_G was greater than 0).</t>
       </section>
     </section>
@@ -604,7 +611,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 		<t>VP9 frames are fragmented into packets, in RTP sequence
 		number order, beginning with a
 		packet with the B bit set, and ending with a packet with the
-		RTP marker bit M set.  There is no mechanism for finer-grained
+		E bit set.  There is no mechanism for finer-grained
 		access to parts of a VP9 frame.</t>
       </section>
 
@@ -615,7 +622,6 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
     <section anchor="Feedback" title="Feedback Messages">
       <section anchor="RPSI" title="Reference Picture Selection Indication (RPSI)">
-		<t>TODO: Update to indicate which frame within the picture.</t>
         <t>The reference picture selection index is a payload-specific
         feedback message defined within the RTCP-based feedback format. The
         RPSI message is generated by a receiver and can be used in two ways.
@@ -633,6 +639,10 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
         simply by sending an RPSI message back to the sender. The message body
         (i.e., the "native RPSI bit string" in <xref target="RFC4585"/>) is
         simply the PictureID of the received frame.</t>
+
+		<t>Note: because all frames of the same picture must have the
+		same inter-picture reference structure, there is no need for a
+		message to specify which frame is being selected.</t>
       </section>
 
       <section anchor="SLI" title="Slice Loss Indication (SLI)">
