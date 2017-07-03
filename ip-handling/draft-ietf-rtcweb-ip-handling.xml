@@ -52,12 +52,14 @@ ipr="trust200902">
   <middle>
     <section title="Introduction">
 
-      <t>As a technology that supports peer-to-peer connections, WebRTC may
-      send data over different network paths than the path used for Hypertext
-      Transfer Protocol (HTTP)
-      <xref target="RFC7230" /> traffic. This may allow a web application to
-      learn additional information about the user, which may be problematic in
-      certain cases. This document summarizes the concerns, and makes
+      <t>One of WebRTC's key features is its support of peer-to-peer
+      connections. However, when establishing such a connection,
+      which involves connectivity tests using various IP addresses,
+      WebRTC may allow a web application to learn additional information about
+      the user compared to an application that only uses the
+      Hypertext Transfer Protocol (HTTP)
+      <xref target="RFC7230" />. This may be problematic in certain cases.
+      This document summarizes the concerns, and makes
       recommendations on how WebRTC implementations should best handle the
       tradeoff between privacy and media performance.</t>
     </section>
