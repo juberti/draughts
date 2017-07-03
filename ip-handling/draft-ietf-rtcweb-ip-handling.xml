@@ -75,10 +75,13 @@ ipr="trust200902">
       <t>In order to establish a peer-to-peer connection, WebRTC implementations
       use Interactive Connectivity Establishment (ICE)
       <xref target="RFC5245" />, which gathers and exchanges all the IP
-      addresses it can discover, in order to check the connectivity of each
-      local-address-remote-address pair, and select the best of those pairs.
+      addresses it can discover, using techniques like
+      Session Traversal Utilities for NAT (STUN) <xref target="RFC5389" /> and
+      Traversal Using Relays around NAT (TURN) <xref target="RFC5766" />,
+      in order to check the connectivity of each
+      local-address-remote-address pair and select the best one.
       The addresses that are gathered usually consist of
-      an endpoint's private physical/virtual addresses, and its public Internet
+      an endpoint's private physical/virtual addresses and its public Internet
       addresses.</t>
 
       <t>These addresses are exposed upwards to the web application, so that
@@ -105,7 +108,7 @@ ipr="trust200902">
         application proxy", as defined in
         <xref target="RFC1919" />, Section 3), but direct access to the
         Internet is also supported, WebRTC's STUN
-        <xref target="RFC5389" /> checks will bypass the proxy and reveal the
+        checks will bypass the proxy and reveal the
         public address of the client.</t>
       </list></t>
 
