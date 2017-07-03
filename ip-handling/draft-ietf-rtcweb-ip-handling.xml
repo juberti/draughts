@@ -147,8 +147,8 @@ ipr="trust200902">
         even when binding to the wildcard addresses as mentioned above. The
         appropriate addresses here can be discovered by the common trick of
         binding sockets to the wildcard addresses, connect()ing those sockets
-        to some well-known public IP address (one particular example being
-        "8.8.8.8"), and then reading the bound local addresses via
+        to some well-known public IP address,
+        and then reading the bound local addresses via
         getsockname(). This approach requires no data exchange; it simply
         provides a mechanism for applications to retrieve the desired
         information from the kernel routing table.</t>
