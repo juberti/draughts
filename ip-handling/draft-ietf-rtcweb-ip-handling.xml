@@ -72,13 +72,12 @@ ipr="trust200902">
     </section>
     <section title="Problem Statement">
 
-      <t>WebRTC enables real-time peer-to-peer communications by enumerating
-      network interfaces and discovering the best route through the Interactive
-      Connectivity Establishment (ICE)
-      <xref target="RFC5245" /> protocol. During the ICE process, the peers
-      involved in a session gather and exchange all the IP addresses they can
-      discover, so that the connectivity of each IP pair can be checked, and
-      the best path chosen. The addresses that are gathered usually consist of
+      <t>In order to establish a peer-to-peer connection, WebRTC implementations
+      use Interactive Connectivity Establishment (ICE)
+      <xref target="RFC5245" />, which gathers and exchanges all the IP
+      addresses it can discover, in order to check the connectivity of each
+      local-address-remote-address pair, and select the best of those pairs.
+      The addresses that are gathered usually consist of
       an endpoint's private physical/virtual addresses, and its public Internet
       addresses.</t>
 
