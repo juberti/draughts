@@ -164,10 +164,12 @@
       </section>
 
       <section title="Negotiating Support">
-        <t>Support for redundant encoding SHOULD be indicated by offering "red" as
-        a supported payload type in the offer. Answerers can reject the use of
-        redundant encoding by not including "red" as a supported payload type in
-        the answer.</t>
+        <t>Support for redundant encoding SHOULD be indicated by including
+        audio/red <xref target="RFC2198"/> as
+        a supported media type in the SDP offer <xref target="RFC3264"/>.
+        Answerers can reject the use of
+        redundant encoding by not including the audio/red media type in the
+        SDP answer.</t>
         <t>Support for codec-specific FEC mechanisms are typically indicated via
         "a=fmtp" parameters.</t>
         <t>For Opus, a receiver MUST indicate that it is prepared to use
@@ -252,7 +254,7 @@
       e.g. <xref target="RFC5109"/>.</t>
     </section>
 
-    <section anchor="adaptive-fec" title="Adaptive Use of FEC">
+    <section title="Adaptive Use of FEC" anchor="adaptive-fec">
       <t>Since use of FEC always causes redundant data to be transmitted, this
       will lead to less bandwidth available for the primary encoding when in a
       bandwidth-constrained environment. This is in contrast to methods like
@@ -267,6 +269,12 @@
       e.g., by monitoring transmit packet loss data from RTCP Receiver Reports
       <xref target="RFC3550"/>), unless the application indicates it is willing
       to pay a quality penalty to proactively avoid losses.</t>
+      <t>Note that when probing bandwidth, i.e., speculatively sending
+      extra data to determine if additional link capacity exists, FEC
+      SHOULD be used in all cases. Given that extra data is going to be
+      sent regardless, it makes sense to have that data protect the
+      primary payload; in addition, FEC can be applied in a way that increases
+      bandwidth only modestly, which is necessary when probing.</t>
       <t>When using FEC with layered codecs, e.g., <xref target="RFC6386"/>,
       where only base layer frames are critical to the decoding of future
       frames, implementations SHOULD only apply FEC to these base layer frames.
@@ -310,6 +318,7 @@
     <references title="Normative References">
       <?rfc include='reference.RFC.2119.xml'?>
       <?rfc include='reference.RFC.2198.xml'?>
+      <?rfc include='reference.RFC.3264.xml'?>
       <?rfc include='reference.RFC.4867.xml'?>
       <?rfc include='reference.RFC.5956.xml'?>
       <?rfc include='reference.RFC.7587.xml'?>
@@ -343,6 +352,12 @@
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -06: <list style="symbols">
+        <t>Placeholder</t>
+      </list></t>
+      <t>Changes in draft -05: <list style="symbols">
+        <t>No changes.</t>
+      </list></t>
       <t>Changes in draft -04: <list style="symbols">
         <t>Discussion of layered codecs.</t>
         <t>Discussion of RTX.</t>
