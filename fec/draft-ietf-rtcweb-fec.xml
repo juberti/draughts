@@ -70,8 +70,11 @@
           <t>This approach, as described in <xref target="RFC5956"/>, Section 4.3,
             sends FEC packets as an
             independent SSRC-multiplexed stream, with its own SSRC and payload type.
-            While by far the most flexible, each FEC packet will have its own
-            IP+UDP+RTP+FEC header, leading to additional overhead of the FEC stream.
+            While this approach can protect multiple
+            packets of the primary encoding with a single FEC packet, each
+            FEC packet will have its own IP+UDP+RTP+FEC header, and this
+            overhead can be excessive in some cases, e.g., when protecting
+            each primary packet with a FEC packet.
           </t>
           <t>This approach allows for recovery of entire RTP packets, including
           the full RTP header.</t>
@@ -164,12 +167,14 @@
       </section>
 
       <section title="Negotiating Support">
-        <t>Support for redundant encoding SHOULD be indicated by including
+        <t>Support for redundant encoding of a given RTP stream SHOULD be
+        indicated by including
         audio/red <xref target="RFC2198"/> as
-        a supported media type in the SDP offer <xref target="RFC3264"/>.
+        an additional supported media type for the associated m= section
+        in the SDP offer <xref target="RFC3264"/>.
         Answerers can reject the use of
         redundant encoding by not including the audio/red media type in the
-        SDP answer.</t>
+        corresponding m= section in the SDP answer.</t>
         <t>Support for codec-specific FEC mechanisms are typically indicated via
         "a=fmtp" parameters.</t>
         <t>For Opus, a receiver MUST indicate that it is prepared to use
@@ -191,40 +196,42 @@
       be activated if network conditions warrant it, or upon explicit application request.
       </t>
       <section title="Recommended Mechanism">
-        <t>Video frames, due to their size, often require multiple RTP packets,
-        and, as discussed above, a separate FEC stream can protect multiple
+        <t>Video frames, due to their size, often require multiple RTP packets.
+        As discussed above, a separate FEC stream can protect multiple
         packets with a single FEC packet. In addition, the "flexfec" FEC
         mechanism described in
-        <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is capable of
+        <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is also capable of
         protecting multiple RTP streams via a single
-        FEC stream. As a result, for video content, use of a separate FEC
+        FEC stream, including all the streams that are part of a
+        BUNDLE <xref target="I-D.ietf-mmusic-sdp-bundle-negotiation"/> group.
+        As a result, for video content, use of a separate FEC
         stream with the flexfec RTP payload format is RECOMMENDED.
         </t>
         <t>To process the incoming FEC stream, the receiver can demultiplex it by SSRC,
-        and then correlate it with the primary stream via the CSRC(s) present in the RTP header of flexfec repair packets, or the SSRC field present in the FEC header of
-        flexfec retransmission packets.
+        and then correlate it with the appropriate primary stream(s) via the CSRC(s) present in the RTP header of flexfec repair packets, or the SSRC field present in the FEC header of flexfec retransmission packets.
         </t>
-        <t>A flexfec FEC stream is capable of protecting all the RTP streams
-        in a BUNDLE <xref target="bundle"/> group, as they are all part the
-        same RTP session, without any explicit signaling. This allows for
-        for efficient FEC encoding in multi-stream scenarios.</t>
       </section>
       <section title="Negotiating Support">
-        <t>To offer support for a SSRC-multiplexed FEC stream that will protect
-          a given primary stream, the offerer MUST include the
-          formats supported for the primary stream, as well as one of the
-          formats described in
-          <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1.</t>
+        <t>Support for a SSRC-multiplexed flexfec stream to protect a
+          given RTP stream SHOULD be indicated by
+          including one of the formats described in
+          <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1,
+          as an additional supported media type for the associated m= section
+          in the SDP offer
+          <xref target="RFC3264"/>. As mentioned above, when BUNDLE is
+          used, only a single flexfec repair stream will be created for each
+          BUNDLE group, even if flexfec is negotiated for each primary
+          stream.
+        </t>
+        <t>Answerers can reject the use of SSRC-multiplexed FEC, by not
+          including the offered FEC formats in the corresponding m= section
+          in the SDP answer.</t>
         <t>Use of FEC-only m-lines, and grouping using the SDP group mechanism
           as described in <xref target="RFC5956"/>, Section 4.1
           is not currently defined for WebRTC, and SHOULD NOT be offered.</t>
-        <t>Answerers can reject the use of SSRC-multiplexed FEC, by not
-          including FEC formats in the answer.</t>
         <t>Answerers SHOULD reject any FEC-only m-lines, unless they
         specifically know how to handle such a thing in a WebRTC context (perhaps
-        defined by a future version of the WebRTC specifications). This ensures
-        that implementations will not malfunction when said future version of WebRTC
-        enables offers of FEC-only m-lines.</t>
+        defined by a future version of the WebRTC specifications).</t>
       </section>
     </section>
 
@@ -336,6 +343,7 @@
       <?rfc include='reference.RFC.6464.xml'?>
       <?rfc include='reference.RFC.6465.xml'?>
       <?rfc include='reference.RFC.6716.xml'?>
+      <?rfc include='reference.I-D.ietf-mmusic-sdp-bundle-negotiation'?>
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
       <reference anchor="TS.26114">
         <front>
