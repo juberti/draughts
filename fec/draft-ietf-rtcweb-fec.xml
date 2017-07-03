@@ -189,21 +189,27 @@
       be activated if network conditions warrant it, or upon explicit application request.
       </t>
       <section title="Recommended Mechanism">
-        <t>For video content, use of a separate FEC stream with the "flexfec"
-        RTP payload format described in
-        <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is RECOMMENDED.
-        The receiver can demultiplex the incoming FEC stream by SSRC and correlate it
-        with the primary stream via the CSRC(s) present in the RTP header of
-        flexfec repair packets, or the SSRC field present in the FEC header of
+        <t>Video frames, due to their size, often require multiple RTP packets,
+        and, as discussed above, a separate FEC stream can protect multiple
+        packets with a single FEC packet. In addition, the "flexfec" FEC
+        mechanism described in
+        <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is capable of
+        protecting multiple RTP streams via a single
+        FEC stream. As a result, for video content, use of a separate FEC
+        stream with the flexfec RTP payload format is RECOMMENDED.
+        </t>
+        <t>To process the incoming FEC stream, the receiver can demultiplex it by SSRC,
+        and then correlate it with the primary stream via the CSRC(s) present in the RTP header of flexfec repair packets, or the SSRC field present in the FEC header of
         flexfec retransmission packets.
         </t>
-        <t>Support for protecting multiple primary streams with a single FEC stream is
-        complicated by WebRTC's 1-m-line-per-stream policy,
-        which does not allow for a m-line dedicated specifically to FEC.</t>
+        <t>A flexfec FEC stream is capable of protecting all the RTP streams
+        in a BUNDLE <xref target="bundle"/> group, as they are all part the
+        same RTP session, without any explicit signaling. This allows for
+        for efficient FEC encoding in multi-stream scenarios.</t>
       </section>
       <section title="Negotiating Support">
-        <t>To offer support for a SSRC-multiplexed FEC stream that is
-          associated with a given primary stream, the offerer MUST offer the
+        <t>To offer support for a SSRC-multiplexed FEC stream that will protect
+          a given primary stream, the offerer MUST include the
           formats supported for the primary stream, as well as one of the
           formats described in
           <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1.</t>
