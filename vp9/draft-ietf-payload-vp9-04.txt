@@ -77,22 +77,23 @@ Table of Contents
      4.5.  Scalable encoding considerations  . . . . . . . . . . . .  12
      4.6.  Examples of VP9 RTP Stream  . . . . . . . . . . . . . . .  13
        4.6.1.  Reference picture use for scalable structure  . . . .  13
-   5.  Feedback Messages . . . . . . . . . . . . . . . . . . . . . .  14
+   5.  Feedback Messages and Header Extensions . . . . . . . . . . .  14
      5.1.  Reference Picture Selection Indication (RPSI) . . . . . .  14
      5.2.  Slice Loss Indication (SLI) . . . . . . . . . . . . . . .  14
      5.3.  Full Intra Request (FIR)  . . . . . . . . . . . . . . . .  15
      5.4.  Layer Refresh Request (LRR) . . . . . . . . . . . . . . .  15
+     5.5.  Frame Marking . . . . . . . . . . . . . . . . . . . . . .  16
    6.  Payload Format Parameters . . . . . . . . . . . . . . . . . .  16
      6.1.  Media Type Definition . . . . . . . . . . . . . . . . . .  16
-     6.2.  SDP Parameters  . . . . . . . . . . . . . . . . . . . . .  17
-       6.2.1.  Mapping of Media Subtype Parameters to SDP  . . . . .  17
+     6.2.  SDP Parameters  . . . . . . . . . . . . . . . . . . . . .  18
+       6.2.1.  Mapping of Media Subtype Parameters to SDP  . . . . .  18
        6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  18
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  19
    8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  19
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  19
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  19
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  19
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  20
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  20
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  21
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21
 
 1.  Introduction
@@ -103,7 +104,6 @@ Table of Contents
    both in peer-to-peer and video conferencing applications.
 
    TODO: VP9 description.  Please see [VP9-BITSTREAM].
-
 
 
 
@@ -730,7 +730,7 @@ Uberti, et al.           Expires January 4, 2018               [Page 13]
 Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
-5.  Feedback Messages
+5.  Feedback Messages and Header Extensions
 
 5.1.  Reference Picture Selection Indication (RPSI)
 
@@ -816,17 +816,16 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
 
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
-               +-------------+-----------------+
-               |  T  |R|  S  | RES             |
-               +-------------+-----------------+
+               +---------------+---------+-----+
+               |   RES   |  T  | RES     |  S  |
+               +---------------+---------+-----+
 
                                  Figure 6
 
-   Figure 6 shows the format of LRR's layer index field for VP9 streams.
-   This is designed to follow the same layout as the "L" byte of the VP9
-   payload header, which carries the stream's layer information.  The
-   "R" and "RES" fields MUST be set to 0 on transmission and ingnored on
-   reception.  See Section 4.2 for details on the T and S fields.
+   Figure 6 shows the format of LRR's layer index fields for VP9
+   streams.  The two "RES" fields MUST be set to 0 on transmission and
+   ingnored on reception.  See Section 4.2 for details on the T and S
+   fields.
 
    Identification of a layer refresh frame can be derived from the
    reference IDs of each frame by backtracking the dependency chain
@@ -834,6 +833,7 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
    referenced.  Therefore it's recommended for both the flexible and the
    non-flexible mode that, when upgrade frames are being encoded in
    response to a LRR, those packets should contain layer indices and the
+
 
 
 
@@ -856,6 +856,30 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
    the layer structure of the SS, thus periodic upgrade frames can be
    automatically identified by the picture ID.
 
+5.5.  Frame Marking
+
+   The Frame Marking RTP header extension [I-D.ietf-avtext-framemarking]
+   is a mechanism to provide information about frames of video streams
+   in a largely codec-independent manner.  However, for its extension
+   for scalable codecs, the specific manner in which codec layers are
+   identified needs to be specified specifically for each codec.  This
+   section defines how frame marking is used with VP9.
+
+       0                   1                   2                   3
+       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+      |  ID=2 |  L=2  |S|E|I|D|B|  T  |0|0|0|0|0|  S  |    TL0PICIDX  |
+      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+                                 Figure 7
+
+   When this header extension is used with VP9, the T and S fields MUST
+   match the values in the packet which the header extension is attached
+   to; see Section 4.2 for details on these fields.
+
+   See [I-D.ietf-avtext-framemarking] for explanations of the other
+   fields, which are generic.
+
 6.  Payload Format Parameters
 
    This payload format has two optional parameters.
@@ -866,6 +890,13 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
    following [RFC4855].
 
    Type name:  video
+
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 16]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
 
    Subtype name:  VP9
 
@@ -890,13 +921,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
          int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable
          of supporting 640x480 resolution) will support widths and
          heights up to 1552 pixels (97 macroblocks).
-
-
-
-Uberti, et al.           Expires January 4, 2018               [Page 16]
-
-Internet-Draft         RTP Payload Format for VP9              July 2017
-
 
    Encoding considerations:
       This media type is framed in RTP and contains binary data; see
@@ -923,6 +947,13 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
    Person & email address to contact for further information:
       TODO [Pick a contact]
 
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 17]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
    Intended usage:  COMMON
 
    Restrictions on usage:
@@ -944,15 +975,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
    Description Protocol (SDP) [RFC4566] as follows:
 
    o  The media name in the "m=" line of SDP MUST be video.
-
-
-
-
-
-Uberti, et al.           Expires January 4, 2018               [Page 17]
-
-Internet-Draft         RTP Payload Format for VP9              July 2017
-
 
    o  The encoding name in the "a=rtpmap" line of SDP MUST be VP9 (the
       media subtype).
@@ -976,6 +998,17 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
 6.2.2.  Offer/Answer Considerations
 
    TODO: Update this for VP9
+
+
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 18]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
 
 7.  Security Considerations
 
@@ -1002,14 +1035,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
    denial-of-service threat due to the receipt of pathological data.
    Nor does the RTP payload format contain any active content.
 
-
-
-
-Uberti, et al.           Expires January 4, 2018               [Page 18]
-
-Internet-Draft         RTP Payload Format for VP9              July 2017
-
-
 8.  Congestion Control
 
    Congestion control for RTP SHALL be used in accordance with RFC 3550
@@ -1030,7 +1055,23 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
 
 10.  References
 
+
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 19]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
 10.1.  Normative References
+
+   [I-D.ietf-avtext-framemarking]
+              Berger, E., Nandakumar, S., and M. Zanaty, "Frame Marking
+              RTP Header Extension", draft-ietf-avtext-framemarking-04
+              (work in progress), March 2017.
 
    [I-D.ietf-avtext-lrr]
               Lennox, J., Hong, D., Uberti, J., Holmer, S., and M.
@@ -1058,14 +1099,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
               10.17487/RFC4585, July 2006,
               <http://www.rfc-editor.org/info/rfc4585>.
 
-
-
-
-Uberti, et al.           Expires January 4, 2018               [Page 19]
-
-Internet-Draft         RTP Payload Format for VP9              July 2017
-
-
    [RFC4855]  Casner, S., "Media Type Registration of RTP Payload
               Formats", RFC 4855, DOI 10.17487/RFC4855, February 2007,
               <http://www.rfc-editor.org/info/rfc4855>.
@@ -1079,6 +1112,15 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
               Specifications and Registration Procedures", BCP 13, RFC
               6838, DOI 10.17487/RFC6838, January 2013,
               <http://www.rfc-editor.org/info/rfc6838>.
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 20]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
 
    [VP9-BITSTREAM]
               Grange, A., de Rivaz, P., and J. Hunt, "VP9 Bitstream &
@@ -1113,15 +1155,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2017
               Security Solution", RFC 7202, DOI 10.17487/RFC7202, April
               2014, <http://www.rfc-editor.org/info/rfc7202>.
 
-
-
-
-
-Uberti, et al.           Expires January 4, 2018               [Page 20]
-
-Internet-Draft         RTP Payload Format for VP9              July 2017
-
-
 Authors' Addresses
 
    Justin Uberti
@@ -1131,6 +1164,18 @@ Authors' Addresses
    USA
 
    Email: justin@uberti.name
+
+
+
+
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 21]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
    Stefan Holmer
@@ -1173,4 +1218,15 @@ Authors' Addresses
 
 
 
-Uberti, et al.           Expires January 4, 2018               [Page 21]
+
+
+
+
+
+
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2018               [Page 22]

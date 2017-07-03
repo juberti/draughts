@@ -14,6 +14,7 @@
 <!ENTITY rfc7201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7202.xml">
 <!ENTITY lrr SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
+<!ENTITY framemarking SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
 ]>
 <rfc category="std" docName="draft-ietf-payload-vp9-04" ipr="trust200902">
@@ -691,7 +692,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 	  </section>
     </section>
 
-    <section anchor="Feedback" title="Feedback Messages">
+    <section anchor="Feedback" title="Feedback Messages and Header Extensions">
       <section anchor="RPSI" title="Reference Picture Selection Indication (RPSI)">
         <t>The reference picture selection index is a payload-specific
         feedback message defined within the RTCP-based feedback format. The
@@ -773,17 +774,14 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
           <artwork><![CDATA[
             +---------------+---------------+
             |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
-            +-------------+-----------------+
-            |  T  |R|  S  | RES             |
-            +-------------+-----------------+
+            +---------------+---------+-----+
+            |   RES   |  T  | RES     |  S  |
+            +---------------+---------+-----+
           ]]></artwork>
 		</figure>
 
 		<t><xref target="figureLRRIndexFormat"/> shows the format
-		of LRR's layer index field for VP9 streams.  This is
-		designed to follow the same layout as the "L" byte
-		of the VP9 payload header, which carries the
-		stream's layer information.  The "R" and "RES"
+		of LRR's layer index fields for VP9 streams.  The two "RES" 
 		fields MUST be set to 0 on transmission and ingnored on
 		reception.  See <xref target="VP9payloadDescriptor"/> for
 		details on the T and S fields.</t>
@@ -808,6 +806,37 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 	  defined by the layer structure of the SS, thus periodic upgrade
 	  frames can be automatically identified by the picture ID.</t>
 	</section>
+
+	  <section title="Frame Marking">
+
+		<t>The <xref target="I-D.ietf-avtext-framemarking">Frame
+		Marking RTP header extension</xref> is a mechanism to provide
+		information about frames of video streams in a largely
+		codec-independent manner.  However, for its extension for
+		scalable codecs, the specific manner in which codec layers are
+		identified needs to be specified specifically for each codec.
+		This section defines how frame marking is used with VP9.</t>
+
+		<figure anchor="figureFramemarking">
+          <artwork><![CDATA[
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  ID=2 |  L=2  |S|E|I|D|B|  T  |0|0|0|0|0|  S  |    TL0PICIDX  |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          ]]></artwork>
+		</figure>
+
+		<t>When this header extension is used with VP9, the T and S
+		fields MUST match the values in the packet which the header
+		extension is attached to; see
+		<xref target="VP9payloadDescriptor" /> for
+		details on these fields.</t>
+
+		<t>See <xref target="I-D.ietf-avtext-framemarking" /> for
+		explanations of the other fields, which are generic.</t>
+
+	  </section>
 
     </section>
 
@@ -1026,6 +1055,8 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 	  &rfc5104;
 
 	  &lrr;
+
+	  &framemarking;
 
     </references>
 
