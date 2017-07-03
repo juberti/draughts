@@ -261,6 +261,13 @@
       make the situation worse, and can lead to significant degradation of the
       network.
       </t>
+      <t>As described in <xref target="RFC3711"/>, Section 10, the default
+      processing when using FEC with SRTP is to perform FEC followed by SRTP
+      at the sender, and SRTP followed by FEC at the receiver. This
+      ordering is used for all the SRTP Protection Profiles used in DTLS-SRTP
+      <xref target="RFC5763"/>, as described in <xref target="RFC5764"/>,
+      Section 4.1.2.
+      </t>
       <t>Additional security considerations for each individual FEC mechanism
       are enumerated in their respective documents.
       </t>
@@ -291,8 +298,11 @@
 
     <references title="Informative References">
       <?rfc include='reference.RFC.3550.xml'?>
+      <?rfc include='reference.RFC.3711.xml'?>
       <?rfc include='reference.RFC.4588.xml'?>
       <?rfc include='reference.RFC.5109.xml'?>
+      <?rfc include='reference.RFC.5763.xml'?>
+      <?rfc include='reference.RFC.5764.xml'?>
       <?rfc include='reference.RFC.6386.xml'?>
       <?rfc include='reference.RFC.6716.xml'?>
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
