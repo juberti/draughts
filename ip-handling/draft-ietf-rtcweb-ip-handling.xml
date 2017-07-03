@@ -106,7 +106,7 @@ ipr="trust200902">
         application proxy", as defined in
         <xref target="RFC1919" />, Section 3), but direct access to the
         Internet is also supported, WebRTC's STUN
-        <xref target="RFC5389" /> checks will bypass the proxy and reveal the
+        checks will bypass the proxy and reveal the
         public address of the client.</t>
       </list></t>
 
