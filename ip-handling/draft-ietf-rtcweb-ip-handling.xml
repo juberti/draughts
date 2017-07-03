@@ -168,8 +168,8 @@ ipr="trust200902">
         even when binding to the wildcard addresses as mentioned above. The
         appropriate addresses here can be discovered by the common trick of
         binding sockets to the wildcard addresses, connect()ing those sockets
-        to some well-known public IP address (one particular example being
-        "8.8.8.8"), and then reading the bound local addresses via
+        to some well-known public IP address,
+        and then reading the bound local addresses via
         getsockname(). This approach requires no data exchange; it simply
         provides a mechanism for applications to retrieve the desired
         information from the kernel routing table.</t>
@@ -264,11 +264,6 @@ ipr="trust200902">
         set of ICE candidates by checking for the presence of host candidates.
         If no host candidates are present, Mode 3 or 4 above is in use; this
         knowledge can be useful for diagnostic purposes.</t>
-
-        <t>Future versions of browsers may present an indicator to signify that
-        the page is using WebRTC to set up a peer-to-peer connection.
-        Applications MUST only use WebRTC in a fashion that is consistent with
-        user expectations.</t>
       </list></t>
     </section>
     <section title="Security Considerations">
