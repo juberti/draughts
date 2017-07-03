@@ -159,7 +159,7 @@
         those specified in <xref target="RFC6464"/> and <xref target="RFC6465"/>.
         Implementations SHOULD account for this and attempt to approximate
         this information, using an approach similar to those described in
-        <xref target="RFC2198"/>, Section 4, and <xref target="RFC646"/>,
+        <xref target="RFC2198"/>, Section 4, and <xref target="RFC6464"/>,
         Section 5.</t>
       </section>
 
