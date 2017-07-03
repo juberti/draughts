@@ -150,10 +150,12 @@
       </section>
 
       <section title="Negotiating Support">
-        <t>Support for redundant encoding SHOULD be indicated by offering "red" as
-        a supported payload type in the offer. Answerers can reject the use of
-        redundant encoding by not including "red" as a supported payload type in
-        the answer.</t>
+        <t>Support for redundant encoding SHOULD be indicated by including
+        audio/red <xref target="RFC2198"/> as
+        a supported media type in the SDP offer <xref target="RFC3264"/>.
+        Answerers can reject the use of
+        redundant encoding by not including the audio/red media type in the
+        SDP answer.</t>
         <t>Support for codec-specific FEC mechanisms are typically indicated via
         "a=fmtp" parameters.</t>
         <t>For Opus, a receiver MUST indicate that it is prepared to use
@@ -284,6 +286,7 @@
     <references title="Normative References">
       <?rfc include='reference.RFC.2119.xml'?>
       <?rfc include='reference.RFC.2198.xml'?>
+      <?rfc include='reference.RFC.3264.xml'?>
       <?rfc include='reference.RFC.4867.xml'?>
       <?rfc include='reference.RFC.5956.xml'?>
       <?rfc include='reference.RFC.7587.xml'?>
@@ -315,6 +318,11 @@
     </references>
 
     <section title="Change log">
+      <t>Changes in draft -06: <list style="symbols">
+      </list></t>
+      <t>Changes in draft -05: <list style="symbols">
+        <t>No changes.</t>
+      </list></t>
       <t>Changes in draft -04: <list style="symbols">
         <t>Discussion of layered codecs.</t>
         <t>Discussion of RTX.</t>
