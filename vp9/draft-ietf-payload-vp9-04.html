@@ -385,6 +385,7 @@
 <link href="#rfc.section.4.4" rel="Chapter" title="4.4 Frame Fragmentation"/>
 <link href="#rfc.section.4.5" rel="Chapter" title="4.5 Scalable encoding considerations"/>
 <link href="#rfc.section.4.6" rel="Chapter" title="4.6 Examples of VP9 RTP Stream"/>
+<link href="#rfc.section.4.6.1" rel="Chapter" title="4.6.1 Reference picture use for scalable structure"/>
 <link href="#rfc.section.5" rel="Chapter" title="5 Feedback Messages"/>
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Reference Picture Selection Indication (RPSI)"/>
 <link href="#rfc.section.5.2" rel="Chapter" title="5.2 Slice Loss Indication (SLI)"/>
@@ -493,7 +494,8 @@
 <li>4.4.   <a href="#rfc.section.4.4">Frame Fragmentation</a></li>
 <li>4.5.   <a href="#rfc.section.4.5">Scalable encoding considerations</a></li>
 <li>4.6.   <a href="#rfc.section.4.6">Examples of VP9 RTP Stream</a></li>
-</ul><li>5.   <a href="#rfc.section.5">Feedback Messages</a></li>
+<ul><li>4.6.1.   <a href="#rfc.section.4.6.1">Reference picture use for scalable structure</a></li>
+</ul></ul><li>5.   <a href="#rfc.section.5">Feedback Messages</a></li>
 <ul><li>5.1.   <a href="#rfc.section.5.1">Reference Picture Selection Indication (RPSI)</a></li>
 <li>5.2.   <a href="#rfc.section.5.2">Slice Loss Indication (SLI)</a></li>
 <li>5.3.   <a href="#rfc.section.5.3">Full Intra Request (FIR)</a></li>
@@ -526,7 +528,7 @@
 <p id="rfc.section.3.p.3">These features together enable an encoder to implement various forms of coarse-grained scalability, including temporal, spatial and quality scalability modes, as well as combinations of these, without the need for explicit scalable coding tools.</p>
 <p id="rfc.section.3.p.4">Temporal layers define different frame rates of video; spatial and quality layers define different and possibly dependent representations of a single input frame.  Spatial layers allow a frame to be encoded at different resolutions, whereas quality layers allow a frame to be encoded at the same resolution but at different qualities (and thus with different amounts of coding error).  VP9 supports quality layers as spatial layers without any resolution changes; hereinafter, the term "spatial layer" is used to represent both spatial and quality layers.</p>
 <p id="rfc.section.3.p.5">This payload format specification defines how such temporal and spatial scalability layers can be described and communicated.</p>
-<p id="rfc.section.3.p.6">Temporal and spatial scalability layers are associated with non-negative integer IDs. The lowest layer of either type has an ID of 0, and is refered to as the "base" temporal or spatial layer.</p>
+<p id="rfc.section.3.p.6">Temporal and spatial scalability layers are associated with non-negative integer IDs. The lowest layer of either type has an ID of 0, and is sometimes referred to as the "base" temporal or spatial layer.</p>
 <p id="rfc.section.3.p.7">Layers are designed (and MUST be encoded) such that if any layer, and all higher layers, are removed from the bitstream along either of the two dimensions, the remaining bitstream is still correctly decodable.</p>
 <p id="rfc.section.3.p.8">For terminology, this document uses the term "frame" to refer to a single encoded VP9 frame for a particular resolution/quality, and "picture" to refer to all the representations (frames) at a single instant in time.  A picture thus consists of one or more frames, encoding different spatial layers.</p>
 <p id="rfc.section.3.p.9">Within a picture, a frame with spatial layer ID equal to S, where S &gt; 0, can depend on a frame of the same picture with a lower spatial layer ID.  This "inter-layer" dependency can result in additional coding gain compared to the case where only traditional "inter-picture" dependency is used, where a frame depends on previously coded frame in time.  For simplicity, this payload format assumes that, within a picture and if inter-layer dependency is used, a spatial layer S frame can only depend on spatial layer S-1 frame when S &gt; 0.  Additionally, if inter-picture dependency is used, spatial layer S frame is assumed to only depend on a previously coded spatial layer S frame.</p>
@@ -577,7 +579,7 @@
   <dt>Payload Type (PT):</dt>
   <dd style="margin-left: 8">In line with the policy in Section 3 of <a href="#RFC3551">[RFC3551]</a>, applications using the VP9 RTP payload profile MUST assign a dynamic payload type number to be used in each RTP session and provide a mechanism to indicate the mapping.  See <a href="#SDPParameters">Section 6.2</a> for the mechanism to be used with the <a href="#RFC4566">Session Description Protocol (SDP)</a> <cite title="NONE">[RFC4566]</cite>.</dd>
   <dt>Timestamp:</dt>
-  <dd style="margin-left: 8">The RTP timestamp indicates the time when the input frame was sampled, at a clock rate of 90 kHz.  If the input frame is encoded with multiple layer frames, all of the layer frames of the super frame MUST have the same timestamp.</dd>
+  <dd style="margin-left: 8">The RTP timestamp indicates the time when the input frame was sampled, at a clock rate of 90 kHz.  If the input picture is encoded with multiple layer frames, all of the frames of the picture MUST have the same timestamp.</dd>
 </dl>
 <p id="rfc.section.4.1.p.2">The remaining RTP Fixed Header Fields (V, P, X, CC, sequence number, SSRC and CSRC identifiers) are used as specified in Section 5.1 of <a href="#RFC3550">[RFC3550]</a>.</p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#VP9payloadDescriptor" id="VP9payloadDescriptor">VP9 Payload Description</a></h1>
@@ -659,12 +661,12 @@ V:   | SS            |
   <dt></dt>
   <dd style="margin-left: 8">In the non-flexible mode (when the F bit is set to 0), another octet is used to represent temporal layer 0 index (TL0PICIDX), as depicted in <a href="#figureVP9payloadDescriptorNonFlexible">Figure 3</a>.  The TL0PICIDX is present so that all minimally required frames - the base temporal layer frames - can be tracked.</dd>
   <dt></dt>
-  <dd style="margin-left: 8">The T and S fields indicate the temporal and spatial layers and can help middleboxes and and endpoints quickly identify which layer a packet belongs to.  <dl><dt>T:</dt><dd style="margin-left: 8">The temporal layer ID of current frame.  In the case of non-flexible mode, if PID is mapped to a picture in a specified PG, then the value of T MUST match the corresponding T value of the mapped picture in the PG.</dd><dt>U:</dt><dd style="margin-left: 8">Switching up point.  If this bit is set to 1 for the current picture with temporal layer ID equal to T, then "switch up" to a higher frame rate is possible as subsequent higher temporal layer pictures will not depend on any picture before the current picture (in coding order) with temporal layer ID greater than T.</dd><dt>S:</dt><dd style="margin-left: 8">The spatial layer ID of current frame.  Note that frames with spatial layer S &gt; 0 may be dependent on decoded spatial layer S-1 frame within the same picture.</dd><dt>D:</dt><dd style="margin-left: 8">Inter-layer dependency used.  MUST be set to one if current spatial layer S frame depends on spatial layer S-1 frame of the same picture.  MUST only be set to zero if current spatial layer S frame does not depend on spatial layer S-1 frame of the same picture.  For the base layer frame with S equal to 0, this D bit MUST be set to zero.</dd><dt>TL0PICIDX:</dt><dd style="margin-left: 8">8 bits temporal layer zero index. TL0PICIDX is only present in the non-flexible mode (F = 0).  This is a running index for the temporal base layer pictures, i.e., the pictures with T set to 0.  If T is larger than 0, TL0PICIDX indicates which temporal base layer picture the current picture depends on.  TL0PICIDX MUST be incremented when T is equal to 0.  The index SHOULD start on a random number, and MUST restart at 0 after reaching the maximum number 255.</dd></dl></dd>
+  <dd style="margin-left: 8">The T and S fields indicate the temporal and spatial layers and can help middleboxes and and endpoints quickly identify which layer a packet belongs to.  <dl><dt>T:</dt><dd style="margin-left: 8">The temporal layer ID of current frame.  In the case of non-flexible mode, if PID is mapped to a picture in a specified PG, then the value of T MUST match the corresponding T value of the mapped picture in the PG.</dd><dt>U:</dt><dd style="margin-left: 8">Switching up point.  If this bit is set to 1 for the current picture with temporal layer ID equal to T, then "switch up" to a higher frame rate is possible as subsequent higher temporal layer pictures will not depend on any picture before the current picture (in coding order) with temporal layer ID greater than T.</dd><dt>S:</dt><dd style="margin-left: 8">The spatial layer ID of current frame.  Note that frames with spatial layer S &gt; 0 may be dependent on decoded spatial layer S-1 frame within the same picture.</dd><dt>D:</dt><dd style="margin-left: 8">Inter-layer dependency used.  MUST be set to one if current spatial layer S frame depends on spatial layer S-1 frame of the same picture.  MUST only be set to zero if current spatial layer S frame does not depend on spatial layer S-1 frame of the same picture.  For the base layer frame (with S equal to 0), this D bit MUST be set to zero.</dd><dt>TL0PICIDX:</dt><dd style="margin-left: 8">8 bits temporal layer zero index. TL0PICIDX is only present in the non-flexible mode (F = 0).  This is a running index for the temporal base layer pictures, i.e., the pictures with T set to 0.  If T is larger than 0, TL0PICIDX indicates which temporal base layer picture the current picture depends on.  TL0PICIDX MUST be incremented when T is equal to 0.  The index SHOULD start on a random number, and MUST restart at 0 after reaching the maximum number 255.</dd></dl></dd>
   <dt>Reference indices:</dt>
   <dd style="margin-left: 8">When P and F are both set to one, indicating a non-key frame in flexible mode, then at least one reference index has to be specified as below.  Additional reference indices (total of up to 3 reference indices are allowed) may be specified using the N bit below.  When either P or F is set to zero, then no reference index is specified.  <dl><dt>P_DIFF:</dt><dd style="margin-left: 8">The reference index (in 7 bits) specified as the relative PID from the current picture.  For example, when P_DIFF=3 on a packet containing the picture with PID 112 means that the picture refers back to the picture with PID 109. This calculation is done modulo the size of the PID field, i.e., either 7 or 15 bits.</dd><dt>N:</dt><dd style="margin-left: 8">1 if there is additional P_DIFF following the current P_DIFF.</dd></dl></dd>
 </dl>
 <h1 id="rfc.section.4.2.1"><a href="#rfc.section.4.2.1">4.2.1.</a> <a href="#VP9payloadDescriptorSS" id="VP9payloadDescriptorSS">Scalability Structure (SS):</a></h1>
-<p id="rfc.section.4.2.1.p.1">The scalability structure (SS) data describes the resolution of each layer frame within a super frame as well as the inter-picture dependencies for a picture group (PG).  If the VP9 payload descriptor's "V" bit is set, the SS data is present in the position indicated in <a href="#figureVP9payloadDescriptor">Figure 2</a> and <a href="#figureVP9payloadDescriptorNonFlexible">Figure 3</a>.</p>
+<p id="rfc.section.4.2.1.p.1">The scalability structure (SS) data describes the resolution of each frame within a picture as well as the inter-picture dependencies for a picture group (PG).  If the VP9 payload descriptor's "V" bit is set, the SS data is present in the position indicated in <a href="#figureVP9payloadDescriptor">Figure 2</a> and <a href="#figureVP9payloadDescriptorNonFlexible">Figure 3</a>.</p>
 <div id="rfc.figure.4"/>
 <div id="figureVP9ScalabilityStructure"/>
 <pre>
@@ -717,7 +719,95 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 <p id="rfc.section.4.5.p.2">Due to the requirements of scalable streams, a VP9 encoder producing a scalable stream needs to ensure that a frame does not depend on a previous frame (of the same or a previous picture) that can legitimately be removed from the stream.  Thus, a frame that follows a removable frame (in full decode order) MUST be encoded with "error_resilient_mode" to true.</p>
 <p id="rfc.section.4.5.p.3">For spatially-scalable streams, this means that "error_resilient_mode" needs to be turned on for the base spatial layer; it can however be turned off for higher spatial layers, assuming they are sent with inter-layer dependency (i.e. with the "D" bit set).  For streams that are only temporally-scalable without spatial scalability, "error_resilient_mode" can additionally be turned off for any picture that immediately follows a temporal layer 0 frame.</p>
 <h1 id="rfc.section.4.6"><a href="#rfc.section.4.6">4.6.</a> Examples of VP9 RTP Stream</h1>
-<p id="rfc.section.4.6.p.1">TODO</p>
+<p id="rfc.section.4.6.p.1">TODO: Examples of packet layouts</p>
+<h1 id="rfc.section.4.6.1"><a href="#rfc.section.4.6.1">4.6.1.</a> Reference picture use for scalable structure</h1>
+<p id="rfc.section.4.6.1.p.1">As discussed in <a href="#mediaFormatDescription">Section 3</a>, the VP9 codec can maintain up to eight reference frames, of which up to three can be referenced or updated by any new frame.  This section illustrates one way that a scalable structure (with three spatial layers and three temporal layers) can be constructed using these reference frames.</p>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <caption>Example scalability structure</caption>
+  <thead>
+    <tr>
+      <th class="center">Temporal</th>
+      <th class="center">Spatial</th>
+      <th class="center">References</th>
+      <th class="center">Updates</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center">0</td>
+      <td class="center">0</td>
+      <td class="center">0</td>
+      <td class="center">0</td>
+    </tr>
+    <tr>
+      <td class="center">0</td>
+      <td class="center">1</td>
+      <td class="center">0,1</td>
+      <td class="center">1</td>
+    </tr>
+    <tr>
+      <td class="center">0</td>
+      <td class="center">2</td>
+      <td class="center">1,2</td>
+      <td class="center">2</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="center">0</td>
+      <td class="center">0</td>
+      <td class="center">6</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="center">1</td>
+      <td class="center">1,6</td>
+      <td class="center">7</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="center">2</td>
+      <td class="center">2,7</td>
+      <td class="center">-</td>
+    </tr>
+    <tr>
+      <td class="center">1</td>
+      <td class="center">0</td>
+      <td class="center">0</td>
+      <td class="center">3</td>
+    </tr>
+    <tr>
+      <td class="center">1</td>
+      <td class="center">1</td>
+      <td class="center">1,3</td>
+      <td class="center">4</td>
+    </tr>
+    <tr>
+      <td class="center">1</td>
+      <td class="center">2</td>
+      <td class="center">2,4</td>
+      <td class="center">5</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="center">0</td>
+      <td class="center">3</td>
+      <td class="center">6</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="center">1</td>
+      <td class="center">4,6</td>
+      <td class="center">7</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="center">2</td>
+      <td class="center">5,7</td>
+      <td class="center">-</td>
+    </tr>
+  </tbody>
+</table>
+<p id="rfc.section.4.6.1.p.2">This structure is constructed such that the "U" bit can always be set.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#Feedback" id="Feedback">Feedback Messages</a></h1>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#RPSI" id="RPSI">Reference Picture Selection Indication (RPSI)</a></h1>
 <p id="rfc.section.5.1.p.1">The reference picture selection index is a payload-specific feedback message defined within the RTCP-based feedback format. The RPSI message is generated by a receiver and can be used in two ways.  Either it can signal a preferred reference picture when a loss has been detected by the decoder -- preferably then a reference that the decoder knows is perfect -- or, it can be used as positive feedback information to acknowledge correct decoding of certain reference pictures. The positive feedback method is useful for VP9 used for point to point (unicast) communication. The use of RPSI for VP9 is preferably combined with a special update pattern of the codec's two special reference frames -- the golden frame and the altref frame -- in which they are updated in an alternating leapfrog fashion. When a receiver has received and correctly decoded a golden or altref frame, and that frame had a PictureID in the payload descriptor, the receiver can acknowledge this simply by sending an RPSI message back to the sender. The message body (i.e., the "native RPSI bit string" in <a href="#RFC4585">[RFC4585]</a>) is simply the PictureID of the received frame.</p>
@@ -738,7 +828,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 <p id="rfc.section.5.2.p.3">Here, First is the macroblock address (in scan order) of the first lost block and Number is the number of lost blocks, as defined in <a href="#RFC4585">[RFC4585]</a>. PictureID is the six least significant bits of the codec-specific picture identifier in which the loss or corruption has occurred. For VP9, this codec-specific identifier is naturally the PictureID of the current frame, as read from the payload descriptor. If the payload descriptor of the current frame does not have a PictureID, the receiver MAY send the last received PictureID+1 in the SLI message. The receiver MAY set the First parameter to 0, and the Number parameter to the total number of macroblocks per frame, even though only part of the frame is corrupted. When the sender receives an SLI message, it can make use of the knowledge from the latest received RPSI message. Knowing that the last golden or altref frame was successfully received, it can encode the next frame with reference to that established reference.</p>
 <h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> <a href="#FIR" id="FIR">Full Intra Request (FIR)</a></h1>
 <p id="rfc.section.5.3.p.1">The <a href="#RFC5104">Full Intra Request (FIR)</a> <cite title="NONE">[RFC5104]</cite> RTCP feedback message allows a receiver to request a full state refresh of an encoded stream.</p>
-<p id="rfc.section.5.3.p.2">Upon receipt of an FIR request, a VP9 sender MUST send a super frame with a keyframe for its spatial layer 0 layer frame, and then send frames without inter-picture prediction (P=0) for any higher layer frames.</p>
+<p id="rfc.section.5.3.p.2">Upon receipt of an FIR request, a VP9 sender MUST send a picture with a keyframe for its spatial layer 0 layer frame, and then send frames without inter-picture prediction (P=0) for any higher layer frames.</p>
 <h1 id="rfc.section.5.4"><a href="#rfc.section.5.4">5.4.</a> <a href="#LRR" id="LRR">Layer Refresh Request (LRR)</a></h1>
 <p id="rfc.section.5.4.p.1">The <a href="#I-D.ietf-avtext-lrr">Layer Refresh Request</a> <cite title="NONE">[I-D.ietf-avtext-lrr]</cite> allows a receiver to request a single layer of a spatially or temporally encoded stream to be refreshed, without necessarily affecting the stream's other layers.</p>
 <div id="rfc.figure.6"/>

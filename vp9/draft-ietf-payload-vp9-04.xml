@@ -212,7 +212,8 @@
 
 	  <t>Temporal and spatial scalability layers are associated with
 	  non-negative integer IDs. The lowest layer of either type has an
-	  ID of 0, and is refered to as the "base" temporal or spatial layer.</t>
+	  ID of 0, and is sometimes referred to as the "base" temporal or
+	  spatial layer.</t>
 
       <t>Layers are designed (and MUST be encoded) such that if
       any layer, and all higher layers, are removed from the bitstream
@@ -337,8 +338,8 @@
 
             <t hangText="Timestamp:">The RTP timestamp indicates the time when
             the input frame was sampled, at a clock rate of 90 kHz.  If the
-            input frame is encoded with multiple layer frames, all of the
-            layer frames of the super frame MUST have the same timestamp.</t>
+            input picture is encoded with multiple layer frames, all of the
+            frames of the picture MUST have the same timestamp.</t>
 
           </list></t>
         <t>The remaining RTP Fixed Header Fields (V, P, X, CC,
@@ -508,7 +509,7 @@ V:   | SS            |
             <t hangText="D:">Inter-layer dependency used.  MUST be set to one if current spatial layer S frame
             depends on spatial layer S-1 frame of the same picture.  MUST only be set to zero if current spatial
             layer S frame does not depend on spatial layer S-1 frame of the same picture.  For the base layer frame
-            with S equal to 0, this D bit MUST be set to zero.</t>
+            (with S equal to 0), this D bit MUST be set to zero.</t>
 
             <t hangText="TL0PICIDX:">8 bits temporal layer zero index. TL0PICIDX is only present
             in the non-flexible mode (F = 0).  This is a running index for the temporal
@@ -536,7 +537,7 @@ V:   | SS            |
 
       <section anchor="VP9payloadDescriptorSS" title="Scalability Structure (SS):">
         <t>The scalability structure (SS) data describes the resolution of
-        each layer frame within a super frame as well as the inter-picture dependencies
+        each frame within a picture as well as the inter-picture dependencies
         for a picture group (PG).  If the VP9 payload descriptor's "V"
         bit is set, the SS data is present in the position indicated in
         <xref target="figureVP9payloadDescriptor"/> and <xref target="figureVP9payloadDescriptorNonFlexible"/>.</t>
@@ -650,7 +651,43 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 	  </section>
 
       <section title="Examples of VP9 RTP Stream">
-		<t>TODO</t>
+		<t>TODO: Examples of packet layouts</t>
+
+		<section title="Reference picture use for scalable structure">
+
+		  <t>As discussed in <xref target="mediaFormatDescription"/>, the
+			VP9 codec can maintain up to eight reference frames, of
+			which up to three can be referenced or updated by any new
+			frame.  This section illustrates one way that a scalable
+			structure (with three spatial layers and three temporal
+			layers) can be constructed using these reference
+			frames.</t>
+
+		  <texttable title="Example scalability structure">
+
+			<ttcol align="center">Temporal</ttcol>
+			<ttcol align="center">Spatial</ttcol>
+			<ttcol align="center">References</ttcol>
+			<ttcol align="center">Updates</ttcol>
+			<c>0</c><c>0</c><c>0</c><c>0</c>
+			<c>0</c><c>1</c><c>0,1</c><c>1</c>
+			<c>0</c><c>2</c><c>1,2</c><c>2</c>
+			<c>2</c><c>0</c><c>0</c><c>6</c>
+			<c>2</c><c>1</c><c>1,6</c><c>7</c>
+			<c>2</c><c>2</c><c>2,7</c><c>-</c>
+			<c>1</c><c>0</c><c>0</c><c>3</c>
+			<c>1</c><c>1</c><c>1,3</c><c>4</c>
+			<c>1</c><c>2</c><c>2,4</c><c>5</c>
+			<c>2</c><c>0</c><c>3</c><c>6</c>
+			<c>2</c><c>1</c><c>4,6</c><c>7</c>
+			<c>2</c><c>2</c><c>5,7</c><c>-</c>
+
+		  </texttable>
+
+		  <t>This structure is constructed such that the "U" bit can
+		  always be set.</t>
+
+		</section>
 	  </section>
     </section>
 
@@ -720,7 +757,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 		RTCP feedback message allows a receiver to request a full state refresh of an encoded stream.</t>
 
 		<t>Upon receipt of an FIR request, a VP9 sender MUST send a
-		super frame with a keyframe for its spatial layer 0 layer
+		picture with a keyframe for its spatial layer 0 layer
 		frame, and then send frames without inter-picture prediction
 		(P=0) for any higher layer frames.</t>
 
