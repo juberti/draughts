@@ -64,7 +64,8 @@ ipr="trust200902">
   <middle>
     <section title="Introduction">
       <t>As a technology that supports peer-to-peer connections, WebRTC may
-      send data over different network paths than the path used for HTTP
+      send data over different network paths than the path used for
+      Hypertext Transfer Protocol (HTTP) <xref target="RFC7230"/>
       traffic. This may allow a web application to learn additional information
       about the user, which may be problematic in certain cases. This document
       summarizes the concerns, and makes recommendations on how best to handle
@@ -72,8 +73,9 @@ ipr="trust200902">
     </section>
     <section title="Problem Statement">
       <t>WebRTC enables real-time peer-to-peer communications by enumerating
-      network interfaces and discovering the best route through the ICE
-      <xref target="RFC5245" />protocol. During the ICE process, the peers
+      network interfaces and discovering the best route through the
+      Interactive Connectivity Establishment (ICE)
+      <xref target="RFC5245" /> protocol. During the ICE process, the peers
       involved in a session gather and exchange all the IP addresses they can
       discover, so that the connectivity of each IP pair can be checked, and
       the best path chosen. The addresses that are gathered usually consist of
@@ -87,10 +89,11 @@ ipr="trust200902">
       HTTP request was sent.</t>
       <t>The information revealed falls into three categories:
       <list style="numbers">
-        <t>If the client is behind a NAT, the client's private IP addresses,
-        typically
-        <xref target="RFC1918" />addresses, can be learned.</t>
-        <t>If the client tries to hide its physical location through a VPN, and
+        <t>If the client is behind a Network Address Translator (NAT),
+        the client's private IP addresses, typically
+        <xref target="RFC1918" /> addresses, can be learned.</t>
+        <t>If the client tries to hide its physical location through a
+        Virtual Private Network (VPN), and
         the VPN and local OS support routing over multiple interfaces (i.e., a
         "split-tunnel" VPN), WebRTC will discover the public address for the
         VPN as well as the ISP public address that the VPN runs over.</t>
@@ -98,7 +101,7 @@ ipr="trust200902">
         "classical application proxy", as defined in <xref target="RFC1919"/>,
         Section 3), but direct access to the Internet
         is also supported, WebRTC's STUN
-        <xref target="RFC5389" />checks will bypass the proxy and reveal the
+        <xref target="RFC5389" /> checks will bypass the proxy and reveal the
         public address of the client.</t>
       </list></t>
       <t>Of these three concerns, #2 is the most significant concern, since for
@@ -115,10 +118,10 @@ ipr="trust200902">
       <t>#1 is considered to be the least significant concern, given that the
       local address values often contain minimal information (e.g.
       192.168.0.2), or have built-in privacy protection (e.g.
-      <xref target="RFC4941" />IPv6 addresses).</t>
+      <xref target="RFC4941" /> IPv6 addresses).</t>
       <t>Note also that these concerns predate WebRTC; Adobe Flash Player has
       provided similar functionality since the introduction of RTMFP
-      <xref target="RFC7016" />in 2008.</t>
+      <xref target="RFC7016" /> in 2008.</t>
     </section>
     <section title="Goals">
       <t>Being peer-to-peer, WebRTC represents a privacy-enabling technology,
@@ -162,12 +165,12 @@ ipr="trust200902">
         Furthermore, web proxies that support UDP are not widely deployed
         today. As a result, when WebRTC is made to go through a proxy, it
         typically needs to use TCP, either ICE-TCP
-        <xref target="RFC6544" />or TURN-over-TCP
+        <xref target="RFC6544" /> or TURN-over-TCP
         <xref target="RFC5766" />. Naturally, this has attendant costs on media
         quality as well as proxy performance, and should be avoided where
         possible.</t>
         <t>RETURN
-        <xref target="I-D.ietf-rtcweb-return" />is a proposal for explicit
+        <xref target="I-D.ietf-rtcweb-return" /> is a proposal for explicit
         proxying of WebRTC media traffic. When RETURN proxies are deployed,
         media and STUN checks will go through the proxy, but without the
         performance issues associated with sending through a typical web
@@ -196,7 +199,7 @@ ipr="trust200902">
         <t>Force proxy: This forces all WebRTC media traffic through a proxy,
         if one is configured. If the proxy does not support UDP (as is the case
         for all HTTP and most SOCKS
-        <xref target="RFC1928" />proxies), or the WebRTC implementation does
+        <xref target="RFC1928" /> proxies), or the WebRTC implementation does
         not support UDP proxying, the use of UDP will be disabled, and TCP will
         be used to send and receive media through the proxy. Use of TCP will
         result in reduced quality, in addition to any performance
