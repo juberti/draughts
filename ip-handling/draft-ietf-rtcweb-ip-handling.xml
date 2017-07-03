@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd"
-[
-<!ENTITY rfc1918 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1918.xml">
-<!ENTITY rfc1919 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1919.xml">
-<!ENTITY rfc1928 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1928.xml">
-<!ENTITY rfc2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY rfc4941 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4941.xml">
-<!ENTITY rfc5245 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5245.xml">
-<!ENTITY rfc5389 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5389.xml">
-<!ENTITY rfc5766 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5766.xml">
-<!ENTITY rfc6544 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6544.xml">
-<!ENTITY rfc7016 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7016.xml">
-<!ENTITY return SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.ietf-rtcweb-return.xml">
-]>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <?rfc toc="yes" ?>
 <?rfc symrefs="yes" ?>
@@ -23,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-03"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-04"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -54,11 +41,11 @@ ipr="trust200902">
         <email>guoweis@google.com</email>
       </address>
     </author>
-    <date day="14" month="January" year="2017" />
+    <date day="3" month="July" year="2017" />
     <area>RAI</area>
     <abstract>
       <t>This document provides information and requirements for how
-      IP addresses should be handled by WebRTC applications.</t>
+      IP addresses should be handled by WebRTC implementations.</t>
     </abstract>
   </front>
   <middle>
@@ -68,8 +55,16 @@ ipr="trust200902">
       Hypertext Transfer Protocol (HTTP) <xref target="RFC7230"/>
       traffic. This may allow a web application to learn additional information
       about the user, which may be problematic in certain cases. This document
-      summarizes the concerns, and makes recommendations on how best to handle
-      the tradeoff between privacy and media performance.</t>
+      summarizes the concerns, and makes recommendations on how WebRTC
+      implementations should best handle the tradeoff between privacy and
+      media performance.</t>
+    </section>
+    <section title="Terminology">
+
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in
+      <xref target="RFC2119"></xref>.</t>
     </section>
     <section title="Problem Statement">
       <t>WebRTC enables real-time peer-to-peer communications by enumerating
@@ -252,22 +247,25 @@ ipr="trust200902">
     </section>
     <section title="Acknowledgements">
       <t>Several people provided input into this document, including
-      Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
+      Bernard Aboba, Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
       Adam Roach, and Martin Thomson.</t>
     </section>
   </middle>
   <back>
+    <references title="Normative References">
+      <?rfc include='reference.RFC.2119.xml'?>
+    </references>
     <references title="Informative References">
-      &rfc1918;
-      &rfc1919;
-      &rfc1928;
-      &rfc4941;
-      &rfc5245;
-      &rfc5389;
-      &rfc5766;
-      &rfc6544;
-      &rfc7016;
-      &return;
+      <?rfc include='reference.RFC.1918.xml'?>
+      <?rfc include='reference.RFC.1919.xml'?>
+      <?rfc include='reference.RFC.1928.xml'?>
+      <?rfc include='reference.RFC.4941.xml'?>
+      <?rfc include='reference.RFC.5245.xml'?>
+      <?rfc include='reference.RFC.5389.xml'?>
+      <?rfc include='reference.RFC.5766.xml'?>
+      <?rfc include='reference.RFC.6544.xml'?>
+      <?rfc include='reference.RFC.7016.xml'?>
+      <?rfc include='reference.I-D.ietf-rtcweb-return.xml'?>
     </references>
     <section title="Change log">
       <t>Changes in draft -03:
