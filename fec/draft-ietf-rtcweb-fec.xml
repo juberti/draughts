@@ -248,7 +248,7 @@
       e.g. <xref target="RFC5109"/>.</t>
     </section>
 
-    <section anchor="adaptive-fec" title="Adaptive Use of FEC">
+    <section title="Adaptive Use of FEC" anchor="adaptive-fec">
       <t>Since use of FEC always causes redundant data to be transmitted, this
       will lead to less bandwidth available for the primary encoding when in a
       bandwidth-constrained environment. This is in contrast to methods like
@@ -263,6 +263,12 @@
       e.g., by monitoring transmit packet loss data from RTCP Receiver Reports
       <xref target="RFC3550"/>), unless the application indicates it is willing
       to pay a quality penalty to proactively avoid losses.</t>
+      <t>Note that when probing bandwidth, i.e., speculatively sending
+      extra data to determine if additional link capacity exists, FEC
+      SHOULD be used in all cases. Given that extra data is going to be
+      sent regardless, it makes sense to have that data protect the
+      primary payload; in addition, FEC can be applied in a way that increases
+      bandwidth only modestly, which is necessary when probing.</t>
       <t>When using FEC with layered codecs, e.g., <xref target="RFC6386"/>,
       where only base layer frames are critical to the decoding of future
       frames, implementations SHOULD only apply FEC to these base layer frames.
