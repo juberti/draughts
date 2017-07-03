@@ -5,15 +5,15 @@
 Payload Working Group                                          J. Uberti
 Internet-Draft                                                 S. Holmer
 Intended status: Standards Track                              M. Flodman
-Expires: September 19, 2016                                       Google
+Expires: January 3, 2018                                          Google
                                                                J. Lennox
                                                                  D. Hong
                                                                    Vidyo
-                                                          March 18, 2016
+                                                            July 2, 2017
 
 
                     RTP Payload Format for VP9 Video
-                       draft-ietf-payload-vp9-02
+                       draft-ietf-payload-vp9-04
 
 Abstract
 
@@ -38,11 +38,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 19, 2016.
+   This Internet-Draft will expire on January 3, 2018.
 
 Copyright Notice
 
-   Copyright (c) 2016 IETF Trust and the persons identified as the
+   Copyright (c) 2017 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 1]
+Uberti, et al.           Expires January 3, 2018                [Page 1]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
    to this document.  Code Components extracted from this document must
@@ -68,7 +68,7 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
    2.  Conventions, Definitions and Acronyms . . . . . . . . . . . .   3
    3.  Media Format Description  . . . . . . . . . . . . . . . . . .   3
-   4.  Payload Format  . . . . . . . . . . . . . . . . . . . . . . .   4
+   4.  Payload Format  . . . . . . . . . . . . . . . . . . . . . . .   5
      4.1.  RTP Header Usage  . . . . . . . . . . . . . . . . . . . .   5
      4.2.  VP9 Payload Description . . . . . . . . . . . . . . . . .   6
        4.2.1.  Scalability Structure (SS): . . . . . . . . . . . . .  10
@@ -80,14 +80,14 @@ Table of Contents
      5.2.  Slice Loss Indication (SLI) . . . . . . . . . . . . . . .  13
      5.3.  Full Intra Request (FIR)  . . . . . . . . . . . . . . . .  13
      5.4.  Layer Refresh Request (LRR) . . . . . . . . . . . . . . .  14
-   6.  Payload Format Parameters . . . . . . . . . . . . . . . . . .  14
+   6.  Payload Format Parameters . . . . . . . . . . . . . . . . . .  15
      6.1.  Media Type Definition . . . . . . . . . . . . . . . . . .  15
      6.2.  SDP Parameters  . . . . . . . . . . . . . . . . . . . . .  16
        6.2.1.  Mapping of Media Subtype Parameters to SDP  . . . . .  16
        6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  17
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
    8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  17
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  18
      10.2.  Informative References . . . . . . . . . . . . . . . . .  19
@@ -97,21 +97,21 @@ Table of Contents
 
    This memo describes an RTP payload specification applicable to the
    transmission of video streams encoded using the VP9 video codec
-   [I-D.grange-vp9-bitstream].  The format described in this document
-   can be used both in peer-to-peer and video conferencing applications.
+   [VP9-BITSTREAM].  The format described in this document can be used
+   both in peer-to-peer and video conferencing applications.
 
-   TODO: VP9 description.  Please see [I-D.grange-vp9-bitstream].
-
-
+   TODO: VP9 description.  Please see [VP9-BITSTREAM].
 
 
 
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 2]
+
+
+Uberti, et al.           Expires January 3, 2018                [Page 2]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
 2.  Conventions, Definitions and Acronyms
@@ -120,7 +120,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
 
-   TODO: Cite terminology from [I-D.grange-vp9-bitstream].
+   TODO: Cite terminology from [VP9-BITSTREAM].
 
 3.  Media Format Description
 
@@ -154,33 +154,33 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    0.
 
    Layers are designed (and MUST be encoded) such that if any layer, and
-   all higher layers, are removed from the bitstream along any of the
+   all higher layers, are removed from the bitstream along either of the
    two dimensions, the remaining bitstream is still correctly decodable.
 
-   For terminology, this document uses the term "layer frame" to refer
-   to a single encoded VP9 frame for a particular resolution/quality,
-   and "super frame" to refer to all the representations (layer frames)
-   at a single instant in time.  A super frame thus consists of one or
-   more layer frames, encoding different spatial layers.
+   For terminology, this document uses the term "frame" to refer to a
+   single encoded VP9 frame for a particular resolution/quality, and
+   "picture" to refer to all the representations (frames) at a single
+   instant in time.  A picture thus consists of one or more frames,
+   encoding different spatial layers.
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 3]
+Uberti, et al.           Expires January 3, 2018                [Page 3]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
-   Within a super frame, a layer frame with spatial layer ID equal to S,
-   where S > 0, can depend on a layer frame of the same super frame with
-   a lower spatial layer ID.  This "inter-layer" dependency can result
-   in additional coding gain compared to the case where only traditional
-   "inter-picture" dependency is used, where a frame depends on
-   previously coded frame in time.  For simplicity, this payload format
-   assumes that, within a super frame and if inter-layer dependency is
-   used, a spatial layer S frame can only depend on spatial layer S-1
-   frame when S > 0.  Additionally, if inter-picture dependency is used,
-   spatial layer S frame is assumed to only depend on previously coded
-   spatial layer S frame.
+   Within a picture, a frame with spatial layer ID equal to S, where S >
+   0, can depend on a frame of the same picture with a lower spatial
+   layer ID.  This "inter-layer" dependency can result in additional
+   coding gain compared to the case where only traditional "inter-
+   picture" dependency is used, where a frame depends on previously
+   coded frame in time.  For simplicity, this payload format assumes
+   that, within a picture and if inter-layer dependency is used, a
+   spatial layer S frame can only depend on spatial layer S-1 frame when
+   S > 0.  Additionally, if inter-picture dependency is used, spatial
+   layer S frame is assumed to only depend on a previously coded spatial
+   layer S frame.
 
    Given above simplifications for inter-layer and inter-picture
    dependencies, a flag (the D bit described below) is used to indicate
@@ -190,8 +190,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    order to determine its decodability.  Two modes of describing the
    inter-picture dependency structure are possible: "flexible mode" and
    "non-flexible mode".  An encoder can only switch between the two on
-   the very first packet of a key frame with temporal layer ID equal to
-   0.
+   the first packet of a key frame with temporal layer ID equal to 0.
 
    In flexible mode, each packet can contain up to 3 reference indices,
    which identify all frames referenced by the frame transmitted in the
@@ -203,29 +202,34 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    dynamically.
 
    In non-flexible mode, the inter-picture dependency (the reference
-   indices) of a group of frames (GOF) MUST be pre-specified as part of
-   the scalability structure (SS) data.  In this mode, each packet MUST
-   have an index to refer to one of the described frames in the GOF,
-   from which the frames referenced by the frame transmitted in the
+   indices) of a Picture Group (PG) MUST be pre-specified as part of the
+   scalability structure (SS) data.  In this mode, each packet MUST have
+   an index to refer to one of the described pictures in the PG, from
+   which the pictures referenced by the picture transmitted in the
    current packet for inter-picture prediction can be identified.
+
+   (Editor's Note: A "Picture Group", as used in this document, is not
+   the same thing as a "Group of Pictures" as traditionally used in
+   video coding.  Suggestions for better terminology are welcome.)
 
    The SS data can also be used to specify the resolution of each
    spatial layer present in the VP9 stream for both flexible and non-
    flexible modes.
 
+
+
+
+
+
+Uberti, et al.           Expires January 3, 2018                [Page 4]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
 4.  Payload Format
 
    This section describes how the encoded VP9 bitstream is encapsulated
    in RTP.  To handle network losses usage of RTP/AVPF [RFC4585] is
-
-
-
-
-Uberti, et al.         Expires September 19, 2016               [Page 4]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
-
    RECOMMENDED.  All integer fields in the specifications are encoded as
    unsigned integers in network octet order.
 
@@ -268,21 +272,21 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
                                  Figure 1
 
    Marker bit (M):  MUST be set to 1 for the final packet of the highest
-      spatial layer frame (the final packet of the super frame), and 0
-      otherwise.  Unless spatial scalability is in use for this super
-      frame, this will have the same value as the E bit described below.
-      Note this bit MUST be set to 1 for the target spatial layer frame
-      if a stream is being rewritten to remove higher spatial layers.
+      spatial layer frame (the final packet of the picture), and 0
+      otherwise.  Unless spatial scalability is in use for this picture,
 
 
 
-
-Uberti, et al.         Expires September 19, 2016               [Page 5]
+Uberti, et al.           Expires January 3, 2018                [Page 5]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
-   Payload Type (TP):  In line with the policy in Section 3 of
+      this will have the same value as the E bit described below.  Note
+      this bit MUST be set to 1 for the target spatial layer frame if a
+      stream is being rewritten to remove higher spatial layers.
+
+   Payload Type (PT):  In line with the policy in Section 3 of
       [RFC3551], applications using the VP9 RTP payload profile MUST
       assign a dynamic payload type number to be used in each RTP
       session and provide a mechanism to indicate the mapping.  See
@@ -329,13 +333,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-
-
-
-
-Uberti, et al.         Expires September 19, 2016               [Page 6]
+Uberti, et al.           Expires January 3, 2018                [Page 6]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
    In non-flexible mode (with the F bit below set to 0), The first
@@ -365,14 +365,15 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       be present after the mandatory first octet and specified as below.
       Otherwise, PID MUST NOT be present.
 
-   P: Inter-picture predicted layer frame.  When set to zero, the layer
-      frame does not utilize inter-picture prediction.  In this case,
-      up-switching to current spatial layer's frame is possible from
+   P: Inter-picture predicted picture.  When set to zero, the picture
+      does not utilize inter-picture prediction.  In this case, up-
+      switching to a current spatial layer's frame is possible from
       directly lower spatial layer frame.  P SHOULD also be set to zero
       when encoding a layer synchronization frame in response to an LRR
       [I-D.ietf-avtext-lrr] message (see Section 5.4).  When P is set to
-      zero, the T bit (described below) MUST also be set to 0 (if
-      present).
+      zero, the T field (described below) MUST also be set to 0 (if
+      present).  Note that the P bit does not forbid inter-layer
+      prediction within a picture.
 
    L: Layer indices present.  When set to one, the one or two octets
       following the mandatory first octet and the PID (if present) is as
@@ -385,34 +386,33 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    F: Flexible mode.  F set to one indicates flexible mode and if the P
       bit is also set to one, then the octets following the mandatory
       first octet, the PID, and layer indices (if present) are as
-      described by "Reference indices" below.  This MUST only be set to
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 7]
+Uberti, et al.           Expires January 3, 2018                [Page 7]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
+      described by "Reference indices" below.  This MUST only be set to
       1 if the I bit is also set to one; if the I bit is set to zero,
       then this MUST also be set to zero and ignored by receivers.  The
-      value of this F bit CAN ONLY CHANGE on the very first packet of a
-      key picture.  This is a packet with the P bit equal to zero, S or
-      D bit (described below) equal to zero, and B bit (described below)
+      value of this F bit CAN ONLY CHANGE on the first packet of a key
+      picture.  This is a packet with the P bit equal to zero, S or D
+      bit (described below) equal to zero, and B bit (described below)
       equal to 1.
 
-   B: Start of a layer frame.  MUST be set to 1 if the first payload
-      octet of the RTP packet is the beginning of a new VP9 layer frame,
-      and MUST NOT be 1 otherwise.  Note that this layer frame might not
-      be the very first layer frame of a super frame.
+   B: Start of a frame.  MUST be set to 1 if the first payload octet of
+      the RTP packet is the beginning of a new VP9 frame, and MUST NOT
+      be 1 otherwise.  Note that this frame might not be the first frame
+      of a picture.
 
-   E: End of a layer frame.  MUST be set to 1 for the final RTP packet
-      of a VP9 layer frame, and 0 otherwise.  This enables a decoder to
-      finish decoding the layer frame, where it otherwise may need to
-      wait for the next packet to explicitly know that the layer frame
-      is complete.  Note that, if spatial scalability is in use, more
-      layer frames from the same super frame may follow; see the
-      description of the M bit above.
+   E: End of a frame.  MUST be set to 1 for the final RTP packet of a
+      VP9 frame, and 0 otherwise.  This enables a decoder to finish
+      decoding the frame, where it otherwise may need to wait for the
+      next packet to explicitly know that the frame is complete.  Note
+      that, if spatial scalability is in use, more frames from the same
+      picture may follow; see the description of the M bit above.
 
    V: Scalability structure (SS) data present.  When set to one, the
       OPTIONAL SS data MUST be present in the payload descriptor.
@@ -440,19 +440,19 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       session.
 
       In the non-flexible mode (when the F bit is set to 0), this PID is
-      used as an index to the GOF specified in the SS data bleow.  In
-      this mode, the PID of the key frame corresponds to the very first
+      used as an index to the picture group (PG) specified in the SS
+      data below.  In this mode, the PID of the key frame corresponds to
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 8]
+Uberti, et al.           Expires January 3, 2018                [Page 8]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
-      specified frame in the GOF.  Then subsequent PIDs are mapped to
-      subsequently specified frames in the GOF (modulo N_G, specified in
-      the SS data below), respectively.
+      the first specified frame in the PG.  Then subsequent PIDs are
+      mapped to subsequently specified frames in the PG (modulo N_G,
+      specified in the SS data below), respectively.
 
    Layer indices:  This information is optional but recommended whenever
       encoding with layers.  For both flexible and non-flexible modes,
@@ -461,7 +461,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       Additionally, a bit (U) is used to indicate that the current frame
       is a "switching up point" frame.  Another bit (D) is used to
       indicate whether inter-layer prediction is used for the current
-      layer frame.
+      frame.
 
       In the non-flexible mode (when the F bit is set to 0), another
       octet is used to represent temporal layer 0 index (TL0PICIDX), as
@@ -474,43 +474,44 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       layer a packet belongs to.
 
       T: The temporal layer ID of current frame.  In the case of non-
-         flexible mode, if PID is mapped to a frame in a specified GOF,
+         flexible mode, if PID is mapped to a picture in a specified PG,
          then the value of T MUST match the corresponding T value of the
-         mapped frame in the GOF.
+         mapped picture in the PG.
 
       U: Switching up point.  If this bit is set to 1 for the current
-         frame with temporal layer ID equal to T, then "switch up" to a
-         higher frame rate is possible as subsequent higher temporal
-         layer frames will not depend on any frame before the current
-         frame (in coding time) with temporal layer ID greater than T.
+         picture with temporal layer ID equal to T, then "switch up" to
+         a higher frame rate is possible as subsequent higher temporal
+         layer pictures will not depend on any picture before the
+         current picture (in coding order) with temporal layer ID
+         greater than T.
 
       S: The spatial layer ID of current frame.  Note that frames with
          spatial layer S > 0 may be dependent on decoded spatial layer
-         S-1 frame within the same super frame.
+         S-1 frame within the same picture.
 
       D: Inter-layer dependency used.  MUST be set to one if current
          spatial layer S frame depends on spatial layer S-1 frame of the
-         same super frame.  MUST only be set to zero if current spatial
+         same picture.  MUST only be set to zero if current spatial
          layer S frame does not depend on spatial layer S-1 frame of the
-         same super frame.  For the base layer frame with S equal to 0,
-         this D bit MUST be set to zero.
+         same picture.  For the base layer frame with S equal to 0, this
+         D bit MUST be set to zero.
 
       TL0PICIDX:  8 bits temporal layer zero index.  TL0PICIDX is only
          present in the non-flexible mode (F = 0).  This is a running
-         index for the temporal base layer frames, i.e., the frames with
 
 
 
-Uberti, et al.         Expires September 19, 2016               [Page 9]
+Uberti, et al.           Expires January 3, 2018                [Page 9]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
-         T set to 0.  If T is larger than 0, TL0PICIDX indicates which
-         temporal base layer frame the current frame depends on.
-         TL0PICIDX MUST be incremented when T is equal to 0.  The index
-         SHOULD start on a random number, and MUST restart at 0 after
-         reaching the maximum number 255.
+         index for the temporal base layer pictures, i.e., the pictures
+         with T set to 0.  If T is larger than 0, TL0PICIDX indicates
+         which temporal base layer picture the current picture depends
+         on.  TL0PICIDX MUST be incremented when T is equal to 0.  The
+         index SHOULD start on a random number, and MUST restart at 0
+         after reaching the maximum number 255.
 
    Reference indices:  When P and F are both set to one, indicating a
       non-key frame in flexible mode, then at least one reference index
@@ -520,11 +521,11 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       reference index is specified.
 
       P_DIFF:  The reference index (in 7 bits) specified as the relative
-         PID from the current frame.  For example, when P_DIFF=3 on a
-         packet containing the frame with PID 112 means that the frame
-         refers back to the frame with PID 109.  This calculation is
-         done modulo the size of the PID field, i.e., either 7 or 15
-         bits.
+         PID from the current picture.  For example, when P_DIFF=3 on a
+         packet containing the picture with PID 112 means that the
+         picture refers back to the picture with PID 109.  This
+         calculation is done modulo the size of the PID field, i.e.,
+         either 7 or 15 bits.
 
       N: 1 if there is additional P_DIFF following the current P_DIFF.
 
@@ -532,7 +533,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
    The scalability structure (SS) data describes the resolution of each
    layer frame within a super frame as well as the inter-picture
-   dependencies for a group of frames (GOF).  If the VP9 payload
+   dependencies for a picture group (PG).  If the VP9 payload
    descriptor's "V" bit is set, the SS data is present in the position
    indicated in Figure 2 and Figure 3.
 
@@ -556,10 +557,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-
-Uberti, et al.         Expires September 19, 2016              [Page 10]
+Uberti, et al.           Expires January 3, 2018               [Page 10]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
         +-+-+-+-+-+-+-+-+
@@ -590,20 +590,20 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       present for each layer frame.  Otherwise, the resolution MUST NOT
       be present.
 
-   G: GOF description present flag.
+   G: PG description present flag.
 
    -: Bit reserved for future use.  MUST be set to zero and MUST be
       ignored by the receiver.
 
-   N_G:  N_G indicates the number of frames in a GOF.  If N_G is greater
-      than 0, then the SS data allows the inter-picture dependency
-      structure of the VP9 stream to be pre-declared, rather than
-      indicating it on the fly with every packet.  If N_G is greater
-      than 0, then for N_G pictures in the GOF, each frame's temporal
-      layer ID (T), switch up point (U), and the R reference indices
-      (P_DIFFs) are specified.
+   N_G:  N_G indicates the number of pictures in a Picture Group (PG).
+      If N_G is greater than 0, then the SS data allows the inter-
+      picture dependency structure of the VP9 stream to be pre-declared,
+      rather than indicating it on the fly with every packet.  If N_G is
+      greater than 0, then for N_G pictures in the PG, each picture's
+      temporal layer ID (T), switch up point (U), and the R reference
+      indices (P_DIFFs) are specified.
 
-      The very first frame specified in the GOF MUST have T set to 0.
+      The first picture specified in the PG MUST have T set to 0.
 
       G set to 0 or N_G set to 0 indicates that either there is only one
       temporal layer or no fixed inter-picture dependency information is
@@ -613,24 +613,24 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-Uberti, et al.         Expires September 19, 2016              [Page 11]
+Uberti, et al.           Expires January 3, 2018               [Page 11]
 
-Internet-Draft         RTP Payload Format for VP9             March 2016
+Internet-Draft         RTP Payload Format for VP9              July 2017
 
 
-      Note that for a given super frame, all layer frames follow the
-      same inter-picture dependency structure.  However, the frame rate
-      of each spatial layer can be different from each other and this
-      can be controlled with the use of the D bit described above.  The
+      Note that for a given picture, all frames follow the same inter-
+      picture dependency structure.  However, the frame rate of each
+      spatial layer can be different from each other and this can be
+      controlled with the use of the D bit described above.  The
       specified dependency structure in the SS data MUST be for the
       highest frame rate layer.
 
    In a scalable stream sent with a fixed pattern, the SS data SHOULD be
    included in the first packet of every key frame.  This is a packet
    with P bit equal to zero, S or D bit equal to zero, and B bit equal
-   to 1.  The SS data MUST only be changed on the frame that corresponds
-   to the very first frame specified in the previous SS data's GOF (if
-   the previous SS data's N_G was greater than 0).
+   to 1.  The SS data MUST only be changed on the picture that
+   corresponds to the first picture specified in the previous SS data's
+   PG (if the previous SS data's N_G was greater than 0).
 
 4.3.  VP9 Payload Header
 
@@ -640,8 +640,8 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
    VP9 frames are fragmented into packets, in RTP sequence number order,
    beginning with a packet with the B bit set, and ending with a packet
-   with the RTP marker bit M set.  There is no mechanism for finer-
-   grained access to parts of a VP9 frame.
+   with the E bit set.  There is no mechanism for finer-grained access
+   to parts of a VP9 frame.
 
 4.5.  Examples of VP9 RTP Stream
 
@@ -650,8 +650,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 5.  Feedback Messages
 
 5.1.  Reference Picture Selection Indication (RPSI)
-
-   TODO: Update to indicate which frame within the picture.
 
    The reference picture selection index is a payload-specific feedback
    message defined within the RTCP-based feedback format.  The RPSI
@@ -666,18 +664,22 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    special reference frames -- the golden frame and the altref frame --
    in which they are updated in an alternating leapfrog fashion.  When a
    receiver has received and correctly decoded a golden or altref frame,
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 12]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
-
    and that frame had a PictureID in the payload descriptor, the
    receiver can acknowledge this simply by sending an RPSI message back
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 12]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
    to the sender.  The message body (i.e., the "native RPSI bit string"
    in [RFC4585]) is simply the PictureID of the received frame.
+
+   Note: because all frames of the same picture must have the same
+   inter-picture reference structure, there is no need for a message to
+   specify which frame is being selected.
 
 5.2.  Slice Loss Indication (SLI)
 
@@ -720,15 +722,16 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
    Upon receipt of an FIR request, a VP9 sender MUST send a super frame
    with a keyframe for its spatial layer 0 layer frame, and then send
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 13]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
    frames without inter-picture prediction (P=0) for any higher layer
    frames.
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 13]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
 
 5.4.  Layer Refresh Request (LRR)
 
@@ -771,20 +774,21 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    the layer structure of the SS, thus periodic upgrade frames can be
    automatically identified by the picture ID.
 
+
+
+
+
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 14]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
 6.  Payload Format Parameters
 
    This payload format has two optional parameters.
-
-
-
-
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 14]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
 
 6.1.  Media Type Definition
 
@@ -827,20 +831,22 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
    Interoperability considerations:  None.
 
-   Published specification:  VP9 bitstream format
-      [I-D.grange-vp9-bitstream] and RFC XXXX.
+   Published specification:  VP9 bitstream format [VP9-BITSTREAM] and
+      RFC XXXX.
+
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 15]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
       [RFC Editor: Upon publication as an RFC, please replace "XXXX"
       with the number assigned to this document and remove this note.]
 
    Applications which use this media type:
       For example: Video over IP, video conferencing.
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 15]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
 
    Fragment identifier considerations:  N/A.
 
@@ -882,6 +888,16 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
       string, in the form of a semicolon separated list of
       parameter=value pairs.
 
+
+
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 16]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
 6.2.1.1.  Example
 
    An example of media representation in SDP is as follows:
@@ -889,14 +905,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    m=video 49170 RTP/AVPF 98
    a=rtpmap:98 VP9/90000
    a=fmtp:98 max-fr=30; max-fs=3600;
-
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 16]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
 
 6.2.2.  Offer/Answer Considerations
 
@@ -937,6 +945,15 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    elements MAY use the information in the VP9 payload descriptor in
    Section 4.2 to identify non-reference frames and discard them in
    order to reduce network congestion.  Note that discarding of non-
+
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 17]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
    reference frames cannot be done if the stream is encrypted (because
    the non-reference marker is encrypted).
 
@@ -945,29 +962,15 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
    The IANA is requested to register the following values:
    - Media type registration as described in Section 6.1.
 
-
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 17]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
-
 10.  References
 
 10.1.  Normative References
 
-   [I-D.grange-vp9-bitstream]
-              Grange, A. and H. Alvestrand, "A VP9 Bitstream Overview",
-              draft-grange-vp9-bitstream-00 (work in progress), February
-              2013.
-
    [I-D.ietf-avtext-lrr]
               Lennox, J., Hong, D., Uberti, J., Holmer, S., and M.
               Flodman, "The Layer Refresh Request (LRR) RTCP Feedback
-              Message", draft-ietf-avtext-lrr-01 (work in progress),
-              October 2015.
+              Message", draft-ietf-avtext-lrr-06 (work in progress),
+              June 2017.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
@@ -998,17 +1001,26 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
               with Feedback (AVPF)", RFC 5104, DOI 10.17487/RFC5104,
               February 2008, <http://www.rfc-editor.org/info/rfc5104>.
 
+
+
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 18]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13, RFC
               6838, DOI 10.17487/RFC6838, January 2013,
               <http://www.rfc-editor.org/info/rfc6838>.
 
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 18]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
-
+   [VP9-BITSTREAM]
+              Grange, A., de Rivaz, P., and J. Hunt, "VP9 Bitstream &
+              Decoding Process Specification", Version 0.6, March 2016,
+              <https://storage.googleapis.com/downloads.webmproject.org/
+              docs/vp9/vp9-bitstream-specification-
+              v0.6-20160331-draft.pdf>.
 
 10.2.  Informative References
 
@@ -1047,6 +1059,13 @@ Authors' Addresses
    Email: justin@uberti.name
 
 
+
+
+Uberti, et al.           Expires January 3, 2018               [Page 19]
+
+Internet-Draft         RTP Payload Format for VP9              July 2017
+
+
    Stefan Holmer
    Google, Inc.
    Kungsbron 2
@@ -1054,16 +1073,6 @@ Authors' Addresses
    Sweden
 
    Email: holmer@google.com
-
-
-
-
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 19]
-
-Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
    Magnus Flodman
@@ -1108,13 +1117,4 @@ Internet-Draft         RTP Payload Format for VP9             March 2016
 
 
 
-
-
-
-
-
-
-
-
-
-Uberti, et al.         Expires September 19, 2016              [Page 20]
+Uberti, et al.           Expires January 3, 2018               [Page 20]
