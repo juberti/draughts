@@ -61,7 +61,7 @@
     </section>
 
     <section title="Types of FEC">
-      <t>By its name, FEC describes the sending of redundant information in
+      <t>FEC describes the sending of redundant information in
          an outgoing packet stream so that information can still be recovered
          even in the face of packet loss. There are multiple ways in which this
          can be accomplished; this section enumerates the various mechanisms
@@ -73,6 +73,8 @@
             While by far the most flexible, each FEC packet will have its own
             IP+UDP+RTP+FEC header, leading to additional overhead of the FEC stream.
           </t>
+          <t>This approach allows for recovery of entire RTP packets, including
+          the full RTP header.</t>
       </section>
       <section title="Redundant Encoding">
           <t>This approach, as descibed in <xref target="RFC2198"/>, allows for redundant data
@@ -87,6 +89,9 @@
             the data all fits into a single packet (i.e. the size is less than a MTU).
             As a result, this approach is generally not useful for video content.
           </t>
+          <t>As described in <xref target="RFC2198"/>, Section 4, this approach
+          cannot recover certain parts of the RTP header, including the marker
+          bit, CSRC information, and header extensions.</t>
       </section>
        <section title="Codec-Specific In-band FEC">
           <t>Some audio codecs, notably Opus <xref target="RFC6716"/> and AMR
@@ -109,6 +114,7 @@
             no additional framing, it can be slightly more efficient. See
             <xref target="RFC4867"/>, Section 3.7.1 for details on this mechanism.
           </t>
+          <t>In-band FEC mechanisms cannot recover any of the RTP header.</t>
       </section>
     </section>
 
@@ -147,6 +153,14 @@
         packet per frame, use of a separate FEC stream comes with a higher overhead
         than other mechanisms, and therefore is NOT RECOMMENDED.
         </t>
+        <t>As mentioned above, the recommended mechanisms do not allow
+        recovery of parts of the RTP header that may be important in
+        certain audio applications, e.g., CSRCs and RTP header extensions like
+        those specified in <xref target="RFC6464"/> and <xref target="RFC6465"/>.
+        Implementations SHOULD account for this and attempt to approximate
+        this information, using an approach similar to those described in
+        <xref target="RFC2198"/>, Section 4, and <xref target="RFC646"/>,
+        Section 5.</t>
       </section>
 
       <section title="Negotiating Support">
@@ -304,6 +318,8 @@
       <?rfc include='reference.RFC.5763.xml'?>
       <?rfc include='reference.RFC.5764.xml'?>
       <?rfc include='reference.RFC.6386.xml'?>
+      <?rfc include='reference.RFC.6464.xml'?>
+      <?rfc include='reference.RFC.6465.xml'?>
       <?rfc include='reference.RFC.6716.xml'?>
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
       <reference anchor="TS.26114">
