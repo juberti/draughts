@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd">
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <?rfc toc="yes" ?>
@@ -10,318 +10,338 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-
-<rfc category="std" docName="draft-ietf-rtcweb-fec-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-06" ipr="trust200902">
   <front>
-    <title abbrev="WebRTC FEC">WebRTC Forward Error Correction Requirements</title>
-
+    <title abbrev="WebRTC FEC">WebRTC Forward Error Correction
+    Requirements</title>
     <author fullname="Justin Uberti" initials="J." surname="Uberti">
       <organization>Google</organization>
-
       <address>
         <postal>
           <street>747 6th St S</street>
-
           <city>Kirkland</city>
-
           <region>WA</region>
-
           <code>98033</code>
-
           <country>USA</country>
         </postal>
-
         <email>justin@uberti.name</email>
       </address>
     </author>
-
-    <date day="23" month="May" year="2017" />
-
+    <date day="2" month="July" year="2017" />
     <area>RAI</area>
-
     <abstract>
-      <t>This document provides information and requirements for how
-      Forward Error Correction (FEC) should be used by WebRTC implementations.</t>
+
+      <t>This document provides information and requirements for how Forward
+      Error Correction (FEC) should be used by WebRTC implementations.</t>
     </abstract>
   </front>
-
   <middle>
     <section title="Introduction">
-      <t>In situations where packet loss is high, or perfect media quality is essential,
-      Forward Error Correction (FEC) can be used to proactively recover from packet losses.
-      This specification provides guidance on which FEC mechanisms to use, and
-      how to use them, for WebRTC implementations.</t>
-    </section>
 
+      <t>In situations where packet loss is high, or perfect media quality is
+      essential, Forward Error Correction (FEC) can be used to proactively
+      recover from packet losses. This specification provides guidance on which
+      FEC mechanisms to use, and how to use them, for WebRTC
+      implementations.</t>
+    </section>
     <section title="Terminology">
+
       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref
-      target="RFC2119"></xref>.</t>
+      document are to be interpreted as described in
+      <xref target="RFC2119"></xref>.</t>
     </section>
-
     <section title="Types of FEC">
-      <t>FEC describes the sending of redundant information in
-         an outgoing packet stream so that information can still be recovered
-         even in the face of packet loss. There are multiple ways in which this
-         can be accomplished; this section enumerates the various mechanisms
-         and describes their tradeoffs.</t>
+
+      <t>FEC describes the sending of redundant information in an outgoing
+      packet stream so that information can still be recovered even in the face
+      of packet loss. There are multiple ways in which this can be
+      accomplished; this section enumerates the various mechanisms and
+      describes their tradeoffs.</t>
       <section title="Separate FEC Stream">
-          <t>This approach, as described in <xref target="RFC5956"/>, Section 4.3,
-            sends FEC packets as an
-            independent SSRC-multiplexed stream, with its own SSRC and payload type.
-            While this approach can protect multiple
-            packets of the primary encoding with a single FEC packet, each
-            FEC packet will have its own IP+UDP+RTP+FEC header, and this
-            overhead can be excessive in some cases, e.g., when protecting
-            each primary packet with a FEC packet.
-          </t>
-          <t>This approach allows for recovery of entire RTP packets, including
-          the full RTP header.</t>
+
+        <t>This approach, as described in
+        <xref target="RFC5956" />, Section 4.3, sends FEC packets as an
+        independent SSRC-multiplexed stream, with its own SSRC and payload
+        type. While this approach can protect multiple packets of the primary
+        encoding with a single FEC packet, each FEC packet will have its own
+        IP+UDP+RTP+FEC header, and this overhead can be excessive in some
+        cases, e.g., when protecting each primary packet with a FEC packet.</t>
+
+        <t>This approach allows for recovery of entire RTP packets, including
+        the full RTP header.</t>
       </section>
       <section title="Redundant Encoding">
-          <t>This approach, as descibed in <xref target="RFC2198"/>, allows for redundant data
-            to be piggybacked on an existing primary encoding, all in a single packet.
-            This redundant data may be an exact copy of a previous packet, or
-            for codecs that support variable-bitrate encodings, possibly a smaller,
-            lower-quality representation. In certain cases, the redundant data
-            could include multiple prior packets.</t>
-          <t>Since there is only a single set of
-            packet headers, this approach allows for a very efficient representation of
-            primary + redundant data. However, this savings is only realized when
-            the data all fits into a single packet (i.e. the size is less than a MTU).
-            As a result, this approach is generally not useful for video content.
-          </t>
-          <t>As described in <xref target="RFC2198"/>, Section 4, this approach
-          cannot recover certain parts of the RTP header, including the marker
-          bit, CSRC information, and header extensions.</t>
+
+        <t>This approach, as descibed in
+        <xref target="RFC2198" />, allows for redundant data to be piggybacked
+        on an existing primary encoding, all in a single packet. This redundant
+        data may be an exact copy of a previous packet, or for codecs that
+        support variable-bitrate encodings, possibly a smaller, lower-quality
+        representation. In certain cases, the redundant data could include
+        multiple prior packets.</t>
+
+        <t>Since there is only a single set of packet headers, this approach
+        allows for a very efficient representation of primary + redundant data.
+        However, this savings is only realized when the data all fits into a
+        single packet (i.e. the size is less than a MTU). As a result, this
+        approach is generally not useful for video content.</t>
+
+        <t>As described in
+        <xref target="RFC2198" />, Section 4, this approach cannot recover
+        certain parts of the RTP header, including the marker bit, CSRC
+        information, and header extensions.</t>
       </section>
-       <section title="Codec-Specific In-band FEC">
-          <t>Some audio codecs, notably Opus <xref target="RFC6716"/> and AMR
-            <xref target="RFC4867"/> support their own in-band FEC
-            mechanism, where redundant data is included in the codec payload.</t>
-          <t>For Opus, packets deemed as important are re-encoded
-            at a lower bitrate and added to the subsequent packet, allowing partial
-            recovery of a lost packet. This scheme is fairly efficient;
-            experiments performed indicate that when Opus FEC is used, the overhead
-            imposed is about 20-30%, depending on the amount of protection needed.
-            Note that this mechanism can only carry redundancy information for the
-            immediately preceding packet; as such the decoder cannot fully
-            recover multiple consecutive lost packets, which can be a problem
-            on wireless networks. See <xref target="RFC6716"/>,
-            Section 2.1.7 for complete details.
-          </t>
-          <t>For AMR/AMR-WB, packets can contain copies or lower-quality encodings
-            of multiple prior audio frames. This mechanism is similar to the
-            <xref target="RFC2198"/> mechanism described above, but as it adds
-            no additional framing, it can be slightly more efficient. See
-            <xref target="RFC4867"/>, Section 3.7.1 for details on this mechanism.
-          </t>
-          <t>In-band FEC mechanisms cannot recover any of the RTP header.</t>
+      <section title="Codec-Specific In-band FEC">
+
+        <t>Some audio codecs, notably Opus
+        <xref target="RFC6716" /> and AMR
+        <xref target="RFC4867" /> support their own in-band FEC mechanism, where
+        redundant data is included in the codec payload.</t>
+
+        <t>For Opus, packets deemed as important are re-encoded at a lower
+        bitrate and added to the subsequent packet, allowing partial recovery
+        of a lost packet. This scheme is fairly efficient; experiments
+        performed indicate that when Opus FEC is used, the overhead imposed is
+        about 20-30%, depending on the amount of protection needed. Note that
+        this mechanism can only carry redundancy information for the
+        immediately preceding packet; as such the decoder cannot fully recover
+        multiple consecutive lost packets, which can be a problem on wireless
+        networks. See
+        <xref target="RFC6716" />, Section 2.1.7 for complete details.</t>
+
+        <t>For AMR/AMR-WB, packets can contain copies or lower-quality
+        encodings of multiple prior audio frames. This mechanism is similar to
+        the
+        <xref target="RFC2198" /> mechanism described above, but as it adds no
+        additional framing, it can be slightly more efficient. See
+        <xref target="RFC4867" />, Section 3.7.1 for details on this
+        mechanism.</t>
+
+        <t>In-band FEC mechanisms cannot recover any of the RTP header.</t>
       </section>
     </section>
-
     <section title="FEC for Audio Content" anchor="audio-fec">
-      <t>The following section provides guidance on how to best use FEC for transmitting
-      audio data. As indicated in <xref target="adaptive-fec"/> below, FEC should only
-      be activated if network conditions warrant it, or upon explicit application request.
-      </t>
-      <section title="Recommended Mechanism">
-        <t>When using variable-bitrate codecs without an internal FEC,
-        <xref target="RFC2198"/> redundant encoding with lower-fidelity version(s)
-        of the previous packet(s) is RECOMMENDED. This provides reasonable
-        protection of the payload with only moderate bitrate increase, as the
-        redundant encodings can be significantly smaller than the primary
-        encoding.
-        </t>
-        <t>When using the Opus codec, use of
-          the built-in Opus FEC mechanism is RECOMMENDED. This provides reasonable
-          protection of the audio stream against individual losses, with minimal
-          overhead. Note that as indicated above the built-in Opus FEC only
-          provides single-frame redundancy; if multi-packet protection is needed,
-          the aforementioned <xref target="RFC2198"/> redundancy with
-          reduced-bitrate Opus encodings SHOULD be used instead.
-        </t>
-        <t>When using the AMR/AMR-WB codecs, use of their built-in FEC
-          mechanism is RECOMMENDED. This provides slightly more efficient
-          protection of the audio stream than <xref target="RFC2198"/>.
-        </t>
-        <t>When using constant-bitrate codecs, e.g. PCMU, use of
-        <xref target="RFC2198"/> redundant encoding MAY be used, but note that
-        this will result in a potentially significant bitrate increase, and
-        that suddenly increasing bitrate to deal with losses from congestion may
-        actually make things worse.
-        </t>
-        <t>Because of the lower packet rate of audio encodings, usually a single
-        packet per frame, use of a separate FEC stream comes with a higher overhead
-        than other mechanisms, and therefore is NOT RECOMMENDED.
-        </t>
-        <t>As mentioned above, the recommended mechanisms do not allow
-        recovery of parts of the RTP header that may be important in
-        certain audio applications, e.g., CSRCs and RTP header extensions like
-        those specified in <xref target="RFC6464"/> and <xref target="RFC6465"/>.
-        Implementations SHOULD account for this and attempt to approximate
-        this information, using an approach similar to those described in
-        <xref target="RFC2198"/>, Section 4, and <xref target="RFC6464"/>,
-        Section 5.</t>
-      </section>
 
+      <t>The following section provides guidance on how to best use FEC for
+      transmitting audio data. As indicated in
+      <xref target="adaptive-fec" /> below, FEC should only be activated if
+      network conditions warrant it, or upon explicit application request.</t>
+      <section title="Recommended Mechanism">
+
+        <t>When using variable-bitrate codecs without an internal FEC,
+        <xref target="RFC2198" /> redundant encoding with lower-fidelity
+        version(s) of the previous packet(s) is RECOMMENDED. This provides
+        reasonable protection of the payload with only moderate bitrate
+        increase, as the redundant encodings can be significantly smaller than
+        the primary encoding.</t>
+
+        <t>When using the Opus codec, use of the built-in Opus FEC mechanism is
+        RECOMMENDED. This provides reasonable protection of the audio stream
+        against individual losses, with minimal overhead. Note that as
+        indicated above the built-in Opus FEC only provides single-frame
+        redundancy; if multi-packet protection is needed, the aforementioned
+        <xref target="RFC2198" /> redundancy with reduced-bitrate Opus encodings
+        SHOULD be used instead.</t>
+
+        <t>When using the AMR/AMR-WB codecs, use of their built-in FEC
+        mechanism is RECOMMENDED. This provides slightly more efficient
+        protection of the audio stream than
+        <xref target="RFC2198" />.</t>
+
+        <t>When using constant-bitrate codecs, e.g. PCMU, use of
+        <xref target="RFC2198" /> redundant encoding MAY be used, but note that
+        this will result in a potentially significant bitrate increase, and
+        that suddenly increasing bitrate to deal with losses from congestion
+        may actually make things worse.</t>
+
+        <t>Because of the lower packet rate of audio encodings, usually a
+        single packet per frame, use of a separate FEC stream comes with a
+        higher overhead than other mechanisms, and therefore is NOT
+        RECOMMENDED.</t>
+
+        <t>As mentioned above, the recommended mechanisms do not allow recovery
+        of parts of the RTP header that may be important in certain audio
+        applications, e.g., CSRCs and RTP header extensions like those
+        specified in
+        <xref target="RFC6464" /> and
+        <xref target="RFC6465" />. Implementations SHOULD account for this and
+        attempt to approximate this information, using an approach similar to
+        those described in
+        <xref target="RFC2198" />, Section 4, and
+        <xref target="RFC6464" />, Section 5.</t>
+      </section>
       <section title="Negotiating Support">
+
         <t>Support for redundant encoding of a given RTP stream SHOULD be
-        indicated by including
-        audio/red <xref target="RFC2198"/> as
-        an additional supported media type for the associated m= section
-        in the SDP offer <xref target="RFC3264"/>.
-        Answerers can reject the use of
-        redundant encoding by not including the audio/red media type in the
-        corresponding m= section in the SDP answer.</t>
-        <t>Support for codec-specific FEC mechanisms are typically indicated via
-        "a=fmtp" parameters.</t>
+        indicated by including audio/red
+        <xref target="RFC2198" /> as an additional supported media type for the
+        associated m= section in the SDP offer
+        <xref target="RFC3264" />. Answerers can reject the use of redundant
+        encoding by not including the audio/red media type in the corresponding
+        m= section in the SDP answer.</t>
+
+        <t>Support for codec-specific FEC mechanisms are typically indicated
+        via "a=fmtp" parameters.</t>
+
         <t>For Opus, a receiver MUST indicate that it is prepared to use
         incoming FEC data with the "useinbandfec=1" parameter, as specified in
-        <xref target="RFC7587"/>.
-        This parameter is declarative and can
-        be negotiated separately for either media direction.</t>
+        <xref target="RFC7587" />. This parameter is declarative and can be
+        negotiated separately for either media direction.</t>
+
         <t>For AMR/AMR-WB, support for redundant encoding, and the maximum
-        supported depth, are controlled by the 'max-red' parameter, as specified
-        in <xref target="RFC4867"/>, Section 8.1. Receivers MUST include this
+        supported depth, are controlled by the 'max-red' parameter, as
+        specified in
+        <xref target="RFC4867" />, Section 8.1. Receivers MUST include this
         parameter, and set it to an appropriate value, as specified in
-        <xref target="TS.26114"/>, Table 6.3.</t>
+        <xref target="TS.26114" />, Table 6.3.</t>
       </section>
     </section>
-
     <section title="FEC for Video Content" anchor="video-fec">
-      <t>The following section provides guidance on how to best use FEC for transmitting
-      video data. As indicated in <xref target="adaptive-fec"/> below, FEC should only
-      be activated if network conditions warrant it, or upon explicit application request.
-      </t>
+
+      <t>The following section provides guidance on how to best use FEC for
+      transmitting video data. As indicated in
+      <xref target="adaptive-fec" /> below, FEC should only be activated if
+      network conditions warrant it, or upon explicit application request.</t>
       <section title="Recommended Mechanism">
+
         <t>Video frames, due to their size, often require multiple RTP packets.
-        As discussed above, a separate FEC stream can protect multiple
-        packets with a single FEC packet. In addition, the "flexfec" FEC
-        mechanism described in
-        <xref target="I-D.ietf-payload-flexible-fec-scheme"/> is also capable of
-        protecting multiple RTP streams via a single
-        FEC stream, including all the streams that are part of a
-        BUNDLE <xref target="I-D.ietf-mmusic-sdp-bundle-negotiation"/> group.
-        As a result, for video content, use of a separate FEC
-        stream with the flexfec RTP payload format is RECOMMENDED.
-        </t>
-        <t>To process the incoming FEC stream, the receiver can demultiplex it by SSRC,
-        and then correlate it with the appropriate primary stream(s) via the CSRC(s) present in the RTP header of flexfec repair packets, or the SSRC field present in the FEC header of flexfec retransmission packets.
-        </t>
+        As discussed above, a separate FEC stream can protect multiple packets
+        with a single FEC packet. In addition, the "flexfec" FEC mechanism
+        described in
+        <xref target="I-D.ietf-payload-flexible-fec-scheme" /> is also capable
+        of protecting multiple RTP streams via a single FEC stream, including
+        all the streams that are part of a BUNDLE
+        <xref target="I-D.ietf-mmusic-sdp-bundle-negotiation" /> group. As a
+        result, for video content, use of a separate FEC stream with the
+        flexfec RTP payload format is RECOMMENDED.</t>
+
+        <t>To process the incoming FEC stream, the receiver can demultiplex it
+        by SSRC, and then correlate it with the appropriate primary stream(s)
+        via the CSRC(s) present in the RTP header of flexfec repair packets, or
+        the SSRC field present in the FEC header of flexfec retransmission
+        packets.</t>
       </section>
       <section title="Negotiating Support">
-        <t>Support for a SSRC-multiplexed flexfec stream to protect a
-          given RTP stream SHOULD be indicated by
-          including one of the formats described in
-          <xref target="I-D.ietf-payload-flexible-fec-scheme"/>, Section 5.1,
-          as an additional supported media type for the associated m= section
-          in the SDP offer
-          <xref target="RFC3264"/>. As mentioned above, when BUNDLE is
-          used, only a single flexfec repair stream will be created for each
-          BUNDLE group, even if flexfec is negotiated for each primary
-          stream.
-        </t>
+
+        <t>Support for a SSRC-multiplexed flexfec stream to protect a given RTP
+        stream SHOULD be indicated by including one of the formats described in
+
+        <xref target="I-D.ietf-payload-flexible-fec-scheme" />, Section 5.1, as
+        an additional supported media type for the associated m= section in the
+        SDP offer
+        <xref target="RFC3264" />. As mentioned above, when BUNDLE is used,
+        only a single flexfec repair stream will be created for each BUNDLE
+        group, even if flexfec is negotiated for each primary stream.</t>
+
         <t>Answerers can reject the use of SSRC-multiplexed FEC, by not
-          including the offered FEC formats in the corresponding m= section
-          in the SDP answer.</t>
+        including the offered FEC formats in the corresponding m= section in
+        the SDP answer.</t>
+
         <t>Use of FEC-only m-lines, and grouping using the SDP group mechanism
-          as described in <xref target="RFC5956"/>, Section 4.1
-          is not currently defined for WebRTC, and SHOULD NOT be offered.</t>
+        as described in
+        <xref target="RFC5956" />, Section 4.1 is not currently defined for
+        WebRTC, and SHOULD NOT be offered.</t>
+
         <t>Answerers SHOULD reject any FEC-only m-lines, unless they
-        specifically know how to handle such a thing in a WebRTC context (perhaps
-        defined by a future version of the WebRTC specifications).</t>
+        specifically know how to handle such a thing in a WebRTC context
+        (perhaps defined by a future version of the WebRTC specifications).</t>
       </section>
     </section>
-
     <section title="FEC for Application Content">
+
       <t>WebRTC also supports the ability to send generic application data, and
       provides transport-level retransmission mechanisms to support full and
-      partial (e.g. timed) reliability.
-      See <xref target="I-D.ietf-rtcweb-data-channel"/> for details.</t>
-      <t>
-      Because the application can control exactly what data to send, it has the
-      ability to monitor packet statistics and perform its own application-level
-      FEC, if necessary.</t>
+      partial (e.g. timed) reliability. See
+      <xref target="I-D.ietf-rtcweb-data-channel" /> for details.</t>
+
+      <t>Because the application can control exactly what data to send, it has
+      the ability to monitor packet statistics and perform its own
+      application-level FEC, if necessary.</t>
+
       <t>As a result, this document makes no recommendations regarding FEC for
       the underlying data transport.</t>
     </section>
-
     <section title="Implementation Requirements">
-      <t>To support the functionality recommended above, implementations MUST
-      be able to receive and make use of the relevant FEC formats for
-      their supported audio codecs, and MUST indicate this support,
-      as described in <xref target="audio-fec"/>.
-      Use of these formats when sending, as mentioned above, is RECOMMENDED.</t>
-      <t>The general FEC
-      mechanism described in <xref target="I-D.ietf-payload-flexible-fec-scheme"/>
-      SHOULD also be supported, as mentioned in <xref target="video-fec"/>.</t>
-      <t>Implementations MAY support additional FEC mechanisms if desired,
-      e.g. <xref target="RFC5109"/>.</t>
-    </section>
 
+      <t>To support the functionality recommended above, implementations MUST
+      be able to receive and make use of the relevant FEC formats for their
+      supported audio codecs, and MUST indicate this support, as described in
+      <xref target="audio-fec" />. Use of these formats when sending, as
+      mentioned above, is RECOMMENDED.</t>
+
+      <t>The general FEC mechanism described in
+      <xref target="I-D.ietf-payload-flexible-fec-scheme" /> SHOULD also be
+      supported, as mentioned in
+      <xref target="video-fec" />.</t>
+
+      <t>Implementations MAY support additional FEC mechanisms if desired, e.g.
+
+      <xref target="RFC5109" />.</t>
+    </section>
     <section title="Adaptive Use of FEC" anchor="adaptive-fec">
+
       <t>Since use of FEC always causes redundant data to be transmitted, this
       will lead to less bandwidth available for the primary encoding when in a
       bandwidth-constrained environment. This is in contrast to methods like
-      RTX <xref target="RFC4588"/> or flexfec
-      <xref target="I-D.ietf-payload-flexible-fec-scheme"/> retransmissions,
-      which only transmit redundant data when
-      necessary, at the cost of an extra roundtrip.</t>
+      RTX
+      <xref target="RFC4588" /> or flexfec
+      <xref target="I-D.ietf-payload-flexible-fec-scheme" /> retransmissions,
+      which only transmit redundant data when necessary, at the cost of an
+      extra roundtrip.</t>
+
       <t>Given this, WebRTC implementations SHOULD consider using RTX or
-      flexfec retransmissions instead of FEC when RTT is low, and SHOULD
-      only transmit the amount of FEC needed
-      to protect against the observed packet loss (which can be determined,
-      e.g., by monitoring transmit packet loss data from RTCP Receiver Reports
-      <xref target="RFC3550"/>), unless the application indicates it is willing
-      to pay a quality penalty to proactively avoid losses.</t>
-      <t>Note that when probing bandwidth, i.e., speculatively sending
-      extra data to determine if additional link capacity exists, FEC
-      SHOULD be used in all cases. Given that extra data is going to be
-      sent regardless, it makes sense to have that data protect the
-      primary payload; in addition, FEC can be applied in a way that increases
-      bandwidth only modestly, which is necessary when probing.</t>
-      <t>When using FEC with layered codecs, e.g., <xref target="RFC6386"/>,
-      where only base layer frames are critical to the decoding of future
-      frames, implementations SHOULD only apply FEC to these base layer frames.
-      </t>
-    </section>
+      flexfec retransmissions instead of FEC when RTT is low, and SHOULD only
+      transmit the amount of FEC needed to protect against the observed packet
+      loss (which can be determined, e.g., by monitoring transmit packet loss
+      data from RTCP Receiver Reports
+      <xref target="RFC3550" />), unless the application indicates it is
+      willing to pay a quality penalty to proactively avoid losses.</t>
 
+      <t>Note that when probing bandwidth, i.e., speculatively sending extra
+      data to determine if additional link capacity exists, FEC SHOULD be used
+      in all cases. Given that extra data is going to be sent regardless, it
+      makes sense to have that data protect the primary payload; in addition,
+      FEC can be applied in a way that increases bandwidth only modestly, which
+      is necessary when probing.</t>
+
+      <t>When using FEC with layered codecs, e.g.,
+      <xref target="RFC6386" />, where only base layer frames are critical to
+      the decoding of future frames, implementations SHOULD only apply FEC to
+      these base layer frames.</t>
+    </section>
     <section title="Security Considerations">
+
       <t>This document makes recommendations regarding the use of FEC.
-      Generally, it should be noted that although applying redundancy is often useful
-      in protecting a stream against packet loss, if the loss is caused by network
-      congestion, the additional bandwidth used by the redundant data may actually
-      make the situation worse, and can lead to significant degradation of the
-      network.
-      </t>
-      <t>As described in <xref target="RFC3711"/>, Section 10, the default
-      processing when using FEC with SRTP is to perform FEC followed by SRTP
-      at the sender, and SRTP followed by FEC at the receiver. This
-      ordering is used for all the SRTP Protection Profiles used in DTLS-SRTP
-      <xref target="RFC5763"/>, as described in <xref target="RFC5764"/>,
-      Section 4.1.2.
-      </t>
+      Generally, it should be noted that although applying redundancy is often
+      useful in protecting a stream against packet loss, if the loss is caused
+      by network congestion, the additional bandwidth used by the redundant
+      data may actually make the situation worse, and can lead to significant
+      degradation of the network.</t>
+
+      <t>As described in
+      <xref target="RFC3711" />, Section 10, the default processing when using
+      FEC with SRTP is to perform FEC followed by SRTP at the sender, and SRTP
+      followed by FEC at the receiver. This ordering is used for all the SRTP
+      Protection Profiles used in DTLS-SRTP
+      <xref target="RFC5763" />, as described in
+      <xref target="RFC5764" />, Section 4.1.2.</t>
+
       <t>Additional security considerations for each individual FEC mechanism
-      are enumerated in their respective documents.
-      </t>
-
+      are enumerated in their respective documents.</t>
     </section>
-
     <section title="IANA Considerations">
+
       <t>This document requires no actions from IANA.</t>
     </section>
-
     <section title="Acknowledgements">
-      <t>Several people provided significant input into this document, including
-      Bernard Aboba, Jonathan Lennox, Giri Mandyam, Varun Singh, Tim Terriberry,
-      Magnus Westerlund, and Mo Zanaty.</t>
+
+      <t>Several people provided significant input into this document,
+      including Bernard Aboba, Jonathan Lennox, Giri Mandyam, Varun Singh, Tim
+      Terriberry, Magnus Westerlund, and Mo Zanaty.</t>
     </section>
   </middle>
-
   <back>
-
     <references title="Normative References">
       <?rfc include='reference.RFC.2119.xml'?>
       <?rfc include='reference.RFC.2198.xml'?>
@@ -330,8 +350,7 @@
       <?rfc include='reference.RFC.5956.xml'?>
       <?rfc include='reference.RFC.7587.xml'?>
       <?rfc include='reference.I-D.ietf-payload-flexible-fec-scheme'?>
-    </references>
-
+      </references>
     <references title="Informative References">
       <?rfc include='reference.RFC.3550.xml'?>
       <?rfc include='reference.RFC.3711.xml'?>
@@ -347,56 +366,107 @@
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
       <reference anchor="TS.26114">
         <front>
-          <title>IP Multimedia Subsystem (IMS); Multimedia telephony; Media handling and interaction
-          </title>
+          <title>IP Multimedia Subsystem (IMS); Multimedia telephony; Media
+          handling and interaction</title>
           <author>
             <organization>3GPP</organization>
           </author>
-          <date day="17" month="March" year="2016"/>
+          <date day="17" month="March" year="2016" />
         </front>
-        <seriesInfo name="3GPP TS" value="26.114 13.3.0"/>
-        <format type="HTML" target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm"/>
+        <seriesInfo name="3GPP TS" value="26.114 13.3.0" />
+        <format type="HTML"
+        target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm" />
       </reference>
     </references>
-
     <section title="Change log">
-      <t>Changes in draft -06: <list style="symbols">
-        <t>Placeholder</t>
+
+      <t>Changes in draft -06:
+      <list style="symbols">
+
+        <t>Discuss how multiple streams can be protected by a single FlexFEC
+        stream.</t>
+
+        <t>Discuss FEC for bandwidth probing.</t>
+
+        <t>Add note about recovery of RTP headers and header extensions.</t>
+
+        <t>Add note about FEC/SRTP ordering.</t>
+
+        <t>Clarify flexfec demux text, and mention retransmits.</t>
+
+        <t>Clarify text regarding offers/answers.</t>
+
+        <t>Make RFC2198 support SHOULD strength.</t>
+
+        <t>Clean up references.</t>
       </list></t>
-      <t>Changes in draft -05: <list style="symbols">
+
+      <t>Changes in draft -05:
+      <list style="symbols">
+
         <t>No changes.</t>
       </list></t>
-      <t>Changes in draft -04: <list style="symbols">
+
+      <t>Changes in draft -04:
+      <list style="symbols">
+
         <t>Discussion of layered codecs.</t>
+
         <t>Discussion of RTX.</t>
+
         <t>Clarified implementation requirements.</t>
-        <t>FlexFEC MUST -> SHOULD.</t>
+
+        <t>FlexFEC MUST -&gt; SHOULD.</t>
+
         <t>Clarified AMR max-red handling.</t>
+
         <t>Updated references.</t>
       </list></t>
-      <t>Changes in draft -03: <list style="symbols">
+
+      <t>Changes in draft -03:
+      <list style="symbols">
+
         <t>Added overhead stats for Opus.</t>
+
         <t>Expanded discussion of multi-packet FEC for Opus.</t>
+
         <t>Added discussion of AMR/AMR-WB.</t>
+
         <t>Removed discussion of ssrc-group.</t>
+
         <t>Referenced the data channel doc.</t>
+
         <t>Referenced the RTP/RTCP RFC.</t>
+
         <t>Several small edits based on feedback from Magnus.</t>
       </list></t>
-      <t>Changes in draft -02: <list style="symbols">
+
+      <t>Changes in draft -02:
+      <list style="symbols">
+
         <t>Expanded discussion of FEC-only m-lines, and how they should be
         handled in offers and answers.</t>
       </list></t>
-      <t>Changes in draft -01: <list style="symbols">
+
+      <t>Changes in draft -01:
+      <list style="symbols">
+
         <t>Tweaked abstract/intro text that was ambiguously normative.</t>
+
         <t>Removed text on FEC for Opus in CELT mode.</t>
-        <t>Changed RFC 2198 recommendation for PCMU to be MAY instead of
-           NOT RECOMMENDED, based on list feedback.</t>
-        <t>Explicitly called out application data as something not addressed
-           in this document.</t>
+
+        <t>Changed RFC 2198 recommendation for PCMU to be MAY instead of NOT
+        RECOMMENDED, based on list feedback.</t>
+
+        <t>Explicitly called out application data as something not addressed in
+        this document.</t>
+
         <t>Updated flexible-fec reference.</t>
       </list></t>
-      <t>Changes in draft -00: <list style="symbols">
+
+      <t>Changes in draft -00:
+      <list style="symbols">
+
         <t>Initial version, from sidebar conversation at IETF 90.</t>
       </list></t>
     </section>
