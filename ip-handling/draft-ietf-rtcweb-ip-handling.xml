@@ -23,7 +23,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-03"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-04"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -54,11 +54,11 @@ ipr="trust200902">
         <email>guoweis@google.com</email>
       </address>
     </author>
-    <date day="14" month="January" year="2017" />
+    <date day="3" month="July" year="2017" />
     <area>RAI</area>
     <abstract>
       <t>This document provides information and requirements for how
-      IP addresses should be handled by WebRTC applications.</t>
+      IP addresses should be handled by WebRTC implementations.</t>
     </abstract>
   </front>
   <middle>
@@ -67,8 +67,9 @@ ipr="trust200902">
       send data over different network paths than the path used for HTTP
       traffic. This may allow a web application to learn additional information
       about the user, which may be problematic in certain cases. This document
-      summarizes the concerns, and makes recommendations on how best to handle
-      the tradeoff between privacy and media performance.</t>
+      summarizes the concerns, and makes recommendations on how WebRTC
+      implementations should best handle the tradeoff between privacy and
+      media performance.</t>
     </section>
     <section title="Problem Statement">
       <t>WebRTC enables real-time peer-to-peer communications by enumerating
@@ -249,7 +250,7 @@ ipr="trust200902">
     </section>
     <section title="Acknowledgements">
       <t>Several people provided input into this document, including
-      Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
+      Bernard Aboba, Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
       Adam Roach, and Martin Thomson.</t>
     </section>
   </middle>
