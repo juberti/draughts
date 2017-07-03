@@ -301,12 +301,28 @@ ipr="trust200902">
       </references>
     <section title="Change log">
 
+      <t>Changes in draft -04:
+      <list style="symbols">
+
+        <t>Rewording and cleanup in abstract, intro, and problem statement.</t>
+
+        <t>Added 2119 boilerplate.</t>
+
+        <t>Fixed weird reference spacing.</t>
+
+        <t>Expanded acronyms on first use.</t>
+
+        <t>Removed 8.8.8.8 mention.</t>
+
+        <t>Removed mention of future browser considerations.</t>
+      </list></t>
+
       <t>Changes in draft -03:
       <list style="symbols">
 
         <t>Clarified when to use which modes.</t>
 
-        <t>Use 2119 qualifiers to make normative statements.</t>
+        <t>Added 2119 qualifiers to make normative statements.</t>
 
         <t>Defined 'proxy'.</t>
 
