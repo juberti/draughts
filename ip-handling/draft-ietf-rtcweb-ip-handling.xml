@@ -230,10 +230,6 @@ ipr="trust200902">
         set of ICE candidates by checking for the presence of host candidates.
         If no host candidates are present, Mode 3 or 4 above is in use; this
         knowledge can be useful for diagnostic purposes.</t>
-        <t>Future versions of browsers may present an indicator to signify that
-        the page is using WebRTC to set up a peer-to-peer connection.
-        Applications MUST only use WebRTC in a fashion that is
-        consistent with user expectations.</t>
       </list></t>
     </section>
     <section title="Security Considerations">
