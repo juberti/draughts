@@ -350,6 +350,19 @@
       <?rfc include='reference.RFC.5956.xml'?>
       <?rfc include='reference.RFC.7587.xml'?>
       <?rfc include='reference.I-D.ietf-payload-flexible-fec-scheme'?>
+      <reference anchor="TS.26114">
+        <front>
+          <title>IP Multimedia Subsystem (IMS); Multimedia telephony; Media
+          handling and interaction</title>
+          <author>
+            <organization>3GPP</organization>
+          </author>
+          <date day="17" month="March" year="2016" />
+        </front>
+        <seriesInfo name="3GPP TS" value="26.114 13.3.0" />
+        <format type="HTML"
+        target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm" />
+      </reference>
       </references>
     <references title="Informative References">
       <?rfc include='reference.RFC.3550.xml'?>
@@ -364,19 +377,6 @@
       <?rfc include='reference.RFC.6716.xml'?>
       <?rfc include='reference.I-D.ietf-mmusic-sdp-bundle-negotiation'?>
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
-      <reference anchor="TS.26114">
-        <front>
-          <title>IP Multimedia Subsystem (IMS); Multimedia telephony; Media
-          handling and interaction</title>
-          <author>
-            <organization>3GPP</organization>
-          </author>
-          <date day="17" month="March" year="2016" />
-        </front>
-        <seriesInfo name="3GPP TS" value="26.114 13.3.0" />
-        <format type="HTML"
-        target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm" />
-      </reference>
     </references>
     <section title="Change log">
 
