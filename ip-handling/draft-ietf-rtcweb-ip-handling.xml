@@ -136,22 +136,21 @@ ipr="trust200902">
     </section>
     <section title="Goals">
 
-      <t>WebRTC's support of secure peer-to-peer connections
-      facilitates deployment of decentralized systems, which can have privacy
-      benefits. As a result, we want to avoid blunt solutions that disable
-      WebRTC or make it significantly harder to use. This document
-      takes a more nuanced approach, with the following goals:
+      <t>Being peer-to-peer, WebRTC represents a privacy-enabling technology,
+      and therefore we want to avoid solutions that disable WebRTC or make it
+      harder to use. This means that WebRTC should be configured by default to
+      only reveal the minimum amount of information needed to establish a
+      performant WebRTC session, while providing options to reveal additional
+      information upon user consent, or further limit this information if the
+      user has specifically requested this. Specifically, WebRTC should:
       <list style="symbols">
 
-        <t>Provide a framework for understanding the problem so that controls
-        might be provided to make different tradeoffs regarding performance
-        and privacy concerns with WebRTC.</t>
-        <t>Using that framework, define settings that enable peer-to-peer
-        communications, each with a different balance between performance and
-        privacy.</t>
-        <t>Finally, provide recommendations for default settings that provide
-        reasonable performance without also exposing addressing information
-        in a way that might violate user expectations.</t>
+        <t>Provide a privacy-friendly default behavior which strikes the right
+        balance between privacy and media performance for most users and use
+        cases.</t>
+
+        <t>For users who care more about one versus the other, provide a means
+        to customize the experience.</t>
       </list></t>
     </section>
     <section title="Detailed Design">
