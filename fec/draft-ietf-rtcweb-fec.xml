@@ -281,10 +281,11 @@
     </section>
     <section title="Adaptive Use of FEC" anchor="adaptive-fec">
 
-      <t>Since use of FEC always causes redundant data to be transmitted, this
-      will lead to less bandwidth available for the primary encoding when in a
-      bandwidth-constrained environment. This is in contrast to methods like
-      RTX
+      <t>Because use of FEC always causes redundant data to be transmitted, and
+      the total amount of data must remain within any bandwidth limits indicated
+      by congestion control and the receiver, this will lead to less bandwidth
+      available for the primary encoding, even when the redundant data is not
+      being used. This is in contrast to methods like RTX
       <xref target="RFC4588" /> or flexfec
       <xref target="I-D.ietf-payload-flexible-fec-scheme" /> retransmissions,
       which only transmit redundant data when necessary, at the cost of an
