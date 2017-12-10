@@ -159,7 +159,7 @@ ipr="trust200902">
       <t>The key principles for the design are listed below:
       <list style="numbers">
 
-        <t>By default, WebRTC should follow normal IP routing rules, to the
+        <t>By default, WebRTC should follow normal IP routing, to the
         extent that this is easy to determine (i.e., not considering proxies).
         This can be accomplished by binding local sockets to the wildcard
         addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to route
@@ -209,14 +209,14 @@ ipr="trust200902">
 
         <t>Default route + associated local addresses: WebRTC MUST follow the
         kernel routing table rules (e.g., by binding solely to the wildcard
-        address), which will typically cause media packets to take the same
-        route as the application's HTTP traffic. In addition, any private IPv4
+        address). In addition, any private IPv4
         and IPv6 addresses associated with the kernel-chosen interface MUST be
         discovered through getsockname, as mentioned above, and provided to the
         application. This ensures that direct connections can still be
         established in this mode.</t>
 
-        <t>Default route only: This is the the same as Mode 2, except that the
+        <t>Origin route only:  WebRTC MUST only use the interface
+        that was used to load the HTML origin page. The
         associated private address MUST NOT be provided. This may cause traffic
         to hairpin through a NAT, fall back to the application TURN server, or
         fail altogether, with resulting quality implications.</t>
