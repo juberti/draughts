@@ -281,10 +281,11 @@
     </section>
     <section title="Adaptive Use of FEC" anchor="adaptive-fec">
 
-      <t>Since use of FEC always causes redundant data to be transmitted, this
-      will lead to less bandwidth available for the primary encoding when in a
-      bandwidth-constrained environment. This is in contrast to methods like
-      RTX
+      <t>Because use of FEC always causes redundant data to be transmitted, and
+      the total amount of data must remain within any bandwidth limits indicated
+      by congestion control and the receiver, this will lead to less bandwidth
+      available for the primary encoding, even when the redundant data is not
+      being used. This is in contrast to methods like RTX
       <xref target="RFC4588" /> or flexfec
       <xref target="I-D.ietf-payload-flexible-fec-scheme" /> retransmissions,
       which only transmit redundant data when necessary, at the cost of an
@@ -350,6 +351,19 @@
       <?rfc include='reference.RFC.5956.xml'?>
       <?rfc include='reference.RFC.7587.xml'?>
       <?rfc include='reference.I-D.ietf-payload-flexible-fec-scheme'?>
+      <reference anchor="TS.26114">
+        <front>
+          <title>IP Multimedia Subsystem (IMS); Multimedia telephony; Media
+          handling and interaction</title>
+          <author>
+            <organization>3GPP</organization>
+          </author>
+          <date day="22" month="September" year="2017" />
+        </front>
+        <seriesInfo name="3GPP TS" value="26.114 15.0.0" />
+        <format type="HTML"
+        target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm" />
+      </reference>
       </references>
     <references title="Informative References">
       <?rfc include='reference.RFC.3550.xml'?>
@@ -364,19 +378,6 @@
       <?rfc include='reference.RFC.6716.xml'?>
       <?rfc include='reference.I-D.ietf-mmusic-sdp-bundle-negotiation'?>
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
-      <reference anchor="TS.26114">
-        <front>
-          <title>IP Multimedia Subsystem (IMS); Multimedia telephony; Media
-          handling and interaction</title>
-          <author>
-            <organization>3GPP</organization>
-          </author>
-          <date day="22" month="September" year="2017" />
-        </front>
-        <seriesInfo name="3GPP TS" value="26.114 15.0.0" />
-        <format type="HTML"
-        target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm" />
-      </reference>
     </references>
     <section title="Change log">
 
