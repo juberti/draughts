@@ -358,9 +358,9 @@
           <author>
             <organization>3GPP</organization>
           </author>
-          <date day="17" month="March" year="2016" />
+         <date day="22" month="September" year="2017" />
         </front>
-        <seriesInfo name="3GPP TS" value="26.114 13.3.0" />
+        <seriesInfo name="3GPP TS" value="26.114 15.0.0" />
         <format type="HTML"
         target="http://www.3gpp.org/ftp/Specs/html-info/26114.htm" />
       </reference>

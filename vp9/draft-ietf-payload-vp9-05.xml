@@ -17,7 +17,7 @@
 <!ENTITY framemarking SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-payload-vp9-04" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-payload-vp9-05" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -405,8 +405,8 @@ V:   | SS            |
           OPTIONAL PID MUST be present after the mandatory first octet and
           specified as below. Otherwise, PID MUST NOT be present.</t>
 
-          <t hangText="P:">Inter-picture predicted picture.  When set to zero, the
-          picture does not utilize inter-picture prediction.  In this case,
+          <t hangText="P:">Inter-picture predicted frame.  When set to zero, the
+          frame does not utilize inter-picture prediction.  In this case,
           up-switching to a current spatial layer's frame is possible from directly
           lower spatial layer frame.  P SHOULD also be set to zero when
           encoding a layer synchronization frame in response to an <xref target='I-D.ietf-avtext-lrr'>LRR</xref> message (see <xref target='LRR'/>).
