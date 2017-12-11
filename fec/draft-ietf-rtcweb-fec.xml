@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-fec-06" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-07" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction
     Requirements</title>
@@ -27,7 +27,7 @@
         <email>justin@uberti.name</email>
       </address>
     </author>
-    <date day="3" month="July" year="2017" />
+    <date day="10" month="December" year="2017" />
     <area>RAI</area>
     <abstract>
 
@@ -381,6 +381,13 @@
     </references>
     <section title="Change log">
 
+      <t>Changes in draft -07:
+      <list style="symbols">
+        <t>Clarify how bandwidth management interacts with FEC.</t>
+        
+        <t>Make 3GPP reference normative.</t>
+      </list></t>
+      
       <t>Changes in draft -06:
       <list style="symbols">
 
