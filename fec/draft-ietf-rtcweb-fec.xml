@@ -358,7 +358,7 @@
           <author>
             <organization>3GPP</organization>
           </author>
-         <date day="22" month="September" year="2017" />
+          <date day="22" month="September" year="2017" />
         </front>
         <seriesInfo name="3GPP TS" value="26.114 15.0.0" />
         <format type="HTML"
