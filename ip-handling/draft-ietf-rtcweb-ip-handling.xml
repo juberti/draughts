@@ -121,9 +121,7 @@ ipr="trust200902">
       <t>#3 is a less common concern, as proxy administrators can control this
       behavior through organization firewall policy if desired, coupled with
       the fact that forcing WebRTC traffic through a proxy will have negative
-      effects on both the proxy and on media quality. For situations where this
-      is an important consideration, use of a RETURN proxy, as described below,
-      can be an effective solution.</t>
+      effects on both the proxy and on media quality.</t>
 
       <t>#1 is considered to be the least significant concern, given that the
       local address values often contain minimal information (e.g.
@@ -188,13 +186,7 @@ ipr="trust200902">
         <xref target="RFC5766" />. Naturally, this has attendant costs on media
         quality as well as proxy performance, and should be avoided where
         possible.</t>
-
-        <t>RETURN
-        <xref target="I-D.ietf-rtcweb-return" /> is a proposal for explicit
-        proxying of WebRTC media traffic. When RETURN proxies are deployed,
-        media and STUN checks will go through the proxy, but without the
-        performance issues associated with sending through a typical web
-        proxy.</t>
+      
       </list></t>
 
       <t>Based on these ideas, we define four specific modes of WebRTC
@@ -243,11 +235,8 @@ ipr="trust200902">
       However, user agents MAY choose a stricter default policy in certain
       circumstances.</t>
 
-      <t>Note that when a RETURN proxy is configured for the interface
-      associated with the default route, Mode 2 and 3 will cause any external
-      media traffic to go through the RETURN proxy. While the RETURN approach
-      gives the best performance, a similar result can be achieved for
-      non-RETURN proxies via an organization firewall policy that only allows
+      <t> WIth mode 2 and 3, proxies can be deployed
+      along with organization firewall policy that only allows
       external WebRTC traffic to leave through the proxy (typically, over TCP).
       This provides a way to ensure the proxy is used for any external traffic,
       but avoids the performance issues of Mode 4, where all media is forced
@@ -301,7 +290,6 @@ ipr="trust200902">
       <?rfc include='reference.RFC.6544.xml'?>
       <?rfc include='reference.RFC.7016.xml'?>
       <?rfc include='reference.RFC.7230.xml'?>
-      <?rfc include='reference.I-D.ietf-rtcweb-return.xml'?>
       </references>
     <section title="Change log">
 
