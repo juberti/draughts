@@ -190,6 +190,7 @@ ipr="trust200902">
           desired.
           </t>
         </list></t>
+      </section>
 
       <section title="Modes and Recommendations">
         <t>Based on these ideas, we define four specific modes of WebRTC
