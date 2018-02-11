@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-04"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-05"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -29,19 +29,19 @@ ipr="trust200902">
       </address>
     </author>
     <author fullname="Guo-wei Shieh" initials="G." surname="Shieh">
-      <organization>Google</organization>
+      <organization>Facebook</organization>
       <address>
         <postal>
-          <street>747 6th St S</street>
-          <city>Kirkland</city>
+          <street>1101 Dexter Ave</street>
+          <city>Seattle</city>
           <region>WA</region>
-          <code>98033</code>
+          <code>98109</code>
           <country>USA</country>
         </postal>
-        <email>guoweis@google.com</email>
+        <email>guoweis@facebook.com</email>
       </address>
     </author>
-    <date day="3" month="July" year="2017" />
+    <date day="11" month="February" year="2018" />
     <area>RAI</area>
     <abstract>
 
