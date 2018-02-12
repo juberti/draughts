@@ -212,7 +212,7 @@ ipr="trust200902">
           established in this mode.</t>
 
           <t>Default route only: This is the the same as Mode 2, except that the
-          associated private addressses MUST NOT be provided; the only IP
+          associated private addresses MUST NOT be provided; the only IP
           addresses gathered are those discovered via mechanisms like STUN and
           TURN (on the default route). This may cause traffic
           to hairpin through a NAT, fall back to an application TURN server, or
@@ -234,7 +234,7 @@ ipr="trust200902">
 
         <t>Mode 1 MUST only be used when user consent has been provided; this
         allows trusted WebRTC applications to achieve optimal network
-        performance, but significanly limites the network information exposed to
+        performance, but significantly limits the network information exposed to
         arbitrary web pages. The details of this
         consent are left to the implementation; one potential mechanism is to tie
         this consent to getUserMedia consent.</t>
