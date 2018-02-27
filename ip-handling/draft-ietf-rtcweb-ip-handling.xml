@@ -243,7 +243,9 @@ ipr="trust200902">
         applications without consent (e.g., 1-way streaming or
         data channel applications) only the minimum information needed to
         achieve direct connections, as defined in Mode 2. However,
-        implementations MAY choose stricter default modes if needed.</t>
+        implementations MAY choose stricter modes if desired, e.g., if a user
+        indicates they want all WebRTC traffic to follow the default route.
+        </t>
 
         <t>Note that the suggested defaults can still be used even for
         organizations that want all
