@@ -230,60 +230,68 @@ ipr="trust200902">
           proxy server.</t>
         </list></t>
 
-        <t>The recommended defaults are as follows:</t>
-
-        <t>Mode 1 MUST only be used when user consent has been provided; this
-        allows trusted WebRTC applications to achieve optimal network
-        performance, but significantly limits the network information exposed to
-        arbitrary web pages. The details of this
+        <t>Mode 1 MUST only be used when user consent has been provided.
+        The details of this
         consent are left to the implementation; one potential mechanism is to tie
         this consent to getUserMedia consent.</t>
 
         <t>In cases where user consent has not been obtained, Mode 2 SHOULD be
-        used. This allows applications to still achieve direct connections in
-        many cases, even without consent (e.g., streaming or data channel
-        applications).
-        However, implementations MAY choose a stricter default policy in certain
-        circumstances.</t>
+        used.</t>
 
-        <t>Note that these defaults can still be used even for organizations
-        that want all
+        <t>These defaults provide a reasonable tradeoff that permits trusted
+        WebRTC applications to achieve optimal network performance, but gives
+        applications without consent (e.g., 1-way streaming or
+        data channel applications) only the minimum information needed to
+        achieve direct connections, as defined in Mode 2. However,
+        implementations MAY choose stricter default modes if needed.</t>
+
+        <t>Note that the suggested defaults can still be used even for
+        organizations that want all
         external WebRTC traffic to traverse a proxy, simply
         by setting an organizational firewall policy that allows
         WebRTC traffic to only leave through the proxy.
         This provides a way to ensure the proxy is used for any external traffic,
-        but avoids the performance issues of Mode 4 (where all media is forced
-        through said proxy) for intra-organization traffic.</t>
+        but avoids the performance issues associated with Mode 4 (where all
+        media is forced through said proxy) for intra-organization traffic.</t>
       </section>
     </section>
     <section title="Implementation Guidance">
       <t>This section provides guidance to WebRTC implementations on how to
         implement the policies described above.</t>
-      <t>When trying to follow typical IP routing, the simplest approach is to
-        bind the sockets used for p2p connections to the wildcard
-        addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to
-        route WebRTC traffic the same way as it would HTTP traffic. STUN and
-        TURN will work as usual, and host candidates can be determined as
-        mentioned below.
-      </t>
-      <t>In order to discover the correct local IP addresses, implementations
-        can use the common trick of binding sockets to the wildcard addresses,
-        connect()ing those sockets to the IPv4/IPv6 addresses of the web
-        application (obtained by resolving the host component of its URI
-        <xref target="RFC3986"/>)
-        and then reading the bound local addresses via getsockname().
-        This requires no data exchange; it simply
-        provides a mechanism for applications to retrieve the desired
-        information from the kernel routing table.
-      </t>
-      <t>Use of the web application IPs ensures the right local IPs are
-        selected, regardless of where the application is hosted
-        (e.g., on an intranet). If the client is behind
-        a proxy and cannot resolve the IPs via DNS, the IPv4/v6 addresses
-        of the proxy can be used instead. If the web application was loaded
-        from a file:// URI <xref target="RFC8089"/>,
-        the implementation can fall back to a well-known DNS name or IP address.
-      </t>
+      <section title="Ensuring Normal Routing">
+        <t>When trying to follow typical IP routing, the simplest approach is to
+          bind the sockets used for peer-to-peer connections to the wildcard
+          addresses (0.0.0.0 for IPv4, :: for IPv6), which allows the OS to
+          route WebRTC traffic the same way as it would HTTP traffic. STUN and
+          TURN will work as usual, and host candidates can still be determined
+          as mentioned below.
+        </t>
+      </section>
+      <section title="Determining Host Candidates">
+        <t>When binding to a wildcard address, some extra work is needed to
+          determine a suitable host candidate, which we define as the
+          source address that would be used for any packets sent to the
+          web application host (assuming that UDP and TCP get the same
+          routing). Use of the web application host as a destination ensures the
+          right source address is selected, regardless of where the application
+          resides (e.g., on an intranet).
+        </t>
+        <t>First, the appropriate remote IPv4/IPv6 address is obtained by
+        resolving the host component of the web application
+        URI <xref target="RFC3986"/>. If the client is behind a proxy and cannot
+        resolve these IPs via DNS, the address of the proxy can be used instead.
+        Or, if the web application was loaded from a file://
+        URI <xref target="RFC8089"/>, rather than over the network, the
+        implementation can fall back to a well-known DNS name or IP address.
+        </t>
+        <t>Once a suitable remote IP has been determined, the implementation
+        can create a UDP socket, bind it to the appropriate wildcard address,
+        and tell it to connect to the remote IP. Generally, this results in
+        the socket being assigned a local address based on the kernel routing
+        table, without sending any packets over the network.</t>
+        <t>Finally, the socket can be queried using getsockname() or the
+        equivalent to determine the appropriate host candidate.</t>
+      </section>
     </section>
     <section title="Application Guidance">
 
