@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-fec-07" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-08" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction
     Requirements</title>
@@ -27,7 +27,7 @@
         <email>justin@uberti.name</email>
       </address>
     </author>
-    <date day="10" month="December" year="2017" />
+    <date day="2" month="March" year="2018" />
     <area>RAI</area>
     <abstract>
 
@@ -46,10 +46,11 @@
     </section>
     <section title="Terminology">
 
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in
-      <xref target="RFC2119"></xref>.</t>
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+      "MAY", and "OPTIONAL" in this document are to be interpreted as
+      described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/>
+      when, and only when, they appear in all capitals, as shown here.</t>
     </section>
     <section title="Types of FEC">
 
@@ -96,8 +97,8 @@
 
         <t>Some audio codecs, notably Opus
         <xref target="RFC6716" /> and AMR
-        <xref target="RFC4867" /> support their own in-band FEC mechanism, where
-        redundant data is included in the codec payload.</t>
+        <xref target="RFC4867" />, support their own in-band FEC mechanism,
+        where redundant data is included in the codec payload.</t>
 
         <t>For Opus, packets deemed as important are re-encoded at a lower
         bitrate and added to the subsequent packet, allowing partial recovery
@@ -138,8 +139,8 @@
 
         <t>When using the Opus codec, use of the built-in Opus FEC mechanism is
         RECOMMENDED. This provides reasonable protection of the audio stream
-        against individual losses, with minimal overhead. Note that as
-        indicated above the built-in Opus FEC only provides single-frame
+        against individual losses, with minimal overhead. Note that, as
+        indicated above, the built-in Opus FEC only provides single-frame
         redundancy; if multi-packet protection is needed, the aforementioned
         <xref target="RFC2198" /> redundancy with reduced-bitrate Opus encodings
         SHOULD be used instead.</t>
@@ -275,7 +276,7 @@
       supported, as mentioned in
       <xref target="video-fec" />.</t>
 
-      <t>Implementations MAY support additional FEC mechanisms if desired, e.g.
+      <t>Implementations MAY support additional FEC mechanisms if desired, e.g.,
 
       <xref target="RFC5109" />.</t>
     </section>
@@ -350,6 +351,7 @@
       <?rfc include='reference.RFC.4867.xml'?>
       <?rfc include='reference.RFC.5956.xml'?>
       <?rfc include='reference.RFC.7587.xml'?>
+      <?rfc include='reference.RFC.8174.xml'?>
       <?rfc include='reference.I-D.ietf-payload-flexible-fec-scheme'?>
       <reference anchor="TS.26114">
         <front>
@@ -380,14 +382,18 @@
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
     </references>
     <section title="Change log">
+       <t>Changes in draft -08:
+      <list style="symbols">
+        <t>Switch to RFC 8174 boilerplate.</t>
+      </list></t>
 
       <t>Changes in draft -07:
       <list style="symbols">
         <t>Clarify how bandwidth management interacts with FEC.</t>
-        
+
         <t>Make 3GPP reference normative.</t>
       </list></t>
-      
+
       <t>Changes in draft -06:
       <list style="symbols">
 
