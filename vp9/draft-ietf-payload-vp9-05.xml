@@ -183,12 +183,14 @@
 
     <section anchor="mediaFormatDescription" title="Media Format Description">
       <t>The VP9 codec can maintain up to eight reference frames, of
-      which up to three can be referenced or updated by any new frame.</t>
+      which up to three can be referenced by any new frame.</t>
 
-      <t>VP9 also allows a reference frame to be resampled and used as a
-      reference for another frame of a different resolution.  This
-      allows internal resolution changes without requiring the use of
-      key frames.</t>
+      <t>VP9 also allows a frame to use another frame of a different
+      resolution as a reference frame.  (Specifically, a frame may use
+      any references whose width and height are between 1/16th that of
+      the current frame and twice that of the current frame,
+      inclusive.)  This allows internal resolution changes without
+      requiring the use of key frames.</t>
 
       <t>These features together enable an encoder to
       implement various forms of coarse-grained scalability,
@@ -234,13 +236,13 @@
       traditional "inter-picture" dependency is used, where a frame depends on previously
       coded frame in time.  For simplicity, this payload format assumes that,
       within a picture and if inter-layer dependency is used, a spatial layer S frame
-      can only depend on spatial layer S-1 frame when S > 0.  Additionally, if
-      inter-picture dependency is used, spatial layer S frame is assumed to only
+      can depend only on the immediately previous spatial layer S-1 frame, when S > 0.  Additionally, if
+      inter-picture dependency is used, a spatial layer S frame is assumed to only
       depend on a previously coded spatial layer S frame.</t>
 
       <t>Given above simplifications for inter-layer and inter-picture
       dependencies, a flag (the D bit described below) is used to indicate whether a
-      spatial layer S frame depends on spatial layer S-1 frame.  Given the D bit, a receiver
+      spatial layer S frame depends on the spatial layer S-1 frame.  Given the D bit, a receiver
       only needs to additionally know the inter-picture dependency structure for a given
       spatial layer frame in order to determine its decodability.  Two modes
       of describing the inter-picture dependency structure are possible:
@@ -261,13 +263,15 @@
       <t>In non-flexible mode, the inter-picture dependency (the reference
       indices) of a Picture Group (PG) MUST be pre-specified as part of the 
       scalability structure (SS) data.  In this mode, each 
-      packet MUST have an index to refer to one of the described pictures
+      packet has an index to refer to one of the described pictures
       in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.</t>
 
 	  <t>(Editor's Note: A "Picture Group", as used in this document,
-	  is not the same thing as a "Group of Pictures" as traditionally
-	  used in video coding.  Suggestions for better terminology are welcome.)</t>
+	  is not the same thing as a the term "Group of Pictures" as
+	  it is traditionally used in video coding, i.e. to mean an
+	  independently-decoadable run of pictures beginning with a
+	  keyframe.  Suggestions for better terminology are welcome.)</t>
 
       <t>The SS data can also be used to specify the resolution of each
       spatial layer present in the VP9 stream for both flexible and non-flexible modes.</t>
@@ -342,6 +346,14 @@
             input picture is encoded with multiple layer frames, all of the
             frames of the picture MUST have the same timestamp.</t>
 
+			<t>If a frame has the VP9 show_frame field set to 0 (i.e., it is meant only to
+			  populate a reference buffer, without being output) its timestamp MAY alternately be set
+			  to be the same as the subsequent frame with show_frame equal to 1.  (This will
+			  be convenient for playing out pre-encoded content packaged with VP9 "superframes", which
+			  typically bundle show_frame==0 frames with a subsequent show_frame==1 frame.)  Every
+			  frame with show_frame==1, however, MUST have a unique timestamp modulo the 2^32 wrap of
+			  the field.</t>
+
           </list></t>
         <t>The remaining RTP Fixed Header Fields (V, P, X, CC,
         sequence number, SSRC and CSRC identifiers) are used as
@@ -403,7 +415,9 @@ V:   | SS            |
         <t><list style="hanging">
           <t hangText="I:">Picture ID (PID) present. When set to one, the
           OPTIONAL PID MUST be present after the mandatory first octet and
-          specified as below. Otherwise, PID MUST NOT be present.</t>
+          specified as below. Otherwise, PID MUST NOT be present.  If the SS field was present in
+		  the stream's most recent start of a keyframe (i.e., non-flexible scalability mode is in use),
+			then the PID MUST also be present in every packet.</t>
 
           <t hangText="P:">Inter-picture predicted frame.  When set to zero, the
           frame does not utilize inter-picture prediction.  In this case,
@@ -479,6 +493,14 @@ V:   | SS            |
           PG.  Then subsequent PIDs are mapped to subsequently specified frames in 
           the PG (modulo N_G, specified in the SS data below), respectively.</t>
 
+		  <t>All frames of the same picture MUST have the same PID value.</t>
+
+		  <t>Frames (and their corresponding pictures) with the VP9 show_frame field equal to 0 MUST
+			have distinct PID values from subsequent pictures with show_frame equal to 1.  Thus,
+			a Picture as defined in this specification is different than a VP9 Superframe.</t>
+
+		  <t>All frames of the same picture MUST have the same value for show_frame.</t>
+
           <t hangText="Layer indices:">This information is optional but recommended
           whenever encoding with layers.  For both flexible and non-flexible modes,
           one octet is used to specify a layer frame's temporal layer ID (T) and spatial layer ID (S)
@@ -505,7 +527,9 @@ V:   | SS            |
             ID greater than T.</t>
 
             <t hangText="S:">The spatial layer ID of current frame.  Note that frames with spatial layer S > 0
-            may be dependent on decoded spatial layer S-1 frame within the same picture.</t>
+            may be dependent on decoded spatial layer S-1 frame within the same picture.  Different
+			frames of the same picture MUST have distinct spatial layer IDs, and frames' spatial layers
+			MUST appear in increasing order within the frame.</t>
 
             <t hangText="D:">Inter-layer dependency used.  MUST be set to one if current spatial layer S frame
             depends on spatial layer S-1 frame of the same picture.  MUST only be set to zero if current spatial
