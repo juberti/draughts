@@ -233,8 +233,8 @@ ipr="trust200902">
         <t>Mode 1 MUST only be used when user consent has been provided.
         The details of this
         consent are left to the implementation; one potential mechanism is to tie
-        this consent to getUserMedia consent. Alternatively implementations can
-        provide a separate mechanism to obtain user consent.</t>
+        this consent to getUserMedia consent. Alternatively, implementations can
+        provide a specific mechanism to obtain user consent.</t>
 
         <t>In cases where user consent has not been obtained, Mode 2 SHOULD be
         used.</t>
