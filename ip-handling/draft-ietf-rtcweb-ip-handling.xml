@@ -218,11 +218,11 @@ ipr="trust200902">
           to hairpin through a NAT, fall back to an application TURN server, or
           fail altogether, with resulting quality implications.</t>
 
-          <t>Force proxy: This is the same as Mode 3, but all WebRTC media
-          traffic is forced through a proxy, if one is configured.
-          If the proxy does not support UDP (as is the case
-          for all HTTP and most SOCKS
-          <xref target="RFC1928" /> proxies), or the WebRTC implementation does
+          <t>Force proxy: This is the same as Mode 3, but when the application's
+          HTTP traffic is proxied, WebRTC media traffic MUST also be proxied.
+          If the proxy does not support UDP (as is the case for all HTTP and
+          most SOCKS <xref target="RFC1928" /> proxies), or the WebRTC
+          implementation does
           not support UDP proxying, the use of UDP will be disabled, and TCP will
           be used to send and receive media through the proxy. Use of TCP will
           result in reduced media quality, in addition to any performance
