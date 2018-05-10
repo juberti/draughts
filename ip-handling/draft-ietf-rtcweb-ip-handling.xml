@@ -227,7 +227,8 @@ ipr="trust200902">
           be used to send and receive media through the proxy. Use of TCP will
           result in reduced media quality, in addition to any performance
           considerations associated with sending all WebRTC media through the
-          proxy server.</t>
+          proxy server. If a TURN server is provisioned outside of the
+          application it should be considered as proxy in this mode.</t>
         </list></t>
 
         <t>Mode 1 MUST only be used when user consent has been provided.
