@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-07"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-08"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -41,7 +41,7 @@ ipr="trust200902">
         <email>guoweis@facebook.com</email>
       </address>
     </author>
-    <date day="18" month="April" year="2018" />
+    <date day="3" month="June" year="2018" />
     <area>RAI</area>
     <abstract>
 
@@ -110,9 +110,15 @@ ipr="trust200902">
         <t>If the client is behind a proxy (a client-configured "classical
         application proxy", as defined in
         <xref target="RFC1919" />, Section 3), but direct access to the
-        Internet is also supported, WebRTC's STUN
+        Internet is permitted, WebRTC's STUN
         checks will bypass the proxy and reveal the
-        public IP address of the client.</t>
+        public IP address of the client. This concern
+        also applies to the "enterprise TURN server" scenario described in
+        <xref target="RFC7478" />, Section 2.3.5.1, if, as above, direct
+        Internet access is permitted. However, when the term "proxy"
+        is used in this document, it is always in reference to an
+        <xref target="RFC1919" /> proxy server.
+        </t>
       </list></t>
 
       <t>Of these three concerns, #1 is the most significant, because for
@@ -162,8 +168,8 @@ ipr="trust200902">
         <list style="numbers">
           <t>By default, WebRTC traffic should follow typical IP routing, i.e.,
           WebRTC should use the same interface used for HTTP traffic, and only
-          the system's 'typical' public addresses should be
-          visible to the application.
+          the system's 'typical' public addresses (or those of an enterprise
+          TURN server, if present) should be visible to the application.
           However, in the interest of optimal media quality,
           it should be possible to enable WebRTC to make use of all
           network interfaces to determine the ideal route.
@@ -183,7 +189,7 @@ ipr="trust200902">
           <t>By default, WebRTC traffic should not be sent through
           proxy servers, due to the media quality problems
           associated with sending WebRTC traffic over TCP, which is almost
-          always used when communicating with proxies, as well as
+          always used when communicating with such proxies, as well as
           proxy performance issues that may result from proxying WebRTC's
           long-lived, high-bandwidth connections. However, it should be possible
           to force WebRTC to send its traffic through a configured proxy if
@@ -205,8 +211,10 @@ ipr="trust200902">
 
           <t>Default route + associated local addresses: WebRTC MUST follow the
           kernel routing table rules, which will typically cause media packets to
-          take the same route as the application's HTTP traffic. In addition,
-          the private IPv4 and IPv6 addresses associated with the kernel-chosen
+          take the same route as the application's HTTP traffic. If an
+          application TURN server is present, the preferred route MUST
+          be through this TURN server. Once an interface has been chosen,
+          the private IPv4 and IPv6 addresses associated with this
           interface MUST be discovered and provided to the
           application. This ensures that direct connections can still be
           established in this mode.</t>
@@ -219,7 +227,8 @@ ipr="trust200902">
           fail altogether, with resulting quality implications.</t>
 
           <t>Force proxy: This is the same as Mode 3, but when the application's
-          HTTP traffic is proxied, WebRTC media traffic MUST also be proxied.
+          HTTP traffic is sent through a proxy, WebRTC media
+          traffic MUST also be proxied.
           If the proxy does not support UDP (as is the case for all HTTP and
           most SOCKS <xref target="RFC1928" /> proxies), or the WebRTC
           implementation does
@@ -250,12 +259,13 @@ ipr="trust200902">
 
         <t>Note that the suggested defaults can still be used even for
         organizations that want all
-        external WebRTC traffic to traverse a proxy, simply
-        by setting an organizational firewall policy that allows
-        WebRTC traffic to only leave through the proxy.
-        This provides a way to ensure the proxy is used for any external traffic,
-        but avoids the performance issues associated with Mode 4 (where all
-        media is forced through said proxy) for intra-organization traffic.</t>
+        external WebRTC traffic to traverse a proxy or enterprise TURN server,
+        simply by setting an organizational firewall policy that allows
+        WebRTC traffic to only leave through the proxy or TURN server.
+        This provides a way to ensure the proxy or TURN server is used for any
+        external traffic, but still allows direct connections (and, in the
+        proxy case, avoids the performance issues associated with forcing
+        media through said proxy) for intra-organization traffic.</t>
       </section>
     </section>
     <section title="Implementation Guidance">
@@ -344,10 +354,17 @@ ipr="trust200902">
       <?rfc include='reference.RFC.5766.xml'?>
       <?rfc include='reference.RFC.7016.xml'?>
       <?rfc include='reference.RFC.7230.xml'?>
+      <?rfc include='reference.RFC.7478.xml'?>
       <?rfc include='reference.RFC.8089.xml'?>
       <?rfc include='reference.I-D.ietf-rtcweb-transports'?>
       </references>
     <section title="Change log">
+      <t>Changes in draft -08:
+      <list style="symbols">
+
+        <t>Discuss how enterprise TURN servers should be handled.</t>
+      </list></t>
+
       <t>Changes in draft -07:
       <list style="symbols">
 
