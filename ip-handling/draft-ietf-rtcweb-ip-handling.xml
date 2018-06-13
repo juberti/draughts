@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-08"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-09"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -41,7 +41,7 @@ ipr="trust200902">
         <email>guoweis@facebook.com</email>
       </address>
     </author>
-    <date day="3" month="June" year="2018" />
+    <date day="12" month="June" year="2018" />
     <area>RAI</area>
     <abstract>
 
@@ -127,11 +127,13 @@ ipr="trust200902">
       corporate VPN users) may in fact prefer WebRTC to send media traffic
       directly, i.e., not through the VPN.</t>
 
-      <t>#2 is considered to be a less significant concern, given that the
-      local address values often contain minimal information (e.g.,
-      192.168.0.2), or have built-in privacy protection (e.g., the
-      <xref target="RFC4941" /> IPv6 addresses recommended
-      by <xref target="I-D.ietf-rtcweb-transports"/>).</t>
+      <t>#2, as a potential fingerprinting surface, is a less significant but
+      valid concern. While the <xref target="RFC4941" /> IPv6 addresses
+      recommended by <xref target="I-D.ietf-rtcweb-transports"/> mitigate this
+      concern through their intentionally short lifetimes, IPv4 addresses
+      present some challenges. Although they typically contain minimal entropy
+      (e.g., 192.168.0.2), in the worst case, they can contain 24 bits of
+      entropy with an indefinite lifetime. </t>
 
       <t>#3 is the least common concern, as proxy administrators can already
       control this behavior through organizational firewall policy, and
@@ -177,13 +179,14 @@ ipr="trust200902">
 
           <t>By default, WebRTC should be able to negotiate direct peer-to-peer
           connections between endpoints (i.e., without traversing a
-          NAT or relay server), by providing a minimal set of local IP
-          addresses to the application for use in the ICE process.
-          This ensures that applications that need true
+          NAT or relay server). This ensures that applications that need true
           peer-to-peer routing for bandwidth or latency reasons can operate
           successfully.
-          However, it should be possible to suppress these addresses (with the
-          resultant impact on direct connections) if desired.
+          </t>
+
+          <t>By default, WebRTC should not disclose network information that
+          can be used for long-term fingerprinting (beyond that needed for a
+          typical direct network connection).
           </t>
 
           <t>By default, WebRTC traffic should not be sent through
@@ -209,22 +212,33 @@ ipr="trust200902">
           path, and is ideal when media performance is the highest priority, but
           it discloses the most information.</t>
 
-          <t>Default route + associated local addresses: WebRTC MUST follow the
-          kernel routing table rules, which will typically cause media packets to
-          take the same route as the application's HTTP traffic. If an
-          application TURN server is present, the preferred route MUST
-          be through this TURN server. Once an interface has been chosen,
-          the private IPv4 and IPv6 addresses associated with this
-          interface MUST be discovered and provided to the
-          application. This ensures that direct connections can still be
-          established in this mode.</t>
+          <t>Default route + privacy-preserving local addresses: WebRTC MUST
+          follow the kernel routing table rules, which will typically cause
+          media packets to take the same route as the application's HTTP
+          traffic. If an application TURN server is present, the preferred
+          route MUST be through this TURN server. Once an interface has been
+          chosen:
+            <list style="symbols">
+              <t>If the interface has an associated <xref target="RFC4941" />
+              IPv6 address, it MUST be provided to the application.</t>
+              <t>If the interface has an associated <xref target="RFC1918" />
+              IPv4 address, and multicast DNS <xref target="RFC6762" /> is
+              supported, the private IPv4 address MUST be replaced with a
+              short-lived mDNS hostname. Any "srflx" candidates generated from
+              this interface MUST have their raddr fields set to 0.0.0.0.</t>
+            </list>
+
+          This ensures that direct connections can still be
+          established in most cases when using this mode.</t>
 
           <t>Default route only: This is the the same as Mode 2, except that the
           associated private addresses MUST NOT be provided; the only IP
           addresses gathered are those discovered via mechanisms like STUN and
           TURN (on the default route). This may cause traffic
           to hairpin through a NAT, fall back to an application TURN server, or
-          fail altogether, with resulting quality implications.</t>
+          fail altogether, with resulting quality implications. To avoid
+          disclosing private IP addresses in any form, "srflx" candidates
+          MUST have their raddr fields set to 0.0.0.0 or ::, as appropriate.</t>
 
           <t>Force proxy: This is the same as Mode 3, but when the application's
           HTTP traffic is sent through a proxy, WebRTC media
@@ -304,6 +318,7 @@ ipr="trust200902">
         table, without sending any packets over the network.</t>
         <t>Finally, the socket can be queried using getsockname() or the
         equivalent to determine the appropriate host candidate.</t>
+        <t>[mDNS TODO]</t>
       </section>
     </section>
     <section title="Application Guidance">
@@ -335,8 +350,8 @@ ipr="trust200902">
     <section title="Acknowledgements">
 
       <t>Several people provided input into this document, including Bernard
-      Aboba, Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
-      Adam Roach, and Martin Thomson.</t>
+      Aboba, Harald Alvestrand, Ted Hardie, Matthew Kaufmann,
+      Eric Rescorla, Adam Roach, and Martin Thomson.</t>
     </section>
   </middle>
   <back>
@@ -352,6 +367,7 @@ ipr="trust200902">
       <?rfc include='reference.RFC.5245.xml'?>
       <?rfc include='reference.RFC.5389.xml'?>
       <?rfc include='reference.RFC.5766.xml'?>
+      <?rfc include='reference.RFC.6762.xml'?>
       <?rfc include='reference.RFC.7016.xml'?>
       <?rfc include='reference.RFC.7230.xml'?>
       <?rfc include='reference.RFC.7478.xml'?>
