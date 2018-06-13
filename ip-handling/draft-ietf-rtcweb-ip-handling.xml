@@ -212,7 +212,7 @@ ipr="trust200902">
           <t>Default route + associated local addresses: WebRTC MUST follow the
           kernel routing table rules, which will typically cause media packets to
           take the same route as the application's HTTP traffic. If an
-          application TURN server is present, the preferred route MUST
+          enterprise TURN server is present, the preferred route MUST
           be through this TURN server. Once an interface has been chosen,
           the private IPv4 and IPv6 addresses associated with this
           interface MUST be discovered and provided to the
