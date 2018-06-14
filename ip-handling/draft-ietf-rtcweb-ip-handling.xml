@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-08"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-09"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -41,7 +41,7 @@ ipr="trust200902">
         <email>guoweis@facebook.com</email>
       </address>
     </author>
-    <date day="3" month="June" year="2018" />
+    <date day="13" month="June" year="2018" />
     <area>RAI</area>
     <abstract>
 
@@ -359,6 +359,12 @@ ipr="trust200902">
       <?rfc include='reference.I-D.ietf-rtcweb-transports'?>
       </references>
     <section title="Change log">
+      <t>Changes in draft -09:
+      <list style="symbols">
+
+        <t>Fixed confusing text regarding enterprise TURN servers.</t>
+      </list></t>
+
       <t>Changes in draft -08:
       <list style="symbols">
 
