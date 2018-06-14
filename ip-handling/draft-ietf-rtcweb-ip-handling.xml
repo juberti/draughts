@@ -41,7 +41,7 @@ ipr="trust200902">
         <email>guoweis@facebook.com</email>
       </address>
     </author>
-    <date day="12" month="June" year="2018" />
+    <date day="13" month="June" year="2018" />
     <area>RAI</area>
     <abstract>
 
@@ -215,7 +215,7 @@ ipr="trust200902">
           <t>Default route + privacy-preserving local addresses: WebRTC MUST
           follow the kernel routing table rules, which will typically cause
           media packets to take the same route as the application's HTTP
-          traffic. If an application TURN server is present, the preferred
+          traffic. If an enterprise TURN server is present, the preferred
           route MUST be through this TURN server. Once an interface has been
           chosen:
             <list style="symbols">
@@ -375,6 +375,12 @@ ipr="trust200902">
       <?rfc include='reference.I-D.ietf-rtcweb-transports'?>
       </references>
     <section title="Change log">
+      <t>Changes in draft -09:
+      <list style="symbols">
+
+        <t>Fixed confusing text regarding enterprise TURN servers.</t>
+      </list></t>
+
       <t>Changes in draft -08:
       <list style="symbols">
 
