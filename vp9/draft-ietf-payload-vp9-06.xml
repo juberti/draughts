@@ -229,20 +229,20 @@
       instant in time.  A picture thus consists of one or more frames,
       encoding different spatial layers.</t>
 
-      <t>Within a picture, a frame with spatial layer ID equal to S,
-      where S > 0, can depend on a frame of the same picture with a lower spatial layer ID.  This
+      <t>Within a picture, a frame with spatial layer ID equal to SID,
+      where SID > 0, can depend on a frame of the same picture with a lower spatial layer ID.  This
       "inter-layer" dependency can result in additional coding gain
       compared to the case where only 
       traditional "inter-picture" dependency is used, where a frame depends on previously
       coded frame in time.  For simplicity, this payload format assumes that,
-      within a picture and if inter-layer dependency is used, a spatial layer S frame
-      can depend only on the immediately previous spatial layer S-1 frame, when S > 0.  Additionally, if
-      inter-picture dependency is used, a spatial layer S frame is assumed to only
-      depend on a previously coded spatial layer S frame.</t>
+      within a picture and if inter-layer dependency is used, a spatial layer SID frame
+      can depend only on the immediately previous spatial layer SID-1 frame, when S > 0.  Additionally, if
+      inter-picture dependency is used, a spatial layer SID frame is assumed to only
+      depend on a previously coded spatial layer SID frame.</t>
 
       <t>Given above simplifications for inter-layer and inter-picture
       dependencies, a flag (the D bit described below) is used to indicate whether a
-      spatial layer S frame depends on the spatial layer S-1 frame.  Given the D bit, a receiver
+      spatial layer SID frame depends on the spatial layer SID-1 frame.  Given the D bit, a receiver
       only needs to additionally know the inter-picture dependency structure for a given
       spatial layer frame in order to determine its decodability.  Two modes
       of describing the inter-picture dependency structure are possible:
@@ -376,7 +376,7 @@ I:   |M| PICTURE ID  | (REQUIRED)
      +-+-+-+-+-+-+-+-+
 M:   | EXTENDED PID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-L:   |  T  |U|  S  |D| (CONDITIONALLY RECOMMENDED)
+L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
      +-+-+-+-+-+-+-+-+                             -\
 P,F: | P_DIFF      |N| (CONDITIONALLY REQUIRED)    - up to 3 times
      +-+-+-+-+-+-+-+-+                             -/
@@ -401,7 +401,7 @@ I:   |M| PICTURE ID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
 M:   | EXTENDED PID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-L:   |  T  |U|  S  |D| (CONDITIONALLY RECOMMENDED)
+L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
      +-+-+-+-+-+-+-+-+
      |   TL0PICIDX   | (CONDITIONALLY REQUIRED)
      +-+-+-+-+-+-+-+-+
@@ -424,7 +424,7 @@ V:   | SS            |
           up-switching to a current spatial layer's frame is possible from directly
           lower spatial layer frame.  P SHOULD also be set to zero when
           encoding a layer synchronization frame in response to an <xref target='I-D.ietf-avtext-lrr'>LRR</xref> message (see <xref target='LRR'/>).
-          When P is set to zero, the T field (described below) MUST also
+          When P is set to zero, the TID field (described below) MUST also
           be set to 0 (if present).  Note that the P bit does not
           forbid intra-picture, inter-layer prediction from earlier
           frames of the same picture, if any.</t>
@@ -447,7 +447,7 @@ V:   | SS            |
           picture whose base spatial layer frame is a key frame, and
           which thus completely resets the encoder state.  This
           packet will have its P bit
-          equal to zero, S or D bit (described below) equal to zero, and B bit (described below) 
+          equal to zero, SID or D bit (described below) equal to zero, and B bit (described below) 
           equal to 1.</t>
 
           <t hangText="B:">Start of a frame. MUST be set to 1 if
@@ -503,7 +503,7 @@ V:   | SS            |
 
           <t hangText="Layer indices:">This information is optional but recommended
           whenever encoding with layers.  For both flexible and non-flexible modes,
-          one octet is used to specify a layer frame's temporal layer ID (T) and spatial layer ID (S)
+          one octet is used to specify a layer frame's temporal layer ID (TID) and spatial layer ID (SID)
           as shown both in <xref target="figureVP9payloadDescriptor"/> and <xref target="figureVP9payloadDescriptorNonFlexible"/>.
           Additionally, a bit (U) is used to indicate that the current frame is a
           "switching up point" frame.  Another bit (D) is used to indicate whether inter-layer 
@@ -513,34 +513,34 @@ V:   | SS            |
           to represent temporal layer 0 index (TL0PICIDX), as depicted in <xref target="figureVP9payloadDescriptorNonFlexible"/>.
           The TL0PICIDX is present so that all minimally required frames - the base temporal layer frames - can be tracked.</t>
 
-          <t>The T and S fields indicate the temporal and spatial layers and can help middleboxes and
+          <t>The TID and SID fields indicate the temporal and spatial layers and can help middleboxes and
 		  and endpoints quickly identify which layer a packet belongs to.
 
           <list style="hanging">
-            <t hangText="T:">The temporal layer ID of current frame.  In the case of non-flexible mode,
+            <t hangText="TID:">The temporal layer ID of current frame.  In the case of non-flexible mode,
             if PID is mapped to a picture in a specified PG, then 
-            the value of T MUST match the corresponding T value of the mapped picture in the PG.</t>
+            the value of TID MUST match the corresponding TID value of the mapped picture in the PG.</t>
 
             <t hangText="U:">Switching up point.  If this bit is set to 1 for the current picture with temporal
-            layer ID equal to T, then "switch up" to a higher frame rate is possible as subsequent higher temporal
+            layer ID equal to TID, then "switch up" to a higher frame rate is possible as subsequent higher temporal
             layer pictures will not depend on any picture before the current picture (in coding order) with temporal layer
-            ID greater than T.</t>
+            ID greater than TID.</t>
 
-            <t hangText="S:">The spatial layer ID of current frame.  Note that frames with spatial layer S > 0
-            may be dependent on decoded spatial layer S-1 frame within the same picture.  Different
+            <t hangText="SID:">The spatial layer ID of current frame.  Note that frames with spatial layer SDI > 0
+            may be dependent on decoded spatial layer SID-1 frame within the same picture.  Different
 			frames of the same picture MUST have distinct spatial layer IDs, and frames' spatial layers
 			MUST appear in increasing order within the frame.</t>
 
-            <t hangText="D:">Inter-layer dependency used.  MUST be set to one if current spatial layer S frame
-            depends on spatial layer S-1 frame of the same picture.  MUST only be set to zero if current spatial
-            layer S frame does not depend on spatial layer S-1 frame of the same picture.  For the base layer frame
-            (with S equal to 0), this D bit MUST be set to zero.</t>
+            <t hangText="D:">Inter-layer dependency used.  MUST be set to one if current spatial layer SID frame
+            depends on spatial layer SID-1 frame of the same picture.  MUST only be set to zero if current spatial
+            layer SID frame does not depend on spatial layer SID-1 frame of the same picture.  For the base layer frame
+            (with SID equal to 0), this D bit MUST be set to zero.</t>
 
             <t hangText="TL0PICIDX:">8 bits temporal layer zero index. TL0PICIDX is only present
             in the non-flexible mode (F = 0).  This is a running index for the temporal
-            base layer pictures, i.e., the pictures with T set to 0.  If T is larger than 0,
+            base layer pictures, i.e., the pictures with TID set to 0.  If TID is larger than 0,
             TL0PICIDX indicates which temporal base layer picture the current picture depends on.  TL0PICIDX MUST be
-            incremented when T is equal to 0.  The index SHOULD start on a random number, and MUST restart
+            incremented when TID is equal to 0.  The index SHOULD start on a random number, and MUST restart
             at 0 after reaching the maximum number 255.</t>
           </list></t>
 
@@ -581,7 +581,7 @@ Y:   |     WIDTH     | (OPTIONAL)    .
      +-+-+-+-+-+-+-+-+              -/            -\
 G:   |      N_G      | (OPTIONAL)
      +-+-+-+-+-+-+-+-+                            -\
-N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
+N_G: | TID |U| R |-|-| (OPTIONAL)                 .
      +-+-+-+-+-+-+-+-+              -\            . - N_G times
      |    P_DIFF     | (OPTIONAL)    . - R times  .
      +-+-+-+-+-+-+-+-+              -/            -/
@@ -608,10 +608,10 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
           the inter-picture dependency structure of the VP9 stream to
           be pre-declared, rather than indicating it on the fly with
           every packet.  If N_G is greater than 0, then for N_G
-          pictures in the PG, each picture's temporal layer ID (T), switch up point (U), 
+          pictures in the PG, each picture's temporal layer ID (TID), switch up point (U), 
           and the R reference indices (P_DIFFs) are specified.</t>
 
-          <t>The first picture specified in the PG MUST have T set to 0.</t>
+          <t>The first picture specified in the PG MUST have TID set to 0.</t>
 
           <t>G set to 0 or N_G set to 0 indicates that either there is only one temporal
           layer or no fixed inter-picture dependency information is present
@@ -627,7 +627,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 
         <t>In a scalable stream sent with a fixed pattern, the SS data
         SHOULD be included in the first packet of every key frame. This is a packet 
-        with P bit equal to zero, S or D bit equal to zero, and B bit equal to 1.
+        with P bit equal to zero, SID or D bit equal to zero, and B bit equal to 1.
         The SS data MUST only be changed on the picture that corresponds to the 
         first picture specified in the previous SS data's PG
         (if the previous SS data's N_G was greater than 0).</t>
@@ -799,7 +799,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
             +---------------+---------------+
             |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
             +---------------+---------+-----+
-            |   RES   |  T  | RES     |  S  |
+            |   RES   | TID | RES     | SID |
             +---------------+---------+-----+
           ]]></artwork>
 		</figure>
@@ -808,7 +808,7 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
 		of LRR's layer index fields for VP9 streams.  The two "RES" 
 		fields MUST be set to 0 on transmission and ingnored on
 		reception.  See <xref target="VP9payloadDescriptor"/> for
-		details on the T and S fields.</t>
+		details on the TID and SID fields.</t>
 
 	  <t>Identification of a layer refresh frame can be derived from the
 	  reference IDs of each frame by backtracking the dependency chain
@@ -846,12 +846,12 @@ N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |  ID=2 |  L=2  |S|E|I|D|B|  T  |0|0|0|0|0|  S  |    TL0PICIDX  |
+   |  ID=2 |  L=2  |S|E|I|D|B| TID |0|0|0|0|0| SID |    TL0PICIDX  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           ]]></artwork>
 		</figure>
 
-		<t>When this header extension is used with VP9, the T and S
+		<t>When this header extension is used with VP9, the TID and SID
 		fields MUST match the values in the packet which the header
 		extension is attached to; see
 		<xref target="VP9payloadDescriptor" /> for

@@ -176,21 +176,21 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
    instant in time.  A picture thus consists of one or more frames,
    encoding different spatial layers.
 
-   Within a picture, a frame with spatial layer ID equal to S, where S >
-   0, can depend on a frame of the same picture with a lower spatial
-   layer ID.  This "inter-layer" dependency can result in additional
-   coding gain compared to the case where only traditional "inter-
-   picture" dependency is used, where a frame depends on previously
-   coded frame in time.  For simplicity, this payload format assumes
-   that, within a picture and if inter-layer dependency is used, a
-   spatial layer S frame can depend only on the immediately previous
-   spatial layer S-1 frame, when S > 0.  Additionally, if inter-picture
-   dependency is used, a spatial layer S frame is assumed to only depend
-   on a previously coded spatial layer S frame.
+   Within a picture, a frame with spatial layer ID equal to SID, where
+   SID > 0, can depend on a frame of the same picture with a lower
+   spatial layer ID.  This "inter-layer" dependency can result in
+   additional coding gain compared to the case where only traditional
+   "inter-picture" dependency is used, where a frame depends on
+   previously coded frame in time.  For simplicity, this payload format
+   assumes that, within a picture and if inter-layer dependency is used,
+   a spatial layer SID frame can depend only on the immediately previous
+   spatial layer SID-1 frame, when S > 0.  Additionally, if inter-
+   picture dependency is used, a spatial layer SID frame is assumed to
+   only depend on a previously coded spatial layer SID frame.
 
    Given above simplifications for inter-layer and inter-picture
    dependencies, a flag (the D bit described below) is used to indicate
-   whether a spatial layer S frame depends on the spatial layer S-1
+   whether a spatial layer SID frame depends on the spatial layer SID-1
    frame.  Given the D bit, a receiver only needs to additionally know
    the inter-picture dependency structure for a given spatial layer
    frame in order to determine its decodability.  Two modes of
@@ -374,7 +374,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
         +-+-+-+-+-+-+-+-+
    M:   | EXTENDED PID  | (RECOMMENDED)
         +-+-+-+-+-+-+-+-+
-   L:   |  T  |U|  S  |D| (CONDITIONALLY RECOMMENDED)
+   L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
         +-+-+-+-+-+-+-+-+                             -\
    P,F: | P_DIFF      |N| (CONDITIONALLY REQUIRED)    - up to 3 times
         +-+-+-+-+-+-+-+-+                             -/
@@ -406,7 +406,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
         +-+-+-+-+-+-+-+-+
    M:   | EXTENDED PID  | (RECOMMENDED)
         +-+-+-+-+-+-+-+-+
-   L:   |  T  |U|  S  |D| (CONDITIONALLY RECOMMENDED)
+   L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
         +-+-+-+-+-+-+-+-+
         |   TL0PICIDX   | (CONDITIONALLY REQUIRED)
         +-+-+-+-+-+-+-+-+
@@ -430,7 +430,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
       spatial layer frame.  P SHOULD also be set to zero when encoding a
       layer synchronization frame in response to an LRR
       [I-D.ietf-avtext-lrr] message (see Section 5.4).  When P is set to
-      zero, the T field (described below) MUST also be set to 0 (if
+      zero, the TID field (described below) MUST also be set to 0 (if
       present).  Note that the P bit does not forbid intra-picture,
       inter-layer prediction from earlier frames of the same picture, if
       any.
@@ -459,9 +459,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
       value of this F bit MUST only change on the first packet of a key
       picture.  A key picture is a picture whose base spatial layer
       frame is a key frame, and which thus completely resets the encoder
-      state.  This packet will have its P bit equal to zero, S or D bit
-      (described below) equal to zero, and B bit (described below) equal
-      to 1.
+      state.  This packet will have its P bit equal to zero, SID or D
+      bit (described below) equal to zero, and B bit (described below)
+      equal to 1.
 
    B: Start of a frame.  MUST be set to 1 if the first payload octet of
       the RTP packet is the beginning of a new VP9 frame, and MUST NOT
@@ -528,12 +528,12 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
    Layer indices:  This information is optional but recommended whenever
       encoding with layers.  For both flexible and non-flexible modes,
-      one octet is used to specify a layer frame's temporal layer ID (T)
-      and spatial layer ID (S) as shown both in Figure 2 and Figure 3.
-      Additionally, a bit (U) is used to indicate that the current frame
-      is a "switching up point" frame.  Another bit (D) is used to
-      indicate whether inter-layer prediction is used for the current
-      frame.
+      one octet is used to specify a layer frame's temporal layer ID
+      (TID) and spatial layer ID (SID) as shown both in Figure 2 and
+      Figure 3.  Additionally, a bit (U) is used to indicate that the
+      current frame is a "switching up point" frame.  Another bit (D) is
+      used to indicate whether inter-layer prediction is used for the
+      current frame.
 
       In the non-flexible mode (when the F bit is set to 0), another
       octet is used to represent temporal layer 0 index (TL0PICIDX), as
@@ -541,19 +541,19 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
       minimally required frames - the base temporal layer frames - can
       be tracked.
 
-      The T and S fields indicate the temporal and spatial layers and
-      can help middleboxes and and endpoints quickly identify which
+      The TID and SID fields indicate the temporal and spatial layers
+      and can help middleboxes and and endpoints quickly identify which
       layer a packet belongs to.
 
-      T: The temporal layer ID of current frame.  In the case of non-
+      TID:  The temporal layer ID of current frame.  In the case of non-
          flexible mode, if PID is mapped to a picture in a specified PG,
-         then the value of T MUST match the corresponding T value of the
-         mapped picture in the PG.
+         then the value of TID MUST match the corresponding TID value of
+         the mapped picture in the PG.
 
       U: Switching up point.  If this bit is set to 1 for the current
-         picture with temporal layer ID equal to T, then "switch up" to
-         a higher frame rate is possible as subsequent higher temporal
-         layer pictures will not depend on any picture before the
+         picture with temporal layer ID equal to TID, then "switch up"
+         to a higher frame rate is possible as subsequent higher
+         temporal layer pictures will not depend on any picture before
 
 
 
@@ -562,31 +562,31 @@ Uberti, et al.          Expires December 30, 2018              [Page 10]
 Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
-         current picture (in coding order) with temporal layer ID
-         greater than T.
+         the current picture (in coding order) with temporal layer ID
+         greater than TID.
 
-      S: The spatial layer ID of current frame.  Note that frames with
-         spatial layer S > 0 may be dependent on decoded spatial layer
-         S-1 frame within the same picture.  Different frames of the
-         same picture MUST have distinct spatial layer IDs, and frames'
-         spatial layers MUST appear in increasing order within the
-         frame.
+      SID:  The spatial layer ID of current frame.  Note that frames
+         with spatial layer SDI > 0 may be dependent on decoded spatial
+         layer SID-1 frame within the same picture.  Different frames of
+         the same picture MUST have distinct spatial layer IDs, and
+         frames' spatial layers MUST appear in increasing order within
+         the frame.
 
       D: Inter-layer dependency used.  MUST be set to one if current
-         spatial layer S frame depends on spatial layer S-1 frame of the
-         same picture.  MUST only be set to zero if current spatial
-         layer S frame does not depend on spatial layer S-1 frame of the
-         same picture.  For the base layer frame (with S equal to 0),
-         this D bit MUST be set to zero.
+         spatial layer SID frame depends on spatial layer SID-1 frame of
+         the same picture.  MUST only be set to zero if current spatial
+         layer SID frame does not depend on spatial layer SID-1 frame of
+         the same picture.  For the base layer frame (with SID equal to
+         0), this D bit MUST be set to zero.
 
       TL0PICIDX:  8 bits temporal layer zero index.  TL0PICIDX is only
          present in the non-flexible mode (F = 0).  This is a running
          index for the temporal base layer pictures, i.e., the pictures
-         with T set to 0.  If T is larger than 0, TL0PICIDX indicates
-         which temporal base layer picture the current picture depends
-         on.  TL0PICIDX MUST be incremented when T is equal to 0.  The
-         index SHOULD start on a random number, and MUST restart at 0
-         after reaching the maximum number 255.
+         with TID set to 0.  If TID is larger than 0, TL0PICIDX
+         indicates which temporal base layer picture the current picture
+         depends on.  TL0PICIDX MUST be incremented when TID is equal to
+         0.  The index SHOULD start on a random number, and MUST restart
+         at 0 after reaching the maximum number 255.
 
    Reference indices:  When P and F are both set to one, indicating a
       non-key frame in flexible mode, then at least one reference index
@@ -634,7 +634,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
         +-+-+-+-+-+-+-+-+              -/            -\
    G:   |      N_G      | (OPTIONAL)
         +-+-+-+-+-+-+-+-+                            -\
-   N_G: |  T  |U| R |-|-| (OPTIONAL)                 .
+   N_G: | TID |U| R |-|-| (OPTIONAL)                 .
         +-+-+-+-+-+-+-+-+              -\            . - N_G times
         |    P_DIFF     | (OPTIONAL)    . - R times  .
         +-+-+-+-+-+-+-+-+              -/            -/
@@ -659,10 +659,10 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
       picture dependency structure of the VP9 stream to be pre-declared,
       rather than indicating it on the fly with every packet.  If N_G is
       greater than 0, then for N_G pictures in the PG, each picture's
-      temporal layer ID (T), switch up point (U), and the R reference
+      temporal layer ID (TID), switch up point (U), and the R reference
       indices (P_DIFFs) are specified.
 
-      The first picture specified in the PG MUST have T set to 0.
+      The first picture specified in the PG MUST have TID set to 0.
 
 
 
@@ -687,7 +687,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
    In a scalable stream sent with a fixed pattern, the SS data SHOULD be
    included in the first packet of every key frame.  This is a packet
-   with P bit equal to zero, S or D bit equal to zero, and B bit equal
+   with P bit equal to zero, SID or D bit equal to zero, and B bit equal
    to 1.  The SS data MUST only be changed on the picture that
    corresponds to the first picture specified in the previous SS data's
    PG (if the previous SS data's N_G was greater than 0).
@@ -877,15 +877,15 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
                +---------------+---------+-----+
-               |   RES   |  T  | RES     |  S  |
+               |   RES   | TID | RES     | SID |
                +---------------+---------+-----+
 
                                  Figure 6
 
    Figure 6 shows the format of LRR's layer index fields for VP9
    streams.  The two "RES" fields MUST be set to 0 on transmission and
-   ingnored on reception.  See Section 4.2 for details on the T and S
-   fields.
+   ingnored on reception.  See Section 4.2 for details on the TID and
+   SID fields.
 
    Identification of a layer refresh frame can be derived from the
    reference IDs of each frame by backtracking the dependency chain
@@ -927,14 +927,14 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
        0                   1                   2                   3
        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |  ID=2 |  L=2  |S|E|I|D|B|  T  |0|0|0|0|0|  S  |    TL0PICIDX  |
+      |  ID=2 |  L=2  |S|E|I|D|B| TID |0|0|0|0|0| SID |    TL0PICIDX  |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                                  Figure 7
 
-   When this header extension is used with VP9, the T and S fields MUST
-   match the values in the packet which the header extension is attached
-   to; see Section 4.2 for details on these fields.
+   When this header extension is used with VP9, the TID and SID fields
+   MUST match the values in the packet which the header extension is
+   attached to; see Section 4.2 for details on these fields.
 
    See [I-D.ietf-avtext-framemarking] for explanations of the other
    fields, which are generic.
