@@ -5,11 +5,11 @@
 Payload Working Group                                          J. Uberti
 Internet-Draft                                                 S. Holmer
 Intended status: Standards Track                              M. Flodman
-Expires: December 30, 2018                                        Google
+Expires: January 3, 2019                                          Google
                                                                J. Lennox
                                                                  D. Hong
                                                                    Vidyo
-                                                           June 28, 2018
+                                                            July 2, 2018
 
 
                     RTP Payload Format for VP9 Video
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 30, 2018.
+   This Internet-Draft will expire on January 3, 2019.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 1]
+Uberti, et al.           Expires January 3, 2019                [Page 1]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 2]
+Uberti, et al.           Expires January 3, 2019                [Page 2]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
 2.  Conventions, Definitions and Acronyms
@@ -165,9 +165,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 3]
+Uberti, et al.           Expires January 3, 2019                [Page 3]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    For terminology, this document uses the term "frame" to refer to a
@@ -221,9 +221,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 4]
+Uberti, et al.           Expires January 3, 2019                [Page 4]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    decoadable run of pictures beginning with a keyframe.  Suggestions
@@ -277,9 +277,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 5]
+Uberti, et al.           Expires January 3, 2019                [Page 5]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    The general RTP payload format for VP9 is depicted below.
@@ -333,9 +333,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 6]
+Uberti, et al.           Expires January 3, 2019                [Page 6]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
       Section 6.2 for the mechanism to be used with the Session
@@ -389,9 +389,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 7]
+Uberti, et al.           Expires January 3, 2019                [Page 7]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    In non-flexible mode (with the F bit below set to 0), The first
@@ -445,9 +445,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 8]
+Uberti, et al.           Expires January 3, 2019                [Page 8]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    F: Flexible mode.  F set to one indicates flexible mode and if the P
@@ -501,9 +501,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018               [Page 9]
+Uberti, et al.           Expires January 3, 2019                [Page 9]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
       assume that the number of bits in PID stay the same through the
@@ -557,9 +557,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 10]
+Uberti, et al.           Expires January 3, 2019               [Page 10]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
          the current picture (in coding order) with temporal layer ID
@@ -613,9 +613,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 11]
+Uberti, et al.           Expires January 3, 2019               [Page 11]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    set, the SS data is present in the position indicated in Figure 2 and
@@ -669,9 +669,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 12]
+Uberti, et al.           Expires January 3, 2019               [Page 12]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
       G set to 0 or N_G set to 0 indicates that either there is only one
@@ -725,9 +725,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 13]
+Uberti, et al.           Expires January 3, 2019               [Page 13]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    assuming they are sent with inter-layer dependency (i.e. with the "D"
@@ -781,9 +781,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 14]
+Uberti, et al.           Expires January 3, 2019               [Page 14]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    This structure is constructed such that the "U" bit can always be
@@ -837,9 +837,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 15]
+Uberti, et al.           Expires January 3, 2019               [Page 15]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    Here, First is the macroblock address (in scan order) of the first
@@ -893,9 +893,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 16]
+Uberti, et al.           Expires January 3, 2019               [Page 16]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    referenced.  Therefore it's recommended for both the flexible and the
@@ -949,9 +949,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 17]
+Uberti, et al.           Expires January 3, 2019               [Page 17]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
 6.1.  Media Type Definition
@@ -1005,9 +1005,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 18]
+Uberti, et al.           Expires January 3, 2019               [Page 18]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    Fragment identifier considerations:  N/A.
@@ -1061,9 +1061,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 19]
+Uberti, et al.           Expires January 3, 2019               [Page 19]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
 6.2.2.  Offer/Answer Considerations
@@ -1117,9 +1117,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 20]
+Uberti, et al.           Expires January 3, 2019               [Page 20]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
 10.  References
@@ -1173,9 +1173,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 21]
+Uberti, et al.           Expires January 3, 2019               [Page 21]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    [VP9-BITSTREAM]
@@ -1229,9 +1229,9 @@ Authors' Addresses
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 22]
+Uberti, et al.           Expires January 3, 2019               [Page 22]
 
-Internet-Draft         RTP Payload Format for VP9              June 2018
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    Stefan Holmer
@@ -1285,4 +1285,4 @@ Internet-Draft         RTP Payload Format for VP9              June 2018
 
 
 
-Uberti, et al.          Expires December 30, 2018              [Page 23]
+Uberti, et al.           Expires January 3, 2019               [Page 23]
