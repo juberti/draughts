@@ -89,12 +89,12 @@ Table of Contents
        6.2.1.  Mapping of Media Subtype Parameters to SDP  . . . . .  19
        6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  20
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
-   8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  20
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  20
+   8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  21
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  21
      10.2.  Informative References . . . . . . . . . . . . . . . . .  22
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
 
@@ -1050,13 +1050,13 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
       string, in the form of a semicolon separated list of
       parameter=value pairs.
 
-6.2.1.1.  Example
+   o  The OPTIONAL parameter profile-id, when present, MUST be included
+      in the "a=fmtp" line of SDP.  This parameter is expressed as a
+      media subtype string, in the form of a parameter=value pair.
 
-   An example of media representation in SDP is as follows:
 
-   m=video 49170 RTP/AVPF 98
-   a=rtpmap:98 VP9/90000
-   a=fmtp:98 max-fr=30; max-fs=3600;
+
+
 
 
 
@@ -1066,9 +1066,32 @@ Uberti, et al.           Expires January 4, 2019               [Page 19]
 Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
+6.2.1.1.  Example
+
+   An example of media representation in SDP is as follows:
+
+   m=video 49170 RTP/AVPF 98
+   a=rtpmap:98 VP9/90000
+   a=fmtp:98 max-fr=30; max-fs=3600; profile-id=0;
+
 6.2.2.  Offer/Answer Considerations
 
-   TODO: Update this for VP9
+   When VP9 is offered over RTP using SDP in an Offer/Answer model
+   [RFC3264] for negotiation for unicast usage, the following
+   limitations and rules apply:
+
+   o  The parameter identifying a media format configuration for VP9 is
+      profile-id.  This media format configuration parameter MUST be
+      used symmetrically; that is, the answerer MUST either maintain all
+      configuration parameters or remove the media format (payload type)
+      completely if one or more of the parameter values are not
+      supported.
+
+   o  To simplify the handling and matching of these configurations, the
+      same RTP payload type number used in the offer SHOULD also be used
+      in the answer, as specified in [RFC3264].  An answer MUST NOT
+      contain the payload type number used in the offer unless the
+      configuration is exactly the same as in the offer.
 
 7.  Security Considerations
 
@@ -1091,6 +1114,14 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
 
    This RTP payload format and its media decoder do not exhibit any
    significant non-uniformity in the receiver-side computational
+
+
+
+Uberti, et al.           Expires January 4, 2019               [Page 20]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
+
+
    complexity for packet processing, and thus are unlikely to pose a
    denial-of-service threat due to the receipt of pathological data.
    Nor does the RTP payload format contain any active content.
@@ -1113,15 +1144,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
    The IANA is requested to register the following values:
    - Media type registration as described in Section 6.1.
 
-
-
-
-
-Uberti, et al.           Expires January 4, 2019               [Page 20]
-
-Internet-Draft         RTP Payload Format for VP9              July 2018
-
-
 10.  References
 
 10.1.  Normative References
@@ -1141,6 +1163,20 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC3264]  Rosenberg, J. and H. Schulzrinne, "An Offer/Answer Model
+              with Session Description Protocol (SDP)", RFC 3264,
+              DOI 10.17487/RFC3264, June 2002,
+              <https://www.rfc-editor.org/info/rfc3264>.
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2019               [Page 21]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
+
 
    [RFC3550]  Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
@@ -1171,13 +1207,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/info/rfc6838>.
 
-
-
-Uberti, et al.           Expires January 4, 2019               [Page 21]
-
-Internet-Draft         RTP Payload Format for VP9              July 2018
-
-
    [VP9-BITSTREAM]
               Grange, A., de Rivaz, P., and J. Hunt, "VP9 Bitstream &
               Decoding Process Specification", Version 0.6, March 2016,
@@ -1196,6 +1225,14 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               Norrman, "The Secure Real-time Transport Protocol (SRTP)",
               RFC 3711, DOI 10.17487/RFC3711, March 2004,
               <https://www.rfc-editor.org/info/rfc3711>.
+
+
+
+
+Uberti, et al.           Expires January 4, 2019               [Page 22]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
+
 
    [RFC5124]  Ott, J. and E. Carrara, "Extended Secure RTP Profile for
               Real-time Transport Control Protocol (RTCP)-Based Feedback
@@ -1222,18 +1259,6 @@ Authors' Addresses
    Email: justin@uberti.name
 
 
-
-
-
-
-
-
-
-Uberti, et al.           Expires January 4, 2019               [Page 22]
-
-Internet-Draft         RTP Payload Format for VP9              July 2018
-
-
    Stefan Holmer
    Google, Inc.
    Kungsbron 2
@@ -1250,6 +1275,19 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
    Sweden
 
    Email: mflodman@google.com
+
+
+
+
+
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2019               [Page 23]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
    Jonathan Lennox
@@ -1285,4 +1323,22 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
 
 
 
-Uberti, et al.           Expires January 4, 2019               [Page 23]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Uberti, et al.           Expires January 4, 2019               [Page 24]

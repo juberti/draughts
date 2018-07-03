@@ -1011,15 +1011,21 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <li>The media name in the "m=" line of SDP MUST be video.</li>
 <li>The encoding name in the "a=rtpmap" line of SDP MUST be VP9 (the media subtype).</li>
 <li>The clock rate in the "a=rtpmap" line MUST be 90000.</li>
-<li>The parameters "max-fs", and "max-fr", MUST be included in the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities.  These parameters are expressed as a media subtype string, in the form of a semicolon separated list of parameter=value pairs.</li>
+<li>The parameters "max-fs", and "max-fr", MUST be included in the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities. These parameters are expressed as a media subtype string, in the form of a semicolon separated list of parameter=value pairs.</li>
+<li>The OPTIONAL parameter profile-id, when present, MUST be included in the "a=fmtp" line of SDP. This parameter is expressed as a media subtype string, in the form of a parameter=value pair.</li>
 </ul>
 <h1 id="rfc.section.6.2.1.1">
 <a href="#rfc.section.6.2.1.1">6.2.1.1.</a> Example</h1>
 <p id="rfc.section.6.2.1.1.p.1">An example of media representation in SDP is as follows:</p>
-<p id="rfc.section.6.2.1.1.p.2">m=video 49170 RTP/AVPF 98<br> a=rtpmap:98 VP9/90000<br> a=fmtp:98 max-fr=30; max-fs=3600;<br></p>
+<p id="rfc.section.6.2.1.1.p.2">m=video 49170 RTP/AVPF 98<br> a=rtpmap:98 VP9/90000<br> a=fmtp:98 max-fr=30; max-fs=3600; profile-id=0;<br></p>
 <h1 id="rfc.section.6.2.2">
 <a href="#rfc.section.6.2.2">6.2.2.</a> Offer/Answer Considerations</h1>
-<p id="rfc.section.6.2.2.p.1">TODO: Update this for VP9</p>
+<p id="rfc.section.6.2.2.p.1">When VP9 is offered over RTP using SDP in an Offer/Answer model <a href="#RFC3264" class="xref">[RFC3264]</a> for negotiation for unicast usage, the following limitations and rules apply: </p>
+
+<ul>
+<li>The parameter identifying a media format configuration for VP9 is profile-id. This media format configuration parameter MUST be used symmetrically; that is, the answerer MUST either maintain all configuration parameters or remove the media format (payload type) completely if one or more of the parameter values are not supported.</li>
+<li>To simplify the handling and matching of these configurations, the same RTP payload type number used in the offer SHOULD also be used in the answer, as specified in <a href="#RFC3264" class="xref">[RFC3264]</a>.  An answer MUST NOT contain the payload type number used in the offer unless the configuration is exactly the same as in the offer.</li>
+</ul>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#securityConsiderations" id="securityConsiderations">Security Considerations</a>
 </h1>
@@ -1052,6 +1058,11 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
 <td class="top">
 <a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3264">[RFC3264]</b></td>
+<td class="top">
+<a>Rosenberg, J.</a> and <a>H. Schulzrinne</a>, "<a href="https://tools.ietf.org/html/rfc3264">An Offer/Answer Model with Session Description Protocol (SDP)</a>", RFC 3264, DOI 10.17487/RFC3264, June 2002.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC3550">[RFC3550]</b></td>
