@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc3264 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3264.xml">
 <!ENTITY rfc3550 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3550.xml">
 <!ENTITY rfc3551 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3551.xml">
 <!ENTITY rfc3711 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3711.xml">
@@ -896,6 +897,18 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
                 than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200
                 (capable of supporting 640x480 resolution) will support widths
                 and heights up to 1552 pixels (97 macroblocks).</t>
+
+                <t hangText="profile-id:">The value of profile-id is an integer
+                indicating the default coding profile, the subset of coding
+		tools that may have been used to generate the stream or that the
+		receiver supports). <xref target="TableOfProfileIds"/> lists all
+		of the profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>
+		and the corresponding integer values to be used.</t>
+
+		<t>If no profile-id is present, Profile 0 MUST be inferred.</t>
+
+		<t>Informative note: See <xref target="TableOfProfiles"/> for capabilities
+		of coding profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>.</t>
               </list></t>
 
             <t hangText="Encoding considerations:"><vspace blankLines="0"/>
@@ -939,6 +952,29 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             <t hangText="Change controller:"><vspace blankLines="0"/> IETF
             Payload Working Group delegated from the IESG.</t>
           </list></t>
+
+	  <texttable anchor="TableOfProfileIds" title="Table 1. Table of profile-id
+	  integer values representing the VP9 profile corresponding to the set of
+	  coding tools supported.">
+		<ttcol align="center">Profile</ttcol>
+		<ttcol align="center">profile-id</ttcol>
+		<c>0</c><c>0</c>
+		<c>1</c><c>1</c>
+		<c>2</c><c>2</c>
+		<c>3</c><c>3</c>
+	  </texttable>
+
+	  <texttable anchor="TableOfProfiles" title="Table 2. Table of profile
+	  capabilities.">
+		<ttcol align="center">Profile</ttcol>
+		<ttcol align="center">Bit Depth</ttcol>
+		<ttcol align="center">SRGB Colorspace</ttcol>
+		<ttcol align="center">Chroma Subsampling</ttcol>
+		<c>0</c><c>8</c><c>No</c><c>YUV 4:2:0</c>
+		<c>1</c><c>8</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
+		<c>2</c><c>10 or 12</c><c>No</c><c>YUV 4:2:0</c>
+		<c>3</c><c>10 or 12</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
+	  </texttable>
       </section>
 
       <section anchor="SDPParameters" title="SDP Parameters">
@@ -957,10 +993,16 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
               <t>The clock rate in the "a=rtpmap" line MUST be 90000.</t>
 
               <t>The parameters "max-fs", and "max-fr", MUST be included in
-              the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities.
-				These parameters are expressed as a
-              media subtype string, in the form of a semicolon separated list
-              of parameter=value pairs.</t>
+              the "a=fmtp" line of SDP if SDP is used to declare receiver
+              capabilities. These parameters are expressed as a media subtype
+	      string, in the form of a semicolon separated list of
+	      parameter=value pairs.</t>
+
+              <t>The OPTIONAL parameter profile-id, when present, SHOULD be
+	      included in the "a=fmtp" line of SDP. This parameter is expressed
+	      as a media subtype string, in the form of a parameter=value
+	      pair. When the parameter is not present, a value of 0 MUST be
+	      used for profile-id.</t>
             </list></t>
 
           <section title="Example">
@@ -968,12 +1010,11 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
             <t>m=video 49170 RTP/AVPF 98<vspace blankLines="0"/> a=rtpmap:98
             VP9/90000<vspace blankLines="0"/> a=fmtp:98 max-fr=30;
-            max-fs=3600;<vspace blankLines="0"/></t>
+            max-fs=3600; profile-id=0;<vspace blankLines="0"/></t>
           </section>
         </section>
 
         <section title="Offer/Answer Considerations">
-		  <t>TODO: Update this for VP9</t>
 		  <!--
           <t>The VP9 codec offers a decode complexity that is roughly linear
           with the number of pixels encoded. The parameters "max-fr" and
@@ -983,6 +1024,21 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
           establish these limits.</t>
 
            -->
+	  <t>When VP9 is offered over RTP using SDP in an Offer/Answer model
+          <xref target="RFC3264"/> for negotiation for unicast usage, the following
+          limitations and rules apply: <list style="symbols">
+	      <t>The parameter identifying a media format configuration for VP9 is
+	      profile-id. This media format configuration parameter MUST be used
+	      symmetrically; that is, the answerer MUST either maintain all
+	      configuration parameters or remove the media format (payload type)
+	      completely if one or more of the parameter values are not supported.</t>
+
+              <t>To simplify the handling and matching of these configurations, the
+              same RTP payload type number used in the offer SHOULD also be used
+              in the answer, as specified in <xref target="RFC3264"/>. An answer
+	      MUST NOT contain the payload type number used in the offer unless the
+	      configuration is exactly the same as in the offer.</t>
+	  </list></t>
         </section>
       </section>
     </section>
@@ -1085,11 +1141,13 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
       &rfc4855;
 
-	  &rfc5104;
+      &rfc5104;
 
-	  &lrr;
+      &lrr;
 
-	  &framemarking;
+      &framemarking;
+
+      &rfc3264;
 
     </references>
 

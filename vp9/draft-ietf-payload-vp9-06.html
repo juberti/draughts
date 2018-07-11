@@ -411,7 +411,7 @@
 
   <meta name="dct.creator" content="Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D. Hong" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-06" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-02" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-11" />
   <meta name="dct.abstract" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
   <meta name="description" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
 
@@ -435,7 +435,7 @@
 <td class="right">M. Flodman</td>
 </tr>
 <tr>
-<td class="left">Expires: January 3, 2019</td>
+<td class="left">Expires: January 12, 2019</td>
 <td class="right">Google</td>
 </tr>
 <tr>
@@ -452,7 +452,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 2, 2018</td>
+<td class="right">July 11, 2018</td>
 </tr>
 
     	
@@ -468,7 +468,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 3, 2019.</p>
+<p>This Internet-Draft will expire on January 12, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -966,6 +966,12 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dd style="margin-left: 8">The value of max-fs is an integer indicating the maximum frame size in units of macroblocks that the decoder is capable of decoding.</dd>
 <dt></dt>
 <dd style="margin-left: 8">The decoder is capable of decoding this frame size as long as the width and height of the frame in macroblocks are less than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable of supporting 640x480 resolution) will support widths and heights up to 1552 pixels (97 macroblocks).</dd>
+<dt>profile-id:</dt>
+<dd style="margin-left: 8">The value of profile-id is an integer indicating the default coding profile, the subset of coding tools that may have been used to generate the stream or that the receiver supports). <a href="#TableOfProfileIds" class="xref">Table 1</a> lists all of the profiles defined in section 7.2 of <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a> and the corresponding integer values to be used.</dd>
+<dt></dt>
+<dd style="margin-left: 8">If no profile-id is present, Profile 0 MUST be inferred.</dd>
+<dt></dt>
+<dd style="margin-left: 8">Informative note: See <a href="#TableOfProfiles" class="xref">Table 2</a> for capabilities of coding profiles defined in section 7.2 of <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a>.</dd>
 </dl>
 </dd>
 <dt>Encoding considerations:</dt>
@@ -999,6 +1005,70 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dd style="margin-left: 8">
 <br> IETF Payload Working Group delegated from the IESG.</dd>
 </dl>
+<div id="rfc.table.1"></div>
+<div id="TableOfProfileIds"></div>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+<caption>Table 1. Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported.</caption>
+<thead><tr>
+<th class="center">Profile</th>
+<th class="center">profile-id</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="center">0</td>
+<td class="center">0</td>
+</tr>
+<tr>
+<td class="center">1</td>
+<td class="center">1</td>
+</tr>
+<tr>
+<td class="center">2</td>
+<td class="center">2</td>
+</tr>
+<tr>
+<td class="center">3</td>
+<td class="center">3</td>
+</tr>
+</tbody>
+</table>
+<div id="rfc.table.2"></div>
+<div id="TableOfProfiles"></div>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+<caption>Table 2. Table of profile    capabilities.</caption>
+<thead><tr>
+<th class="center">Profile</th>
+<th class="center">Bit Depth</th>
+<th class="center">SRGB Colorspace</th>
+<th class="center">Chroma Subsampling</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="center">0</td>
+<td class="center">8</td>
+<td class="center">No</td>
+<td class="center">YUV 4:2:0</td>
+</tr>
+<tr>
+<td class="center">1</td>
+<td class="center">8</td>
+<td class="center">Yes</td>
+<td class="center">YUV 4:2:0,4:4:0 or 4:4:4</td>
+</tr>
+<tr>
+<td class="center">2</td>
+<td class="center">10 or 12</td>
+<td class="center">No</td>
+<td class="center">YUV 4:2:0</td>
+</tr>
+<tr>
+<td class="center">3</td>
+<td class="center">10 or 12</td>
+<td class="center">Yes</td>
+<td class="center">YUV 4:2:0,4:4:0 or 4:4:4</td>
+</tr>
+</tbody>
+</table>
 <h1 id="rfc.section.6.2">
 <a href="#rfc.section.6.2">6.2.</a> <a href="#SDPParameters" id="SDPParameters">SDP Parameters</a>
 </h1>
@@ -1011,15 +1081,21 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <li>The media name in the "m=" line of SDP MUST be video.</li>
 <li>The encoding name in the "a=rtpmap" line of SDP MUST be VP9 (the media subtype).</li>
 <li>The clock rate in the "a=rtpmap" line MUST be 90000.</li>
-<li>The parameters "max-fs", and "max-fr", MUST be included in the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities.  These parameters are expressed as a media subtype string, in the form of a semicolon separated list of parameter=value pairs.</li>
+<li>The parameters "max-fs", and "max-fr", MUST be included in the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities. These parameters are expressed as a media subtype string, in the form of a semicolon separated list of parameter=value pairs.</li>
+<li>The OPTIONAL parameter profile-id, when present, SHOULD be included in the "a=fmtp" line of SDP. This parameter is expressed as a media subtype string, in the form of a parameter=value pair. When the parameter is not present, a value of 0 MUST be used for profile-id.</li>
 </ul>
 <h1 id="rfc.section.6.2.1.1">
 <a href="#rfc.section.6.2.1.1">6.2.1.1.</a> Example</h1>
 <p id="rfc.section.6.2.1.1.p.1">An example of media representation in SDP is as follows:</p>
-<p id="rfc.section.6.2.1.1.p.2">m=video 49170 RTP/AVPF 98<br> a=rtpmap:98 VP9/90000<br> a=fmtp:98 max-fr=30; max-fs=3600;<br></p>
+<p id="rfc.section.6.2.1.1.p.2">m=video 49170 RTP/AVPF 98<br> a=rtpmap:98 VP9/90000<br> a=fmtp:98 max-fr=30; max-fs=3600; profile-id=0;<br></p>
 <h1 id="rfc.section.6.2.2">
 <a href="#rfc.section.6.2.2">6.2.2.</a> Offer/Answer Considerations</h1>
-<p id="rfc.section.6.2.2.p.1">TODO: Update this for VP9</p>
+<p id="rfc.section.6.2.2.p.1">When VP9 is offered over RTP using SDP in an Offer/Answer model <a href="#RFC3264" class="xref">[RFC3264]</a> for negotiation for unicast usage, the following limitations and rules apply: </p>
+
+<ul>
+<li>The parameter identifying a media format configuration for VP9 is profile-id. This media format configuration parameter MUST be used symmetrically; that is, the answerer MUST either maintain all configuration parameters or remove the media format (payload type) completely if one or more of the parameter values are not supported.</li>
+<li>To simplify the handling and matching of these configurations, the same RTP payload type number used in the offer SHOULD also be used in the answer, as specified in <a href="#RFC3264" class="xref">[RFC3264]</a>. An answer MUST NOT contain the payload type number used in the offer unless the configuration is exactly the same as in the offer.</li>
+</ul>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#securityConsiderations" id="securityConsiderations">Security Considerations</a>
 </h1>
@@ -1052,6 +1128,11 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
 <td class="top">
 <a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3264">[RFC3264]</b></td>
+<td class="top">
+<a>Rosenberg, J.</a> and <a>H. Schulzrinne</a>, "<a href="https://tools.ietf.org/html/rfc3264">An Offer/Answer Model with Session Description Protocol (SDP)</a>", RFC 3264, DOI 10.17487/RFC3264, June 2002.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC3550">[RFC3550]</b></td>
