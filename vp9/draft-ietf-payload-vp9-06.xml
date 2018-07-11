@@ -578,7 +578,7 @@ Y:   |     WIDTH     | (OPTIONAL)    .
      |     HEIGHT    | (OPTIONAL)    .
      +               +               .
      |               | (OPTIONAL)    .
-     +-+-+-+-+-+-+-+-+              -/            -\
+     +-+-+-+-+-+-+-+-+              -/
 G:   |      N_G      | (OPTIONAL)
      +-+-+-+-+-+-+-+-+                            -\
 N_G: | TID |U| R |-|-| (OPTIONAL)                 .
