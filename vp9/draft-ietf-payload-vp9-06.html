@@ -967,9 +967,11 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dt></dt>
 <dd style="margin-left: 8">The decoder is capable of decoding this frame size as long as the width and height of the frame in macroblocks are less than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable of supporting 640x480 resolution) will support widths and heights up to 1552 pixels (97 macroblocks).</dd>
 <dt>profile-id:</dt>
-<dd style="margin-left: 8">The value of profile-id is an integer indicating the default coding profile, the subset of coding tools that may have been used to generate the stream or that the receiver supports). <a href="#TableOfProfiles" class="xref">Table 1</a> lists all of the profiles defined in section 7.2 of <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a> and the corresponding integer values to be used.</dd>
+<dd style="margin-left: 8">The value of profile-id is an integer indicating the default coding profile, the subset of coding tools that may have been used to generate the stream or that the receiver supports). <a href="#TableOfProfileIds" class="xref">Table 1</a> lists all of the profiles defined in section 7.2 of <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a> and the corresponding integer values to be used.</dd>
 <dt></dt>
 <dd style="margin-left: 8">If no profile-id is present, Profile 0 MUST be inferred.</dd>
+<dt></dt>
+<dd style="margin-left: 8">Informative note: See <a href="#TableOfProfiles" class="xref">Table 2</a> for capabilities of coding profiles defined in section 7.2 of <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a>.</dd>
 </dl>
 </dd>
 <dt>Encoding considerations:</dt>
@@ -1004,9 +1006,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <br> IETF Payload Working Group delegated from the IESG.</dd>
 </dl>
 <div id="rfc.table.1"></div>
-<div id="TableOfProfiles"></div>
+<div id="TableOfProfileIds"></div>
 <table cellpadding="3" cellspacing="0" class="tt full center">
-<caption>Table 1. Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported</caption>
+<caption>Table 1. Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported.</caption>
 <thead><tr>
 <th class="center">Profile</th>
 <th class="center">profile-id</th>
@@ -1027,6 +1029,43 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <tr>
 <td class="center">3</td>
 <td class="center">3</td>
+</tr>
+</tbody>
+</table>
+<div id="rfc.table.2"></div>
+<div id="TableOfProfiles"></div>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+<caption>Table 2. Table of profile    capabilities.</caption>
+<thead><tr>
+<th class="center">Profile</th>
+<th class="center">Bit Depth</th>
+<th class="center">SRGB Colorspace</th>
+<th class="center">Chroma Subsampling</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="center">0</td>
+<td class="center">8</td>
+<td class="center">No</td>
+<td class="center">YUV 4:2:0</td>
+</tr>
+<tr>
+<td class="center">1</td>
+<td class="center">8</td>
+<td class="center">Yes</td>
+<td class="center">YUV 4:2:0,4:4:0 or 4:4:4</td>
+</tr>
+<tr>
+<td class="center">2</td>
+<td class="center">10 or 12</td>
+<td class="center">No</td>
+<td class="center">YUV 4:2:0</td>
+</tr>
+<tr>
+<td class="center">3</td>
+<td class="center">10 or 12</td>
+<td class="center">Yes</td>
+<td class="center">YUV 4:2:0,4:4:0 or 4:4:4</td>
 </tr>
 </tbody>
 </table>

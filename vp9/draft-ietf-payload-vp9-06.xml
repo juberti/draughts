@@ -901,11 +901,14 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
                 <t hangText="profile-id:">The value of profile-id is an integer
                 indicating the default coding profile, the subset of coding
 		tools that may have been used to generate the stream or that the
-		receiver supports). <xref target="TableOfProfiles"/> lists all
+		receiver supports). <xref target="TableOfProfileIds"/> lists all
 		of the profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>
 		and the corresponding integer values to be used.</t>
 
 		<t>If no profile-id is present, Profile 0 MUST be inferred.</t>
+
+		<t>Informative note: See <xref target="TableOfProfiles"/> for capabilities
+		of coding profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>.</t>
               </list></t>
 
             <t hangText="Encoding considerations:"><vspace blankLines="0"/>
@@ -950,15 +953,27 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             Payload Working Group delegated from the IESG.</t>
           </list></t>
 
-	  <texttable anchor="TableOfProfiles" title="Table 1. Table of profile-id
+	  <texttable anchor="TableOfProfileIds" title="Table 1. Table of profile-id
 	  integer values representing the VP9 profile corresponding to the set of
-	  coding tools supported">
+	  coding tools supported.">
 		<ttcol align="center">Profile</ttcol>
 		<ttcol align="center">profile-id</ttcol>
 		<c>0</c><c>0</c>
 		<c>1</c><c>1</c>
 		<c>2</c><c>2</c>
 		<c>3</c><c>3</c>
+	  </texttable>
+
+	  <texttable anchor="TableOfProfiles" title="Table 2. Table of profile
+	  capabilities.">
+		<ttcol align="center">Profile</ttcol>
+		<ttcol align="center">Bit Depth</ttcol>
+		<ttcol align="center">SRGB Colorspace</ttcol>
+		<ttcol align="center">Chroma Subsampling</ttcol>
+		<c>0</c><c>8</c><c>No</c><c>YUV 4:2:0</c>
+		<c>1</c><c>8</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
+		<c>2</c><c>10 or 12</c><c>No</c><c>YUV 4:2:0</c>
+		<c>3</c><c>10 or 12</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
 	  </texttable>
       </section>
 
