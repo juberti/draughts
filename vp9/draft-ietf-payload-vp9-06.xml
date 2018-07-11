@@ -897,6 +897,15 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
                 than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200
                 (capable of supporting 640x480 resolution) will support widths
                 and heights up to 1552 pixels (97 macroblocks).</t>
+
+                <t hangText="profile-id:">The value of profile-id is an integer
+                indicating the default coding profile, the subset of coding
+		tools that may have been used to generate the stream or that the
+		receiver supports). <xref target="TableOfProfiles"/> lists all
+		of the profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>
+		and the corresponding integer values to be used.</t>
+
+		<t>If no profile-id is present, Profile 0 MUST be inferred.</t>
               </list></t>
 
             <t hangText="Encoding considerations:"><vspace blankLines="0"/>
@@ -940,6 +949,17 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             <t hangText="Change controller:"><vspace blankLines="0"/> IETF
             Payload Working Group delegated from the IESG.</t>
           </list></t>
+
+	  <texttable anchor="TableOfProfiles" title="Table 1. Table of profile-id
+	  integer values representing the VP9 profile corresponding to the set of
+	  coding tools supported">
+		<ttcol align="center">Profile</ttcol>
+		<ttcol align="center">profile-id</ttcol>
+		<c>0</c><c>0</c>
+		<c>1</c><c>1</c>
+		<c>2</c><c>2</c>
+		<c>3</c><c>3</c>
+	  </texttable>
       </section>
 
       <section anchor="SDPParameters" title="SDP Parameters">
@@ -963,10 +983,11 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 	      string, in the form of a semicolon separated list of
 	      parameter=value pairs.</t>
 
-              <t>The OPTIONAL parameter profile-id, when present, MUST be
+              <t>The OPTIONAL parameter profile-id, when present, SHOULD be
 	      included in the "a=fmtp" line of SDP. This parameter is expressed
 	      as a media subtype string, in the form of a parameter=value
-	      pair.</t>
+	      pair. When the parameter is not present, a value of 0 MUST be
+	      used for profile-id.</t>
             </list></t>
 
           <section title="Example">
@@ -999,7 +1020,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
               <t>To simplify the handling and matching of these configurations, the
               same RTP payload type number used in the offer SHOULD also be used
-              in the answer, as specified in <xref target="RFC3264"/>.  An answer
+              in the answer, as specified in <xref target="RFC3264"/>. An answer
 	      MUST NOT contain the payload type number used in the offer unless the
 	      configuration is exactly the same as in the offer.</t>
 	  </list></t>

@@ -966,6 +966,10 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dd style="margin-left: 8">The value of max-fs is an integer indicating the maximum frame size in units of macroblocks that the decoder is capable of decoding.</dd>
 <dt></dt>
 <dd style="margin-left: 8">The decoder is capable of decoding this frame size as long as the width and height of the frame in macroblocks are less than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable of supporting 640x480 resolution) will support widths and heights up to 1552 pixels (97 macroblocks).</dd>
+<dt>profile-id:</dt>
+<dd style="margin-left: 8">The value of profile-id is an integer indicating the default coding profile, the subset of coding tools that may have been used to generate the stream or that the receiver supports). <a href="#TableOfProfiles" class="xref">Table 1</a> lists all of the profiles defined in section 7.2 of <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a> and the corresponding integer values to be used.</dd>
+<dt></dt>
+<dd style="margin-left: 8">If no profile-id is present, Profile 0 MUST be inferred.</dd>
 </dl>
 </dd>
 <dt>Encoding considerations:</dt>
@@ -999,6 +1003,33 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dd style="margin-left: 8">
 <br> IETF Payload Working Group delegated from the IESG.</dd>
 </dl>
+<div id="rfc.table.1"></div>
+<div id="TableOfProfiles"></div>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+<caption>Table 1. Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported</caption>
+<thead><tr>
+<th class="center">Profile</th>
+<th class="center">profile-id</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="center">0</td>
+<td class="center">0</td>
+</tr>
+<tr>
+<td class="center">1</td>
+<td class="center">1</td>
+</tr>
+<tr>
+<td class="center">2</td>
+<td class="center">2</td>
+</tr>
+<tr>
+<td class="center">3</td>
+<td class="center">3</td>
+</tr>
+</tbody>
+</table>
 <h1 id="rfc.section.6.2">
 <a href="#rfc.section.6.2">6.2.</a> <a href="#SDPParameters" id="SDPParameters">SDP Parameters</a>
 </h1>
@@ -1012,7 +1043,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <li>The encoding name in the "a=rtpmap" line of SDP MUST be VP9 (the media subtype).</li>
 <li>The clock rate in the "a=rtpmap" line MUST be 90000.</li>
 <li>The parameters "max-fs", and "max-fr", MUST be included in the "a=fmtp" line of SDP if SDP is used to declare receiver capabilities. These parameters are expressed as a media subtype string, in the form of a semicolon separated list of parameter=value pairs.</li>
-<li>The OPTIONAL parameter profile-id, when present, MUST be included in the "a=fmtp" line of SDP. This parameter is expressed as a media subtype string, in the form of a parameter=value pair.</li>
+<li>The OPTIONAL parameter profile-id, when present, SHOULD be included in the "a=fmtp" line of SDP. This parameter is expressed as a media subtype string, in the form of a parameter=value pair. When the parameter is not present, a value of 0 MUST be used for profile-id.</li>
 </ul>
 <h1 id="rfc.section.6.2.1.1">
 <a href="#rfc.section.6.2.1.1">6.2.1.1.</a> Example</h1>
@@ -1024,7 +1055,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
 <ul>
 <li>The parameter identifying a media format configuration for VP9 is profile-id. This media format configuration parameter MUST be used symmetrically; that is, the answerer MUST either maintain all configuration parameters or remove the media format (payload type) completely if one or more of the parameter values are not supported.</li>
-<li>To simplify the handling and matching of these configurations, the same RTP payload type number used in the offer SHOULD also be used in the answer, as specified in <a href="#RFC3264" class="xref">[RFC3264]</a>.  An answer MUST NOT contain the payload type number used in the offer unless the configuration is exactly the same as in the offer.</li>
+<li>To simplify the handling and matching of these configurations, the same RTP payload type number used in the offer SHOULD also be used in the answer, as specified in <a href="#RFC3264" class="xref">[RFC3264]</a>. An answer MUST NOT contain the payload type number used in the offer unless the configuration is exactly the same as in the offer.</li>
 </ul>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#securityConsiderations" id="securityConsiderations">Security Considerations</a>
