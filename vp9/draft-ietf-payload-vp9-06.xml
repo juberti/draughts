@@ -1034,6 +1034,15 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
       blankLines="0"/> - Media type registration as described in <xref
       target="mediaTypeRegistration"/>.</t>
     </section>
+
+    <section title="Acknowledgments">
+	  <t>Alex Eleftheriadis, Yuki Ito, Won Kap Jang, Sergio Garcia
+	  Murillo, Roi Sasson, Timothy Terriberry, Emircan Uysaler, and
+	  Thomas Volkert commented on the development of this document and
+	  provided helpful comments and feedback.</t>
+
+	</section>
+
   </middle>
 
   <back>
