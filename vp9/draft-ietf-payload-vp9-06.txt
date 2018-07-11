@@ -91,9 +91,10 @@ Table of Contents
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
    8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  22
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  22
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  23
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  22
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .  22
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  23
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  24
 
 1.  Introduction
@@ -104,7 +105,6 @@ Table of Contents
    both in peer-to-peer and video conferencing applications.
 
    TODO: VP9 description.  Please see [VP9-BITSTREAM].
-
 
 
 
@@ -631,7 +631,7 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
         |     HEIGHT    | (OPTIONAL)    .
         +               +               .
         |               | (OPTIONAL)    .
-        +-+-+-+-+-+-+-+-+              -/            -\
+        +-+-+-+-+-+-+-+-+              -/
    G:   |      N_G      | (OPTIONAL)
         +-+-+-+-+-+-+-+-+                            -\
    N_G: | TID |U| R |-|-| (OPTIONAL)                 .
@@ -1196,9 +1196,16 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
    The IANA is requested to register the following values:
    - Media type registration as described in Section 6.1.
 
-10.  References
+10.  Acknowledgments
 
-10.1.  Normative References
+   Alex Eleftheriadis, Yuki Ito, Won Kap Jang, Sergio Garcia Murillo,
+   Roi Sasson, Timothy Terriberry, Emircan Uysaler, and Thomas Volkert
+   commented on the development of this document and provided helpful
+   comments and feedback.
+
+11.  References
+
+11.1.  Normative References
 
    [I-D.ietf-avtext-framemarking]
               Zanaty, M., Berger, E., and S. Nandakumar, "Frame Marking
@@ -1216,6 +1223,17 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+
+
+
+Uberti, et al.          Expires January 12, 2019               [Page 22]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
+
+
    [RFC3264]  Rosenberg, J. and H. Schulzrinne, "An Offer/Answer Model
               with Session Description Protocol (SDP)", RFC 3264,
               DOI 10.17487/RFC3264, June 2002,
@@ -1225,14 +1243,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               Jacobson, "RTP: A Transport Protocol for Real-Time
               Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
               July 2003, <https://www.rfc-editor.org/info/rfc3550>.
-
-
-
-
-Uberti, et al.          Expires January 12, 2019               [Page 22]
-
-Internet-Draft         RTP Payload Format for VP9              July 2018
-
 
    [RFC4566]  Handley, M., Jacobson, V., and C. Perkins, "SDP: Session
               Description Protocol", RFC 4566, DOI 10.17487/RFC4566,
@@ -1265,12 +1275,20 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               docs/vp9/
               vp9-bitstream-specification-v0.6-20160331-draft.pdf>.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [RFC3551]  Schulzrinne, H. and S. Casner, "RTP Profile for Audio and
               Video Conferences with Minimal Control", STD 65, RFC 3551,
               DOI 10.17487/RFC3551, July 2003,
               <https://www.rfc-editor.org/info/rfc3551>.
+
+
+
+
+Uberti, et al.          Expires January 12, 2019               [Page 23]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
+
 
    [RFC3711]  Baugher, M., McGrew, D., Naslund, M., Carrara, E., and K.
               Norrman, "The Secure Real-time Transport Protocol (SRTP)",
@@ -1281,14 +1299,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
               Real-time Transport Control Protocol (RTCP)-Based Feedback
               (RTP/SAVPF)", RFC 5124, DOI 10.17487/RFC5124, February
               2008, <https://www.rfc-editor.org/info/rfc5124>.
-
-
-
-
-Uberti, et al.          Expires January 12, 2019               [Page 23]
-
-Internet-Draft         RTP Payload Format for VP9              July 2018
-
 
    [RFC7201]  Westerlund, M. and C. Perkins, "Options for Securing RTP
               Sessions", RFC 7201, DOI 10.17487/RFC7201, April 2014,
@@ -1328,6 +1338,14 @@ Authors' Addresses
    Email: mflodman@google.com
 
 
+
+
+
+Uberti, et al.          Expires January 12, 2019               [Page 24]
+
+Internet-Draft         RTP Payload Format for VP9              July 2018
+
+
    Jonathan Lennox
    Vidyo, Inc.
    433 Hackensack Avenue
@@ -1338,14 +1356,6 @@ Authors' Addresses
    Email: jonathan@vidyo.com
 
 
-
-
-
-Uberti, et al.          Expires January 12, 2019               [Page 24]
-
-Internet-Draft         RTP Payload Format for VP9              July 2018
-
-
    Danny Hong
    Vidyo, Inc.
    433 Hackensack Avenue
@@ -1354,16 +1364,6 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
    US
 
    Email: danny@vidyo.com
-
-
-
-
-
-
-
-
-
-
 
 
 
