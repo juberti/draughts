@@ -127,11 +127,24 @@ ipr="trust200902">
       corporate VPN users) may in fact prefer WebRTC to send media traffic
       directly, i.e., not through the VPN.</t>
 
-      <t>#2 is considered to be a less significant concern, given that the
-      local address values often contain minimal information (e.g.,
-      192.168.0.2), or have built-in privacy protection (e.g., the
-      <xref target="RFC4941" /> IPv6 addresses recommended
-      by <xref target="I-D.ietf-rtcweb-transports"/>).</t>
+      <t>#2 is a less significant but valid concern. While the
+      <xref target="RFC4941" /> IPv6 addresses
+      recommended by <xref target="I-D.ietf-rtcweb-transports"/> are fairly
+      benign due to their intentionally short lifetimes, IPv4 addresses
+      present some challenges. Although they typically contain minimal entropy
+      (e.g., 192.168.0.2, a fairly common address), in the worst case,
+      they can contain 24 bits of entropy with an indefinite lifetime. As such,
+      they can be a fairly significant fingerprinting surface. In addition,
+      intranet web sites can be attacked
+      more easily when their IPv4 address range is externally known.</t>
+
+      <t>Private local IP addresses can also act as an identifier that allows
+      web applications running in isolated browsing contexts (e.g., normal and
+      private browsing) to learn that they are running on the same device.
+      This could allow the application sessions to be correlated, defeating
+      some of the privacy protections provided by isolation. It should be
+      noted that local addresses are just one potential mechanism for this
+      correlation and this is an area for further study.</t>
 
       <t>#3 is the least common concern, as proxy administrators can already
       control this behavior through organizational firewall policy, and
@@ -177,13 +190,18 @@ ipr="trust200902">
 
           <t>By default, WebRTC should be able to negotiate direct peer-to-peer
           connections between endpoints (i.e., without traversing a
-          NAT or relay server), by providing a minimal set of local IP
-          addresses to the application for use in the ICE process.
+          NAT or relay server).
           This ensures that applications that need true
           peer-to-peer routing for bandwidth or latency reasons can operate
           successfully.
-          However, it should be possible to suppress these addresses (with the
-          resultant impact on direct connections) if desired.
+          </t>
+
+          <t>It should be possible to configure WebRTC to not disclose private
+          local IP addresses, to avoid the issues associated with web
+          applications learning such addresses. This document does not require
+          this to be the default state, as there is no currently defined
+          mechanism that can satisfy this requirement as well as the
+          aforementioned requirement to allow direct peer-to-peer connections.
           </t>
 
           <t>By default, WebRTC traffic should not be sent through
@@ -256,6 +274,9 @@ ipr="trust200902">
         implementations MAY choose stricter modes if desired, e.g., if a user
         indicates they want all WebRTC traffic to follow the default route.
         </t>
+
+        <t>Future versions of this document may define additional modes and/or
+        update the recommended default modes.</t>
 
         <t>Note that the suggested defaults can still be used even for
         organizations that want all
@@ -335,8 +356,8 @@ ipr="trust200902">
     <section title="Acknowledgements">
 
       <t>Several people provided input into this document, including Bernard
-      Aboba, Harald Alvestrand, Ted Hardie, Matthew Kaufmann, Eric Rescorla,
-      Adam Roach, and Martin Thomson.</t>
+      Aboba, Harald Alvestrand, Youenn Fablet, Ted Hardie, Matthew Kaufmann,
+      Eric Rescorla, Adam Roach, and Martin Thomson.</t>
     </section>
   </middle>
   <back>
