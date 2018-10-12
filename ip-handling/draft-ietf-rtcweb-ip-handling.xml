@@ -143,8 +143,8 @@ ipr="trust200902">
       private browsing) to learn that they are running on the same device.
       This could allow the application sessions to be correlated, defeating
       some of the privacy protections provided by isolation. It should be
-      noted that local addresses are just one way this correlation can be
-      performed, and this is an area for further study.</t>
+      noted that local addresses are just one potential mechanism for this
+      correlation and this is an area for further study.</t>
 
       <t>#3 is the least common concern, as proxy administrators can already
       control this behavior through organizational firewall policy, and
