@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-09"
+<rfc category="std" docName="draft-ietf-rtcweb-ip-handling-10"
 ipr="trust200902">
   <front>
     <title abbrev="WebRTC IP Handling">WebRTC IP Address Handling
@@ -28,20 +28,7 @@ ipr="trust200902">
         <email>justin@uberti.name</email>
       </address>
     </author>
-    <author fullname="Guo-wei Shieh" initials="G." surname="Shieh">
-      <organization>Facebook</organization>
-      <address>
-        <postal>
-          <street>1101 Dexter Ave</street>
-          <city>Seattle</city>
-          <region>WA</region>
-          <code>98109</code>
-          <country>USA</country>
-        </postal>
-        <email>guoweis@facebook.com</email>
-      </address>
-    </author>
-    <date day="13" month="June" year="2018" />
+    <date day="12" month="October" year="2018" />
     <area>RAI</area>
     <abstract>
 
@@ -380,6 +367,12 @@ ipr="trust200902">
       <?rfc include='reference.I-D.ietf-rtcweb-transports'?>
       </references>
     <section title="Change log">
+      <t>Changes in draft -10:
+      <list style="symbols">
+
+        <t>Incorporate feedback from IETF 102 on the problem space.</t>
+        <t>Note that future versions of the document may define new modes.</t>
+      </list></t>
       <t>Changes in draft -09:
       <list style="symbols">
 
