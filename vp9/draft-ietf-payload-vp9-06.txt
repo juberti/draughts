@@ -70,7 +70,7 @@ Table of Contents
    3.  Media Format Description  . . . . . . . . . . . . . . . . . .   3
    4.  Payload Format  . . . . . . . . . . . . . . . . . . . . . . .   5
      4.1.  RTP Header Usage  . . . . . . . . . . . . . . . . . . . .   5
-     4.2.  VP9 Payload Description . . . . . . . . . . . . . . . . .   7
+     4.2.  VP9 Payload Descriptor  . . . . . . . . . . . . . . . . .   7
        4.2.1.  Scalability Structure (SS): . . . . . . . . . . . . .  11
      4.3.  VP9 Payload Header  . . . . . . . . . . . . . . . . . . .  13
      4.4.  Frame Fragmentation . . . . . . . . . . . . . . . . . . .  13
@@ -360,7 +360,7 @@ Internet-Draft         RTP Payload Format for VP9              July 2018
    SSRC and CSRC identifiers) are used as specified in Section 5.1 of
    [RFC3550].
 
-4.2.  VP9 Payload Description
+4.2.  VP9 Payload Descriptor
 
    In flexible mode (with the F bit below set to 1), The first octets
    after the RTP header are the VP9 payload descriptor, with the
