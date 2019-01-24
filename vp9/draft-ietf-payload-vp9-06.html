@@ -407,12 +407,12 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.9.9 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.17.1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D. Hong" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-06" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-11" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-24" />
   <meta name="dct.abstract" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
   <meta name="description" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
 
@@ -436,7 +436,7 @@
 <td class="right">M. Flodman</td>
 </tr>
 <tr>
-<td class="left">Expires: January 12, 2019</td>
+<td class="left">Expires: July 28, 2019</td>
 <td class="right">Google</td>
 </tr>
 <tr>
@@ -453,7 +453,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 11, 2018</td>
+<td class="right">January 24, 2019</td>
 </tr>
 
     	
@@ -469,9 +469,9 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 12, 2019.</p>
+<p>This Internet-Draft will expire on July 28, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -632,7 +632,7 @@
 <pre>
       0 1 2 3 4 5 6 7
      +-+-+-+-+-+-+-+-+
-     |I|P|L|F|B|E|V|-| (REQUIRED)
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
      +-+-+-+-+-+-+-+-+
 I:   |M| PICTURE ID  | (REQUIRED)
      +-+-+-+-+-+-+-+-+
@@ -654,7 +654,7 @@ V:   | SS            |
 <pre>
       0 1 2 3 4 5 6 7
      +-+-+-+-+-+-+-+-+
-     |I|P|L|F|B|E|V|-| (REQUIRED)
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
      +-+-+-+-+-+-+-+-+
 I:   |M| PICTURE ID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
@@ -687,8 +687,8 @@ V:   | SS            |
 <dd style="margin-left: 8">End of a frame.  MUST be set to 1 for the final RTP packet of a VP9 frame, and 0 otherwise.  This enables a decoder to finish decoding the frame, where it otherwise may need to wait for the next packet to explicitly know that the frame is complete.  Note that, if spatial scalability is in use, more frames from the same picture may follow; see the description of the M bit above.</dd>
 <dt>V:</dt>
 <dd style="margin-left: 8">Scalability structure (SS) data present. When set to one, the OPTIONAL SS data MUST be present in the payload descriptor.  Otherwise, the SS data MUST NOT be present.</dd>
-<dt>-:</dt>
-<dd style="margin-left: 8">Bit reserved for future use. MUST be set to zero and MUST be ignored by the receiver.</dd>
+<dt>Z:</dt>
+<dd style="margin-left: 8">Not a reference frame for a higher spatial layer.  If set to one it indicates that spatial layer SID+1 frame of current and following pictures do not depend on current spatial layer SID frame.</dd>
 </dl>
 <p id="rfc.section.4.2.p.2">The mandatory first octet is followed by the extension data fields that are enabled:</p>
 
@@ -1123,7 +1123,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <tr>
 <td class="reference"><b id="I-D.ietf-avtext-framemarking">[I-D.ietf-avtext-framemarking]</b></td>
 <td class="top">
-<a>Zanaty, M.</a>, <a>Berger, E.</a> and <a>S. Nandakumar</a>, "<a href="https://tools.ietf.org/html/draft-ietf-avtext-framemarking-07">Frame Marking RTP Header Extension</a>", Internet-Draft draft-ietf-avtext-framemarking-07, April 2018.</td>
+<a>Zanaty, M.</a>, <a>Berger, E.</a> and <a>S. Nandakumar</a>, "<a href="https://tools.ietf.org/html/draft-ietf-avtext-framemarking-08">Frame Marking RTP Header Extension</a>", Internet-Draft draft-ietf-avtext-framemarking-08, October 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="I-D.ietf-avtext-lrr">[I-D.ietf-avtext-lrr]</b></td>
