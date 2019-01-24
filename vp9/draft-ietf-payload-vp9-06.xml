@@ -371,7 +371,7 @@
           <artwork><![CDATA[
       0 1 2 3 4 5 6 7
      +-+-+-+-+-+-+-+-+
-     |I|P|L|F|B|E|V|-| (REQUIRED)
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
      +-+-+-+-+-+-+-+-+
 I:   |M| PICTURE ID  | (REQUIRED)
      +-+-+-+-+-+-+-+-+
@@ -396,7 +396,7 @@ V:   | SS            |
           <artwork><![CDATA[
       0 1 2 3 4 5 6 7
      +-+-+-+-+-+-+-+-+
-     |I|P|L|F|B|E|V|-| (REQUIRED)
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
      +-+-+-+-+-+-+-+-+
 I:   |M| PICTURE ID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
@@ -467,8 +467,9 @@ V:   | SS            |
           to one, the OPTIONAL SS data MUST be present in the payload descriptor.
           Otherwise, the SS data MUST NOT be present.</t>
 
-          <t hangText="-:">Bit reserved for future use. MUST be set to
-          zero and MUST be ignored by the receiver.</t>
+          <t hangText="Z:">Not a reference frame for a higher spatial layer.
+            If set to one it indicates that spatial layer SID+1 frame of current
+            and following pictures do not depend on current spatial layer SID frame.</t>
         </list></t>
 
         <t>The mandatory first octet is followed by the extension data fields that
