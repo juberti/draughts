@@ -10,7 +10,7 @@
 <?rfc colonspace="yes" ?>
 <?rfc rfcedstyle="no" ?>
 <?rfc tocdepth="4"?>
-<rfc category="std" docName="draft-ietf-rtcweb-fec-08" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-rtcweb-fec-09" ipr="trust200902">
   <front>
     <title abbrev="WebRTC FEC">WebRTC Forward Error Correction
     Requirements</title>
@@ -27,7 +27,7 @@
         <email>justin@uberti.name</email>
       </address>
     </author>
-    <date day="2" month="March" year="2018" />
+    <date day="8" month="Feb" year="2019" />
     <area>RAI</area>
     <abstract>
 
@@ -311,22 +311,23 @@
       <xref target="RFC6386" />, where only base layer frames are critical to
       the decoding of future frames, implementations SHOULD only apply FEC to
       these base layer frames.</t>
-    </section>
-    <section title="Security Considerations">
 
-      <t>This document makes recommendations regarding the use of FEC.
-      Generally, it should be noted that although applying redundancy is often
+      <t>Finally, it should be noted that although applying redundancy is often
       useful in protecting a stream against packet loss, if the loss is caused
       by network congestion, the additional bandwidth used by the redundant
       data may actually make the situation worse, and can lead to significant
       degradation of the network.</t>
+    </section>
 
-      <t>As described in
-      <xref target="RFC3711" />, Section 10, the default processing when using
-      FEC with SRTP is to perform FEC followed by SRTP at the sender, and SRTP
-      followed by FEC at the receiver. This ordering is used for all the SRTP
-      Protection Profiles used in DTLS-SRTP
-      <xref target="RFC5763" />, as described in
+    <section title="Security Considerations">
+      <t>In the WebRTC context, FEC is specifically concerned with recovering
+      data from lost packets; any corrupted packets will be discarded by the
+      SRTP <xref target="RFC3711" /> decryption process. Therefore, as described
+      in <xref target="RFC3711" />, Section 10, the default processing when
+      using FEC with SRTP is to perform FEC followed by SRTP at the sender, and
+      SRTP followed by FEC at the receiver. This ordering is used for all the
+      SRTP Protection Profiles used in DTLS-SRTP
+      <xref target="RFC5763" />, which are enumerated in
       <xref target="RFC5764" />, Section 4.1.2.</t>
 
       <t>Additional security considerations for each individual FEC mechanism
@@ -382,6 +383,11 @@
       <?rfc include='reference.I-D.ietf-rtcweb-data-channel'?>
     </references>
     <section title="Change log">
+       <t>Changes in draft -09:
+      <list style="symbols">
+        <t>Editorial changes.</t>
+      </list></t>
+
        <t>Changes in draft -08:
       <list style="symbols">
         <t>Switch to RFC 8174 boilerplate.</t>
