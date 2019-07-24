@@ -93,24 +93,22 @@
     </author>
 
     <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
-      <organization abbrev="Vidyo">Vidyo, Inc.</organization>
+      <organization abbrev="8x8 / Jitsi">8x8, Inc. / Jitsi</organization>
 
       <address>
         <postal>
-          <street>433 Hackensack Avenue</street>
+          <street>1350 Broadway</street>
 
-          <street>Seventh Floor</street>
+          <city>New York</city>
 
-          <city>Hackensack</city>
+          <region>NY</region>
 
-          <region>NJ</region>
-
-          <code>07601</code>
+          <code>10018</code>
 
           <country>US</country>
         </postal>
 
-        <email>jonathan@vidyo.com</email>
+        <email>jonathan.lennox@8x8.com</email>
       </address>
     </author>
 
