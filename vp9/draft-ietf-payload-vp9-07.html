@@ -388,10 +388,9 @@
 <link href="#rfc.section.4.6.1" rel="Chapter" title="4.6.1 Reference picture use for scalable structure">
 <link href="#rfc.section.5" rel="Chapter" title="5 Feedback Messages and Header Extensions">
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Reference Picture Selection Indication (RPSI)">
-<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Slice Loss Indication (SLI)">
-<link href="#rfc.section.5.3" rel="Chapter" title="5.3 Full Intra Request (FIR)">
-<link href="#rfc.section.5.4" rel="Chapter" title="5.4 Layer Refresh Request (LRR)">
-<link href="#rfc.section.5.5" rel="Chapter" title="5.5 Frame Marking">
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Full Intra Request (FIR)">
+<link href="#rfc.section.5.3" rel="Chapter" title="5.3 Layer Refresh Request (LRR)">
+<link href="#rfc.section.5.4" rel="Chapter" title="5.4 Frame Marking">
 <link href="#rfc.section.6" rel="Chapter" title="6 Payload Format Parameters">
 <link href="#rfc.section.6.1" rel="Chapter" title="6.1 Media Type Definition">
 <link href="#rfc.section.6.2" rel="Chapter" title="6.2 SDP Parameters">
@@ -407,12 +406,12 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.9.9 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.23.1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D. Hong" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-06" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-11" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-07" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-24" />
   <meta name="dct.abstract" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
   <meta name="description" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
 
@@ -436,7 +435,7 @@
 <td class="right">M. Flodman</td>
 </tr>
 <tr>
-<td class="left">Expires: January 12, 2019</td>
+<td class="left">Expires: January 25, 2020</td>
 <td class="right">Google</td>
 </tr>
 <tr>
@@ -453,7 +452,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 11, 2018</td>
+<td class="right">July 24, 2019</td>
 </tr>
 
     	
@@ -461,7 +460,7 @@
   </table>
 
   <p class="title">RTP Payload Format for VP9 Video<br />
-  <span class="filename">draft-ietf-payload-vp9-06</span></p>
+  <span class="filename">draft-ietf-payload-vp9-07</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability.</p>
@@ -469,9 +468,9 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 12, 2019.</p>
+<p>This Internet-Draft will expire on January 25, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -507,13 +506,11 @@
 </li>
 <ul><li>5.1.   <a href="#rfc.section.5.1">Reference Picture Selection Indication (RPSI)</a>
 </li>
-<li>5.2.   <a href="#rfc.section.5.2">Slice Loss Indication (SLI)</a>
+<li>5.2.   <a href="#rfc.section.5.2">Full Intra Request (FIR)</a>
 </li>
-<li>5.3.   <a href="#rfc.section.5.3">Full Intra Request (FIR)</a>
+<li>5.3.   <a href="#rfc.section.5.3">Layer Refresh Request (LRR)</a>
 </li>
-<li>5.4.   <a href="#rfc.section.5.4">Layer Refresh Request (LRR)</a>
-</li>
-<li>5.5.   <a href="#rfc.section.5.5">Frame Marking</a>
+<li>5.4.   <a href="#rfc.section.5.4">Frame Marking</a>
 </li>
 </ul><li>6.   <a href="#rfc.section.6">Payload Format Parameters</a>
 </li>
@@ -676,7 +673,7 @@ V:   | SS            |
 <dt>I:</dt>
 <dd style="margin-left: 8">Picture ID (PID) present. When set to one, the OPTIONAL PID MUST be present after the mandatory first octet and specified as below. Otherwise, PID MUST NOT be present.  If the SS field was present in the stream's most recent start of a keyframe (i.e., non-flexible scalability mode is in use), then the PID MUST also be present in every packet.</dd>
 <dt>P:</dt>
-<dd style="margin-left: 8">Inter-picture predicted frame.  When set to zero, the frame does not utilize inter-picture prediction.  In this case, up-switching to a current spatial layer's frame is possible from directly lower spatial layer frame.  P SHOULD also be set to zero when encoding a layer synchronization frame in response to an <a href="#I-D.ietf-avtext-lrr" class="xref">LRR</a> message (see <a href="#LRR" class="xref">Section 5.4</a>).  When P is set to zero, the TID field (described below) MUST also be set to 0 (if present).  Note that the P bit does not forbid intra-picture, inter-layer prediction from earlier frames of the same picture, if any.</dd>
+<dd style="margin-left: 8">Inter-picture predicted frame.  When set to zero, the frame does not utilize inter-picture prediction.  In this case, up-switching to a current spatial layer's frame is possible from directly lower spatial layer frame.  P SHOULD also be set to zero when encoding a layer synchronization frame in response to an <a href="#I-D.ietf-avtext-lrr" class="xref">LRR</a> message (see <a href="#LRR" class="xref">Section 5.3</a>).  When P is set to zero, the TID field (described below) MUST also be set to 0 (if present).  Note that the P bit does not forbid intra-picture, inter-layer prediction from earlier frames of the same picture, if any.</dd>
 <dt>L:</dt>
 <dd style="margin-left: 8">Layer indices present.  When set to one, the one or two octets following the mandatory first octet and the PID (if present) is as described by "Layer indices" below.  If the F bit (described below) is set to 1 (indicating flexible mode), then only one octet is present for the layer indices. Otherwise if the F bit is set to 0 (indicating non-flexible mode), then two octets are present for the layer indices.</dd>
 <dt>F:</dt>
@@ -890,31 +887,15 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <p id="rfc.section.5.1.p.1">The reference picture selection index is a payload-specific feedback message defined within the RTCP-based feedback format. The RPSI message is generated by a receiver and can be used in two ways.  Either it can signal a preferred reference picture when a loss has been detected by the decoder -- preferably then a reference that the decoder knows is perfect -- or, it can be used as positive feedback information to acknowledge correct decoding of certain reference pictures. The positive feedback method is useful for VP9 used for point to point (unicast) communication. The use of RPSI for VP9 is preferably combined with a special update pattern of the codec's two special reference frames -- the golden frame and the altref frame -- in which they are updated in an alternating leapfrog fashion. When a receiver has received and correctly decoded a golden or altref frame, and that frame had a PictureID in the payload descriptor, the receiver can acknowledge this simply by sending an RPSI message back to the sender. The message body (i.e., the "native RPSI bit string" in <a href="#RFC4585" class="xref">[RFC4585]</a>) is simply the PictureID of the received frame.</p>
 <p id="rfc.section.5.1.p.2">Note: because all frames of the same picture must have the same inter-picture reference structure, there is no need for a message to specify which frame is being selected.</p>
 <h1 id="rfc.section.5.2">
-<a href="#rfc.section.5.2">5.2.</a> <a href="#SLI" id="SLI">Slice Loss Indication (SLI)</a>
+<a href="#rfc.section.5.2">5.2.</a> <a href="#FIR" id="FIR">Full Intra Request (FIR)</a>
 </h1>
-<p id="rfc.section.5.2.p.1">TODO: Update to indicate which frame within the picture.</p>
-<p id="rfc.section.5.2.p.2">The slice loss indication is another payload-specific feedback message defined within the RTCP-based feedback format. The SLI message is generated by the receiver when a loss or corruption is detected in a frame. The format of the SLI message is as follows <a href="#RFC4585" class="xref">[RFC4585]</a>:</p>
-<div id="rfc.figure.5"></div>
-<div id="figureSLIHeader"></div>
-<pre>
-   0                   1                   2                   3
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |         First           |        Number           | PictureID |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            </pre>
-<p class="figure">Figure 5</p>
-<p id="rfc.section.5.2.p.3">Here, First is the macroblock address (in scan order) of the first lost block and Number is the number of lost blocks, as defined in <a href="#RFC4585" class="xref">[RFC4585]</a>. PictureID is the six least significant bits of the codec-specific picture identifier in which the loss or corruption has occurred. For VP9, this codec-specific identifier is naturally the PictureID of the current frame, as read from the payload descriptor. If the payload descriptor of the current frame does not have a PictureID, the receiver MAY send the last received PictureID+1 in the SLI message. The receiver MAY set the First parameter to 0, and the Number parameter to the total number of macroblocks per frame, even though only part of the frame is corrupted. When the sender receives an SLI message, it can make use of the knowledge from the latest received RPSI message. Knowing that the last golden or altref frame was successfully received, it can encode the next frame with reference to that established reference.</p>
+<p id="rfc.section.5.2.p.1">The <a href="#RFC5104" class="xref">Full Intra Request (FIR)</a> RTCP feedback message allows a receiver to request a full state refresh of an encoded stream.</p>
+<p id="rfc.section.5.2.p.2">Upon receipt of an FIR request, a VP9 sender MUST send a picture with a keyframe for its spatial layer 0 layer frame, and then send frames without inter-picture prediction (P=0) for any higher layer frames.</p>
 <h1 id="rfc.section.5.3">
-<a href="#rfc.section.5.3">5.3.</a> <a href="#FIR" id="FIR">Full Intra Request (FIR)</a>
+<a href="#rfc.section.5.3">5.3.</a> <a href="#LRR" id="LRR">Layer Refresh Request (LRR)</a>
 </h1>
-<p id="rfc.section.5.3.p.1">The <a href="#RFC5104" class="xref">Full Intra Request (FIR)</a> RTCP feedback message allows a receiver to request a full state refresh of an encoded stream.</p>
-<p id="rfc.section.5.3.p.2">Upon receipt of an FIR request, a VP9 sender MUST send a picture with a keyframe for its spatial layer 0 layer frame, and then send frames without inter-picture prediction (P=0) for any higher layer frames.</p>
-<h1 id="rfc.section.5.4">
-<a href="#rfc.section.5.4">5.4.</a> <a href="#LRR" id="LRR">Layer Refresh Request (LRR)</a>
-</h1>
-<p id="rfc.section.5.4.p.1">The <a href="#I-D.ietf-avtext-lrr" class="xref">Layer Refresh Request</a> allows a receiver to request a single layer of a spatially or temporally encoded stream to be refreshed, without necessarily affecting the stream's other layers.</p>
-<div id="rfc.figure.6"></div>
+<p id="rfc.section.5.3.p.1">The <a href="#I-D.ietf-avtext-lrr" class="xref">Layer Refresh Request</a> allows a receiver to request a single layer of a spatially or temporally encoded stream to be refreshed, without necessarily affecting the stream's other layers.</p>
+<div id="rfc.figure.5"></div>
 <div id="figureLRRIndexFormat"></div>
 <pre>
             +---------------+---------------+
@@ -923,16 +904,16 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             |   RES   | TID | RES     | SID |
             +---------------+---------+-----+
           </pre>
-<p class="figure">Figure 6</p>
-<p><a href="#figureLRRIndexFormat" class="xref">Figure 6</a> shows the format of LRR's layer index fields for VP9 streams.  The two "RES" fields MUST be set to 0 on transmission and ingnored on reception.  See <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> for details on the TID and SID fields.</p>
-<p id="rfc.section.5.4.p.3">Identification of a layer refresh frame can be derived from the reference IDs of each frame by backtracking the dependency chain until reaching a point where only decodable frames are being referenced. Therefore it's recommended for both the flexible and the non-flexible mode that, when upgrade frames are being encoded in response to a LRR, those packets should contain layer indices and the reference fields so that the decoder or an MCU can make this derivation.</p>
-<p id="rfc.section.5.4.p.4">Example:</p>
-<p id="rfc.section.5.4.p.5">LRR {1,0}, {2,1} is sent by an MCU when it is currently relaying {1,0} to a receiver and which wants to upgrade to {2,1}. In response the encoder should encode the next frames in layers {1,1} and {2,1} by only referring to frames in {1,0}, or {0,0}.</p>
-<p id="rfc.section.5.4.p.6">In the non-flexible mode, periodic upgrade frames can be defined by the layer structure of the SS, thus periodic upgrade frames can be automatically identified by the picture ID.</p>
-<h1 id="rfc.section.5.5">
-<a href="#rfc.section.5.5">5.5.</a> Frame Marking</h1>
-<p id="rfc.section.5.5.p.1">The <a href="#I-D.ietf-avtext-framemarking" class="xref">Frame Marking RTP header extension</a> is a mechanism to provide information about frames of video streams in a largely codec-independent manner.  However, for its extension for scalable codecs, the specific manner in which codec layers are identified needs to be specified specifically for each codec.  This section defines how frame marking is used with VP9.</p>
-<div id="rfc.figure.7"></div>
+<p class="figure">Figure 5</p>
+<p><a href="#figureLRRIndexFormat" class="xref">Figure 5</a> shows the format of LRR's layer index fields for VP9 streams.  The two "RES" fields MUST be set to 0 on transmission and ingnored on reception.  See <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> for details on the TID and SID fields.</p>
+<p id="rfc.section.5.3.p.3">Identification of a layer refresh frame can be derived from the reference IDs of each frame by backtracking the dependency chain until reaching a point where only decodable frames are being referenced. Therefore it's recommended for both the flexible and the non-flexible mode that, when upgrade frames are being encoded in response to a LRR, those packets should contain layer indices and the reference fields so that the decoder or an MCU can make this derivation.</p>
+<p id="rfc.section.5.3.p.4">Example:</p>
+<p id="rfc.section.5.3.p.5">LRR {1,0}, {2,1} is sent by an MCU when it is currently relaying {1,0} to a receiver and which wants to upgrade to {2,1}. In response the encoder should encode the next frames in layers {1,1} and {2,1} by only referring to frames in {1,0}, or {0,0}.</p>
+<p id="rfc.section.5.3.p.6">In the non-flexible mode, periodic upgrade frames can be defined by the layer structure of the SS, thus periodic upgrade frames can be automatically identified by the picture ID.</p>
+<h1 id="rfc.section.5.4">
+<a href="#rfc.section.5.4">5.4.</a> Frame Marking</h1>
+<p id="rfc.section.5.4.p.1">The <a href="#I-D.ietf-avtext-framemarking" class="xref">Frame Marking RTP header extension</a> is a mechanism to provide information about frames of video streams in a largely codec-independent manner.  However, for its extension for scalable codecs, the specific manner in which codec layers are identified needs to be specified specifically for each codec.  This section defines how frame marking is used with VP9.</p>
+<div id="rfc.figure.6"></div>
 <div id="figureFramemarking"></div>
 <pre>
     0                   1                   2                   3
@@ -941,9 +922,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
    |  ID=2 |  L=2  |S|E|I|D|B| TID |0|0|0|0|0| SID |    TL0PICIDX  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           </pre>
-<p class="figure">Figure 7</p>
-<p id="rfc.section.5.5.p.2">When this header extension is used with VP9, the TID and SID fields MUST match the values in the packet which the header extension is attached to; see <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> for details on these fields.</p>
-<p id="rfc.section.5.5.p.3">See <a href="#I-D.ietf-avtext-framemarking" class="xref">[I-D.ietf-avtext-framemarking]</a> for explanations of the other fields, which are generic.</p>
+<p class="figure">Figure 6</p>
+<p id="rfc.section.5.4.p.2">When this header extension is used with VP9, the TID and SID fields MUST match the values in the packet which the header extension is attached to; see <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> for details on these fields.</p>
+<p id="rfc.section.5.4.p.3">See <a href="#I-D.ietf-avtext-framemarking" class="xref">[I-D.ietf-avtext-framemarking]</a> for explanations of the other fields, which are generic.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#payloadFormatParameters" id="payloadFormatParameters">Payload Format Parameters</a>
 </h1>
@@ -1123,7 +1104,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <tr>
 <td class="reference"><b id="I-D.ietf-avtext-framemarking">[I-D.ietf-avtext-framemarking]</b></td>
 <td class="top">
-<a>Zanaty, M.</a>, <a>Berger, E.</a> and <a>S. Nandakumar</a>, "<a href="https://tools.ietf.org/html/draft-ietf-avtext-framemarking-07">Frame Marking RTP Header Extension</a>", Internet-Draft draft-ietf-avtext-framemarking-07, April 2018.</td>
+<a>Zanaty, M.</a>, <a>Berger, E.</a> and <a>S. Nandakumar</a>, "<a href="https://tools.ietf.org/html/draft-ietf-avtext-framemarking-09">Frame Marking RTP Header Extension</a>", Internet-Draft draft-ietf-avtext-framemarking-09, March 2019.</td>
 </tr>
 <tr>
 <td class="reference"><b id="I-D.ietf-avtext-lrr">[I-D.ietf-avtext-lrr]</b></td>
