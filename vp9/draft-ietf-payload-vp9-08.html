@@ -381,11 +381,10 @@
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 RTP Header Usage">
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 VP9 Payload Descriptor">
 <link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 Scalability Structure (SS):">
-<link href="#rfc.section.4.3" rel="Chapter" title="4.3 VP9 Payload Header">
-<link href="#rfc.section.4.4" rel="Chapter" title="4.4 Frame Fragmentation">
-<link href="#rfc.section.4.5" rel="Chapter" title="4.5 Scalable encoding considerations">
-<link href="#rfc.section.4.6" rel="Chapter" title="4.6 Examples of VP9 RTP Stream">
-<link href="#rfc.section.4.6.1" rel="Chapter" title="4.6.1 Reference picture use for scalable structure">
+<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Frame Fragmentation">
+<link href="#rfc.section.4.4" rel="Chapter" title="4.4 Scalable encoding considerations">
+<link href="#rfc.section.4.5" rel="Chapter" title="4.5 Examples of VP9 RTP Stream">
+<link href="#rfc.section.4.5.1" rel="Chapter" title="4.5.1 Reference picture use for scalable structure">
 <link href="#rfc.section.5" rel="Chapter" title="5 Feedback Messages and Header Extensions">
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Reference Picture Selection Indication (RPSI)">
 <link href="#rfc.section.5.2" rel="Chapter" title="5.2 Full Intra Request (FIR)">
@@ -410,8 +409,8 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Uberti, J., Holmer, S., Flodman, M., Lennox, J., and D. Hong" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-07" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-24" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-08" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-20" />
   <meta name="dct.abstract" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
   <meta name="description" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
 
@@ -423,7 +422,7 @@
     <tbody>
     
     	<tr>
-<td class="left">Payload Working Group</td>
+<td class="left">AVTCore Working Group</td>
 <td class="right">J. Uberti</td>
 </tr>
 <tr>
@@ -435,7 +434,7 @@
 <td class="right">M. Flodman</td>
 </tr>
 <tr>
-<td class="left">Expires: January 25, 2020</td>
+<td class="left">Expires: June 22, 2020</td>
 <td class="right">Google</td>
 </tr>
 <tr>
@@ -456,7 +455,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 24, 2019</td>
+<td class="right">December 20, 2019</td>
 </tr>
 
     	
@@ -464,7 +463,7 @@
   </table>
 
   <p class="title">RTP Payload Format for VP9 Video<br />
-  <span class="filename">draft-ietf-payload-vp9-07</span></p>
+  <span class="filename">draft-ietf-payload-vp9-08</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability.</p>
@@ -472,7 +471,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 25, 2020.</p>
+<p>This Internet-Draft will expire on June 22, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -496,15 +495,13 @@
 </li>
 <ul><li>4.2.1.   <a href="#rfc.section.4.2.1">Scalability Structure (SS):</a>
 </li>
-</ul><li>4.3.   <a href="#rfc.section.4.3">VP9 Payload Header</a>
+</ul><li>4.3.   <a href="#rfc.section.4.3">Frame Fragmentation</a>
 </li>
-<li>4.4.   <a href="#rfc.section.4.4">Frame Fragmentation</a>
+<li>4.4.   <a href="#rfc.section.4.4">Scalable encoding considerations</a>
 </li>
-<li>4.5.   <a href="#rfc.section.4.5">Scalable encoding considerations</a>
+<li>4.5.   <a href="#rfc.section.4.5">Examples of VP9 RTP Stream</a>
 </li>
-<li>4.6.   <a href="#rfc.section.4.6">Examples of VP9 RTP Stream</a>
-</li>
-<ul><li>4.6.1.   <a href="#rfc.section.4.6.1">Reference picture use for scalable structure</a>
+<ul><li>4.5.1.   <a href="#rfc.section.4.5.1">Reference picture use for scalable structure</a>
 </li>
 </ul></ul><li>5.   <a href="#rfc.section.5">Feedback Messages and Header Extensions</a>
 </li>
@@ -550,12 +547,11 @@
 <a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">This memo describes an RTP payload specification applicable to the transmission of video streams encoded using the VP9 video codec <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a>. The format described in this document can be used both in peer-to-peer and video conferencing applications.</p>
-<p id="rfc.section.1.p.2">TODO: VP9 description.  Please see <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a>.</p>
+<p id="rfc.section.1.p.2">The VP9 video codec was developed by Google, and is the successor to its earlier <a href="#RFC6386" class="xref">VP8</a> codec.  Above the compression improvements and other general enhancements above VP8, VP9 is also designed in a way that allows spatially-scalable video encoding.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#conventions" id="conventions">Conventions, Definitions and Acronyms</a>
 </h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">[RFC2119]</a>.</p>
-<p id="rfc.section.2.p.2">TODO: Cite terminology from <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a>.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#mediaFormatDescription" id="mediaFormatDescription">Media Format Description</a>
 </h1>
@@ -609,7 +605,7 @@
   |                               :    OPTIONAL RTP padding       |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           </pre>
-<p>The VP9 payload descriptor and VP9 payload header will be described in <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> and <a href="#VP9payloadHeader" class="xref">Section 4.3</a>.  OPTIONAL RTP padding MUST NOT be included unless the P bit is set.  The figure specifically shows the format for the first packet in a frame.  Subsequent packets will not contain the VP9 payload header, and will have later octets in the frame payload.</p>
+<p>The VP9 payload descriptor will be described in <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a>; the VP9 payload header is described in <a href="#VP9-BITSTREAM" class="xref">[VP9-BITSTREAM]</a>.  OPTIONAL RTP padding MUST NOT be included unless the P bit is set.  The figure specifically shows the format for the first packet in a frame.  Subsequent packets will not contain the VP9 payload header, and will have later octets in the frame payload.</p>
 <p class="figure">Figure 1</p>
 <p></p>
 
@@ -781,23 +777,18 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 </dl>
 <p id="rfc.section.4.2.1.p.3">In a scalable stream sent with a fixed pattern, the SS data SHOULD be included in the first packet of every key frame. This is a packet with P bit equal to zero, SID or D bit equal to zero, and B bit equal to 1.  The SS data MUST only be changed on the picture that corresponds to the first picture specified in the previous SS data's PG (if the previous SS data's N_G was greater than 0).</p>
 <h1 id="rfc.section.4.3">
-<a href="#rfc.section.4.3">4.3.</a> <a href="#VP9payloadHeader" id="VP9payloadHeader">VP9 Payload Header</a>
-</h1>
-<p id="rfc.section.4.3.p.1">TODO: need to describe VP9 payload header.</p>
+<a href="#rfc.section.4.3">4.3.</a> Frame Fragmentation</h1>
+<p id="rfc.section.4.3.p.1">VP9 frames are fragmented into packets, in RTP sequence number order, beginning with a packet with the B bit set, and ending with a packet with the E bit set.  There is no mechanism for finer-grained access to parts of a VP9 frame.</p>
 <h1 id="rfc.section.4.4">
-<a href="#rfc.section.4.4">4.4.</a> Frame Fragmentation</h1>
-<p id="rfc.section.4.4.p.1">VP9 frames are fragmented into packets, in RTP sequence number order, beginning with a packet with the B bit set, and ending with a packet with the E bit set.  There is no mechanism for finer-grained access to parts of a VP9 frame.</p>
+<a href="#rfc.section.4.4">4.4.</a> Scalable encoding considerations</h1>
+<p id="rfc.section.4.4.p.1">In addition to the use of reference frames, VP9 has several additional forms of inter-frame dependencies, largely involving probability tables for the entropy and tree encoders.  In VP9 syntax, the syntax element "error_resilient_mode" resets this additional inter-frame data, allowing a frame's syntax to be decoded independently.</p>
+<p id="rfc.section.4.4.p.2">Due to the requirements of scalable streams, a VP9 encoder producing a scalable stream needs to ensure that a frame does not depend on a previous frame (of the same or a previous picture) that can legitimately be removed from the stream.  Thus, a frame that follows a removable frame (in full decode order) MUST be encoded with "error_resilient_mode" to true.</p>
+<p id="rfc.section.4.4.p.3">For spatially-scalable streams, this means that "error_resilient_mode" needs to be turned on for the base spatial layer; it can however be turned off for higher spatial layers, assuming they are sent with inter-layer dependency (i.e. with the "D" bit set).  For streams that are only temporally-scalable without spatial scalability, "error_resilient_mode" can additionally be turned off for any picture that immediately follows a temporal layer 0 frame.</p>
 <h1 id="rfc.section.4.5">
-<a href="#rfc.section.4.5">4.5.</a> Scalable encoding considerations</h1>
-<p id="rfc.section.4.5.p.1">In addition to the use of reference frames, VP9 has several additional forms of inter-frame dependencies, largely involving probability tables for the entropy and tree encoders.  In VP9 syntax, the syntax element "error_resilient_mode" resets this additional inter-frame data, allowing a frame's syntax to be decoded independently.</p>
-<p id="rfc.section.4.5.p.2">Due to the requirements of scalable streams, a VP9 encoder producing a scalable stream needs to ensure that a frame does not depend on a previous frame (of the same or a previous picture) that can legitimately be removed from the stream.  Thus, a frame that follows a removable frame (in full decode order) MUST be encoded with "error_resilient_mode" to true.</p>
-<p id="rfc.section.4.5.p.3">For spatially-scalable streams, this means that "error_resilient_mode" needs to be turned on for the base spatial layer; it can however be turned off for higher spatial layers, assuming they are sent with inter-layer dependency (i.e. with the "D" bit set).  For streams that are only temporally-scalable without spatial scalability, "error_resilient_mode" can additionally be turned off for any picture that immediately follows a temporal layer 0 frame.</p>
-<h1 id="rfc.section.4.6">
-<a href="#rfc.section.4.6">4.6.</a> Examples of VP9 RTP Stream</h1>
-<p id="rfc.section.4.6.p.1">TODO: Examples of packet layouts</p>
-<h1 id="rfc.section.4.6.1">
-<a href="#rfc.section.4.6.1">4.6.1.</a> Reference picture use for scalable structure</h1>
-<p id="rfc.section.4.6.1.p.1">As discussed in <a href="#mediaFormatDescription" class="xref">Section 3</a>, the VP9 codec can maintain up to eight reference frames, of which up to three can be referenced or updated by any new frame.  This section illustrates one way that a scalable structure (with three spatial layers and three temporal layers) can be constructed using these reference frames.</p>
+<a href="#rfc.section.4.5">4.5.</a> Examples of VP9 RTP Stream</h1>
+<h1 id="rfc.section.4.5.1">
+<a href="#rfc.section.4.5.1">4.5.1.</a> Reference picture use for scalable structure</h1>
+<p id="rfc.section.4.5.1.p.1">As discussed in <a href="#mediaFormatDescription" class="xref">Section 3</a>, the VP9 codec can maintain up to eight reference frames, of which up to three can be referenced or updated by any new frame.  This section illustrates one way that a scalable structure (with three spatial layers and three temporal layers) can be constructed using these reference frames.</p>
 <table cellpadding="3" cellspacing="0" class="tt full center">
 <caption>Example scalability structure</caption>
 <thead><tr>
@@ -881,7 +872,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 </tr>
 </tbody>
 </table>
-<p id="rfc.section.4.6.1.p.2">This structure is constructed such that the "U" bit can always be set.</p>
+<p id="rfc.section.4.5.1.p.2">This structure is constructed such that the "U" bit can always be set.</p>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> <a href="#Feedback" id="Feedback">Feedback Messages and Header Extensions</a>
 </h1>
@@ -981,17 +972,17 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dd style="margin-left: 8">None.</dd>
 <dt>Person &amp; email address to contact for further information:</dt>
 <dd style="margin-left: 8">
-<br> TODO [Pick a contact]</dd>
+<br> Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</dd>
 <dt>Intended usage:</dt>
 <dd style="margin-left: 8">COMMON</dd>
 <dt>Restrictions on usage:</dt>
 <dd style="margin-left: 8">
 <br> This media type depends on RTP framing, and hence is only defined for transfer via RTP <a href="#RFC3550" class="xref">[RFC3550]</a>.</dd>
 <dt>Author:</dt>
-<dd style="margin-left: 8">TODO [Pick a contact]</dd>
+<dd style="margin-left: 8">Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</dd>
 <dt>Change controller:</dt>
 <dd style="margin-left: 8">
-<br> IETF Payload Working Group delegated from the IESG.</dd>
+<br> IETF AVTCore Working Group delegated from the IESG.</dd>
 </dl>
 <div id="rfc.table.1"></div>
 <div id="TableOfProfileIds"></div>
@@ -1096,7 +1087,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <h1 id="rfc.section.9">
 <a href="#rfc.section.9">9.</a> <a href="#IANAConsiderations" id="IANAConsiderations">IANA Considerations</a>
 </h1>
-<p id="rfc.section.9.p.1">The IANA is requested to register the following values:<br> - Media type registration as described in <a href="#mediaTypeRegistration" class="xref">Section 6.1</a>.</p>
+<p id="rfc.section.9.p.1">The IANA is requested to register the media type registration "video/vp9" as specified in <a href="#mediaTypeRegistration" class="xref">Section 6.1</a>.  The media type is also requested to be added to the IANA registry for "RTP Payload Format MIME types" &lt;http://www.iana.org/assignments/rtp-parameters&gt;.</p>
 <h1 id="rfc.section.10">
 <a href="#rfc.section.10">10.</a> Acknowledgments</h1>
 <p id="rfc.section.10.p.1">Alex Eleftheriadis, Yuki Ito, Won Kap Jang, Sergio Garcia Murillo, Roi Sasson, Timothy Terriberry, Emircan Uysaler, and Thomas Volkert commented on the development of this document and provided helpful comments and feedback.</p>
@@ -1108,7 +1099,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <tr>
 <td class="reference"><b id="I-D.ietf-avtext-framemarking">[I-D.ietf-avtext-framemarking]</b></td>
 <td class="top">
-<a>Zanaty, M.</a>, <a>Berger, E.</a> and <a>S. Nandakumar</a>, "<a href="https://tools.ietf.org/html/draft-ietf-avtext-framemarking-09">Frame Marking RTP Header Extension</a>", Internet-Draft draft-ietf-avtext-framemarking-09, March 2019.</td>
+<a>Zanaty, M.</a>, <a>Berger, E.</a> and <a>S. Nandakumar</a>, "<a href="https://tools.ietf.org/html/draft-ietf-avtext-framemarking-10">Frame Marking RTP Header Extension</a>", Internet-Draft draft-ietf-avtext-framemarking-10, November 2019.</td>
 </tr>
 <tr>
 <td class="reference"><b id="I-D.ietf-avtext-lrr">[I-D.ietf-avtext-lrr]</b></td>
@@ -1178,6 +1169,11 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <td class="reference"><b id="RFC5124">[RFC5124]</b></td>
 <td class="top">
 <a>Ott, J.</a> and <a>E. Carrara</a>, "<a href="https://tools.ietf.org/html/rfc5124">Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)</a>", RFC 5124, DOI 10.17487/RFC5124, February 2008.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC6386">[RFC6386]</b></td>
+<td class="top">
+<a>Bankoski, J.</a>, <a>Koleszar, J.</a>, <a>Quillio, L.</a>, <a>Salonen, J.</a>, <a>Wilkins, P.</a> and <a>Y. Xu</a>, "<a href="https://tools.ietf.org/html/rfc6386">VP8 Data Format and Decoding Guide</a>", RFC 6386, DOI 10.17487/RFC6386, November 2011.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC7201">[RFC7201]</b></td>

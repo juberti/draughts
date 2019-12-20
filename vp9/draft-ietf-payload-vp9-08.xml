@@ -11,6 +11,7 @@
 <!ENTITY rfc4585 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4585.xml">
 <!ENTITY rfc5104 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc5124 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5124.xml">
+<!ENTITY rfc6386 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6386.xml">
 <!ENTITY rfc6838 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7202.xml">
@@ -18,7 +19,7 @@
 <!ENTITY framemarking SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-payload-vp9-07" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-payload-vp9-08" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -138,7 +139,7 @@
 
     <area>RAI</area>
 
-    <workgroup>Payload Working Group</workgroup>
+    <workgroup>AVTCore Working Group</workgroup>
 
     <keyword>RFC</keyword>
 
@@ -165,8 +166,11 @@
       target="VP9-BITSTREAM"/>. The format described in this document can be used
       both in peer-to-peer and video conferencing applications.</t>
 
-      <t>TODO: VP9 description.  Please see <xref
-      target="VP9-BITSTREAM"/>.</t>
+      <t>The VP9 video codec was developed by Google, and is the
+      successor to its earlier <xref target="RFC6386">VP8</xref>
+      codec.  Above the compression improvements and other general
+      enhancements above VP8, VP9 is also designed in a way that
+      allows spatially-scalable video encoding.</t>
     </section>
 
     <section anchor="conventions"
@@ -175,9 +179,6 @@
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
       document are to be interpreted as described in <xref
       target="RFC2119"/>.</t>
-
-      <t>TODO: Cite terminology from <xref
-      target="VP9-BITSTREAM"/>.</t>
     </section>
 
     <section anchor="mediaFormatDescription" title="Media Format Description">
@@ -316,8 +317,9 @@
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           ]]></artwork>
 
-          <postamble>The VP9 payload descriptor and VP9 payload header will be
-          described in <xref target="VP9payloadDescriptor"/> and <xref target="VP9payloadHeader"/>.
+          <postamble>The VP9 payload descriptor will be
+          described in <xref target="VP9payloadDescriptor"/>; the VP9 payload header is described
+	      in <xref target="VP9-BITSTREAM"/>.
 			OPTIONAL RTP padding MUST NOT be included unless the P bit is set.
 			The figure specifically shows the format for the first
 			packet in a frame.  Subsequent packets will not contain the
@@ -633,10 +635,6 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
       </section>
     </section>
 
-      <section anchor="VP9payloadHeader" title="VP9 Payload Header">
-		<t>TODO: need to describe VP9 payload header.</t>
-      </section>
-
       <section title="Frame Fragmentation">
 		<t>VP9 frames are fragmented into packets, in RTP sequence
 		number order, beginning with a
@@ -675,8 +673,6 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 	  </section>
 
       <section title="Examples of VP9 RTP Stream">
-		<t>TODO: Examples of packet layouts</t>
-
 		<section title="Reference picture use for scalable structure">
 
 		  <t>As discussed in <xref target="mediaFormatDescription"/>, the
@@ -902,7 +898,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
             <t
             hangText="Person &amp; email address to contact for further information:"><vspace
-            blankLines="0"/> TODO [Pick a contact]</t>
+            blankLines="0"/> Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</t>
 
             <t hangText="Intended usage:">COMMON</t>
 
@@ -910,10 +906,10 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             media type depends on RTP framing, and hence is only defined for
             transfer via RTP <xref target="RFC3550"/>.</t>
 
-            <t hangText="Author:">TODO [Pick a contact]</t>
+            <t hangText="Author:">Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</t>
 
             <t hangText="Change controller:"><vspace blankLines="0"/> IETF
-            Payload Working Group delegated from the IESG.</t>
+            AVTCore Working Group delegated from the IESG.</t>
           </list></t>
 
 	  <texttable anchor="TableOfProfileIds" title="Table 1. Table of profile-id
@@ -978,15 +974,6 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
         </section>
 
         <section title="Offer/Answer Considerations">
-		  <!--
-          <t>The VP9 codec offers a decode complexity that is roughly linear
-          with the number of pixels encoded. The parameters "max-fr" and
-          "max-fs" are defined in <xref target="mediaTypeRegistration"/>,
-          where the macroblock size is 16x16 pixels as defined in <xref
-          target="RFC6386"/>, the max-fs and max-fr parameters MUST be used to
-          establish these limits.</t>
-
-           -->
 	  <t>When VP9 is offered over RTP using SDP in an Offer/Answer model
           <xref target="RFC3264"/> for negotiation for unicast usage, the following
           limitations and rules apply: <list style="symbols">
@@ -1049,9 +1036,12 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
     </section>
 
     <section anchor="IANAConsiderations" title="IANA Considerations">
-      <t>The IANA is requested to register the following values:<vspace
-      blankLines="0"/> - Media type registration as described in <xref
-      target="mediaTypeRegistration"/>.</t>
+      <t>The IANA is requested to register the media type registration
+      "video/vp9" as specified in <xref
+      target="mediaTypeRegistration"/>.  The media type is also
+      requested to
+	  be added to the IANA registry for "RTP Payload Format MIME types"
+	  &lt;http://www.iana.org/assignments/rtp-parameters&gt;.</t>
     </section>
 
     <section title="Acknowledgments">
@@ -1119,6 +1109,8 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
       &rfc3551;
 	  
 	  &rfc5124;
+
+          &rfc6386;
 
 	  &rfc7201;
 
