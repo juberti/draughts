@@ -93,6 +93,26 @@
       </address>
     </author>
 
+     <author fullname="Danny Hong" initials="D." surname="Hong">
+      <organization abbrev="Google">Google, Inc.</organization>
+
+      <address>
+        <postal>
+          <street>1600 Amphiteatre Pkwy</street>
+
+          <city>Mountain View</city>
+
+          <region>CA</region>
+
+          <code>94043</code>
+
+          <country>US</country>
+        </postal>
+
+        <email>dannyhong@google.com</email>
+      </address>
+    </author>
+
     <author fullname="Jonathan Lennox" initials="J." surname="Lennox">
       <organization abbrev="8x8 / Jitsi">8x8, Inc. / Jitsi</organization>
 
@@ -113,27 +133,6 @@
       </address>
     </author>
 
-     <author fullname="Danny Hong" initials="D." surname="Hong">
-      <organization abbrev="Vidyo">Vidyo, Inc.</organization>
-
-      <address>
-        <postal>
-          <street>433 Hackensack Avenue</street>
-
-          <street>Seventh Floor</street>
-
-          <city>Hackensack</city>
-
-          <region>NJ</region>
-
-          <code>07601</code>
-
-          <country>US</country>
-        </postal>
-
-        <email>danny@vidyo.com</email>
-      </address>
-    </author>
 
     <date/>
 
