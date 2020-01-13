@@ -409,7 +409,7 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Uberti, J., Holmer, S., Flodman, M., Hong, D., and J. Lennox" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-08" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-payload-vp9-09" />
   <meta name="dct.issued" scheme="ISO8601" content="2020-13" />
   <meta name="dct.abstract" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
   <meta name="description" content="This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability." />
@@ -459,7 +459,7 @@
   </table>
 
   <p class="title">RTP Payload Format for VP9 Video<br />
-  <span class="filename">draft-ietf-payload-vp9-08</span></p>
+  <span class="filename">draft-ietf-payload-vp9-09</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This memo describes an RTP payload format for the VP9 video codec.  The payload format has wide applicability, as it supports applications from low bit-rate peer-to-peer usage, to high bit-rate video conferences.  It includes provisions for temporal and spatial scalability.</p>
@@ -778,7 +778,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <h1 id="rfc.section.4.4">
 <a href="#rfc.section.4.4">4.4.</a> Scalable encoding considerations</h1>
 <p id="rfc.section.4.4.p.1">In addition to the use of reference frames, VP9 has several additional forms of inter-frame dependencies, largely involving probability tables for the entropy and tree encoders.  In VP9 syntax, the syntax element "error_resilient_mode" resets this additional inter-frame data, allowing a frame's syntax to be decoded independently.</p>
-<p id="rfc.section.4.4.p.2">Due to the requirements of scalable streams, a VP9 encoder producing a scalable stream needs to ensure that a frame does not depend on a previous frame (of the same or a previous picture) that can legitimately be removed from the stream.  Thus, a frame that follows a removable frame (in full decode order) MUST be encoded with "error_resilient_mode" to true.</p>
+<p id="rfc.section.4.4.p.2">Due to the requirements of scalable streams, a VP9 encoder producing a scalable stream needs to ensure that a frame does not depend on a previous frame (of the same or a previous picture) that can legitimately be removed from the stream.  Thus, a frame that follows a removable frame (in full decode order) MUST be encoded with "error_resilient_mode" set to true.</p>
 <p id="rfc.section.4.4.p.3">For spatially-scalable streams, this means that "error_resilient_mode" needs to be turned on for the base spatial layer; it can however be turned off for higher spatial layers, assuming they are sent with inter-layer dependency (i.e. with the "D" bit set).  For streams that are only temporally-scalable without spatial scalability, "error_resilient_mode" can additionally be turned off for any picture that immediately follows a temporal layer 0 frame.</p>
 <h1 id="rfc.section.4.5">
 <a href="#rfc.section.4.5">4.5.</a> Examples of VP9 RTP Stream</h1>
@@ -968,14 +968,14 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 <dd style="margin-left: 8">None.</dd>
 <dt>Person &amp; email address to contact for further information:</dt>
 <dd style="margin-left: 8">
-<br> Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</dd>
+<br> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</dd>
 <dt>Intended usage:</dt>
 <dd style="margin-left: 8">COMMON</dd>
 <dt>Restrictions on usage:</dt>
 <dd style="margin-left: 8">
 <br> This media type depends on RTP framing, and hence is only defined for transfer via RTP <a href="#RFC3550" class="xref">[RFC3550]</a>.</dd>
 <dt>Author:</dt>
-<dd style="margin-left: 8">Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</dd>
+<dd style="margin-left: 8">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</dd>
 <dt>Change controller:</dt>
 <dd style="margin-left: 8">
 <br> IETF AVTCore Working Group delegated from the IESG.</dd>

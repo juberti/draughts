@@ -13,7 +13,7 @@ Expires: July 16, 2020                                           D. Hong
 
 
                     RTP Payload Format for VP9 Video
-                       draft-ietf-payload-vp9-08
+                       draft-ietf-payload-vp9-09
 
 Abstract
 
@@ -688,7 +688,7 @@ Internet-Draft         RTP Payload Format for VP9           January 2020
    previous frame (of the same or a previous picture) that can
    legitimately be removed from the stream.  Thus, a frame that follows
    a removable frame (in full decode order) MUST be encoded with
-   "error_resilient_mode" to true.
+   "error_resilient_mode" set to true.
 
    For spatially-scalable streams, this means that
    "error_resilient_mode" needs to be turned on for the base spatial
@@ -962,7 +962,7 @@ Internet-Draft         RTP Payload Format for VP9           January 2020
    Additional information:  None.
 
    Person & email address to contact for further information:
-      Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;
+      Jonathan Lennox <jonathan.lennox@8x8.com>
 
    Intended usage:  COMMON
 
@@ -970,7 +970,7 @@ Internet-Draft         RTP Payload Format for VP9           January 2020
       This media type depends on RTP framing, and hence is only defined
       for transfer via RTP [RFC3550].
 
-   Author:  Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;
+   Author:  Jonathan Lennox <jonathan.lennox@8x8.com>
 
    Change controller:
       IETF AVTCore Working Group delegated from the IESG.

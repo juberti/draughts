@@ -19,7 +19,7 @@
 <!ENTITY framemarking SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-framemarking.xml">
 
 ]>
-<rfc category="std" docName="draft-ietf-payload-vp9-08" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-payload-vp9-09" ipr="trust200902">
   <?rfc symrefs="yes" ?>
 
   <?rfc sortrefs="yes" ?>
@@ -897,7 +897,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
             <t
             hangText="Person &amp; email address to contact for further information:"><vspace
-            blankLines="0"/> Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</t>
+            blankLines="0"/> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</t>
 
             <t hangText="Intended usage:">COMMON</t>
 
@@ -905,7 +905,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             media type depends on RTP framing, and hence is only defined for
             transfer via RTP <xref target="RFC3550"/>.</t>
 
-            <t hangText="Author:">Jonathan Lennox %lt;jonathan.lennox@8x8.com%gt;</t>
+            <t hangText="Author:">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</t>
 
             <t hangText="Change controller:"><vspace blankLines="0"/> IETF
             AVTCore Working Group delegated from the IESG.</t>
