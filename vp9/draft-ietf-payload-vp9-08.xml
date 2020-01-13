@@ -657,7 +657,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		not depend on a previous frame (of the same or a previous
 		picture) that can legitimately be removed from the stream.
 		Thus, a frame that follows a removable frame (in full decode
-		order) MUST be encoded with "error_resilient_mode" to
+		order) MUST be encoded with "error_resilient_mode" set to
 		true.</t>
 
 		<t>For spatially-scalable streams, this means that
