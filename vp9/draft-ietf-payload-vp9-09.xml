@@ -370,7 +370,7 @@
           <artwork><![CDATA[
       0 1 2 3 4 5 6 7
      +-+-+-+-+-+-+-+-+
-     |I|P|L|F|B|E|V|-| (REQUIRED)
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
      +-+-+-+-+-+-+-+-+
 I:   |M| PICTURE ID  | (REQUIRED)
      +-+-+-+-+-+-+-+-+
@@ -395,7 +395,7 @@ V:   | SS            |
           <artwork><![CDATA[
       0 1 2 3 4 5 6 7
      +-+-+-+-+-+-+-+-+
-     |I|P|L|F|B|E|V|-| (REQUIRED)
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
      +-+-+-+-+-+-+-+-+
 I:   |M| PICTURE ID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
@@ -466,8 +466,14 @@ V:   | SS            |
           to one, the OPTIONAL SS data MUST be present in the payload descriptor.
           Otherwise, the SS data MUST NOT be present.</t>
 
-          <t hangText="-:">Bit reserved for future use. MUST be set to
-          zero and MUST be ignored by the receiver.</t>
+	  <t hangtext="Z:">Not a reference frame for upper spatial
+	  layers. If set to 1, indicates that frames with higher
+	  spatial layers SID+1 of the current and following pictures
+	  do not depend on the current spatial layer SID frame.  This
+	  enables a decoder which is targeting a higher spatial layer
+	  to know that it can safely discard this packet's frame
+	  without processing it, without having to wait for the "D"
+	  bit in the higher-layer frame (see below).</t>
         </list></t>
 
         <t>The mandatory first octet is followed by the extension data fields that
