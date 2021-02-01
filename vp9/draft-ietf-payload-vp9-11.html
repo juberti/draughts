@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>RTP Payload Format for VP9 Video</title>
+<meta content="Justin Uberti" name="author">
+<meta content="Stefan Holmer" name="author">
+<meta content="Magnus Flodman" name="author">
+<meta content="Danny Hong" name="author">
+<meta content="Jonathan Lennox" name="author">
+<meta content="
+       This memo describes an RTP payload format for the VP9 video codec.
+      The payload format has wide applicability, as it supports applications
+      from low bit-rate peer-to-peer usage, to high bit-rate video
+      conferences.  It includes provisions for temporal and spatial scalability. 
+    " name="description">
+<meta content="xml2rfc 3.5.0" name="generator">
+<meta content="RFC" name="keyword">
+<meta content="Request for Comments" name="keyword">
+<meta content="RTP" name="keyword">
+<meta content="VP9" name="keyword">
+<meta content="WebM" name="keyword">
+<meta content="draft-ietf-payload-vp9-11" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.5.0
+    Python 3.8.7
+    appdirs 1.4.4
+    ConfigArgParse 1.2.3
+    google-i18n-address 2.4.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.2
+    kitchen 1.2.6
+    lxml 4.6.2
+    pycountry 20.7.3
+    pyflakes 2.2.0
+    PyYAML 5.3.1
+    requests 2.24.0
+    setuptools 51.1.1
+    six 1.11.0
+-->
+<link href="draft-ietf-payload-vp9-11.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necssary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre, code {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre, code {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+pre.sourcecode,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact informatio look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background sligthtly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: avoid-page;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottim margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the comact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div:first-child > pre.sourcecode,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
+</head>
+<body>
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">RTP Payload Format for VP9</td>
+<td class="right">February 2021</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Uberti, et al.</td>
+<td class="center">Expires 5 August 2021</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">AVTCore Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-payload-vp9-11</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2021-02-01" class="published">1 February 2021</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2021-08-05">5 August 2021</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">J. Uberti</div>
+<div class="org">Google</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Holmer</div>
+<div class="org">Google</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Flodman</div>
+<div class="org">Google</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Hong</div>
+<div class="org">Google</div>
+</div>
+<div class="author">
+      <div class="author-name">J. Lennox</div>
+<div class="org">8x8 / Jitsi</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">RTP Payload Format for VP9 Video</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This memo describes an RTP payload format for the VP9 video codec.
+      The payload format has wide applicability, as it supports applications
+      from low bit-rate peer-to-peer usage, to high bit-rate video
+      conferences.  It includes provisions for temporal and spatial scalability.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 5 August 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2021 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Simplified BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions-definitions-and" class="xref">Conventions, Definitions and Acronyms</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-media-format-description" class="xref">Media Format Description</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-payload-format" class="xref">Payload Format</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-rtp-header-usage" class="xref">RTP Header Usage</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-vp9-payload-descriptor" class="xref">VP9 Payload Descriptor</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="xref">4.2.1</a>.  <a href="#name-scalability-structure-ss" class="xref">Scalability Structure (SS):</a><a href="#section-toc.1-1.4.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-frame-fragmentation" class="xref">Frame Fragmentation</a><a href="#section-toc.1-1.4.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-scalable-encoding-considera" class="xref">Scalable encoding considerations</a><a href="#section-toc.1-1.4.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-examples-of-vp9-rtp-stream" class="xref">Examples of VP9 RTP Stream</a><a href="#section-toc.1-1.4.2.5.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.5.2.1">
+                    <p id="section-toc.1-1.4.2.5.2.1.1"><a href="#section-4.5.1" class="xref">4.5.1</a>.  <a href="#name-reference-picture-use-for-s" class="xref">Reference picture use for scalable structure</a><a href="#section-toc.1-1.4.2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-feedback-messages-and-heade" class="xref">Feedback Messages and Header Extensions</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-reference-picture-selection" class="xref">Reference Picture Selection Indication (RPSI)</a><a href="#section-toc.1-1.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-full-intra-request-fir" class="xref">Full Intra Request (FIR)</a><a href="#section-toc.1-1.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-layer-refresh-request-lrr" class="xref">Layer Refresh Request (LRR)</a><a href="#section-toc.1-1.5.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-frame-marking" class="xref">Frame Marking</a><a href="#section-toc.1-1.5.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-payload-format-parameters" class="xref">Payload Format Parameters</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-media-type-definition" class="xref">Media Type Definition</a><a href="#section-toc.1-1.6.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-sdp-parameters" class="xref">SDP Parameters</a><a href="#section-toc.1-1.6.2.2.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.6.2.2.2.1">
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="xref">6.2.1</a>.  <a href="#name-mapping-of-media-subtype-pa" class="xref">Mapping of Media Subtype Parameters to SDP</a><a href="#section-toc.1-1.6.2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.2.2.2">
+                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="xref">6.2.2</a>.  <a href="#name-offer-answer-considerations" class="xref">Offer/Answer Considerations</a><a href="#section-toc.1-1.6.2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-acknowledgments" class="xref">Acknowledgments</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.11.1" class="pilcrow">¶</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.11.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.11.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.12.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="intro">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">This memo describes an RTP payload specification applicable to the
+      transmission of video streams encoded using the VP9 video codec <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>. The format described in this document can be used
+      both in peer-to-peer and video conferencing applications.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The VP9 video codec was developed by Google, and is the
+      successor to its earlier <span><a href="#RFC6386" class="xref">VP8</a> [<a href="#RFC6386" class="xref">RFC6386</a>]</span>
+      codec.  Above the compression improvements and other general
+      enhancements above VP8, VP9 is also designed in a way that
+      allows spatially-scalable video encoding.<a href="#section-1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions">
+<section id="section-2">
+      <h2 id="name-conventions-definitions-and">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-definitions-and" class="section-name selfRef">Conventions, Definitions and Acronyms</a>
+      </h2>
+<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mediaFormatDescription">
+<section id="section-3">
+      <h2 id="name-media-format-description">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-media-format-description" class="section-name selfRef">Media Format Description</a>
+      </h2>
+<p id="section-3-1">The VP9 codec can maintain up to eight reference frames, of
+      which up to three can be referenced by any new frame.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">VP9 also allows a frame to use another frame of a different
+      resolution as a reference frame.  (Specifically, a frame may use
+      any references whose width and height are between 1/16th that of
+      the current frame and twice that of the current frame,
+      inclusive.)  This allows internal resolution changes without
+      requiring the use of key frames.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">These features together enable an encoder to
+      implement various forms of coarse-grained scalability,
+      including temporal, spatial and quality scalability modes, as
+      well as combinations of these, without the need for explicit
+      scalable coding tools.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Temporal layers define different frame rates of video;
+      spatial and quality layers define different and possibly dependent
+      representations of a single input frame.  Spatial layers allow
+      a frame to be encoded at different resolutions, whereas
+      quality layers allow a frame to be encoded at the same
+      resolution but at different qualities (and thus with different
+      amounts of coding error).  VP9 supports quality layers as
+      spatial layers without any resolution changes; hereinafter,
+      the term "spatial layer" is used to represent both spatial and
+      quality layers.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">This payload format specification defines how such
+      temporal and spatial scalability layers can be described and 
+      communicated.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">Temporal and spatial scalability layers are associated with
+   non-negative integer IDs. The lowest layer of either type has an
+   ID of 0, and is sometimes referred to as the "base" temporal or
+   spatial layer.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Layers are designed (and MUST be encoded) such that if
+      any layer, and all higher layers, are removed from the bitstream
+      along either of the two dimensions, the remaining bitstream is
+      still correctly decodable.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">For terminology, this document uses the term "frame" to refer
+      to a single encoded VP9 frame for a particular resolution/quality, and
+      "picture" to refer to all the representations (frames) at a single
+      instant in time.  A picture thus consists of one or more frames,
+      encoding different spatial layers.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">Within a picture, a frame with spatial layer ID equal to SID,
+      where SID &gt; 0, can depend on a frame of the same picture with a lower spatial layer ID.  This
+      "inter-layer" dependency can result in additional coding gain
+      compared to the case where only 
+      traditional "inter-picture" dependency is used, where a frame depends on previously
+      coded frame in time.  For simplicity, this payload format assumes that,
+      within a picture and if inter-layer dependency is used, a spatial layer SID frame
+      can depend only on the immediately previous spatial layer SID-1 frame, when S &gt; 0.  Additionally, if
+      inter-picture dependency is used, a spatial layer SID frame is assumed to only
+      depend on a previously coded spatial layer SID frame.<a href="#section-3-9" class="pilcrow">¶</a></p>
+<p id="section-3-10">Given above simplifications for inter-layer and inter-picture
+      dependencies, a flag (the D bit described below) is used to indicate whether a
+      spatial layer SID frame depends on the spatial layer SID-1 frame.  Given the D bit, a receiver
+      only needs to additionally know the inter-picture dependency structure for a given
+      spatial layer frame in order to determine its decodability.  Two modes
+      of describing the inter-picture dependency structure are possible:
+      "flexible mode" and "non-flexible mode".  An encoder can only switch
+      between the two on the first packet of a key frame with temporal 
+      layer ID equal to 0.<a href="#section-3-10" class="pilcrow">¶</a></p>
+<p id="section-3-11">In flexible mode, each packet can contain up to 3 reference
+      indices, which identify all frames referenced by the frame
+      transmitted in the current packet for inter-picture prediction. 
+      This (along with the D bit) enables a receiver to identify if a frame 
+      is decodable or not and helps it understand the temporal layer
+      structure.
+      Since this is signaled in 
+      each packet it makes it possible to have very flexible temporal layer
+      hierarchies and patterns which are changing dynamically.<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-12">In non-flexible mode, the inter-picture dependency (the reference
+      indices) of a Picture Group (PG) MUST be pre-specified as part of the 
+      scalability structure (SS) data.  In this mode, each 
+      packet has an index to refer to one of the described pictures
+      in the PG, from which the pictures referenced by the picture transmitted in the current packet 
+      for inter-picture prediction can be identified.<a href="#section-3-12" class="pilcrow">¶</a></p>
+<p id="section-3-13">(Editor's Note: A "Picture Group", as used in this document,
+   is not the same thing as a the term "Group of Pictures" as
+   it is traditionally used in video coding, i.e. to mean an
+   independently-decoadable run of pictures beginning with a
+   keyframe.  Suggestions for better terminology are welcome.)<a href="#section-3-13" class="pilcrow">¶</a></p>
+<p id="section-3-14">The SS data can also be used to specify the resolution of each
+      spatial layer present in the VP9 stream for both flexible and non-flexible modes.<a href="#section-3-14" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="payloadFormat">
+<section id="section-4">
+      <h2 id="name-payload-format">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-payload-format" class="section-name selfRef">Payload Format</a>
+      </h2>
+<p id="section-4-1">This section describes how the encoded VP9 bitstream is encapsulated
+      in RTP. To handle network losses usage of RTP/AVPF <span>[<a href="#RFC4585" class="xref">RFC4585</a>]</span> is RECOMMENDED. All integer fields in the
+      specifications are encoded as unsigned integers in network octet
+      order.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="RTPHeaderUsage">
+<section id="section-4.1">
+        <h3 id="name-rtp-header-usage">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-rtp-header-usage" class="section-name selfRef">RTP Header Usage</a>
+        </h3>
+<p id="section-4.1-1" class="keepWithNext">The general RTP payload format for VP9 is depicted
+          below.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<div id="figureRTPHeader">
+<figure id="figure-1">
+          <div class="artwork art-text alignLeft" id="section-4.1-2.1">
+<pre>
+   0                   1                   2                   3
+   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |V=2|P|X|  CC   |M|     PT      |       sequence number         |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                           timestamp                           |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           synchronization source (SSRC) identifier            |
+  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+  |            contributing source (CSRC) identifiers             |
+  |                             ....                              |
+  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+  |            VP9 payload descriptor (integer #octets)           |
+  :                                                               :
+  |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                               : VP9 pyld hdr  |               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               |
+  |                                                               |
+  +                                                               |
+  :                   Bytes 2..N of VP9 payload                   :
+  |                                                               |
+  |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                               :    OPTIONAL RTP padding       |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a></figcaption></figure>
+</div>
+<p id="section-4.1-3" class="keepWithPrevious">The VP9 payload descriptor will be
+          described in <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a>; the VP9 payload header is described
+       in <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>.
+ OPTIONAL RTP padding MUST NOT be included unless the P bit is set.
+ The figure specifically shows the format for the first
+ packet in a frame.  Subsequent packets will not contain the
+ VP9 payload header, and will have later octets in the frame payload.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4.1-4">
+          <dt id="section-4.1-4.1">Marker bit (M):</dt>
+          <dd style="margin-left: 1.5em" id="section-4.1-4.2">MUST be set to 1 for the final packet
+            of the highest spatial layer frame (the final packet of the picture),
+            and 0 otherwise.  Unless spatial scalability is in use for this picture,
+            this will have the same value as the E bit described below.  Note this bit
+            MUST be set to 1 for the target spatial layer frame 
+            if a stream is being rewritten to remove higher spatial layers.<a href="#section-4.1-4.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.1-4.3">Payload Type (PT):</dt>
+          <dd style="margin-left: 1.5em" id="section-4.1-4.4">In line with the policy
+   in Section 3 of <span>[<a href="#RFC3551" class="xref">RFC3551</a>]</span>, applications using the VP9 RTP payload
+   profile MUST assign a dynamic payload type number to be
+   used in each RTP session and provide a mechanism to
+   indicate the mapping.  See <a href="#SDPParameters" class="xref">Section 6.2</a> for the mechanism
+   to be used with the <span><a href="#RFC4566" class="xref">Session
+   Description Protocol (SDP)</a> [<a href="#RFC4566" class="xref">RFC4566</a>]</span>.<a href="#section-4.1-4.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.1-4.5">Timestamp:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.1-4.6">The RTP timestamp indicates the time when
+            the input frame was sampled, at a clock rate of 90 kHz.  If the
+            input picture is encoded with multiple layer frames, all of the
+            frames of the picture MUST have the same timestamp.<a href="#section-4.1-4.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.1-4.7"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.1-4.8">If a frame has the VP9 show_frame field set to 0 (i.e., it is meant only to
+   populate a reference buffer, without being output) its timestamp MAY alternately be set
+   to be the same as the subsequent frame with show_frame equal to 1.  (This will
+   be convenient for playing out pre-encoded content packaged with VP9 "superframes", which
+   typically bundle show_frame==0 frames with a subsequent show_frame==1 frame.)  Every
+   frame with show_frame==1, however, MUST have a unique timestamp modulo the 2^32 wrap of
+   the field.<a href="#section-4.1-4.8" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.1-5">The remaining RTP Fixed Header Fields (V, P, X, CC,
+        sequence number, SSRC and CSRC identifiers) are used as
+        specified in Section 5.1 of <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="VP9payloadDescriptor">
+<section id="section-4.2">
+        <h3 id="name-vp9-payload-descriptor">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-vp9-payload-descriptor" class="section-name selfRef">VP9 Payload Descriptor</a>
+        </h3>
+<p id="section-4.2-1" class="keepWithNext">In flexible mode (with the F bit below set to 1), The first octets 
+          after the RTP header are the VP9 payload descriptor, with the following 
+          structure.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<div id="figureVP9payloadDescriptor">
+<figure id="figure-2">
+          <div class="artwork art-text alignLeft" id="section-4.2-2.1">
+<pre>
+      0 1 2 3 4 5 6 7
+     +-+-+-+-+-+-+-+-+
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
+     +-+-+-+-+-+-+-+-+
+I:   |M| PICTURE ID  | (REQUIRED)
+     +-+-+-+-+-+-+-+-+
+M:   | EXTENDED PID  | (RECOMMENDED)
+     +-+-+-+-+-+-+-+-+
+L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
+     +-+-+-+-+-+-+-+-+                             -\
+P,F: | P_DIFF      |N| (CONDITIONALLY REQUIRED)    - up to 3 times
+     +-+-+-+-+-+-+-+-+                             -/
+V:   | SS            |
+     | ..            |
+     +-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a></figcaption></figure>
+</div>
+<p id="section-4.2-3" class="keepWithNext">In non-flexible mode (with the F bit below set to 0), The first octets 
+          after the RTP header are the VP9 payload descriptor, with the following 
+          structure.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<div id="figureVP9payloadDescriptorNonFlexible">
+<figure id="figure-3">
+          <div class="artwork art-text alignLeft" id="section-4.2-4.1">
+<pre>
+      0 1 2 3 4 5 6 7
+     +-+-+-+-+-+-+-+-+
+     |I|P|L|F|B|E|V|Z| (REQUIRED)
+     +-+-+-+-+-+-+-+-+
+I:   |M| PICTURE ID  | (RECOMMENDED)
+     +-+-+-+-+-+-+-+-+
+M:   | EXTENDED PID  | (RECOMMENDED)
+     +-+-+-+-+-+-+-+-+
+L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
+     +-+-+-+-+-+-+-+-+
+     |   TL0PICIDX   | (CONDITIONALLY REQUIRED)
+     +-+-+-+-+-+-+-+-+
+V:   | SS            |
+     | ..            |
+     +-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a></figcaption></figure>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-4.2-5">
+          <dt id="section-4.2-5.1">I:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.2">Picture ID (PID) present. When set to one, the
+          OPTIONAL PID MUST be present after the mandatory first octet and
+          specified as below. Otherwise, PID MUST NOT be present.  If the SS field was present in
+   the stream's most recent start of a keyframe (i.e., non-flexible scalability mode is in use),
+ then the PID MUST also be present in every packet.<a href="#section-4.2-5.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.3">P:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.4">Inter-picture predicted frame.  When set to zero, the
+          frame does not utilize inter-picture prediction.  In this case,
+          up-switching to a current spatial layer's frame is possible from directly
+          lower spatial layer frame.  P SHOULD also be set to zero when
+          encoding a layer synchronization frame in response to an <span><a href="#I-D.ietf-avtext-lrr" class="xref">LRR</a> [<a href="#I-D.ietf-avtext-lrr" class="xref">I-D.ietf-avtext-lrr</a>]</span> message (see <a href="#LRR" class="xref">Section 5.3</a>).
+          When P is set to zero, the TID field (described below) MUST also
+          be set to 0 (if present).  Note that the P bit does not
+          forbid intra-picture, inter-layer prediction from earlier
+          frames of the same picture, if any.<a href="#section-4.2-5.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.5">L:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.6">Layer indices present.  When set to one,
+          the one or two octets following the mandatory first octet and the PID
+          (if present) is as described by "Layer indices" below.  If the F bit (described below)
+          is set to 1 (indicating flexible mode), then only one octet is present for the 
+          layer indices. Otherwise if the F bit is set to 0 (indicating non-flexible mode), 
+          then two octets are present for the layer indices.<a href="#section-4.2-5.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.7">F:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.8">Flexible mode.  F set to one indicates
+          flexible mode and if the P bit is also set to one, then the octets following 
+          the mandatory first octet, the PID, and layer indices (if present) are 
+          as described by "Reference indices" below.  This MUST only be set to 1 if the I 
+          bit is also set to one; if the I bit is set to zero, then this MUST also be 
+          set to zero and ignored by receivers.  The value of this F
+          bit MUST only change 
+          on the first packet of a key picture.  A key picture is a
+          picture whose base spatial layer frame is a key frame, and
+          which thus completely resets the encoder state.  This
+          packet will have its P bit
+          equal to zero, SID or D bit (described below) equal to zero, and B bit (described below) 
+          equal to 1.<a href="#section-4.2-5.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.9">B:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.10">Start of a frame. MUST be set to 1 if
+          the first payload octet of the RTP packet is the beginning of a
+          new VP9 frame, and MUST NOT be 1 otherwise. Note that this
+          frame might not be the first frame of a picture.<a href="#section-4.2-5.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.11">E:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.12">End of a frame.  MUST be set to 1 for the final
+          RTP packet of a VP9 frame, and 0 otherwise.  This enables a
+          decoder to finish decoding the frame, where it otherwise may need to
+          wait for the next packet to explicitly know that the frame is complete.
+          Note that, if spatial scalability is in use, more frames from the
+          same picture may follow; see the description of the M bit above.<a href="#section-4.2-5.12" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.13">V:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.14">Scalability structure (SS) data present. When set
+          to one, the OPTIONAL SS data MUST be present in the payload descriptor.
+          Otherwise, the SS data MUST NOT be present.<a href="#section-4.2-5.14" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-5.15">Z:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-5.16">Not a reference frame for upper spatial
+   layers. If set to 1, indicates that frames with higher
+   spatial layers SID+1 of the current and following pictures
+   do not depend on the current spatial layer SID frame.  This
+   enables a decoder which is targeting a higher spatial layer
+   to know that it can safely discard this packet's frame
+   without processing it, without having to wait for the "D"
+   bit in the higher-layer frame (see below).<a href="#section-4.2-5.16" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.2-6">The mandatory first octet is followed by the extension data fields that
+        are enabled:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4.2-7">
+          <dt id="section-4.2-7.1">M:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.2">The most significant bit of the first octet is an
+          extension flag. The field MUST be present if the I bit is equal to
+          one. If set, the PID field MUST contain 15 bits; otherwise, it MUST
+          contain 7 bits. See PID below.<a href="#section-4.2-7.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.3">Picture ID (PID):</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.4">Picture ID represented in 7 or 15 bits,
+          depending on the M bit. This is a running index of the pictures. The
+          field MUST be present if the I bit is equal to one. If M is set to zero,
+          7 bits carry the PID; else if M is set to one, 15 bits carry
+          the PID in network byte order.
+          The sender may choose between a 7- or 15-bit index. The PID SHOULD start on a
+          random number, and MUST wrap after reaching the maximum ID. The receiver
+          MUST NOT assume that the number of bits in PID stay the same through the
+          session.<a href="#section-4.2-7.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.5"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.6">In the non-flexible mode (when the F bit is set to 0), this PID is used
+          as an index to the picture group (PG) specified in the SS data below.  In this mode, the 
+          PID of the key frame corresponds to the first specified frame in the
+          PG.  Then subsequent PIDs are mapped to subsequently specified frames in 
+          the PG (modulo N_G, specified in the SS data below), respectively.<a href="#section-4.2-7.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.7"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.8">All frames of the same picture MUST have the same PID value.<a href="#section-4.2-7.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.9"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.10">Frames (and their corresponding pictures) with the VP9 show_frame field equal to 0 MUST
+ have distinct PID values from subsequent pictures with show_frame equal to 1.  Thus,
+ a Picture as defined in this specification is different than a VP9 Superframe.<a href="#section-4.2-7.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.11"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.12">All frames of the same picture MUST have the same value for show_frame.<a href="#section-4.2-7.12" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.13">Layer indices:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.14">This information is optional but recommended
+          whenever encoding with layers.  For both flexible and non-flexible modes,
+          one octet is used to specify a layer frame's temporal layer ID (TID) and spatial layer ID (SID)
+          as shown both in <a href="#figureVP9payloadDescriptor" class="xref">Figure 2</a> and <a href="#figureVP9payloadDescriptorNonFlexible" class="xref">Figure 3</a>.
+          Additionally, a bit (U) is used to indicate that the current frame is a
+          "switching up point" frame.  Another bit (D) is used to indicate whether inter-layer 
+          prediction is used for the current frame.<a href="#section-4.2-7.14" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.15"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.16">In the non-flexible mode (when the F bit is set to 0), another octet is used
+          to represent temporal layer 0 index (TL0PICIDX), as depicted in <a href="#figureVP9payloadDescriptorNonFlexible" class="xref">Figure 3</a>.
+          The TL0PICIDX is present so that all minimally required frames - the base temporal layer frames - can be tracked.<a href="#section-4.2-7.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.17"></dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.18">
+            <p id="section-4.2-7.18.1">The TID and SID fields indicate the temporal and spatial layers and can help middleboxes and
+   and endpoints quickly identify which layer a packet belongs to.<a href="#section-4.2-7.18.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4.2-7.18.2">
+              <dt id="section-4.2-7.18.2.1">TID:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.2">The temporal layer ID of current frame.  In the case of non-flexible mode,
+            if PID is mapped to a picture in a specified PG, then 
+            the value of TID MUST match the corresponding TID value of the mapped picture in the PG.<a href="#section-4.2-7.18.2.2" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-4.2-7.18.2.3">U:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.4">Switching up point.  If this bit is set to 1 for the current picture with temporal
+            layer ID equal to TID, then "switch up" to a higher frame rate is possible as subsequent higher temporal
+            layer pictures will not depend on any picture before the current picture (in coding order) with temporal layer
+            ID greater than TID.<a href="#section-4.2-7.18.2.4" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-4.2-7.18.2.5">SID:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.6">The spatial layer ID of current frame.  Note that frames with spatial layer SDI &gt; 0
+            may be dependent on decoded spatial layer SID-1 frame within the same picture.  Different
+ frames of the same picture MUST have distinct spatial layer IDs, and frames' spatial layers
+ MUST appear in increasing order within the frame.<a href="#section-4.2-7.18.2.6" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-4.2-7.18.2.7">D:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.8">Inter-layer dependency used.  MUST be set to one if current spatial layer SID frame
+            depends on spatial layer SID-1 frame of the same picture.  MUST only be set to zero if current spatial
+            layer SID frame does not depend on spatial layer SID-1 frame of the same picture.  For the base layer frame
+            (with SID equal to 0), this D bit MUST be set to zero.<a href="#section-4.2-7.18.2.8" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-4.2-7.18.2.9">TL0PICIDX:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.10">8 bits temporal layer zero index. TL0PICIDX is only present
+            in the non-flexible mode (F = 0).  This is a running index for the temporal
+            base layer pictures, i.e., the pictures with TID set to 0.  If TID is larger than 0,
+            TL0PICIDX indicates which temporal base layer picture the current picture depends on.  TL0PICIDX MUST be
+            incremented when TID is equal to 0.  The index SHOULD start on a random number, and MUST restart
+            at 0 after reaching the maximum number 255.<a href="#section-4.2-7.18.2.10" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.2-7.19">Reference indices:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.2-7.20">
+            <p id="section-4.2-7.20.1">When P and F are both set to one, indicating a non-key frame in
+          flexible mode, then at least
+          one reference index has to be specified as below.  Additional reference indices (total of up to
+          3 reference indices are allowed) may be specified using the N bit below.  When either P or F is
+          set to zero, then no reference index is specified.<a href="#section-4.2-7.20.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4.2-7.20.2">
+              <dt id="section-4.2-7.20.2.1">P_DIFF:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.20.2.2">The reference index (in 7 bits) specified as the
+            relative PID from the current picture.  For example, when P_DIFF=3
+            on a packet containing the picture with PID 112 means
+            that the picture refers back to the picture with PID
+            109. This calculation is done modulo the size of the PID field,
+            i.e., either 7 or 15 bits.<a href="#section-4.2-7.20.2.2" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-4.2-7.20.2.3">N:</dt>
+              <dd style="margin-left: 1.5em" id="section-4.2-7.20.2.4">1 if there is additional P_DIFF following the current P_DIFF.<a href="#section-4.2-7.20.2.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<div id="VP9payloadDescriptorSS">
+<section id="section-4.2.1">
+          <h4 id="name-scalability-structure-ss">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-scalability-structure-ss" class="section-name selfRef">Scalability Structure (SS):</a>
+          </h4>
+<p id="section-4.2.1-1">The scalability structure (SS) data describes the resolution of
+        each frame within a picture as well as the inter-picture dependencies
+        for a picture group (PG).  If the VP9 payload descriptor's "V"
+        bit is set, the SS data is present in the position indicated in
+        <a href="#figureVP9payloadDescriptor" class="xref">Figure 2</a> and <a href="#figureVP9payloadDescriptorNonFlexible" class="xref">Figure 3</a>.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+<div id="figureVP9ScalabilityStructure">
+<figure id="figure-4">
+            <div class="artwork art-text alignLeft" id="section-4.2.1-2.1">
+<pre>
+     +-+-+-+-+-+-+-+-+
+V:   | N_S |Y|G|-|-|-|
+     +-+-+-+-+-+-+-+-+              -\
+Y:   |     WIDTH     | (OPTIONAL)    .
+     +               +               .
+     |               | (OPTIONAL)    .
+     +-+-+-+-+-+-+-+-+               . - N_S + 1 times
+     |     HEIGHT    | (OPTIONAL)    .
+     +               +               .
+     |               | (OPTIONAL)    .
+     +-+-+-+-+-+-+-+-+              -/
+G:   |      N_G      | (OPTIONAL)
+     +-+-+-+-+-+-+-+-+                            -\
+N_G: | TID |U| R |-|-| (OPTIONAL)                 .
+     +-+-+-+-+-+-+-+-+              -\            . - N_G times
+     |    P_DIFF     | (OPTIONAL)    . - R times  .
+     +-+-+-+-+-+-+-+-+              -/            -/
+</pre>
+</div>
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a></figcaption></figure>
+</div>
+<span class="break"></span><dl class="dlParallel" id="section-4.2.1-3">
+            <dt id="section-4.2.1-3.1">N_S:</dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.2">N_S + 1 indicates the number of spatial
+          layers present in the VP9 stream.<a href="#section-4.2.1-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.3">Y:</dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.4">Each spatial layer's frame resolution present.
+          When set to one, the OPTIONAL WIDTH (2 octets) and HEIGHT
+          (2 octets) MUST be present for each layer frame.  Otherwise, the
+          resolution MUST NOT be present.<a href="#section-4.2.1-3.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.5">G:</dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.6">PG description present flag.<a href="#section-4.2.1-3.6" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.7">-:</dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.8">Bit reserved for future use. MUST be set to
+          zero and MUST be ignored by the receiver.<a href="#section-4.2.1-3.8" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.9">N_G:</dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.10">N_G indicates the number of pictures in a
+          Picture Group (PG).
+          If N_G is greater than 0, then the SS data allows
+          the inter-picture dependency structure of the VP9 stream to
+          be pre-declared, rather than indicating it on the fly with
+          every packet.  If N_G is greater than 0, then for N_G
+          pictures in the PG, each picture's temporal layer ID (TID), switch up point (U), 
+          and the R reference indices (P_DIFFs) are specified.<a href="#section-4.2.1-3.10" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.11"></dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.12">The first picture specified in the PG MUST have TID set to 0.<a href="#section-4.2.1-3.12" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.13"></dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.14">G set to 0 or N_G set to 0 indicates that either there is only one temporal
+          layer or no fixed inter-picture dependency information is present
+          going forward in the bitstream.<a href="#section-4.2.1-3.14" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-4.2.1-3.15"></dt>
+            <dd style="margin-left: 1.5em" id="section-4.2.1-3.16">Note that for a given picture, all frames follow the
+          same inter-picture dependency structure.  However, the frame rate
+          of each spatial layer can be different from each other and this can
+          be controlled with the use of the D bit described above.  The 
+          specified dependency structure in the SS data MUST be for the highest
+          frame rate layer.<a href="#section-4.2.1-3.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-4.2.1-4">In a scalable stream sent with a fixed pattern, the SS data
+        SHOULD be included in the first packet of every key frame. This is a packet 
+        with P bit equal to zero, SID or D bit equal to zero, and B bit equal to 1.
+        The SS data MUST only be changed on the picture that corresponds to the 
+        first picture specified in the previous SS data's PG
+        (if the previous SS data's N_G was greater than 0).<a href="#section-4.2.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<section id="section-4.3">
+        <h3 id="name-frame-fragmentation">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-frame-fragmentation" class="section-name selfRef">Frame Fragmentation</a>
+        </h3>
+<p id="section-4.3-1">VP9 frames are fragmented into packets, in RTP sequence
+ number order, beginning with a
+ packet with the B bit set, and ending with a packet with the
+ E bit set.  There is no mechanism for finer-grained
+ access to parts of a VP9 frame.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4.4">
+        <h3 id="name-scalable-encoding-considera">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-scalable-encoding-considera" class="section-name selfRef">Scalable encoding considerations</a>
+        </h3>
+<p id="section-4.4-1">In addition to the use of reference frames, VP9 has several
+ additional forms of inter-frame dependencies, largely
+ involving probability tables for the entropy and tree
+ encoders.  In VP9 syntax, the syntax element
+ "error_resilient_mode" resets this additional inter-frame
+ data, allowing a frame's syntax to be decoded
+ independently.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Due to the requirements of scalable streams, a VP9 encoder
+ producing a scalable stream needs to ensure that a frame does
+ not depend on a previous frame (of the same or a previous
+ picture) that can legitimately be removed from the stream.
+ Thus, a frame that follows a removable frame (in full decode
+ order) MUST be encoded with "error_resilient_mode" set to
+ true.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">For spatially-scalable streams, this means that
+ "error_resilient_mode" needs to be turned on for the base
+ spatial layer; it can however be turned off for higher spatial
+ layers, assuming they are sent with inter-layer dependency
+ (i.e. with the "D" bit set).  For streams that are only
+ temporally-scalable without spatial scalability,
+ "error_resilient_mode" can additionally be turned off for any
+ picture that immediately follows a temporal layer 0 frame.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+</section>
+<section id="section-4.5">
+        <h3 id="name-examples-of-vp9-rtp-stream">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-examples-of-vp9-rtp-stream" class="section-name selfRef">Examples of VP9 RTP Stream</a>
+        </h3>
+<section id="section-4.5.1">
+          <h4 id="name-reference-picture-use-for-s">
+<a href="#section-4.5.1" class="section-number selfRef">4.5.1. </a><a href="#name-reference-picture-use-for-s" class="section-name selfRef">Reference picture use for scalable structure</a>
+          </h4>
+<p id="section-4.5.1-1">As discussed in <a href="#mediaFormatDescription" class="xref">Section 3</a>, the
+ VP9 codec can maintain up to eight reference frames, of
+ which up to three can be referenced or updated by any new
+ frame.  This section illustrates one way that a scalable
+ structure (with three spatial layers and three temporal
+ layers) can be constructed using these reference
+ frames.<a href="#section-4.5.1-1" class="pilcrow">¶</a></p>
+<span id="name-example-scalability-structu"></span><table class="center" id="table-1">
+            <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-example-scalability-structu" class="selfRef">Example scalability structure</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-center" rowspan="1" colspan="1">Temporal</th>
+                <th class="text-center" rowspan="1" colspan="1">Spatial</th>
+                <th class="text-center" rowspan="1" colspan="1">References</th>
+                <th class="text-center" rowspan="1" colspan="1">Updates</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">0,1</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">1,2</td>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">6</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">1,6</td>
+                <td class="text-center" rowspan="1" colspan="1">7</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">2,7</td>
+                <td class="text-center" rowspan="1" colspan="1">-</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">3</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">1,3</td>
+                <td class="text-center" rowspan="1" colspan="1">4</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">2,4</td>
+                <td class="text-center" rowspan="1" colspan="1">5</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">3</td>
+                <td class="text-center" rowspan="1" colspan="1">6</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">4,6</td>
+                <td class="text-center" rowspan="1" colspan="1">7</td>
+              </tr>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">2</td>
+                <td class="text-center" rowspan="1" colspan="1">5,7</td>
+                <td class="text-center" rowspan="1" colspan="1">-</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-4.5.1-3">This structure is constructed such that the "U" bit can
+   always be set.<a href="#section-4.5.1-3" class="pilcrow">¶</a></p>
+</section>
+</section>
+</section>
+</div>
+<div id="Feedback">
+<section id="section-5">
+      <h2 id="name-feedback-messages-and-heade">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-feedback-messages-and-heade" class="section-name selfRef">Feedback Messages and Header Extensions</a>
+      </h2>
+<div id="RPSI">
+<section id="section-5.1">
+        <h3 id="name-reference-picture-selection">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-reference-picture-selection" class="section-name selfRef">Reference Picture Selection Indication (RPSI)</a>
+        </h3>
+<p id="section-5.1-1">The reference picture selection index is a payload-specific
+        feedback message defined within the RTCP-based feedback format. The
+        RPSI message is generated by a receiver and can be used in two ways.
+        Either it can signal a preferred reference picture when a loss has
+        been detected by the decoder -- preferably then a reference that the
+        decoder knows is perfect -- or, it can be used as positive feedback
+        information to acknowledge correct decoding of certain reference
+        pictures. The positive feedback method is useful for VP9 used for
+        point to point (unicast) communication. The use of RPSI for VP9 is preferably combined with a special
+        update pattern of the codec's two special reference frames -- the
+        golden frame and the altref frame -- in which they are updated in an
+        alternating leapfrog fashion. When a receiver has received and
+        correctly decoded a golden or altref frame, and that frame had a
+        PictureID in the payload descriptor, the receiver can acknowledge this
+        simply by sending an RPSI message back to the sender. The message body
+        (i.e., the "native RPSI bit string" in <span>[<a href="#RFC4585" class="xref">RFC4585</a>]</span>) is
+        simply the PictureID of the received frame.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Note: because all frames of the same picture must have the
+ same inter-picture reference structure, there is no need for a
+ message to specify which frame is being selected.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="FIR">
+<section id="section-5.2">
+        <h3 id="name-full-intra-request-fir">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-full-intra-request-fir" class="section-name selfRef">Full Intra Request (FIR)</a>
+        </h3>
+<p id="section-5.2-1">The <span><a href="#RFC5104" class="xref">Full Intra Request (FIR)</a> [<a href="#RFC5104" class="xref">RFC5104</a>]</span>
+ RTCP feedback message allows a receiver to request a full state refresh of an encoded stream.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">Upon receipt of an FIR request, a VP9 sender MUST send a
+ picture with a keyframe for its spatial layer 0 layer
+ frame, and then send frames without inter-picture prediction
+ (P=0) for any higher layer frames.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="LRR">
+<section id="section-5.3">
+        <h3 id="name-layer-refresh-request-lrr">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-layer-refresh-request-lrr" class="section-name selfRef">Layer Refresh Request (LRR)</a>
+        </h3>
+<p id="section-5.3-1">The <span><a href="#I-D.ietf-avtext-lrr" class="xref">Layer Refresh Request</a> [<a href="#I-D.ietf-avtext-lrr" class="xref">I-D.ietf-avtext-lrr</a>]</span>
+   allows a receiver to request a single layer of a spatially or
+   temporally encoded stream to be refreshed, without necessarily
+   affecting the stream's other layers.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<div id="figureLRRIndexFormat">
+<figure id="figure-5">
+          <div class="artwork art-text alignLeft" id="section-5.3-2.1">
+<pre>
+            +---------------+---------------+
+            |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
+            +---------------+---------+-----+
+            |   RES   | TID | RES     | SID |
+            +---------------+---------+-----+
+</pre>
+</div>
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a></figcaption></figure>
+</div>
+<p id="section-5.3-3"><a href="#figureLRRIndexFormat" class="xref">Figure 5</a> shows the format
+ of LRR's layer index fields for VP9 streams.  The two "RES" 
+ fields MUST be set to 0 on transmission and ingnored on
+ reception.  See <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> for
+ details on the TID and SID fields.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3-4">Identification of a layer refresh frame can be derived from the
+   reference IDs of each frame by backtracking the dependency chain
+   until reaching a point where only decodable frames are being
+   referenced. Therefore it's recommended for both the
+   flexible and the non-flexible mode that, when upgrade frames are
+   being encoded in response to a LRR, those packets should contain
+   layer indices and the reference fields so that the decoder or an
+   MCU can make this derivation.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
+<p id="section-5.3-5">Example:<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<p id="section-5.3-6">LRR {1,0}, {2,1} is sent by an MCU when it is currently
+   relaying {1,0} to a receiver and which wants to upgrade to
+   {2,1}. In response the encoder should encode the next frames
+   in layers {1,1} and {2,1} by only referring to frames in
+   {1,0}, or {0,0}.<a href="#section-5.3-6" class="pilcrow">¶</a></p>
+<p id="section-5.3-7">In the non-flexible mode, periodic upgrade frames can be
+   defined by the layer structure of the SS, thus periodic upgrade
+   frames can be automatically identified by the picture ID.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-5.4">
+        <h3 id="name-frame-marking">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-frame-marking" class="section-name selfRef">Frame Marking</a>
+        </h3>
+<p id="section-5.4-1">The <span><a href="#I-D.ietf-avtext-framemarking" class="xref">Frame
+ Marking RTP header extension</a> [<a href="#I-D.ietf-avtext-framemarking" class="xref">I-D.ietf-avtext-framemarking</a>]</span> is a mechanism to provide
+ information about frames of video streams in a largely
+ codec-independent manner.  However, for its extension for
+ scalable codecs, the specific manner in which codec layers are
+ identified needs to be specified specifically for each codec.
+ This section defines how frame marking is used with VP9.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<div id="figureFramemarking">
+<figure id="figure-6">
+          <div class="artwork art-text alignLeft" id="section-5.4-2.1">
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  ID=2 |  L=2  |S|E|I|D|B| TID |0|0|0|0|0| SID |    TL0PICIDX  |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre>
+</div>
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a></figcaption></figure>
+</div>
+<p id="section-5.4-3">When this header extension is used with VP9, the TID and SID
+ fields MUST match the values in the packet which the header
+ extension is attached to; see
+ <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> for
+ details on these fields.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-4">See <span>[<a href="#I-D.ietf-avtext-framemarking" class="xref">I-D.ietf-avtext-framemarking</a>]</span> for
+ explanations of the other fields, which are generic.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<div id="payloadFormatParameters">
+<section id="section-6">
+      <h2 id="name-payload-format-parameters">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-payload-format-parameters" class="section-name selfRef">Payload Format Parameters</a>
+      </h2>
+<p id="section-6-1">This payload format has two optional parameters.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div id="mediaTypeRegistration">
+<section id="section-6.1">
+        <h3 id="name-media-type-definition">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-media-type-definition" class="section-name selfRef">Media Type Definition</a>
+        </h3>
+<p id="section-6.1-1">This registration is done using the template defined in <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span> and following <span>[<a href="#RFC4855" class="xref">RFC4855</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-6.1-2">
+          <dt id="section-6.1-2.1">Type name:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.2">video<a href="#section-6.1-2.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.3">Subtype name:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.4">VP9<a href="#section-6.1-2.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.5">Required parameters:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.6">None.<a href="#section-6.1-2.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.7">Optional parameters:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.8">
+            <p id="section-6.1-2.8.1"> These
+            parameters are used to signal the capabilities of a receiver
+            implementation. If the implementation is willing to
+            receive media, both parameters MUST be provided. These parameters MUST NOT be used for any other
+            purpose.<a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6.1-2.8.2">
+              <dt id="section-6.1-2.8.2.1">max-fr:</dt>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.2">The value of max-fr is an integer
+                indicating the maximum frame rate in units of frames per
+                second that the decoder is capable of decoding.<a href="#section-6.1-2.8.2.2" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-6.1-2.8.2.3">max-fs:</dt>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.4">The value of max-fs is an integer
+                indicating the maximum frame size in units of macroblocks that
+                the decoder is capable of decoding.<a href="#section-6.1-2.8.2.4" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-6.1-2.8.2.5"></dt>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.6">The decoder is capable of decoding this frame size as long
+                as the width and height of the frame in macroblocks are less
+                than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200
+                (capable of supporting 640x480 resolution) will support widths
+                and heights up to 1552 pixels (97 macroblocks).<a href="#section-6.1-2.8.2.6" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-6.1-2.8.2.7">profile-id:</dt>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.8">The value of profile-id is an integer
+                indicating the default coding profile, the subset of coding
+ tools that may have been used to generate the stream or that the
+ receiver supports). <a href="#TableOfProfileIds" class="xref">Table 2</a> lists all
+ of the profiles defined in section 7.2 of <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>
+ and the corresponding integer values to be used.<a href="#section-6.1-2.8.2.8" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-6.1-2.8.2.9"></dt>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.10">If no profile-id is present, Profile 0 MUST be inferred.<a href="#section-6.1-2.8.2.10" class="pilcrow">¶</a>
+</dd>
+              <dd class="break"></dd>
+<dt id="section-6.1-2.8.2.11"></dt>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.12">Informative note: See <a href="#TableOfProfiles" class="xref">Table 3</a> for capabilities
+ of coding profiles defined in section 7.2 of <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>.<a href="#section-6.1-2.8.2.12" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+</dl>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.9">Encoding considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.10">
+            This media type is framed in RTP and contains binary data; see
+            Section 4.8 of <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span>.<a href="#section-6.1-2.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.11">Security considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.12">
+            <p id="section-6.1-2.12.1">See <a href="#securityConsiderations" class="xref">Section 7</a> of RFC xxxx.<a href="#section-6.1-2.12.1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2.12.2"> [RFC Editor: Upon publication as an RFC, please
+            replace "XXXX" with the number assigned to this document and
+            remove this note.]<a href="#section-6.1-2.12.2" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.13">Interoperability considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.14">None.<a href="#section-6.1-2.14" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.15">Published specification:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.16">
+            <p id="section-6.1-2.16.1">VP9 bitstream format <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span> and RFC XXXX.<a href="#section-6.1-2.16.1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2.16.2"> [RFC
+            Editor: Upon publication as an RFC, please replace "XXXX" with the
+            number assigned to this document and remove this note.]<a href="#section-6.1-2.16.2" class="pilcrow">¶</a></p>
+<p id="section-6.1-2.16.3"></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.17">Applications which use this media type:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.18"> For example: Video over IP, video
+            conferencing.<a href="#section-6.1-2.18" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.19">Fragment identifier considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.20">N/A.<a href="#section-6.1-2.20" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.21">Additional information:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.22">None.<a href="#section-6.1-2.22" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.23">Person &amp; email address to contact for further information:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.24"> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;<a href="#section-6.1-2.24" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.25">Intended usage:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.26">COMMON<a href="#section-6.1-2.26" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.27">Restrictions on usage:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.28"> This
+            media type depends on RTP framing, and hence is only defined for
+            transfer via RTP <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>.<a href="#section-6.1-2.28" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.29">Author:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.30">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;<a href="#section-6.1-2.30" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.31">Change controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.32"> IETF
+            AVTCore Working Group delegated from the IESG.<a href="#section-6.1-2.32" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<span id="name-table-1-table-of-profile-id"></span><div id="TableOfProfileIds">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-table-1-table-of-profile-id" class="selfRef">Table 1. Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported.</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Profile</th>
+              <th class="text-center" rowspan="1" colspan="1">profile-id</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">0</td>
+              <td class="text-center" rowspan="1" colspan="1">0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">1</td>
+              <td class="text-center" rowspan="1" colspan="1">1</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">3</td>
+              <td class="text-center" rowspan="1" colspan="1">3</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<span id="name-table-2-table-of-profile-ca"></span><div id="TableOfProfiles">
+<table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-table-2-table-of-profile-ca" class="selfRef">Table 2. Table of profile    capabilities.</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Profile</th>
+              <th class="text-center" rowspan="1" colspan="1">Bit Depth</th>
+              <th class="text-center" rowspan="1" colspan="1">SRGB Colorspace</th>
+              <th class="text-center" rowspan="1" colspan="1">Chroma Subsampling</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">0</td>
+              <td class="text-center" rowspan="1" colspan="1">8</td>
+              <td class="text-center" rowspan="1" colspan="1">No</td>
+              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">1</td>
+              <td class="text-center" rowspan="1" colspan="1">8</td>
+              <td class="text-center" rowspan="1" colspan="1">Yes</td>
+              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0,4:4:0 or 4:4:4</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">10 or 12</td>
+              <td class="text-center" rowspan="1" colspan="1">No</td>
+              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">3</td>
+              <td class="text-center" rowspan="1" colspan="1">10 or 12</td>
+              <td class="text-center" rowspan="1" colspan="1">Yes</td>
+              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0,4:4:0 or 4:4:4</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+<div id="SDPParameters">
+<section id="section-6.2">
+        <h3 id="name-sdp-parameters">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-sdp-parameters" class="section-name selfRef">SDP Parameters</a>
+        </h3>
+<p id="section-6.2-1">The receiver MUST ignore any fmtp parameter unspecified in this
+        memo.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<section id="section-6.2.1">
+          <h4 id="name-mapping-of-media-subtype-pa">
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-mapping-of-media-subtype-pa" class="section-name selfRef">Mapping of Media Subtype Parameters to SDP</a>
+          </h4>
+<p id="section-6.2.1-1">The media type video/VP9 string is mapped to fields in the
+          Session Description Protocol (SDP) <span>[<a href="#RFC4566" class="xref">RFC4566</a>]</span> as
+          follows:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2.1-2.1">The media name in the "m=" line of SDP MUST be video.<a href="#section-6.2.1-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.2.1-2.2">The encoding name in the "a=rtpmap" line of SDP MUST be VP9
+              (the media subtype).<a href="#section-6.2.1-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.2.1-2.3">The clock rate in the "a=rtpmap" line MUST be 90000.<a href="#section-6.2.1-2.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.2.1-2.4">The parameters "max-fs", and "max-fr", MUST be included in
+              the "a=fmtp" line of SDP if SDP is used to declare receiver
+              capabilities. These parameters are expressed as a media subtype
+       string, in the form of a semicolon separated list of
+       parameter=value pairs.<a href="#section-6.2.1-2.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.2.1-2.5">The OPTIONAL parameter profile-id, when present, SHOULD be
+       included in the "a=fmtp" line of SDP. This parameter is expressed
+       as a media subtype string, in the form of a parameter=value
+       pair. When the parameter is not present, a value of 0 MUST be
+       used for profile-id.<a href="#section-6.2.1-2.5" class="pilcrow">¶</a>
+</li>
+          </ul>
+<section id="section-6.2.1.1">
+            <h5 id="name-example">
+<a href="#section-6.2.1.1" class="section-number selfRef">6.2.1.1. </a><a href="#name-example" class="section-name selfRef">Example</a>
+            </h5>
+<p id="section-6.2.1.1-1">An example of media representation in SDP is as follows:<a href="#section-6.2.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1.1-2">m=video 49170 RTP/AVPF 98 a=rtpmap:98
+            VP9/90000 a=fmtp:98 max-fr=30;
+            max-fs=3600; profile-id=0;<a href="#section-6.2.1.1-2" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-6.2.2">
+          <h4 id="name-offer-answer-considerations">
+<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-offer-answer-considerations" class="section-name selfRef">Offer/Answer Considerations</a>
+          </h4>
+<p id="section-6.2.2-1">When VP9 is offered over RTP using SDP in an Offer/Answer model
+          <span>[<a href="#RFC3264" class="xref">RFC3264</a>]</span> for negotiation for unicast usage, the following
+          limitations and rules apply:<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2.2-2.1">The parameter identifying a media format configuration for VP9 is
+       profile-id. This media format configuration parameter MUST be used
+       symmetrically; that is, the answerer MUST either maintain all
+       configuration parameters or remove the media format (payload type)
+       completely if one or more of the parameter values are not supported.<a href="#section-6.2.2-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.2.2-2.2">To simplify the handling and matching of these configurations, the
+              same RTP payload type number used in the offer SHOULD also be used
+              in the answer, as specified in <span>[<a href="#RFC3264" class="xref">RFC3264</a>]</span>. An answer
+       MUST NOT contain the payload type number used in the offer unless the
+       configuration is exactly the same as in the offer.<a href="#section-6.2.2-2.2" class="pilcrow">¶</a>
+</li>
+          </ul>
+</section>
+</section>
+</div>
+</section>
+</div>
+<div id="securityConsiderations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-7-1">RTP packets using the payload format defined in this specification
+      are subject to the security considerations discussed in the RTP
+      specification <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>, and in any applicable RTP
+      profile such
+      as <span><a href="#RFC3551" class="xref">RTP/AVP</a> [<a href="#RFC3551" class="xref">RFC3551</a>]</span>, <span><a href="#RFC4585" class="xref">RTP/AVPF</a> [<a href="#RFC4585" class="xref">RFC4585</a>]</span>,
+      <span><a href="#RFC3711" class="xref">RTP/SAVP</a> [<a href="#RFC3711" class="xref">RFC3711</a>]</span>,
+      or <span><a href="#RFC5124" class="xref">RTP/SAVPF</a> [<a href="#RFC5124" class="xref">RFC5124</a>]</span>.
+   SAVPF [RFC5124].  However, as <span><a href="#RFC7202" class="xref">"Securing the RTP Protocol
+      Framework: Why RTP Does Not Mandate a Single Media
+      Security Solution"</a> [<a href="#RFC7202" class="xref">RFC7202</a>]</span> discusses, it is not an RTP payload format's responsibility to
+      discuss or mandate what solutions are used to meet the
+      basic security goals like confidentiality, integrity and source
+      authenticity for RTP in general.  This responsibility lays on
+      anyone using RTP in an application.  They can find guidance on available
+      security mechanisms in <span><a href="#RFC7201" class="xref">Options for Securing
+      RTP Sessions</a> [<a href="#RFC7201" class="xref">RFC7201</a>]</span>.  Applications SHOULD use one or more appropriate
+      strong security mechanisms.  The rest of this security
+      consideration section discusses the security impacting properties of the
+      payload format itself.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">This RTP payload
+      format and its media decoder do not exhibit any significant
+      non-uniformity in the receiver-side computational complexity for packet
+      processing, and thus are unlikely to pose a denial-of-service threat due
+      to the receipt of pathological data. Nor does the RTP payload format
+      contain any active content.<a href="#section-7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="congestionControl">
+<section id="section-8">
+      <h2 id="name-congestion-control">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
+      </h2>
+<p id="section-8-1">Congestion control for RTP SHALL be used in accordance with RFC 3550
+      <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>, and with any applicable RTP profile; e.g., RFC
+      3551 <span>[<a href="#RFC3551" class="xref">RFC3551</a>]</span>. The congestion control mechanism can, in
+      a real-time encoding scenario, adapt the transmission rate by
+      instructing the encoder to encode at a certain target rate. Media aware
+      network elements MAY use the information in the VP9 payload descriptor
+      in <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> to identify non-reference
+      frames and discard them in order to reduce network congestion. Note that
+      discarding of non-reference frames cannot be done if the stream is
+      encrypted (because the non-reference marker is encrypted).<a href="#section-8-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="IANAConsiderations">
+<section id="section-9">
+      <h2 id="name-iana-considerations">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-9-1">The IANA is requested to register the media type registration
+      "video/vp9" as specified in <a href="#mediaTypeRegistration" class="xref">Section 6.1</a>.  The media type is also
+      requested to
+   be added to the IANA registry for "RTP Payload Format MIME types"
+   &lt;http://www.iana.org/assignments/rtp-parameters&gt;.<a href="#section-9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-10">
+      <h2 id="name-acknowledgments">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-10-1">Alex Eleftheriadis, Yuki Ito, Won Kap Jang, Sergio Garcia
+   Murillo, Roi Sasson, Timothy Terriberry, Emircan Uysaler, and
+   Thomas Volkert commented on the development of this document and
+   provided helpful comments and feedback.<a href="#section-10-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-11">
+      <h2 id="name-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-11.1">
+        <h3 id="name-normative-references">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-avtext-framemarking">[I-D.ietf-avtext-framemarking]</dt>
+        <dd>
+<span class="refAuthor">Zanaty, M.</span><span class="refAuthor">, Berger, E.</span><span class="refAuthor">, and S. Nandakumar</span>, <span class="refTitle">"Frame Marking RTP Header Extension"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-avtext-framemarking-11</span>, <time datetime="2020-08-04" class="refDate">4 August 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-avtext-framemarking-11.txt">http://www.ietf.org/internet-drafts/draft-ietf-avtext-framemarking-11.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-avtext-lrr">[I-D.ietf-avtext-lrr]</dt>
+        <dd>
+<span class="refAuthor">Lennox, J.</span><span class="refAuthor">, Hong, D.</span><span class="refAuthor">, Uberti, J.</span><span class="refAuthor">, Holmer, S.</span><span class="refAuthor">, and M. Flodman</span>, <span class="refTitle">"The Layer Refresh Request (LRR) RTCP Feedback Message"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-avtext-lrr-07</span>, <time datetime="2017-07-02" class="refDate">2 July 2017</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-ietf-avtext-lrr-07.txt">http://www.ietf.org/internet-drafts/draft-ietf-avtext-lrr-07.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3264">[RFC3264]</dt>
+        <dd>
+<span class="refAuthor">Rosenberg, J.</span><span class="refAuthor"> and H. Schulzrinne</span>, <span class="refTitle">"An Offer/Answer Model with Session Description Protocol (SDP)"</span>, <span class="seriesInfo">RFC 3264</span>, <span class="seriesInfo">DOI 10.17487/RFC3264</span>, <time datetime="2002-06" class="refDate">June 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3264">https://www.rfc-editor.org/info/rfc3264</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3550">[RFC3550]</dt>
+        <dd>
+<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor">, Casner, S.</span><span class="refAuthor">, Frederick, R.</span><span class="refAuthor">, and V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD 64</span>, <span class="seriesInfo">RFC 3550</span>, <span class="seriesInfo">DOI 10.17487/RFC3550</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3550">https://www.rfc-editor.org/info/rfc3550</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4566">[RFC4566]</dt>
+        <dd>
+<span class="refAuthor">Handley, M.</span><span class="refAuthor">, Jacobson, V.</span><span class="refAuthor">, and C. Perkins</span>, <span class="refTitle">"SDP: Session Description Protocol"</span>, <span class="seriesInfo">RFC 4566</span>, <span class="seriesInfo">DOI 10.17487/RFC4566</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4566">https://www.rfc-editor.org/info/rfc4566</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4585">[RFC4585]</dt>
+        <dd>
+<span class="refAuthor">Ott, J.</span><span class="refAuthor">, Wenger, S.</span><span class="refAuthor">, Sato, N.</span><span class="refAuthor">, Burmeister, C.</span><span class="refAuthor">, and J. Rey</span>, <span class="refTitle">"Extended RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/AVPF)"</span>, <span class="seriesInfo">RFC 4585</span>, <span class="seriesInfo">DOI 10.17487/RFC4585</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4585">https://www.rfc-editor.org/info/rfc4585</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4855">[RFC4855]</dt>
+        <dd>
+<span class="refAuthor">Casner, S.</span>, <span class="refTitle">"Media Type Registration of RTP Payload Formats"</span>, <span class="seriesInfo">RFC 4855</span>, <span class="seriesInfo">DOI 10.17487/RFC4855</span>, <time datetime="2007-02" class="refDate">February 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4855">https://www.rfc-editor.org/info/rfc4855</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5104">[RFC5104]</dt>
+        <dd>
+<span class="refAuthor">Wenger, S.</span><span class="refAuthor">, Chandra, U.</span><span class="refAuthor">, Westerlund, M.</span><span class="refAuthor">, and B. Burman</span>, <span class="refTitle">"Codec Control Messages in the RTP Audio-Visual Profile with Feedback (AVPF)"</span>, <span class="seriesInfo">RFC 5104</span>, <span class="seriesInfo">DOI 10.17487/RFC5104</span>, <time datetime="2008-02" class="refDate">February 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5104">https://www.rfc-editor.org/info/rfc5104</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6838">[RFC6838]</dt>
+        <dd>
+<span class="refAuthor">Freed, N.</span><span class="refAuthor">, Klensin, J.</span><span class="refAuthor">, and T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="VP9-BITSTREAM">[VP9-BITSTREAM]</dt>
+      <dd>
+<span class="refAuthor">Grange, A.</span><span class="refAuthor">, de Rivaz, P.</span><span class="refAuthor">, and J. Hunt</span>, <span class="refTitle">"VP9 Bitstream &amp; Decoding Process Specification"</span>, <span class="seriesInfo">Version 0.6</span>, <time datetime="2016-03-31" class="refDate">31 March 2016</time>, <span>&lt;<a href="https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp9-bitstream-specification-v0.6-20160331-draft.pdf">https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp9-bitstream-specification-v0.6-20160331-draft.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-11.2">
+        <h3 id="name-informative-references">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC3551">[RFC3551]</dt>
+        <dd>
+<span class="refAuthor">Schulzrinne, H.</span><span class="refAuthor"> and S. Casner</span>, <span class="refTitle">"RTP Profile for Audio and Video Conferences with Minimal Control"</span>, <span class="seriesInfo">STD 65</span>, <span class="seriesInfo">RFC 3551</span>, <span class="seriesInfo">DOI 10.17487/RFC3551</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3551">https://www.rfc-editor.org/info/rfc3551</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3711">[RFC3711]</dt>
+        <dd>
+<span class="refAuthor">Baugher, M.</span><span class="refAuthor">, McGrew, D.</span><span class="refAuthor">, Naslund, M.</span><span class="refAuthor">, Carrara, E.</span><span class="refAuthor">, and K. Norrman</span>, <span class="refTitle">"The Secure Real-time Transport Protocol (SRTP)"</span>, <span class="seriesInfo">RFC 3711</span>, <span class="seriesInfo">DOI 10.17487/RFC3711</span>, <time datetime="2004-03" class="refDate">March 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3711">https://www.rfc-editor.org/info/rfc3711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5124">[RFC5124]</dt>
+        <dd>
+<span class="refAuthor">Ott, J.</span><span class="refAuthor"> and E. Carrara</span>, <span class="refTitle">"Extended Secure RTP Profile for Real-time Transport Control Protocol (RTCP)-Based Feedback (RTP/SAVPF)"</span>, <span class="seriesInfo">RFC 5124</span>, <span class="seriesInfo">DOI 10.17487/RFC5124</span>, <time datetime="2008-02" class="refDate">February 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5124">https://www.rfc-editor.org/info/rfc5124</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6386">[RFC6386]</dt>
+        <dd>
+<span class="refAuthor">Bankoski, J.</span><span class="refAuthor">, Koleszar, J.</span><span class="refAuthor">, Quillio, L.</span><span class="refAuthor">, Salonen, J.</span><span class="refAuthor">, Wilkins, P.</span><span class="refAuthor">, and Y. Xu</span>, <span class="refTitle">"VP8 Data Format and Decoding Guide"</span>, <span class="seriesInfo">RFC 6386</span>, <span class="seriesInfo">DOI 10.17487/RFC6386</span>, <time datetime="2011-11" class="refDate">November 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6386">https://www.rfc-editor.org/info/rfc6386</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7201">[RFC7201]</dt>
+        <dd>
+<span class="refAuthor">Westerlund, M.</span><span class="refAuthor"> and C. Perkins</span>, <span class="refTitle">"Options for Securing RTP Sessions"</span>, <span class="seriesInfo">RFC 7201</span>, <span class="seriesInfo">DOI 10.17487/RFC7201</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7201">https://www.rfc-editor.org/info/rfc7201</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7202">[RFC7202]</dt>
+      <dd>
+<span class="refAuthor">Perkins, C.</span><span class="refAuthor"> and M. Westerlund</span>, <span class="refTitle">"Securing the RTP Framework: Why RTP Does Not Mandate a Single Media Security Solution"</span>, <span class="seriesInfo">RFC 7202</span>, <span class="seriesInfo">DOI 10.17487/RFC7202</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7202">https://www.rfc-editor.org/info/rfc7202</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="authors-addresses">
+<section id="section-appendix.a">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Justin Uberti</span></div>
+<div dir="auto" class="left"><span class="org">Google, Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">747 6th Street South</span></div>
+<div dir="auto" class="left">
+<span class="locality">Kirkland</span>, <span class="region">WA</span> <span class="postal-code">98033</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:justin@uberti.name" class="email">justin@uberti.name</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Stefan Holmer</span></div>
+<div dir="auto" class="left"><span class="org">Google, Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">Kungsbron 2</span></div>
+<div dir="auto" class="left">SE-<span class="postal-code">111 22</span> <span class="locality">Stockholm</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Sweden</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:holmer@google.com" class="email">holmer@google.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Magnus Flodman</span></div>
+<div dir="auto" class="left"><span class="org">Google, Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">Kungsbron 2</span></div>
+<div dir="auto" class="left">SE-<span class="postal-code">111 22</span> <span class="locality">Stockholm</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Sweden</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mflodman@google.com" class="email">mflodman@google.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Danny Hong</span></div>
+<div dir="auto" class="left"><span class="org">Google, Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">1585 Charleston Road</span></div>
+<div dir="auto" class="left">
+<span class="locality">Mountain View</span>, <span class="region">CA</span> <span class="postal-code">94043</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:dannyhong@google.com" class="email">dannyhong@google.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Jonathan Lennox</span></div>
+<div dir="auto" class="left"><span class="org">8x8, Inc. / Jitsi</span></div>
+<div dir="auto" class="left"><span class="street-address">1350 Broadway</span></div>
+<div dir="auto" class="left">
+<span class="locality">New York</span>, <span class="region">NY</span> <span class="postal-code">10018</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:jonathan.lennox@8x8.com" class="email">jonathan.lennox@8x8.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
