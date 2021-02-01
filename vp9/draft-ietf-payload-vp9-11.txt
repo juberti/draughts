@@ -79,19 +79,18 @@ Table of Contents
      5.1.  Reference Picture Selection Indication (RPSI) . . . . . .  14
      5.2.  Full Intra Request (FIR)  . . . . . . . . . . . . . . . .  15
      5.3.  Layer Refresh Request (LRR) . . . . . . . . . . . . . . .  15
-     5.4.  Frame Marking . . . . . . . . . . . . . . . . . . . . . .  16
    6.  Payload Format Parameters . . . . . . . . . . . . . . . . . .  16
      6.1.  Media Type Definition . . . . . . . . . . . . . . . . . .  16
-     6.2.  SDP Parameters  . . . . . . . . . . . . . . . . . . . . .  19
+     6.2.  SDP Parameters  . . . . . . . . . . . . . . . . . . . . .  18
        6.2.1.  Mapping of Media Subtype Parameters to SDP  . . . . .  19
-       6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  20
+       6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  19
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
-   8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  21
+   8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  20
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
    10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  21
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  23
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  22
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
@@ -105,6 +104,7 @@ Table of Contents
    its earlier VP8 [RFC6386] codec.  Above the compression improvements
    and other general enhancements above VP8, VP9 is also designed in a
    way that allows spatially-scalable video encoding.
+
 
 
 
@@ -853,30 +853,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
    the layer structure of the SS, thus periodic upgrade frames can be
    automatically identified by the picture ID.
 
-5.4.  Frame Marking
-
-   The Frame Marking RTP header extension [I-D.ietf-avtext-framemarking]
-   is a mechanism to provide information about frames of video streams
-   in a largely codec-independent manner.  However, for its extension
-   for scalable codecs, the specific manner in which codec layers are
-   identified needs to be specified specifically for each codec.  This
-   section defines how frame marking is used with VP9.
-
-       0                   1                   2                   3
-       0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |  ID=2 |  L=2  |S|E|I|D|B| TID |0|0|0|0|0| SID |    TL0PICIDX  |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                                  Figure 6
-
-   When this header extension is used with VP9, the TID and SID fields
-   MUST match the values in the packet which the header extension is
-   attached to; see Section 4.2 for details on these fields.
-
-   See [I-D.ietf-avtext-framemarking] for explanations of the other
-   fields, which are generic.
-
 6.  Payload Format Parameters
 
    This payload format has two optional parameters.
@@ -888,15 +864,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 
    Type name:
       video
-
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 16]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
 
    Subtype name:
       VP9
@@ -924,6 +891,13 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
          of supporting 640x480 resolution) will support widths and
          heights up to 1552 pixels (97 macroblocks).
 
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 16]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
       profile-id:  The value of profile-id is an integer indicating the
          default coding profile, the subset of coding tools that may
          have been used to generate the stream or that the receiver
@@ -945,14 +919,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 
       [RFC Editor: Upon publication as an RFC, please replace "XXXX"
       with the number assigned to this document and remove this note.]
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 17]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
 
    Interoperability considerations:
       None.
@@ -979,6 +945,15 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
    Intended usage:
       COMMON
 
+
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 17]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
    Restrictions on usage:
       This media type depends on RTP framing, and hence is only defined
       for transfer via RTP [RFC3550].
@@ -988,27 +963,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 
    Change controller:
       IETF AVTCore Working Group delegated from the IESG.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 18]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
 
                           +=========+============+
                           | Profile | profile-id |
@@ -1048,6 +1002,14 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 
    The receiver MUST ignore any fmtp parameter unspecified in this memo.
 
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 18]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
 6.2.1.  Mapping of Media Subtype Parameters to SDP
 
    The media type video/VP9 string is mapped to fields in the Session
@@ -1057,14 +1019,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 
    *  The encoding name in the "a=rtpmap" line of SDP MUST be VP9 (the
       media subtype).
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 19]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
 
    *  The clock rate in the "a=rtpmap" line MUST be 90000.
 
@@ -1100,6 +1054,18 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
       completely if one or more of the parameter values are not
       supported.
 
+
+
+
+
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 19]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
    *  To simplify the handling and matching of these configurations, the
       same RTP payload type number used in the offer SHOULD also be used
       in the answer, as specified in [RFC3264].  An answer MUST NOT
@@ -1114,14 +1080,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
    RTP/AVP [RFC3551], RTP/AVPF [RFC4585], RTP/SAVP [RFC3711], or RTP/
    SAVPF [RFC5124].  SAVPF [RFC5124].  However, as "Securing the RTP
    Protocol Framework: Why RTP Does Not Mandate a Single Media Security
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 20]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
-
    Solution" [RFC7202] discusses, it is not an RTP payload format's
    responsibility to discuss or mandate what solutions are used to meet
    the basic security goals like confidentiality, integrity and source
@@ -1152,6 +1110,18 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
    reference frames cannot be done if the stream is encrypted (because
    the non-reference marker is encrypted).
 
+
+
+
+
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 20]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
 9.  IANA Considerations
 
    The IANA is requested to register the media type registration "video/
@@ -1169,21 +1139,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 11.  References
 
 11.1.  Normative References
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 21]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
-
-   [I-D.ietf-avtext-framemarking]
-              Zanaty, M., Berger, E., and S. Nandakumar, "Frame Marking
-              RTP Header Extension", Work in Progress, Internet-Draft,
-              draft-ietf-avtext-framemarking-11, 4 August 2020,
-              <http://www.ietf.org/internet-drafts/draft-ietf-avtext-
-              framemarking-11.txt>.
 
    [I-D.ietf-avtext-lrr]
               Lennox, J., Hong, D., Uberti, J., Holmer, S., and M.
@@ -1211,6 +1166,18 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
               Description Protocol", RFC 4566, DOI 10.17487/RFC4566,
               July 2006, <https://www.rfc-editor.org/info/rfc4566>.
 
+
+
+
+
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 21]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
    [RFC4585]  Ott, J., Wenger, S., Sato, N., Burmeister, C., and J. Rey,
               "Extended RTP Profile for Real-time Transport Control
               Protocol (RTCP)-Based Feedback (RTP/AVPF)", RFC 4585,
@@ -1225,14 +1192,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
               "Codec Control Messages in the RTP Audio-Visual Profile
               with Feedback (AVPF)", RFC 5104, DOI 10.17487/RFC5104,
               February 2008, <https://www.rfc-editor.org/info/rfc5104>.
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 22]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
@@ -1264,6 +1223,17 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
               (RTP/SAVPF)", RFC 5124, DOI 10.17487/RFC5124, February
               2008, <https://www.rfc-editor.org/info/rfc5124>.
 
+
+
+
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 22]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
    [RFC6386]  Bankoski, J., Koleszar, J., Quillio, L., Salonen, J.,
               Wilkins, P., and Y. Xu, "VP8 Data Format and Decoding
               Guide", RFC 6386, DOI 10.17487/RFC6386, November 2011,
@@ -1279,16 +1249,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
               2014, <https://www.rfc-editor.org/info/rfc7202>.
 
 Authors' Addresses
-
-
-
-
-
-
-Uberti, et al.            Expires 5 August 2021                [Page 23]
-
-Internet-Draft         RTP Payload Format for VP9          February 2021
-
 
    Justin Uberti
    Google, Inc.
@@ -1317,6 +1277,19 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
    Email: mflodman@google.com
 
 
+
+
+
+
+
+
+
+
+Uberti, et al.            Expires 5 August 2021                [Page 23]
+
+Internet-Draft         RTP Payload Format for VP9          February 2021
+
+
    Danny Hong
    Google, Inc.
    1585 Charleston Road
@@ -1333,6 +1306,33 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
    United States of America
 
    Email: jonathan.lennox@8x8.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
