@@ -7,7 +7,6 @@
 <!ENTITY rfc3711 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3711.xml">
 <!ENTITY rfc3984 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3984.xml">
 <!ENTITY rfc4855 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4855.xml">
-<!ENTITY rfc4566 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4566.xml">
 <!ENTITY rfc4585 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4585.xml">
 <!ENTITY rfc5104 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5104.xml">
 <!ENTITY rfc5124 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5124.xml">
@@ -15,6 +14,7 @@
 <!ENTITY rfc6838 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7202.xml">
+<!ENTITY rfc8866 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8866.xml">
 <!ENTITY lrr SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
 
 ]>
@@ -337,7 +337,7 @@
 			  profile MUST assign a dynamic payload type number to be
 			  used in each RTP session and provide a mechanism to
 			  indicate the mapping.  See <xref target="SDPParameters"/> for the mechanism
-			  to be used with the <xref target='RFC4566'>Session
+			  to be used with the <xref target='RFC8866'>Session
 			  Description Protocol (SDP)</xref>.</t>
 
             <t hangText="Timestamp:">The RTP timestamp indicates the time when
@@ -915,7 +915,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
         <section title="Mapping of Media Subtype Parameters to SDP">
           <t>The media type video/VP9 string is mapped to fields in the
-          Session Description Protocol (SDP) <xref target="RFC4566"/> as
+          Session Description Protocol (SDP) <xref target="RFC8866"/> as
           follows: <list style="symbols">
               <t>The media name in the "m=" line of SDP MUST be video.</t>
 
@@ -1061,7 +1061,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
       &rfc3550;
 
-      &rfc4566;
+      &rfc8866;
 
       &rfc6838;
 
