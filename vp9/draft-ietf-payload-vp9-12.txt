@@ -1038,8 +1038,9 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
 
    An example of media representation in SDP is as follows:
 
-   m=video 49170 RTP/AVPF 98 a=rtpmap:98 VP9/90000 a=fmtp:98 max-fr=30;
-   max-fs=3600; profile-id=0;
+   m=video 49170 RTP/AVPF 98
+   a=rtpmap:98 VP9/90000
+   a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
 
 6.2.2.  Offer/Answer Considerations
 
@@ -1053,7 +1054,6 @@ Internet-Draft         RTP Payload Format for VP9          February 2021
       configuration parameters or remove the media format (payload type)
       completely if one or more of the parameter values are not
       supported.
-
 
 
 
