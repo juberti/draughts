@@ -519,7 +519,7 @@ V:   | SS            |
           The TL0PICIDX is present so that all minimally required frames - the base temporal layer frames - can be tracked.</t>
 
           <t>The TID and SID fields indicate the temporal and spatial layers and can help middleboxes and
-		  and endpoints quickly identify which layer a packet belongs to.
+		  endpoints quickly identify which layer a packet belongs to.
 
           <list style="hanging">
             <t hangText="TID:">The temporal layer ID of current frame.  In the case of non-flexible mode,
@@ -531,7 +531,7 @@ V:   | SS            |
             layer pictures will not depend on any picture before the current picture (in coding order) with temporal layer
             ID greater than TID.</t>
 
-            <t hangText="SID:">The spatial layer ID of current frame.  Note that frames with spatial layer SDI > 0
+            <t hangText="SID:">The spatial layer ID of current frame.  Note that frames with spatial layer SID > 0
             may be dependent on decoded spatial layer SID-1 frame within the same picture.  Different
 			frames of the same picture MUST have distinct spatial layer IDs, and frames' spatial layers
 			MUST appear in increasing order within the frame.</t>
