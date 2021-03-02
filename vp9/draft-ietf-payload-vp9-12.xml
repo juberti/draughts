@@ -931,7 +931,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
               <t>The clock rate in the "a=rtpmap" line MUST be 90000.</t>
 
               <t>The parameters "max-fs", and "max-fr", MUST be included in
-              the "a=fmtp" line of SDP if SDP is used to declare receiver
+              the "a=fmtp" line of SDP if the receiver wishes to declare its receiver
               capabilities. These parameters are expressed as a media subtype
 	      string, in the form of a semicolon separated list of
 	      parameter=value pairs.</t>
