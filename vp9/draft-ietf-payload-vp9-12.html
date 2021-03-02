@@ -25,7 +25,7 @@
 <meta content="draft-ietf-payload-vp9-12" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.5.0
-    Python 3.8.7
+    Python 3.8.8
     appdirs 1.4.4
     ConfigArgParse 1.2.3
     google-i18n-address 2.4.0
@@ -38,7 +38,7 @@
     pyflakes 2.2.0
     PyYAML 5.3.1
     requests 2.24.0
-    setuptools 51.1.1
+    setuptools 53.0.0
     six 1.11.0
 -->
 <link href="draft-ietf-payload-vp9-12.xml" rel="alternate" type="application/rfc+xml">
@@ -1179,11 +1179,11 @@ dt+dd:empty::before{
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">RTP Payload Format for VP9</td>
-<td class="right">February 2021</td>
+<td class="right">March 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Uberti, et al.</td>
-<td class="center">Expires 8 August 2021</td>
+<td class="center">Expires 3 September 2021</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1196,12 +1196,12 @@ dt+dd:empty::before{
 <dd class="internet-draft">draft-ietf-payload-vp9-12</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-02-04" class="published">4 February 2021</time>
+<time datetime="2021-03-02" class="published">2 March 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-08-08">8 August 2021</time></dd>
+<dd class="expires"><time datetime="2021-09-03">3 September 2021</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1254,7 +1254,7 @@ dt+dd:empty::before{
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 August 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 September 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1405,9 +1405,12 @@ dt+dd:empty::before{
       <h2 id="name-conventions-definitions-and">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-definitions-and" class="section-name selfRef">Conventions, Definitions and Acronyms</a>
       </h2>
-<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
+       "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT
+       RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+       interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>
+        <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when,
+       they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mediaFormatDescription">
@@ -1797,7 +1800,7 @@ V:   | SS            |
 <dt id="section-4.2-7.17"></dt>
           <dd style="margin-left: 1.5em" id="section-4.2-7.18">
             <p id="section-4.2-7.18.1">The TID and SID fields indicate the temporal and spatial layers and can help middleboxes and
-   and endpoints quickly identify which layer a packet belongs to.<a href="#section-4.2-7.18.1" class="pilcrow">¶</a></p>
+   endpoints quickly identify which layer a packet belongs to.<a href="#section-4.2-7.18.1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4.2-7.18.2">
               <dt id="section-4.2-7.18.2.1">TID:</dt>
               <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.2">The temporal layer ID of current frame.  In the case of non-flexible mode,
@@ -1813,7 +1816,7 @@ V:   | SS            |
 </dd>
               <dd class="break"></dd>
 <dt id="section-4.2-7.18.2.5">SID:</dt>
-              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.6">The spatial layer ID of current frame.  Note that frames with spatial layer SDI &gt; 0
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.6">The spatial layer ID of current frame.  Note that frames with spatial layer SID &gt; 0
             may be dependent on decoded spatial layer SID-1 frame within the same picture.  Different
  frames of the same picture MUST have distinct spatial layer IDs, and frames' spatial layers
  MUST appear in increasing order within the frame.<a href="#section-4.2-7.18.2.6" class="pilcrow">¶</a>
@@ -2263,7 +2266,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 </dd>
               <dd class="break"></dd>
 <dt id="section-6.1-2.8.2.9"></dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.10">If no profile-id is present, Profile 0 MUST be inferred.<a href="#section-6.1-2.8.2.10" class="pilcrow">¶</a>
+              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.10">If no profile-id is present, Profile 0 MUST be inferred.  (The
+                profile-id parameter was added relatively late in the development of this
+                specification, so some existing implementations may not send it.)<a href="#section-6.1-2.8.2.10" class="pilcrow">¶</a>
 </dd>
               <dd class="break"></dd>
 <dt id="section-6.1-2.8.2.11"></dt>
@@ -2437,7 +2442,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             <li class="normal" id="section-6.2.1-2.3">The clock rate in the "a=rtpmap" line MUST be 90000.<a href="#section-6.2.1-2.3" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-6.2.1-2.4">The parameters "max-fs", and "max-fr", MUST be included in
-              the "a=fmtp" line of SDP if SDP is used to declare receiver
+              the "a=fmtp" line of SDP if the receiver wishes to declare its receiver
               capabilities. These parameters are expressed as a media subtype
        string, in the form of a semicolon separated list of
        parameter=value pairs.<a href="#section-6.2.1-2.4" class="pilcrow">¶</a>
@@ -2446,7 +2451,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
        included in the "a=fmtp" line of SDP. This parameter is expressed
        as a media subtype string, in the form of a parameter=value
        pair. When the parameter is not present, a value of 0 MUST be
-       used for profile-id.<a href="#section-6.2.1-2.5" class="pilcrow">¶</a>
+       inferred for profile-id.<a href="#section-6.2.1-2.5" class="pilcrow">¶</a>
 </li>
           </ul>
 <section id="section-6.2.1.1">
@@ -2598,6 +2603,10 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
 <dt id="RFC6838">[RFC6838]</dt>
         <dd>
 <span class="refAuthor">Freed, N.</span><span class="refAuthor">, Klensin, J.</span><span class="refAuthor">, and T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8866">[RFC8866]</dt>
         <dd>
