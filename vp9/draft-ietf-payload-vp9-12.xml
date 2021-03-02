@@ -837,7 +837,10 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		of the profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>
 		and the corresponding integer values to be used.</t>
 
-		<t>If no profile-id is present, Profile 0 MUST be inferred.</t>
+		<t>If no profile-id is present, Profile 0 MUST be inferred.  (The
+                profile-id parameter was added relatively late in the development of this
+                specification, so some existing implementations may not send it.)
+                </t>
 
 		<t>Informative note: See <xref target="TableOfProfiles"/> for capabilities
 		of coding profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>.</t>
@@ -934,7 +937,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 	      included in the "a=fmtp" line of SDP. This parameter is expressed
 	      as a media subtype string, in the form of a parameter=value
 	      pair. When the parameter is not present, a value of 0 MUST be
-	      used for profile-id.</t>
+	      inferred for profile-id.</t>
             </list></t>
 
           <section title="Example">
