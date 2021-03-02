@@ -14,6 +14,7 @@
 <!ENTITY rfc6838 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7202.xml">
+<!ENTITY rfc8174 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY rfc8866 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8866.xml">
 <!ENTITY lrr SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
 
@@ -173,10 +174,12 @@
 
     <section anchor="conventions"
              title="Conventions, Definitions and Acronyms">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref
-      target="RFC2119"/>.</t>
+       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
+       "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT
+       RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+       interpreted as described in BCP 14 <xref target="RFC2119"/>
+       <xref target="RFC8174"/> when, and only when,
+       they appear in all capitals, as shown here.</t>
     </section>
 
     <section anchor="mediaFormatDescription" title="Media Format Description">
@@ -1060,6 +1063,8 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
 	  </reference>
 
       &rfc2119;
+
+      &rfc8174;
 
       &rfc4585;
 
