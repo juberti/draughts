@@ -955,10 +955,12 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
           <section title="Example">
             <t>An example of media representation in SDP is as follows:</t>
 
+            <figure>
             <artwork>m=video 49170 RTP/AVPF 98
 a=rtpmap:98 VP9/90000
 a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
             </artwork>
+            </figure>
           </section>
         </section>
 
