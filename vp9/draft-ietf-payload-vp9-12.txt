@@ -5,11 +5,11 @@
 AVTCore Working Group                                          J. Uberti
 Internet-Draft                                                 S. Holmer
 Intended status: Standards Track                              M. Flodman
-Expires: 3 September 2021                                        D. Hong
+Expires: 3 October 2021                                          D. Hong
                                                                   Google
                                                                J. Lennox
                                                              8x8 / Jitsi
-                                                            2 March 2021
+                                                            1 April 2021
 
 
                     RTP Payload Format for VP9 Video
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 September 2021.
+   This Internet-Draft will expire on 3 October 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 1]
+Uberti, et al.           Expires 3 October 2021                 [Page 1]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    extracted from this document must include Simplified BSD License text
@@ -83,14 +83,14 @@ Table of Contents
      6.1.  Media Type Definition . . . . . . . . . . . . . . . . . .  16
      6.2.  SDP Parameters  . . . . . . . . . . . . . . . . . . . . .  19
        6.2.1.  Mapping of Media Subtype Parameters to SDP  . . . . .  19
-       6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  19
+       6.2.2.  Offer/Answer Considerations . . . . . . . . . . . . .  20
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
-   8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  20
+   8.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  21
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
    10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  21
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  22
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  23
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 2]
+Uberti, et al.           Expires 3 October 2021                 [Page 2]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
 2.  Conventions, Definitions and Acronyms
@@ -165,9 +165,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 3]
+Uberti, et al.           Expires 3 October 2021                 [Page 3]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    For terminology, this document uses the term "frame" to refer to a
@@ -221,9 +221,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 4]
+Uberti, et al.           Expires 3 October 2021                 [Page 4]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    (Editor's Note: A "Picture Group", as used in this document, is not
@@ -277,9 +277,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 5]
+Uberti, et al.           Expires 3 October 2021                 [Page 5]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
                                   Figure 1
@@ -333,9 +333,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 6]
+Uberti, et al.           Expires 3 October 2021                 [Page 6]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
          0 1 2 3 4 5 6 7
@@ -389,9 +389,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 7]
+Uberti, et al.           Expires 3 October 2021                 [Page 7]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    P:  Inter-picture predicted frame.  When set to zero, the frame does
@@ -445,9 +445,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 8]
+Uberti, et al.           Expires 3 October 2021                 [Page 8]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    Z:  Not a reference frame for upper spatial layers.  If set to 1,
@@ -501,9 +501,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021                [Page 9]
+Uberti, et al.           Expires 3 October 2021                 [Page 9]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
       current frame is a "switching up point" frame.  Another bit (D) is
@@ -557,9 +557,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021               [Page 10]
+Uberti, et al.           Expires 3 October 2021                [Page 10]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    Reference indices:  When P and F are both set to one, indicating a
@@ -613,9 +613,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021               [Page 11]
+Uberti, et al.           Expires 3 October 2021                [Page 11]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
       the OPTIONAL WIDTH (2 octets) and HEIGHT (2 octets) MUST be
@@ -669,9 +669,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021               [Page 12]
+Uberti, et al.           Expires 3 October 2021                [Page 12]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
 4.4.  Scalable encoding considerations
@@ -725,9 +725,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021               [Page 13]
+Uberti, et al.           Expires 3 October 2021                [Page 13]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
                +==========+=========+============+=========+
@@ -781,9 +781,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021               [Page 14]
+Uberti, et al.           Expires 3 October 2021                [Page 14]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    in which they are updated in an alternating leapfrog fashion.  When a
@@ -837,9 +837,9 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-Uberti, et al.          Expires 3 September 2021               [Page 15]
+Uberti, et al.           Expires 3 October 2021                [Page 15]
 
-Internet-Draft         RTP Payload Format for VP9             March 2021
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    Example:
@@ -855,7 +855,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 6.  Payload Format Parameters
 
-   This payload format has two optional parameters.
+   This payload format has three optional parameters.
 
 6.1.  Media Type Definition
 
@@ -872,10 +872,16 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
       None.
 
    Optional parameters:
-      These parameters are used to signal the capabilities of a receiver
-      implementation.  If the implementation is willing to receive
-      media, both parameters MUST be provided.  These parameters MUST
-      NOT be used for any other purpose.
+      The max-fr and max-fs parameters are used to signal the
+      capabilities of a receiver implementation.  If the implementation
+      is willing to receive media, both parameters MUST be provided.
+      These parameters MUST NOT be used for any other purpose.  A media
+      sender SHOULD NOT send media with a frame rate or frame size
+      exceeding the max-fr and max-fs values signaled.  (There may be
+      scenarios, such as pre-encoded media or selective forwarding
+      middleboxes [RFC7667], where a media sender does not have media
+      available that fits within a receivers max-fs and max-fr value; in
+      such scenarios, a sender MAY exceed the signaled values.)
 
       max-fr:  The value of max-fr is an integer indicating the maximum
          frame rate in units of frames per second that the decoder is
@@ -885,18 +891,18 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
          frame size in units of macroblocks that the decoder is capable
          of decoding.
 
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 16]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
          The decoder is capable of decoding this frame size as long as
          the width and height of the frame in macroblocks are less than
          int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200 (capable
          of supporting 640x480 resolution) will support widths and
          heights up to 1552 pixels (97 macroblocks).
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 16]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
 
       profile-id:  The value of profile-id is an integer indicating the
          default coding profile, the subset of coding tools that may
@@ -939,20 +945,20 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
    Fragment identifier considerations:
       N/A.
 
+
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 17]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
    Additional information:
       None.
 
    Person & email address to contact for further information:
       Jonathan Lennox <jonathan.lennox@8x8.com>
-
-
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 17]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
 
    Intended usage:
       COMMON
@@ -987,6 +993,23 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
                             to the set of coding
                               tools supported.
 
+
+
+
+
+
+
+
+
+
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 18]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
    +=========+===========+=================+==========================+
    | Profile | Bit Depth | SRGB Colorspace |    Chroma Subsampling    |
    +=========+===========+=================+==========================+
@@ -1000,15 +1023,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
    +---------+-----------+-----------------+--------------------------+
 
             Table 3: Table 2.  Table of profile capabilities.
-
-
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 18]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
 
 6.2.  SDP Parameters
 
@@ -1026,7 +1040,7 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
    *  The clock rate in the "a=rtpmap" line MUST be 90000.
 
-   *  The parameters "max-fs", and "max-fr", MUST be included in the
+   *  The parameters "max-fr" and "max-fs" MUST be included in the
       "a=fmtp" line of SDP if the receiver wishes to declare its
       receiver capabilities.  These parameters are expressed as a media
       subtype string, in the form of a semicolon separated list of
@@ -1042,6 +1056,16 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
    An example of media representation in SDP is as follows:
 
+
+
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 19]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
    m=video 49170 RTP/AVPF 98
    a=rtpmap:98 VP9/90000
    a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
@@ -1054,23 +1078,25 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
    *  The parameter identifying a media format configuration for VP9 is
       profile-id.  This media format configuration parameter MUST be
-      used symmetrically; that is, the answerer MUST either maintain all
-      configuration parameters or remove the media format (payload type)
-      completely if one or more of the parameter values are not
-      supported.
+      used symmetrically; that is, the answerer MUST either maintain
+      this configuration parameter or remove the media format (payload
+      type) completely if it is not supported.
 
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 19]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
+   *  The max-fr and max-fs parameters are used declaratively to
+      describe receiver capabilities, even in the Offer/Answer model.
+      The values in an answer are used to describe the answerer's
+      capabilities, and thus their values are set independently of the
+      values in the offer.
 
    *  To simplify the handling and matching of these configurations, the
       same RTP payload type number used in the offer SHOULD also be used
-      in the answer, as specified in [RFC3264].  An answer MUST NOT
-      contain the payload type number used in the offer unless the
-      configuration is exactly the same as in the offer.
+      in the answer and in a subsequent offer, as specified in
+      [RFC3264].  An answer or subsequent offer MUST NOT contain the
+      payload type number used in the offer unless the profile-id value
+      is exactly the same as in the original offer.  However, max-fr and
+      max-fs parameters MAY be changed in subsequent offers and answers,
+      with the same payload type number, if an endpoint wishes to change
+      its declared receiver capabilties.
 
 7.  Security Considerations
 
@@ -1088,6 +1114,14 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
    security mechanisms in Options for Securing RTP Sessions [RFC7201].
    Applications SHOULD use one or more appropriate strong security
    mechanisms.  The rest of this security consideration section
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 20]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
    discusses the security impacting properties of the payload format
    itself.
 
@@ -1109,18 +1143,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
    order to reduce network congestion.  Note that discarding of non-
    reference frames cannot be done if the stream is encrypted (because
    the non-reference marker is encrypted).
-
-
-
-
-
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 20]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
 
 9.  IANA Considerations
 
@@ -1147,6 +1169,15 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
               avtext-lrr-07, 2 July 2017, <http://www.ietf.org/internet-
               drafts/draft-ietf-avtext-lrr-07.txt>.
 
+
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 21]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -1167,16 +1198,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
               Protocol (RTCP)-Based Feedback (RTP/AVPF)", RFC 4585,
               DOI 10.17487/RFC4585, July 2006,
               <https://www.rfc-editor.org/info/rfc4585>.
-
-
-
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 21]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
 
    [RFC4855]  Casner, S., "Media Type Registration of RTP Payload
               Formats", RFC 4855, DOI 10.17487/RFC4855, February 2007,
@@ -1205,6 +1226,14 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
               Grange, A., de Rivaz, P., and J. Hunt, "VP9 Bitstream &
               Decoding Process Specification", Version 0.6, 31 March
               2016,
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 22]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
+
+
               <https://storage.googleapis.com/downloads.webmproject.org/
               docs/vp9/vp9-bitstream-specification-
               v0.6-20160331-draft.pdf>.
@@ -1226,14 +1255,6 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
               (RTP/SAVPF)", RFC 5124, DOI 10.17487/RFC5124, February
               2008, <https://www.rfc-editor.org/info/rfc5124>.
 
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 22]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
-
-
    [RFC6386]  Bankoski, J., Koleszar, J., Quillio, L., Salonen, J.,
               Wilkins, P., and Y. Xu, "VP8 Data Format and Decoding
               Guide", RFC 6386, DOI 10.17487/RFC6386, November 2011,
@@ -1248,6 +1269,10 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
               Security Solution", RFC 7202, DOI 10.17487/RFC7202, April
               2014, <https://www.rfc-editor.org/info/rfc7202>.
 
+   [RFC7667]  Westerlund, M. and S. Wenger, "RTP Topologies", RFC 7667,
+              DOI 10.17487/RFC7667, November 2015,
+              <https://www.rfc-editor.org/info/rfc7667>.
+
 Authors' Addresses
 
    Justin Uberti
@@ -1257,6 +1282,12 @@ Authors' Addresses
    United States of America
 
    Email: justin@uberti.name
+
+
+
+Uberti, et al.           Expires 3 October 2021                [Page 23]
+
+Internet-Draft         RTP Payload Format for VP9             April 2021
 
 
    Stefan Holmer
@@ -1275,19 +1306,6 @@ Authors' Addresses
    Sweden
 
    Email: mflodman@google.com
-
-
-
-
-
-
-
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 23]
-
-Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
    Danny Hong
@@ -1323,22 +1341,4 @@ Internet-Draft         RTP Payload Format for VP9             March 2021
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Uberti, et al.          Expires 3 September 2021               [Page 24]
+Uberti, et al.           Expires 3 October 2021                [Page 24]

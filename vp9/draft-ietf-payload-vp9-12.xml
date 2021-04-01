@@ -14,6 +14,7 @@
 <!ENTITY rfc6838 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6838.xml">
 <!ENTITY rfc7201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7201.xml">
 <!ENTITY rfc7202 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7202.xml">
+<!ENTITY rfc7667 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7667.xml">
 <!ENTITY rfc8174 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY rfc8866 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8866.xml">
 <!ENTITY lrr SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-avtext-lrr.xml">
@@ -802,7 +803,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
     <section anchor="payloadFormatParameters"
              title="Payload Format Parameters">
-      <t>This payload format has two optional parameters.</t>
+      <t>This payload format has three optional parameters.</t>
 
       <section anchor="mediaTypeRegistration" title="Media Type Definition">
         <t>This registration is done using the template defined in <xref
@@ -814,11 +815,19 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
             <t hangText="Required parameters:">None.</t>
 
-            <t hangText="Optional parameters:"><vspace blankLines="0"/> These
+            <t hangText="Optional parameters:"><vspace blankLines="0"/> The max-fr
+            and max-fs
             parameters are used to signal the capabilities of a receiver
             implementation. If the implementation is willing to
-            receive media, both parameters MUST be provided. These parameters MUST NOT be used for any other
-            purpose. <list style="hanging">
+            receive media, both parameters MUST be provided. These parameters MUST
+            NOT be used for any other purpose.  A media sender SHOULD NOT send
+            media with a frame rate or frame size exceeding the max-fr and max-fs
+            values signaled.  (There may be scenarios, such as pre-encoded
+            media or <xref target='RFC7667'>selective forwarding
+            middleboxes</xref>, where a media sender does not have media available
+            that fits within a receivers max-fs and max-fr value; in such
+            scenarios, a sender MAY exceed the signaled values.)
+            <list style="hanging">
                 <t hangText="max-fr:">The value of max-fr is an integer
                 indicating the maximum frame rate in units of frames per
                 second that the decoder is capable of decoding.</t>
@@ -930,7 +939,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
               <t>The clock rate in the "a=rtpmap" line MUST be 90000.</t>
 
-              <t>The parameters "max-fs", and "max-fr", MUST be included in
+              <t>The parameters "max-fr" and "max-fs" MUST be included in
               the "a=fmtp" line of SDP if the receiver wishes to declare its receiver
               capabilities. These parameters are expressed as a media subtype
 	      string, in the form of a semicolon separated list of
@@ -959,15 +968,25 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
           limitations and rules apply: <list style="symbols">
 	      <t>The parameter identifying a media format configuration for VP9 is
 	      profile-id. This media format configuration parameter MUST be used
-	      symmetrically; that is, the answerer MUST either maintain all
-	      configuration parameters or remove the media format (payload type)
-	      completely if one or more of the parameter values are not supported.</t>
+	      symmetrically; that is, the answerer MUST either maintain this
+	      configuration parameter or remove the media format (payload type)
+	      completely if it is not supported.</t>
+
+              <t>The max-fr and max-fs parameters are used declaratively to
+              describe receiver capabilities, even in the Offer/Answer model.
+              The values in an answer are used to describe the answerer's
+              capabilities, and thus their values are set independently of the
+              values in the offer.</t>
 
               <t>To simplify the handling and matching of these configurations, the
               same RTP payload type number used in the offer SHOULD also be used
-              in the answer, as specified in <xref target="RFC3264"/>. An answer
+              in the answer and in a subsequent offer, as specified in <xref
+              target="RFC3264"/>. An answer or subsequent offer
 	      MUST NOT contain the payload type number used in the offer unless the
-	      configuration is exactly the same as in the offer.</t>
+	      profile-id value is exactly the same as in the original offer.
+              However, max-fr and max-fs parameters MAY be changed in subsequent
+              offers and answers, with the same payload type number, if an endpoint
+              wishes to change its declared receiver capabilties.</t>
 	  </list></t>
         </section>
       </section>
@@ -1096,7 +1115,9 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
 
 	  &rfc7202;
 
-      &rfc3711;
+          &rfc7667;
+
+          &rfc3711;
 
 	</references>
   </back>
