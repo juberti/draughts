@@ -11,7 +11,7 @@
 <meta content="Danny Hong" name="author">
 <meta content="Jonathan Lennox" name="author">
 <meta content="
-       This memo describes an RTP payload format for the VP9 video codec.
+       This specification describes an RTP payload format for the VP9 video codec.
       The payload format has wide applicability, as it supports applications
       from low bit-rate peer-to-peer usage, to high bit-rate video
       conferences.  It includes provisions for temporal and spatial scalability. 
@@ -1238,7 +1238,7 @@ li > p:last-of-type {
 <h1 id="title">RTP Payload Format for VP9 Video</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This memo describes an RTP payload format for the VP9 video codec.
+<p id="section-abstract-1">This specification describes an RTP payload format for the VP9 video codec.
       The payload format has wide applicability, as it supports applications
       from low bit-rate peer-to-peer usage, to high bit-rate video
       conferences.  It includes provisions for temporal and spatial scalability.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
@@ -1290,104 +1290,104 @@ li > p:last-of-type {
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.1">
+<nav class="toc"><ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.2">
+          <li class="toc compact ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions-definitions-and" class="xref">Conventions, Definitions and Acronyms</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.3">
+          <li class="toc compact ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-media-format-description" class="xref">Media Format Description</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.4">
+          <li class="toc compact ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-payload-format" class="xref">Payload Format</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.4.2.1">
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-rtp-header-usage" class="xref">RTP Header Usage</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.4.2.2">
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-vp9-payload-descriptor" class="xref">VP9 Payload Descriptor</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.4.2.2.2.1">
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.2.2.1">
                     <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="xref">4.2.1</a>.  <a href="#name-scalability-structure-ss" class="xref">Scalability Structure (SS):</a></p>
 </li>
                 </ul>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.4.2.3">
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.3">
                 <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-frame-fragmentation" class="xref">Frame Fragmentation</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.4.2.4">
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.4">
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-scalable-encoding-considera" class="xref">Scalable encoding considerations</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.4.2.5">
+              <li class="toc compact ulEmpty" id="section-toc.1-1.4.2.5">
                 <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-examples-of-vp9-rtp-stream" class="xref">Examples of VP9 RTP Stream</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.4.2.5.2.1">
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.4.2.5.2.1">
                     <p id="section-toc.1-1.4.2.5.2.1.1"><a href="#section-4.5.1" class="xref">4.5.1</a>.  <a href="#name-reference-picture-use-for-s" class="xref">Reference picture use for scalable structure</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.5">
+          <li class="toc compact ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-feedback-messages-and-heade" class="xref">Feedback Messages and Header Extensions</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.5.2.1">
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-reference-picture-selection" class="xref">Reference Picture Selection Indication (RPSI)</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.5.2.2">
+              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-full-intra-request-fir" class="xref">Full Intra Request (FIR)</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.5.2.3">
+              <li class="toc compact ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-layer-refresh-request-lrr" class="xref">Layer Refresh Request (LRR)</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.6">
+          <li class="toc compact ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-payload-format-parameters" class="xref">Payload Format Parameters</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-media-type-definition" class="xref">Media Type Definition</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-sdp-parameters" class="xref">SDP Parameters</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="xref">6.1.1</a>.  <a href="#name-mapping-of-media-subtype-pa" class="xref">Mapping of Media Subtype Parameters to SDP</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-sdp-parameters" class="xref">SDP Parameters</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.6.2.2.2.1">
-                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="xref">6.2.1</a>.  <a href="#name-mapping-of-media-subtype-pa" class="xref">Mapping of Media Subtype Parameters to SDP</a></p>
-</li>
-                  <li class="ulEmpty compact toc" id="section-toc.1-1.6.2.2.2.2">
-                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="xref">6.2.2</a>.  <a href="#name-offer-answer-considerations" class="xref">Offer/Answer Considerations</a></p>
+                  <li class="toc compact ulEmpty" id="section-toc.1-1.6.2.1.2.2">
+                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="xref">6.1.2</a>.  <a href="#name-offer-answer-considerations" class="xref">Offer/Answer Considerations</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-media-type-definition" class="xref">Media Type Definition</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-references" class="xref">References</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="xref">11.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="xref">11.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-references" class="xref">References</a></p>
+<ul class="toc compact ulEmpty">
+<li class="toc compact ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="xref">12.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+              <li class="toc compact ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="xref">12.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+          <li class="toc compact ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1398,7 +1398,7 @@ li > p:last-of-type {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This memo describes an RTP payload specification applicable to the
+<p id="section-1-1">This specification describes an RTP payload specification applicable to the
       transmission of video streams encoded using the VP9 video codec <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>. The format described in this document can be used
       both in peer-to-peer and video conferencing applications.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The VP9 video codec was developed by Google, and is the
@@ -1499,11 +1499,11 @@ li > p:last-of-type {
       packet has an index to refer to one of the described pictures
       in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.<a href="#section-3-12" class="pilcrow">¶</a></p>
-<p id="section-3-13">(Editor's Note: A "Picture Group", as used in this document,
+<p id="section-3-13">(Note: A "Picture Group", as used in this document,
    is not the same thing as a the term "Group of Pictures" as
    it is traditionally used in video coding, i.e. to mean an
    independently-decoadable run of pictures beginning with a
-   keyframe.  Suggestions for better terminology are welcome.)<a href="#section-3-13" class="pilcrow">¶</a></p>
+   keyframe.)<a href="#section-3-13" class="pilcrow">¶</a></p>
 <p id="section-3-14">The SS data can also be used to specify the resolution of each
       spatial layer present in the VP9 stream for both flexible and non-flexible modes.<a href="#section-3-14" class="pilcrow">¶</a></p>
 </section>
@@ -1578,7 +1578,7 @@ li > p:last-of-type {
    in Section 3 of <span>[<a href="#RFC3551" class="xref">RFC3551</a>]</span>, applications using the VP9 RTP payload
    profile MUST assign a dynamic payload type number to be
    used in each RTP session and provide a mechanism to
-   indicate the mapping.  See <a href="#SDPParameters" class="xref">Section 6.2</a> for the mechanism
+   indicate the mapping.  See <a href="#SDPParameters" class="xref">Section 6.1</a> for the mechanism
    to be used with the <span><a href="#RFC8866" class="xref">Session
    Description Protocol (SDP)</a> [<a href="#RFC8866" class="xref">RFC8866</a>]</span>.<a href="#section-4.1-4.4" class="pilcrow">¶</a>
 </dd>
@@ -1592,7 +1592,7 @@ li > p:last-of-type {
           <dd class="break"></dd>
 <dt id="section-4.1-4.7"></dt>
           <dd style="margin-left: 1.5em" id="section-4.1-4.8">If a frame has the VP9 show_frame field set to 0 (i.e., it is meant only to
-   populate a reference buffer, without being output) its timestamp MAY alternately be set
+   populate a reference buffer, without being output) its timestamp MAY alternatively be set
    to be the same as the subsequent frame with show_frame equal to 1.  (This will
    be convenient for playing out pre-encoded content packaged with VP9 "superframes", which
    typically bundle show_frame==0 frames with a subsequent show_frame==1 frame.)  Every
@@ -1611,7 +1611,7 @@ li > p:last-of-type {
         <h3 id="name-vp9-payload-descriptor">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-vp9-payload-descriptor" class="section-name selfRef">VP9 Payload Descriptor</a>
         </h3>
-<p id="section-4.2-1" class="keepWithNext">In flexible mode (with the F bit below set to 1), The first octets 
+<p id="section-4.2-1" class="keepWithNext">In flexible mode (with the F bit below set to 1), the first octets 
           after the RTP header are the VP9 payload descriptor, with the following 
           structure.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <div id="figureVP9payloadDescriptor">
@@ -1626,9 +1626,9 @@ I:   |M| PICTURE ID  | (REQUIRED)
      +-+-+-+-+-+-+-+-+
 M:   | EXTENDED PID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
+L:   | TID |U| SID |D| (Conditionally RECOMMENDED)
      +-+-+-+-+-+-+-+-+                             -\
-P,F: | P_DIFF      |N| (CONDITIONALLY REQUIRED)    - up to 3 times
+P,F: | P_DIFF      |N| (Conditionally REQUIRED)    - up to 3 times
      +-+-+-+-+-+-+-+-+                             -/
 V:   | SS            |
      | ..            |
@@ -1653,9 +1653,9 @@ I:   |M| PICTURE ID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
 M:   | EXTENDED PID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
+L:   | TID |U| SID |D| (Conditionally RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-     |   TL0PICIDX   | (CONDITIONALLY REQUIRED)
+     |   TL0PICIDX   | (Conditionally REQUIRED)
      +-+-+-+-+-+-+-+-+
 V:   | SS            |
      | ..            |
@@ -1762,7 +1762,8 @@ V:   | SS            |
           7 bits carry the PID; else if M is set to one, 15 bits carry
           the PID in network byte order.
           The sender may choose between a 7- or 15-bit index. The PID SHOULD start on a
-          random number, and MUST wrap after reaching the maximum ID. The receiver
+          random number, and MUST wrap after reaching the maximum ID (0x7f or 0x7fff depending on
+          the index size chosen). The receiver
           MUST NOT assume that the number of bits in PID stay the same through the
           session.<a href="#section-4.2-7.4" class="pilcrow">¶</a>
 </dd>
@@ -1790,7 +1791,7 @@ V:   | SS            |
 </dd>
           <dd class="break"></dd>
 <dt id="section-4.2-7.13">Layer indices:</dt>
-          <dd style="margin-left: 1.5em" id="section-4.2-7.14">This information is optional but recommended
+          <dd style="margin-left: 1.5em" id="section-4.2-7.14">This information is optional but RECOMMENDED
           whenever encoding with layers.  For both flexible and non-flexible modes,
           one octet is used to specify a layer frame's temporal layer ID (TID) and spatial layer ID (SID)
           as shown both in <a href="#figureVP9payloadDescriptor" class="xref">Figure 2</a> and <a href="#figureVP9payloadDescriptorNonFlexible" class="xref">Figure 3</a>.
@@ -1831,9 +1832,8 @@ V:   | SS            |
 </dd>
               <dd class="break"></dd>
 <dt id="section-4.2-7.18.2.7">D:</dt>
-              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.8">Inter-layer dependency used.  MUST be set to one if current spatial layer SID frame
-            depends on spatial layer SID-1 frame of the same picture.  MUST only be set to zero if current spatial
-            layer SID frame does not depend on spatial layer SID-1 frame of the same picture.  For the base layer frame
+              <dd style="margin-left: 1.5em" id="section-4.2-7.18.2.8">Inter-layer dependency used.  MUST be set to one if and only if the current spatial layer SID frame
+            depends on spatial layer SID-1 frame of the same picture, otherwise MUST set to zero.  For the base layer frame
             (with SID equal to 0), this D bit MUST be set to zero.<a href="#section-4.2-7.18.2.8" class="pilcrow">¶</a>
 </dd>
               <dd class="break"></dd>
@@ -1853,7 +1853,7 @@ V:   | SS            |
           <dd style="margin-left: 1.5em" id="section-4.2-7.20">
             <p id="section-4.2-7.20.1">When P and F are both set to one, indicating a non-key frame in
           flexible mode, then at least
-          one reference index has to be specified as below.  Additional reference indices (total of up to
+          one reference index MUST be specified as below.  Additional reference indices (total of up to
           3 reference indices are allowed) may be specified using the N bit below.  When either P or F is
           set to zero, then no reference index is specified.<a href="#section-4.2-7.20.1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4.2-7.20.2">
@@ -2216,30 +2216,8 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
       <h2 id="name-payload-format-parameters">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-payload-format-parameters" class="section-name selfRef">Payload Format Parameters</a>
       </h2>
-<p id="section-6-1">This payload format has three optional parameters.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<div id="mediaTypeRegistration">
-<section id="section-6.1">
-        <h3 id="name-media-type-definition">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-media-type-definition" class="section-name selfRef">Media Type Definition</a>
-        </h3>
-<p id="section-6.1-1">This registration is done using the template defined in <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span> and following <span>[<a href="#RFC4855" class="xref">RFC4855</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlNewline" id="section-6.1-2">
-          <dt id="section-6.1-2.1">Type name:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.2">video<a href="#section-6.1-2.2" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.3">Subtype name:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.4">VP9<a href="#section-6.1-2.4" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.5">Required parameters:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.6">None.<a href="#section-6.1-2.6" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.7">Optional parameters:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.8">
-            <p id="section-6.1-2.8.1"> The max-fr
-            and max-fs
+<p id="section-6-1">This payload format has three optional parameters, "max-fr", "max-fs", and "profile-id".<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">The max-fr and max-fs
             parameters are used to signal the capabilities of a receiver
             implementation. If the implementation is willing to
             receive media, both parameters MUST be provided. These parameters MUST
@@ -2249,267 +2227,199 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
             media or <span><a href="#RFC7667" class="xref">selective forwarding
             middleboxes</a> [<a href="#RFC7667" class="xref">RFC7667</a>]</span>, where a media sender does not have media available
             that fits within a receivers max-fs and max-fr value; in such
-            scenarios, a sender MAY exceed the signaled values.)<a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6.1-2.8.2">
-              <dt id="section-6.1-2.8.2.1">max-fr:</dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.2">The value of max-fr is an integer
+            scenarios, a sender MAY exceed the signaled values.)<a href="#section-6-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-6-3">
+        <dt id="section-6-3.1">max-fr:</dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.2">The value of max-fr is an integer
                 indicating the maximum frame rate in units of frames per
-                second that the decoder is capable of decoding.<a href="#section-6.1-2.8.2.2" class="pilcrow">¶</a>
+                second that the decoder is capable of decoding.<a href="#section-6-3.2" class="pilcrow">¶</a>
 </dd>
-              <dd class="break"></dd>
-<dt id="section-6.1-2.8.2.3">max-fs:</dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.4">The value of max-fs is an integer
+        <dd class="break"></dd>
+<dt id="section-6-3.3">max-fs:</dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.4">The value of max-fs is an integer
                 indicating the maximum frame size in units of macroblocks that
-                the decoder is capable of decoding.<a href="#section-6.1-2.8.2.4" class="pilcrow">¶</a>
+                the decoder is capable of decoding.<a href="#section-6-3.4" class="pilcrow">¶</a>
 </dd>
-              <dd class="break"></dd>
-<dt id="section-6.1-2.8.2.5"></dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.6">The decoder is capable of decoding this frame size as long
+        <dd class="break"></dd>
+<dt id="section-6-3.5"></dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.6">The decoder is capable of decoding this frame size as long
                 as the width and height of the frame in macroblocks are less
                 than int(sqrt(max-fs * 8)) - for instance, a max-fs of 1200
                 (capable of supporting 640x480 resolution) will support widths
-                and heights up to 1552 pixels (97 macroblocks).<a href="#section-6.1-2.8.2.6" class="pilcrow">¶</a>
+                and heights up to 1552 pixels (97 macroblocks).<a href="#section-6-3.6" class="pilcrow">¶</a>
 </dd>
-              <dd class="break"></dd>
-<dt id="section-6.1-2.8.2.7">profile-id:</dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.8">The value of profile-id is an integer
+        <dd class="break"></dd>
+<dt id="section-6-3.7">profile-id:</dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.8">The value of profile-id is an integer
                 indicating the default coding profile, the subset of coding
  tools that may have been used to generate the stream or that the
  receiver supports). <a href="#TableOfProfileIds" class="xref">Table 2</a> lists all
  of the profiles defined in section 7.2 of <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>
- and the corresponding integer values to be used.<a href="#section-6.1-2.8.2.8" class="pilcrow">¶</a>
-</dd>
-              <dd class="break"></dd>
-<dt id="section-6.1-2.8.2.9"></dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.10">If no profile-id is present, Profile 0 MUST be inferred.  (The
-                profile-id parameter was added relatively late in the development of this
-                specification, so some existing implementations may not send it.)<a href="#section-6.1-2.8.2.10" class="pilcrow">¶</a>
-</dd>
-              <dd class="break"></dd>
-<dt id="section-6.1-2.8.2.11"></dt>
-              <dd style="margin-left: 1.5em" id="section-6.1-2.8.2.12">Informative note: See <a href="#TableOfProfiles" class="xref">Table 3</a> for capabilities
- of coding profiles defined in section 7.2 of <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>.<a href="#section-6.1-2.8.2.12" class="pilcrow">¶</a>
-</dd>
-            <dd class="break"></dd>
-</dl>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.9">Encoding considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.10">
-            This media type is framed in RTP and contains binary data; see
-            Section 4.8 of <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span>.<a href="#section-6.1-2.10" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.11">Security considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.12">
-            <p id="section-6.1-2.12.1">See <a href="#securityConsiderations" class="xref">Section 7</a> of RFC xxxx.<a href="#section-6.1-2.12.1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2.12.2"> [RFC Editor: Upon publication as an RFC, please
-            replace "XXXX" with the number assigned to this document and
-            remove this note.]<a href="#section-6.1-2.12.2" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.13">Interoperability considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.14">None.<a href="#section-6.1-2.14" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.15">Published specification:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.16">
-            <p id="section-6.1-2.16.1">VP9 bitstream format <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span> and RFC XXXX.<a href="#section-6.1-2.16.1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2.16.2"> [RFC
-            Editor: Upon publication as an RFC, please replace "XXXX" with the
-            number assigned to this document and remove this note.]<a href="#section-6.1-2.16.2" class="pilcrow">¶</a></p>
-<p id="section-6.1-2.16.3"></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.17">Applications which use this media type:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.18"> For example: Video over IP, video
-            conferencing.<a href="#section-6.1-2.18" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.19">Fragment identifier considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.20">N/A.<a href="#section-6.1-2.20" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.21">Additional information:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.22">None.<a href="#section-6.1-2.22" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.23">Person &amp; email address to contact for further information:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.24"> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;<a href="#section-6.1-2.24" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.25">Intended usage:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.26">COMMON<a href="#section-6.1-2.26" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.27">Restrictions on usage:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.28"> This
-            media type depends on RTP framing, and hence is only defined for
-            transfer via RTP <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>.<a href="#section-6.1-2.28" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.29">Author:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.30">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;<a href="#section-6.1-2.30" class="pilcrow">¶</a>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-2.31">Change controller:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-2.32"> IETF
-            AVTCore Working Group delegated from the IESG.<a href="#section-6.1-2.32" class="pilcrow">¶</a>
+ and the corresponding integer values to be used.<a href="#section-6-3.8" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
+<dt id="section-6-3.9"></dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.10">If no profile-id is present, Profile 0 MUST be inferred.  (The
+                profile-id parameter was added relatively late in the development of this
+                specification, so some existing implementations may not send it.)<a href="#section-6-3.10" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-6-3.11"></dt>
+        <dd style="margin-left: 1.5em" id="section-6-3.12">Informative note: See <a href="#TableOfProfiles" class="xref">Table 3</a> for capabilities
+ of coding profiles defined in section 7.2 of <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span>.<a href="#section-6-3.12" class="pilcrow">¶</a>
+</dd>
+      <dd class="break"></dd>
 </dl>
-<span id="name-table-1-table-of-profile-id"></span><div id="TableOfProfileIds">
+<p id="section-6-4">A receiver MUST ignore any parameter unspecified in this
+              specification.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<span id="name-table-of-profile-id-integer"></span><div id="TableOfProfileIds">
 <table class="center" id="table-2">
-          <caption>
+        <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-table-1-table-of-profile-id" class="selfRef">Table 1. Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported.</a>
-          </caption>
+<a href="#name-table-of-profile-id-integer" class="selfRef">Table of profile-id    integer values representing the VP9 profile corresponding to the set of    coding tools supported.</a>
+        </caption>
 <thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Profile</th>
-              <th class="text-center" rowspan="1" colspan="1">profile-id</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">0</td>
-              <td class="text-center" rowspan="1" colspan="1">0</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">2</td>
-              <td class="text-center" rowspan="1" colspan="1">2</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">3</td>
-              <td class="text-center" rowspan="1" colspan="1">3</td>
-            </tr>
-          </tbody>
-        </table>
+          <tr>
+            <th class="text-center" rowspan="1" colspan="1">Profile</th>
+            <th class="text-center" rowspan="1" colspan="1">profile-id</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">0</td>
+            <td class="text-center" rowspan="1" colspan="1">0</td>
+          </tr>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">1</td>
+            <td class="text-center" rowspan="1" colspan="1">1</td>
+          </tr>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+          </tr>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">3</td>
+            <td class="text-center" rowspan="1" colspan="1">3</td>
+          </tr>
+        </tbody>
+      </table>
 </div>
-<span id="name-table-2-table-of-profile-ca"></span><div id="TableOfProfiles">
+<span id="name-table-of-profile-capabiliti"></span><div id="TableOfProfiles">
 <table class="center" id="table-3">
-          <caption>
+        <caption>
 <a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-table-2-table-of-profile-ca" class="selfRef">Table 2. Table of profile    capabilities.</a>
-          </caption>
+<a href="#name-table-of-profile-capabiliti" class="selfRef">Table of profile    capabilities.</a>
+        </caption>
 <thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Profile</th>
-              <th class="text-center" rowspan="1" colspan="1">Bit Depth</th>
-              <th class="text-center" rowspan="1" colspan="1">SRGB Colorspace</th>
-              <th class="text-center" rowspan="1" colspan="1">Chroma Subsampling</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">0</td>
-              <td class="text-center" rowspan="1" colspan="1">8</td>
-              <td class="text-center" rowspan="1" colspan="1">No</td>
-              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">8</td>
-              <td class="text-center" rowspan="1" colspan="1">Yes</td>
-              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0,4:4:0 or 4:4:4</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">2</td>
-              <td class="text-center" rowspan="1" colspan="1">10 or 12</td>
-              <td class="text-center" rowspan="1" colspan="1">No</td>
-              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">3</td>
-              <td class="text-center" rowspan="1" colspan="1">10 or 12</td>
-              <td class="text-center" rowspan="1" colspan="1">Yes</td>
-              <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0,4:4:0 or 4:4:4</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-</section>
+          <tr>
+            <th class="text-center" rowspan="1" colspan="1">Profile</th>
+            <th class="text-center" rowspan="1" colspan="1">Bit Depth</th>
+            <th class="text-center" rowspan="1" colspan="1">SRGB Colorspace</th>
+            <th class="text-center" rowspan="1" colspan="1">Chroma Subsampling</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">0</td>
+            <td class="text-center" rowspan="1" colspan="1">8</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
+            <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0</td>
+          </tr>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">1</td>
+            <td class="text-center" rowspan="1" colspan="1">8</td>
+            <td class="text-center" rowspan="1" colspan="1">Yes</td>
+            <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0,4:4:0 or 4:4:4</td>
+          </tr>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">10 or 12</td>
+            <td class="text-center" rowspan="1" colspan="1">No</td>
+            <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0</td>
+          </tr>
+          <tr>
+            <td class="text-center" rowspan="1" colspan="1">3</td>
+            <td class="text-center" rowspan="1" colspan="1">10 or 12</td>
+            <td class="text-center" rowspan="1" colspan="1">Yes</td>
+            <td class="text-center" rowspan="1" colspan="1">YUV 4:2:0,4:4:0 or 4:4:4</td>
+          </tr>
+        </tbody>
+      </table>
 </div>
 <div id="SDPParameters">
-<section id="section-6.2">
+<section id="section-6.1">
         <h3 id="name-sdp-parameters">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-sdp-parameters" class="section-name selfRef">SDP Parameters</a>
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-sdp-parameters" class="section-name selfRef">SDP Parameters</a>
         </h3>
-<p id="section-6.2-1">The receiver MUST ignore any fmtp parameter unspecified in this
-        memo.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<section id="section-6.2.1">
+<section id="section-6.1.1">
           <h4 id="name-mapping-of-media-subtype-pa">
-<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-mapping-of-media-subtype-pa" class="section-name selfRef">Mapping of Media Subtype Parameters to SDP</a>
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-mapping-of-media-subtype-pa" class="section-name selfRef">Mapping of Media Subtype Parameters to SDP</a>
           </h4>
-<p id="section-6.2.1-1">The media type video/VP9 string is mapped to fields in the
+<p id="section-6.1.1-1">The media type video/VP9 string is mapped to fields in the
           Session Description Protocol (SDP) <span>[<a href="#RFC8866" class="xref">RFC8866</a>]</span> as
-          follows:<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+          follows:<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.1-2.1">The media name in the "m=" line of SDP MUST be video.<a href="#section-6.2.1-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.1.1-2.1">The media name in the "m=" line of SDP MUST be video.<a href="#section-6.1.1-2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.2.1-2.2">The encoding name in the "a=rtpmap" line of SDP MUST be VP9
-              (the media subtype).<a href="#section-6.2.1-2.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-6.1.1-2.2">The encoding name in the "a=rtpmap" line of SDP MUST be VP9
+              (the media subtype).<a href="#section-6.1.1-2.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.2.1-2.3">The clock rate in the "a=rtpmap" line MUST be 90000.<a href="#section-6.2.1-2.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-6.1.1-2.3">The clock rate in the "a=rtpmap" line MUST be 90000.<a href="#section-6.1.1-2.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.2.1-2.4">The parameters "max-fr" and "max-fs" MUST be included in
+            <li class="normal" id="section-6.1.1-2.4">The parameters "max-fr" and "max-fs" MUST be included in
               the "a=fmtp" line of SDP if the receiver wishes to declare its receiver
               capabilities. These parameters are expressed as a media subtype
        string, in the form of a semicolon separated list of
-       parameter=value pairs.<a href="#section-6.2.1-2.4" class="pilcrow">¶</a>
+       parameter=value pairs.<a href="#section-6.1.1-2.4" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.2.1-2.5">The OPTIONAL parameter profile-id, when present, SHOULD be
+            <li class="normal" id="section-6.1.1-2.5">The OPTIONAL parameter profile-id, when present, SHOULD be
        included in the "a=fmtp" line of SDP. This parameter is expressed
        as a media subtype string, in the form of a parameter=value
        pair. When the parameter is not present, a value of 0 MUST be
-       inferred for profile-id.<a href="#section-6.2.1-2.5" class="pilcrow">¶</a>
+       inferred for profile-id.<a href="#section-6.1.1-2.5" class="pilcrow">¶</a>
 </li>
           </ul>
-<section id="section-6.2.1.1">
+<section id="section-6.1.1.1">
             <h5 id="name-example">
-<a href="#section-6.2.1.1" class="section-number selfRef">6.2.1.1. </a><a href="#name-example" class="section-name selfRef">Example</a>
+<a href="#section-6.1.1.1" class="section-number selfRef">6.1.1.1. </a><a href="#name-example" class="section-name selfRef">Example</a>
             </h5>
-<p id="section-6.2.1.1-1">An example of media representation in SDP is as follows:<a href="#section-6.2.1.1-1" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-6.2.1.1-2">
+<p id="section-6.1.1.1-1">An example of media representation in SDP is as follows:<a href="#section-6.1.1.1-1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-6.1.1.1-2">
 <pre>m=video 49170 RTP/AVPF 98
 a=rtpmap:98 VP9/90000
 a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
-</pre><a href="#section-6.2.1.1-2" class="pilcrow">¶</a>
+</pre><a href="#section-6.1.1.1-2" class="pilcrow">¶</a>
 </div>
 </section>
 </section>
-<section id="section-6.2.2">
+<section id="section-6.1.2">
           <h4 id="name-offer-answer-considerations">
-<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-offer-answer-considerations" class="section-name selfRef">Offer/Answer Considerations</a>
+<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-offer-answer-considerations" class="section-name selfRef">Offer/Answer Considerations</a>
           </h4>
-<p id="section-6.2.2-1">When VP9 is offered over RTP using SDP in an Offer/Answer model
+<p id="section-6.1.2-1">When VP9 is offered over RTP using SDP in an Offer/Answer model
           <span>[<a href="#RFC3264" class="xref">RFC3264</a>]</span> for negotiation for unicast usage, the following
-          limitations and rules apply:<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
+          limitations and rules apply:<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.2.2-2.1">The parameter identifying a media format configuration for VP9 is
+<li class="normal" id="section-6.1.2-2.1">The parameter identifying a media format configuration for VP9 is
        profile-id. This media format configuration parameter MUST be used
        symmetrically; that is, the answerer MUST either maintain this
        configuration parameter or remove the media format (payload type)
-       completely if it is not supported.<a href="#section-6.2.2-2.1" class="pilcrow">¶</a>
+       completely if it is not supported.<a href="#section-6.1.2-2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.2.2-2.2">The max-fr and max-fs parameters are used declaratively to
+            <li class="normal" id="section-6.1.2-2.2">The max-fr and max-fs parameters are used declaratively to
               describe receiver capabilities, even in the Offer/Answer model.
               The values in an answer are used to describe the answerer's
               capabilities, and thus their values are set independently of the
-              values in the offer.<a href="#section-6.2.2-2.2" class="pilcrow">¶</a>
+              values in the offer.<a href="#section-6.1.2-2.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-6.2.2-2.3">To simplify the handling and matching of these configurations, the
+            <li class="normal" id="section-6.1.2-2.3">To simplify the handling and matching of these configurations, the
               same RTP payload type number used in the offer SHOULD also be used
               in the answer and in a subsequent offer, as specified in <span>[<a href="#RFC3264" class="xref">RFC3264</a>]</span>. An answer or subsequent offer
        MUST NOT contain the payload type number used in the offer unless the
        profile-id value is exactly the same as in the original offer.
               However, max-fr and max-fs parameters MAY be changed in subsequent
               offers and answers, with the same payload type number, if an endpoint
-              wishes to change its declared receiver capabilties.<a href="#section-6.2.2-2.3" class="pilcrow">¶</a>
+              wishes to change its declared receiver capabilties.<a href="#section-6.1.2-2.3" class="pilcrow">¶</a>
 </li>
           </ul>
 </section>
@@ -2517,12 +2427,103 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
 </div>
 </section>
 </div>
-<div id="securityConsiderations">
+<div id="mediaTypeRegistration">
 <section id="section-7">
-      <h2 id="name-security-considerations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-media-type-definition">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-media-type-definition" class="section-name selfRef">Media Type Definition</a>
       </h2>
-<p id="section-7-1">RTP packets using the payload format defined in this specification
+<p id="section-7-1">This registration is done using the template defined in <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span> and following <span>[<a href="#RFC4855" class="xref">RFC4855</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-7-2">
+        <dt id="section-7-2.1">Type name:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.2">video<a href="#section-7-2.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.3">Subtype name:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.4">VP9<a href="#section-7-2.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.5">Required parameters:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.6">N/A.<a href="#section-7-2.6" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.7">Optional parameters:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.8">
+            There are three optional parameters, "max-fr", "max-fs", and "profile-id".
+            See <a href="#payloadFormatParameters" class="xref">Section 6</a> for their definition.<a href="#section-7-2.8" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.9">Encoding considerations:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.10">
+            This media type is framed in RTP and contains binary data; see
+            Section 4.8 of <span>[<a href="#RFC6838" class="xref">RFC6838</a>]</span>.<a href="#section-7-2.10" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.11">Security considerations:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.12">
+          <p id="section-7-2.12.1">See <a href="#securityConsiderations" class="xref">Section 8</a> of RFC xxxx.<a href="#section-7-2.12.1" class="pilcrow">¶</a></p>
+<p id="section-7-2.12.2"> [RFC Editor: Upon publication as an RFC, please
+            replace "XXXX" with the number assigned to this document and
+            remove this note.]<a href="#section-7-2.12.2" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.13">Interoperability considerations:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.14">None.<a href="#section-7-2.14" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.15">Published specification:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.16">
+          <p id="section-7-2.16.1">VP9 bitstream format <span>[<a href="#VP9-BITSTREAM" class="xref">VP9-BITSTREAM</a>]</span> and RFC XXXX.<a href="#section-7-2.16.1" class="pilcrow">¶</a></p>
+<p id="section-7-2.16.2"> [RFC
+            Editor: Upon publication as an RFC, please replace "XXXX" with the
+            number assigned to this document and remove this note.]<a href="#section-7-2.16.2" class="pilcrow">¶</a></p>
+<p id="section-7-2.16.3"></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.17">Applications which use this media type:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.18"> For example: Video over IP, video
+            conferencing.<a href="#section-7-2.18" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.19">Fragment identifier considerations:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.20">N/A.<a href="#section-7-2.20" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.21">Additional information:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.22">None.<a href="#section-7-2.22" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.23">Person &amp; email address to contact for further information:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.24"> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;<a href="#section-7-2.24" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.25">Intended usage:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.26">COMMON<a href="#section-7-2.26" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.27">Restrictions on usage:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.28"> This
+            media type depends on RTP framing, and hence is only defined for
+            transfer via RTP <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>.<a href="#section-7-2.28" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.29">Author:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.30">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;<a href="#section-7-2.30" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-2.31">Change controller:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-2.32"> IETF
+            AVTCore Working Group delegated from the IESG.<a href="#section-7-2.32" class="pilcrow">¶</a>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="securityConsiderations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-8-1">RTP packets using the payload format defined in this specification
       are subject to the security considerations discussed in the RTP
       specification <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>, and in any applicable RTP
       profile such
@@ -2540,21 +2541,21 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
       RTP Sessions</a> [<a href="#RFC7201" class="xref">RFC7201</a>]</span>.  Applications SHOULD use one or more appropriate
       strong security mechanisms.  The rest of this security
       consideration section discusses the security impacting properties of the
-      payload format itself.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">This RTP payload
+      payload format itself.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">This RTP payload
       format and its media decoder do not exhibit any significant
       non-uniformity in the receiver-side computational complexity for packet
       processing, and thus are unlikely to pose a denial-of-service threat due
       to the receipt of pathological data. Nor does the RTP payload format
-      contain any active content.<a href="#section-7-2" class="pilcrow">¶</a></p>
+      contain any active content.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="congestionControl">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-congestion-control">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
       </h2>
-<p id="section-8-1">Congestion control for RTP SHALL be used in accordance with RFC 3550
+<p id="section-9-1">Congestion control for RTP SHALL be used in accordance with RFC 3550
       <span>[<a href="#RFC3550" class="xref">RFC3550</a>]</span>, and with any applicable RTP profile; e.g., RFC
       3551 <span>[<a href="#RFC3551" class="xref">RFC3551</a>]</span>. The congestion control mechanism can, in
       a real-time encoding scenario, adapt the transmission rate by
@@ -2563,37 +2564,37 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
       in <a href="#VP9payloadDescriptor" class="xref">Section 4.2</a> to identify non-reference
       frames and discard them in order to reduce network congestion. Note that
       discarding of non-reference frames cannot be done if the stream is
-      encrypted (because the non-reference marker is encrypted).<a href="#section-8-1" class="pilcrow">¶</a></p>
+      encrypted (because the non-reference marker is encrypted).<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="IANAConsiderations">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-9-1">The IANA is requested to register the media type registration
-      "video/vp9" as specified in <a href="#mediaTypeRegistration" class="xref">Section 6.1</a>.  The media type is also
+<p id="section-10-1">The IANA is requested to register the media type registration
+      "video/vp9" as specified in <a href="#mediaTypeRegistration" class="xref">Section 7</a>.  The media type is also
       requested to
    be added to the IANA registry for "RTP Payload Format MIME types"
-   &lt;http://www.iana.org/assignments/rtp-parameters&gt;.<a href="#section-9-1" class="pilcrow">¶</a></p>
+   &lt;http://www.iana.org/assignments/rtp-parameters&gt;.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-10">
+<section id="section-11">
       <h2 id="name-acknowledgments">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-10-1">Alex Eleftheriadis, Yuki Ito, Won Kap Jang, Sergio Garcia
+<p id="section-11-1">Alex Eleftheriadis, Yuki Ito, Won Kap Jang, Sergio Garcia
    Murillo, Roi Sasson, Timothy Terriberry, Emircan Uysaler, and
    Thomas Volkert commented on the development of this document and
-   provided helpful comments and feedback.<a href="#section-10-1" class="pilcrow">¶</a></p>
+   provided helpful comments and feedback.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
-<section id="section-11">
+<section id="section-12">
       <h2 id="name-references">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<section id="section-11.1">
+<section id="section-12.1">
         <h3 id="name-normative-references">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.ietf-avtext-lrr">[I-D.ietf-avtext-lrr]</dt>
@@ -2642,9 +2643,9 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
 <dd class="break"></dd>
 </dl>
 </section>
-<section id="section-11.2">
+<section id="section-12.2">
         <h3 id="name-informative-references">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC3551">[RFC3551]</dt>

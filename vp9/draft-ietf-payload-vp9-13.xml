@@ -152,7 +152,7 @@
     <keyword>WebM</keyword>
 
     <abstract>
-      <t>This memo describes an RTP payload format for the VP9 video codec.
+      <t>This specification describes an RTP payload format for the VP9 video codec.
       The payload format has wide applicability, as it supports applications
       from low bit-rate peer-to-peer usage, to high bit-rate video
       conferences.  It includes provisions for temporal and spatial scalability.</t>
@@ -161,7 +161,7 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This memo describes an RTP payload specification applicable to the
+      <t>This specification describes an RTP payload specification applicable to the
       transmission of video streams encoded using the VP9 video codec <xref
       target="VP9-BITSTREAM"/>. The format described in this document can be used
       both in peer-to-peer and video conferencing applications.</t>
@@ -269,11 +269,11 @@
       in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.</t>
 
-	  <t>(Editor's Note: A "Picture Group", as used in this document,
+	  <t>(Note: A "Picture Group", as used in this document,
 	  is not the same thing as a the term "Group of Pictures" as
 	  it is traditionally used in video coding, i.e. to mean an
 	  independently-decoadable run of pictures beginning with a
-	  keyframe.  Suggestions for better terminology are welcome.)</t>
+	  keyframe.)</t>
 
       <t>The SS data can also be used to specify the resolution of each
       spatial layer present in the VP9 stream for both flexible and non-flexible modes.</t>
@@ -350,7 +350,7 @@
             frames of the picture MUST have the same timestamp.</t>
 
 			<t>If a frame has the VP9 show_frame field set to 0 (i.e., it is meant only to
-			  populate a reference buffer, without being output) its timestamp MAY alternately be set
+			  populate a reference buffer, without being output) its timestamp MAY alternatively be set
 			  to be the same as the subsequent frame with show_frame equal to 1.  (This will
 			  be convenient for playing out pre-encoded content packaged with VP9 "superframes", which
 			  typically bundle show_frame==0 frames with a subsequent show_frame==1 frame.)  Every
@@ -366,7 +366,7 @@
 
       <section anchor="VP9payloadDescriptor" title="VP9 Payload Descriptor">
         <figure anchor="figureVP9payloadDescriptor">
-          <preamble>In flexible mode (with the F bit below set to 1), The first octets 
+          <preamble>In flexible mode (with the F bit below set to 1), the first octets 
           after the RTP header are the VP9 payload descriptor, with the following 
           structure.</preamble>
 
@@ -379,9 +379,9 @@ I:   |M| PICTURE ID  | (REQUIRED)
      +-+-+-+-+-+-+-+-+
 M:   | EXTENDED PID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
+L:   | TID |U| SID |D| (Conditionally RECOMMENDED)
      +-+-+-+-+-+-+-+-+                             -\
-P,F: | P_DIFF      |N| (CONDITIONALLY REQUIRED)    - up to 3 times
+P,F: | P_DIFF      |N| (Conditionally REQUIRED)    - up to 3 times
      +-+-+-+-+-+-+-+-+                             -/
 V:   | SS            |
      | ..            |
@@ -404,9 +404,9 @@ I:   |M| PICTURE ID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
 M:   | EXTENDED PID  | (RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-L:   | TID |U| SID |D| (CONDITIONALLY RECOMMENDED)
+L:   | TID |U| SID |D| (Conditionally RECOMMENDED)
      +-+-+-+-+-+-+-+-+
-     |   TL0PICIDX   | (CONDITIONALLY REQUIRED)
+     |   TL0PICIDX   | (Conditionally REQUIRED)
      +-+-+-+-+-+-+-+-+
 V:   | SS            |
      | ..            |
@@ -492,7 +492,8 @@ V:   | SS            |
           7 bits carry the PID; else if M is set to one, 15 bits carry
           the PID in network byte order.
           The sender may choose between a 7- or 15-bit index. The PID SHOULD start on a
-          random number, and MUST wrap after reaching the maximum ID. The receiver
+          random number, and MUST wrap after reaching the maximum ID (0x7f or 0x7fff depending on
+          the index size chosen). The receiver
           MUST NOT assume that the number of bits in PID stay the same through the
           session.</t>
 
@@ -510,7 +511,7 @@ V:   | SS            |
 
 		  <t>All frames of the same picture MUST have the same value for show_frame.</t>
 
-          <t hangText="Layer indices:">This information is optional but recommended
+          <t hangText="Layer indices:">This information is optional but RECOMMENDED
           whenever encoding with layers.  For both flexible and non-flexible modes,
           one octet is used to specify a layer frame's temporal layer ID (TID) and spatial layer ID (SID)
           as shown both in <xref target="figureVP9payloadDescriptor"/> and <xref target="figureVP9payloadDescriptorNonFlexible"/>.
@@ -540,9 +541,8 @@ V:   | SS            |
 			frames of the same picture MUST have distinct spatial layer IDs, and frames' spatial layers
 			MUST appear in increasing order within the frame.</t>
 
-            <t hangText="D:">Inter-layer dependency used.  MUST be set to one if current spatial layer SID frame
-            depends on spatial layer SID-1 frame of the same picture.  MUST only be set to zero if current spatial
-            layer SID frame does not depend on spatial layer SID-1 frame of the same picture.  For the base layer frame
+            <t hangText="D:">Inter-layer dependency used.  MUST be set to one if and only if the current spatial layer SID frame
+            depends on spatial layer SID-1 frame of the same picture, otherwise MUST set to zero.  For the base layer frame
             (with SID equal to 0), this D bit MUST be set to zero.</t>
 
             <t hangText="TL0PICIDX:">8 bits temporal layer zero index. TL0PICIDX is only present
@@ -555,7 +555,7 @@ V:   | SS            |
 
           <t hangText="Reference indices:">When P and F are both set to one, indicating a non-key frame in
           flexible mode, then at least
-          one reference index has to be specified as below.  Additional reference indices (total of up to
+          one reference index MUST be specified as below.  Additional reference indices (total of up to
           3 reference indices are allowed) may be specified using the N bit below.  When either P or F is
           set to zero, then no reference index is specified.
           <list style="hanging">
@@ -803,20 +803,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
     <section anchor="payloadFormatParameters"
              title="Payload Format Parameters">
-      <t>This payload format has three optional parameters.</t>
+      <t>This payload format has three optional parameters, "max-fr", "max-fs", and "profile-id".</t>
 
-      <section anchor="mediaTypeRegistration" title="Media Type Definition">
-        <t>This registration is done using the template defined in <xref
-        target="RFC6838"/> and following <xref target="RFC4855"/>. <list
-            style="hanging">
-            <t hangText="Type name:">video</t>
-
-            <t hangText="Subtype name:">VP9</t>
-
-            <t hangText="Required parameters:">None.</t>
-
-            <t hangText="Optional parameters:"><vspace blankLines="0"/> The max-fr
-            and max-fs
+      <t>The max-fr and max-fs
             parameters are used to signal the capabilities of a receiver
             implementation. If the implementation is willing to
             receive media, both parameters MUST be provided. These parameters MUST
@@ -858,49 +847,10 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		of coding profiles defined in section 7.2 of <xref target="VP9-BITSTREAM"/>.</t>
               </list></t>
 
-            <t hangText="Encoding considerations:"><vspace blankLines="0"/>
-            This media type is framed in RTP and contains binary data; see
-            Section 4.8 of <xref target="RFC6838"/>.</t>
+              <t>A receiver MUST ignore any parameter unspecified in this
+              specification.</t>
 
-            <t hangText="Security considerations:">See <xref
-            target="securityConsiderations"/> of RFC xxxx. <vspace
-            blankLines="0"/> [RFC Editor: Upon publication as an RFC, please
-            replace "XXXX" with the number assigned to this document and
-            remove this note.]</t>
-
-            <t hangText="Interoperability considerations:">None.</t>
-
-            <t hangText="Published specification:">VP9 bitstream format <xref
-            target="VP9-BITSTREAM"/> and RFC XXXX. <vspace blankLines="0"/> [RFC
-            Editor: Upon publication as an RFC, please replace "XXXX" with the
-            number assigned to this document and remove this note.] <vspace
-            blankLines="0"/></t>
-
-            <t hangText="Applications which use this media type:"><vspace
-            blankLines="0"/> For example: Video over IP, video
-            conferencing.</t>
-
-			<t hangText="Fragment identifier considerations:">N/A.</t>
-
-            <t hangText="Additional information:">None.</t>
-
-            <t
-            hangText="Person &amp; email address to contact for further information:"><vspace
-            blankLines="0"/> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</t>
-
-            <t hangText="Intended usage:">COMMON</t>
-
-            <t hangText="Restrictions on usage:"><vspace blankLines="0"/> This
-            media type depends on RTP framing, and hence is only defined for
-            transfer via RTP <xref target="RFC3550"/>.</t>
-
-            <t hangText="Author:">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</t>
-
-            <t hangText="Change controller:"><vspace blankLines="0"/> IETF
-            AVTCore Working Group delegated from the IESG.</t>
-          </list></t>
-
-	  <texttable anchor="TableOfProfileIds" title="Table 1. Table of profile-id
+              <texttable anchor="TableOfProfileIds" title="Table of profile-id
 	  integer values representing the VP9 profile corresponding to the set of
 	  coding tools supported.">
 		<ttcol align="center">Profile</ttcol>
@@ -911,7 +861,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		<c>3</c><c>3</c>
 	  </texttable>
 
-	  <texttable anchor="TableOfProfiles" title="Table 2. Table of profile
+	  <texttable anchor="TableOfProfiles" title="Table of profile
 	  capabilities.">
 		<ttcol align="center">Profile</ttcol>
 		<ttcol align="center">Bit Depth</ttcol>
@@ -922,12 +872,8 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		<c>2</c><c>10 or 12</c><c>No</c><c>YUV 4:2:0</c>
 		<c>3</c><c>10 or 12</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
 	  </texttable>
-      </section>
 
       <section anchor="SDPParameters" title="SDP Parameters">
-        <t>The receiver MUST ignore any fmtp parameter unspecified in this
-        memo.</t>
-
         <section title="Mapping of Media Subtype Parameters to SDP">
           <t>The media type video/VP9 string is mapped to fields in the
           Session Description Protocol (SDP) <xref target="RFC8866"/> as
@@ -994,7 +940,65 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
       </section>
     </section>
 
-    <section anchor="securityConsiderations" title="Security Considerations">
+      <section anchor="mediaTypeRegistration" title="Media Type Definition">
+        <t>This registration is done using the template defined in <xref
+        target="RFC6838"/> and following <xref target="RFC4855"/>. <list
+            style="hanging">
+            <t hangText="Type name:">video</t>
+
+            <t hangText="Subtype name:">VP9</t>
+
+            <t hangText="Required parameters:">N/A.</t>
+
+            <t hangText="Optional parameters:"><vspace blankLines="0"/>
+            There are three optional parameters, "max-fr", "max-fs", and "profile-id".
+            See <xref target='payloadFormatParameters' /> for their definition.
+            </t>
+
+            <t hangText="Encoding considerations:"><vspace blankLines="0"/>
+            This media type is framed in RTP and contains binary data; see
+            Section 4.8 of <xref target="RFC6838"/>.</t>
+
+            <t hangText="Security considerations:">See <xref
+            target="securityConsiderations"/> of RFC xxxx. <vspace
+            blankLines="0"/> [RFC Editor: Upon publication as an RFC, please
+            replace "XXXX" with the number assigned to this document and
+            remove this note.]</t>
+
+            <t hangText="Interoperability considerations:">None.</t>
+
+            <t hangText="Published specification:">VP9 bitstream format <xref
+            target="VP9-BITSTREAM"/> and RFC XXXX. <vspace blankLines="0"/> [RFC
+            Editor: Upon publication as an RFC, please replace "XXXX" with the
+            number assigned to this document and remove this note.] <vspace
+            blankLines="0"/></t>
+
+            <t hangText="Applications which use this media type:"><vspace
+            blankLines="0"/> For example: Video over IP, video
+            conferencing.</t>
+
+			<t hangText="Fragment identifier considerations:">N/A.</t>
+
+            <t hangText="Additional information:">None.</t>
+
+            <t
+            hangText="Person &amp; email address to contact for further information:"><vspace
+            blankLines="0"/> Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</t>
+
+            <t hangText="Intended usage:">COMMON</t>
+
+            <t hangText="Restrictions on usage:"><vspace blankLines="0"/> This
+            media type depends on RTP framing, and hence is only defined for
+            transfer via RTP <xref target="RFC3550"/>.</t>
+
+            <t hangText="Author:">Jonathan Lennox &lt;jonathan.lennox@8x8.com&gt;</t>
+
+            <t hangText="Change controller:"><vspace blankLines="0"/> IETF
+            AVTCore Working Group delegated from the IESG.</t>
+          </list></t>
+        </section>
+
+        <section anchor="securityConsiderations" title="Security Considerations">
       <t>RTP packets using the payload format defined in this specification
       are subject to the security considerations discussed in the RTP
       specification <xref target="RFC3550"/>, and in any applicable RTP
