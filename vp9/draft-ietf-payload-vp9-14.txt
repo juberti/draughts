@@ -5,15 +5,15 @@
 AVTCore Working Group                                          J. Uberti
 Internet-Draft                                                 S. Holmer
 Intended status: Standards Track                              M. Flodman
-Expires: 8 November 2021                                         D. Hong
+Expires: 5 December 2021                                         D. Hong
                                                                   Google
                                                                J. Lennox
                                                              8x8 / Jitsi
-                                                              7 May 2021
+                                                             3 June 2021
 
 
                     RTP Payload Format for VP9 Video
-                       draft-ietf-payload-vp9-13
+                       draft-ietf-payload-vp9-14
 
 Abstract
 
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 November 2021.
+   This Internet-Draft will expire on 5 December 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 1]
+Uberti, et al.           Expires 5 December 2021                [Page 1]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    extracted from this document must include Simplified BSD License text
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 2]
+Uberti, et al.           Expires 5 December 2021                [Page 2]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
 2.  Conventions, Definitions and Acronyms
@@ -165,9 +165,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 3]
+Uberti, et al.           Expires 5 December 2021                [Page 3]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    For terminology, this document uses the term "frame" to refer to a
@@ -221,9 +221,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 4]
+Uberti, et al.           Expires 5 December 2021                [Page 4]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    (Note: A "Picture Group", as used in this document, is not the same
@@ -277,9 +277,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 5]
+Uberti, et al.           Expires 5 December 2021                [Page 5]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
                                   Figure 1
@@ -333,9 +333,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 6]
+Uberti, et al.           Expires 5 December 2021                [Page 6]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
          0 1 2 3 4 5 6 7
@@ -389,9 +389,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 7]
+Uberti, et al.           Expires 5 December 2021                [Page 7]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    P:  Inter-picture predicted frame.  When set to zero, the frame does
@@ -445,9 +445,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 8]
+Uberti, et al.           Expires 5 December 2021                [Page 8]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    Z:  Not a reference frame for upper spatial layers.  If set to 1,
@@ -501,9 +501,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021                [Page 9]
+Uberti, et al.           Expires 5 December 2021                [Page 9]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
       current frame is a "switching up point" frame.  Another bit (D) is
@@ -557,9 +557,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 10]
+Uberti, et al.           Expires 5 December 2021               [Page 10]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    Reference indices:  When P and F are both set to one, indicating a
@@ -613,9 +613,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 11]
+Uberti, et al.           Expires 5 December 2021               [Page 11]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
       the OPTIONAL WIDTH (2 octets) and HEIGHT (2 octets) MUST be
@@ -669,9 +669,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 12]
+Uberti, et al.           Expires 5 December 2021               [Page 12]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
 4.4.  Scalable encoding considerations
@@ -725,9 +725,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 13]
+Uberti, et al.           Expires 5 December 2021               [Page 13]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
                +==========+=========+============+=========+
@@ -781,9 +781,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 14]
+Uberti, et al.           Expires 5 December 2021               [Page 14]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    in which they are updated in an alternating leapfrog fashion.  When a
@@ -837,9 +837,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 15]
+Uberti, et al.           Expires 5 December 2021               [Page 15]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    Example:
@@ -893,9 +893,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 16]
+Uberti, et al.           Expires 5 December 2021               [Page 16]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
       profile-id parameter was added relatively late in the development
@@ -949,9 +949,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 17]
+Uberti, et al.           Expires 5 December 2021               [Page 17]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
 6.1.1.  Mapping of Media Subtype Parameters to SDP
@@ -1005,9 +1005,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 18]
+Uberti, et al.           Expires 5 December 2021               [Page 18]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    *  The max-fr and max-fs parameters are used declaratively to
@@ -1061,9 +1061,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 19]
+Uberti, et al.           Expires 5 December 2021               [Page 19]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
       VP9 bitstream format [VP9-BITSTREAM] and RFC XXXX.
@@ -1117,9 +1117,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 20]
+Uberti, et al.           Expires 5 December 2021               [Page 20]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
 8.  Security Considerations
@@ -1173,9 +1173,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 21]
+Uberti, et al.           Expires 5 December 2021               [Page 21]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
 11.  Acknowledgments
@@ -1229,9 +1229,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 22]
+Uberti, et al.           Expires 5 December 2021               [Page 22]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
@@ -1285,9 +1285,9 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 23]
+Uberti, et al.           Expires 5 December 2021               [Page 23]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    [RFC7202]  Perkins, C. and M. Westerlund, "Securing the RTP
@@ -1341,9 +1341,9 @@ Authors' Addresses
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 24]
+Uberti, et al.           Expires 5 December 2021               [Page 24]
 
-Internet-Draft         RTP Payload Format for VP9               May 2021
+Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    Jonathan Lennox
@@ -1397,4 +1397,4 @@ Internet-Draft         RTP Payload Format for VP9               May 2021
 
 
 
-Uberti, et al.           Expires 8 November 2021               [Page 25]
+Uberti, et al.           Expires 5 December 2021               [Page 25]
