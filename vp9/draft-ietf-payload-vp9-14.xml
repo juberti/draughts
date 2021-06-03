@@ -222,7 +222,7 @@
 
       <t>Layers are designed (and MUST be encoded) such that if
       any layer, and all higher layers, are removed from the bitstream
-      along either of the two dimensions, the remaining bitstream is
+      along either the spatial or temporal dimension, the remaining bitstream is
       still correctly decodable.</t>
 
       <t>For terminology, this document uses the term "frame" to refer
@@ -260,11 +260,15 @@
       structure.
       Since this is signaled in 
       each packet it makes it possible to have very flexible temporal layer
-      hierarchies and patterns which are changing dynamically.</t>
+      hierarchies, and scalability structures which are changing dynamically.</t>
 
-      <t>In non-flexible mode, the inter-picture dependency (the reference
-      indices) of a Picture Group (PG) MUST be pre-specified as part of the 
-      scalability structure (SS) data.  In this mode, each 
+      <t>In non-flexible mode, frames are encoded using a fixed, recurring pattern of dependencies;
+      the set of pictures that recur in this pattern is known as a Picture Group (PG).
+      In this mode, the inter-picture dependencies (the reference
+      indices) of the Picture Group MUST be pre-specified as part of the 
+      scalability structure (SS) data.  A Picture Group is a recurring pattern of spatial and temporal
+      dependencies which 
+      In this mode, each 
       packet has an index to refer to one of the described pictures
       in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.</t>
@@ -308,11 +312,11 @@
   |            VP9 payload descriptor (integer #octets)           |
   :                                                               :
   |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                               : VP9 pyld hdr  |               |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               |
+  |                               :                               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
   |                                                               |
   +                                                               |
-  :                   Bytes 2..N of VP9 payload                   :
+  :                          VP9 payload                          :
   |                                                               |
   |                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                               :    OPTIONAL RTP padding       |
@@ -320,12 +324,9 @@
           ]]></artwork>
 
           <postamble>The VP9 payload descriptor will be
-          described in <xref target="VP9payloadDescriptor"/>; the VP9 payload header is described
+          described in <xref target="VP9payloadDescriptor"/>; the VP9 payload is described
 	      in <xref target="VP9-BITSTREAM"/>.
-			OPTIONAL RTP padding MUST NOT be included unless the P bit is set.
-			The figure specifically shows the format for the first
-			packet in a frame.  Subsequent packets will not contain the
-			VP9 payload header, and will have later octets in the frame payload.</postamble>
+			OPTIONAL RTP padding MUST NOT be included unless the P bit is set.</postamble>
         </figure>
 
         <t><list style="hanging">
@@ -420,7 +421,7 @@ V:   | SS            |
           OPTIONAL PID MUST be present after the mandatory first octet and
           specified as below. Otherwise, PID MUST NOT be present.  If the SS field was present in
 		  the stream's most recent start of a keyframe (i.e., non-flexible scalability mode is in use),
-			then the PID MUST also be present in every packet.</t>
+			then this bit MUST be set on every packet.</t>
 
           <t hangText="P:">Inter-picture predicted frame.  When set to zero, the
           frame does not utilize inter-picture prediction.  In this case,
@@ -471,7 +472,7 @@ V:   | SS            |
 
 	  <t hangText="Z:">Not a reference frame for upper spatial
 	  layers. If set to 1, indicates that frames with higher
-	  spatial layers SID+1 of the current and following pictures
+	  spatial layers SID+1 and greater of the current and following pictures
 	  do not depend on the current spatial layer SID frame.  This
 	  enables a decoder which is targeting a higher spatial layer
 	  to know that it can safely discard this packet's frame
@@ -487,7 +488,10 @@ V:   | SS            |
           contain 7 bits. See PID below.</t>
 
           <t hangText="Picture ID (PID):">Picture ID represented in 7 or 15 bits,
-          depending on the M bit. This is a running index of the pictures. The
+          depending on the M bit. This is a running index of the pictures, where the
+          sender increments the value by 1 for each picture it sends.  (Note however that
+          because a middlebox can discard pictures where permitted by the scalability structure, Picture IDs
+          as received by a receiver might not be contiguous.)  This
           field MUST be present if the I bit is equal to one. If M is set to zero,
           7 bits carry the PID; else if M is set to one, 15 bits carry
           the PID in network byte order.
@@ -495,7 +499,10 @@ V:   | SS            |
           random number, and MUST wrap after reaching the maximum ID (0x7f or 0x7fff depending on
           the index size chosen). The receiver
           MUST NOT assume that the number of bits in PID stay the same through the
-          session.</t>
+          session.  If this field transitions from 7-bits to 15-bits, the value is zero-extended
+          (i.e. the value after 0x6e is 0x006f); if the field transitions from 15 bits to 7 bits,
+          it is truncated (i.e. the value after 0x1bbe is 0xbf).
+          </t>
 
           <t>In the non-flexible mode (when the F bit is set to 0), this PID is used
           as an index to the picture group (PG) specified in the SS data below.  In this mode, the 
@@ -564,7 +571,7 @@ V:   | SS            |
             on a packet containing the picture with PID 112 means
             that the picture refers back to the picture with PID
             109. This calculation is done modulo the size of the PID field,
-            i.e., either 7 or 15 bits.</t>
+            i.e., either 7 or 15 bits.  A P_DIFF value of 0 is invalid.</t>
             <t hangText="N:">1 if there is additional P_DIFF following the current P_DIFF.</t>
           </list></t>
         </list></t>
@@ -623,20 +630,20 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
           <t>The first picture specified in the PG MUST have TID set to 0.</t>
 
           <t>G set to 0 or N_G set to 0 indicates that either there is only one temporal
-          layer or no fixed inter-picture dependency information is present
-          going forward in the bitstream.</t>
+          layer (for non-flexible mode) or no fixed inter-picture dependency information is present
+          (for flexible mode) going forward in the bitstream.</t>
 
           <t>Note that for a given picture, all frames follow the
           same inter-picture dependency structure.  However, the frame rate
           of each spatial layer can be different from each other and this can
-          be controlled with the use of the D bit described above.  The 
+          be described with the use of the D bit described above.  The 
           specified dependency structure in the SS data MUST be for the highest
           frame rate layer.</t>
         </list></t>
 
         <t>In a scalable stream sent with a fixed pattern, the SS data
         SHOULD be included in the first packet of every key frame. This is a packet 
-        with P bit equal to zero, SID or D bit equal to zero, and B bit equal to 1.
+        with P bit equal to zero, SID or Lis not the bit equal to zero, and B bit equal to 1.
         The SS data MUST only be changed on the picture that corresponds to the 
         first picture specified in the previous SS data's PG
         (if the previous SS data's N_G was greater than 0).</t>
@@ -665,7 +672,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		producing a scalable stream needs to ensure that a frame does
 		not depend on a previous frame (of the same or a previous
 		picture) that can legitimately be removed from the stream.
-		Thus, a frame that follows a removable frame (in full decode
+		Thus, a frame that follows a frame that might be removed (in full decode
 		order) MUST be encoded with "error_resilient_mode" set to
 		true.</t>
 
@@ -734,10 +741,10 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
         golden frame and the altref frame -- in which they are updated in an
         alternating leapfrog fashion. When a receiver has received and
         correctly decoded a golden or altref frame, and that frame had a
-        PictureID in the payload descriptor, the receiver can acknowledge this
+        Picture ID in the payload descriptor, the receiver can acknowledge this
         simply by sending an RPSI message back to the sender. The message body
         (i.e., the "native RPSI bit string" in <xref target="RFC4585"/>) is
-        simply the PictureID of the received frame.</t>
+        simply the (7 or 15 bit) Picture ID of the received frame.</t>
 
 		<t>Note: because all frames of the same picture must have the
 		same inter-picture reference structure, there is no need for a
@@ -782,9 +789,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 	  reference IDs of each frame by backtracking the dependency chain
 	  until reaching a point where only decodable frames are being
 	  referenced. Therefore it's recommended for both the
-	  flexible and the non-flexible mode that, when upgrade frames are
+	  flexible and the non-flexible mode that, when switching up points are
 	  being encoded in response to a LRR, those packets should contain
-	  layer indices and the reference fields so that the decoder or an
+	  layer indices and the reference field(s) so that the decoder or an
 	  MCU can make this derivation.</t>
 
 	  <t>Example:</t>
@@ -1006,7 +1013,7 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
       as <xref target='RFC3551'>RTP/AVP</xref>, <xref target='RFC4585'>RTP/AVPF</xref>,
       <xref target='RFC3711'>RTP/SAVP</xref>,
       or <xref target='RFC5124'>RTP/SAVPF</xref>.
-	  SAVPF [RFC5124].  However, as <xref target='RFC7202'>"Securing the RTP Protocol
+      However, as <xref target='RFC7202'>"Securing the RTP Protocol
       Framework: Why RTP Does Not Mandate a Single Media
       Security Solution"</xref> discusses, it is not an RTP payload format's responsibility to
       discuss or mandate what solutions are used to meet the
