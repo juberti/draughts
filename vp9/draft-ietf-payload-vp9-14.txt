@@ -95,10 +95,10 @@ Table of Contents
 
 1.  Introduction
 
-   This specification describes an RTP payload specification applicable
-   to the transmission of video streams encoded using the VP9 video
-   codec [VP9-BITSTREAM].  The format described in this document can be
-   used both in peer-to-peer and video conferencing applications.
+   This specification describes an RTP [RFC3550] payload specification
+   applicable to the transmission of video streams encoded using the VP9
+   video codec [VP9-BITSTREAM].  The format described in this document
+   can be used both in peer-to-peer and video conferencing applications.
 
    The VP9 video codec was developed by Google, and is the successor to
    its earlier VP8 [RFC6386] codec.  Above the compression improvements
@@ -302,10 +302,10 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       Section 6.1 for the mechanism to be used with the Session
       Description Protocol (SDP) [RFC8866].
 
-   Timestamp:  The RTP timestamp indicates the time when the input frame
-      was sampled, at a clock rate of 90 kHz.  If the input picture is
-      encoded with multiple layer frames, all of the frames of the
-      picture MUST have the same timestamp.
+   Timestamp:  The RTP timestamp [RFC3550] indicates the time when the
+      input frame was sampled, at a clock rate of 90 kHz.  If the input
+      picture is encoded with multiple layer frames, all of the frames
+      of the picture MUST have the same timestamp.
 
       If a frame has the VP9 show_frame field set to 0 (i.e., it is
       meant only to populate a reference buffer, without being output)
@@ -382,10 +382,10 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
 
    I:  Picture ID (PID) present.  When set to one, the OPTIONAL PID MUST
       be present after the mandatory first octet and specified as below.
-      Otherwise, PID MUST NOT be present.  If the SS field was present
-      in the stream's most recent start of a keyframe (i.e., non-
-      flexible scalability mode is in use), then this bit MUST be set on
-      every packet.
+      Otherwise, PID MUST NOT be present.  If the V bit was set in the
+      stream's most recent start of a keyframe (i.e. the SS field was
+      present, and non-flexible scalability mode is in use), then this
+      bit MUST be set on every packet.
 
 
 
@@ -418,13 +418,15 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       first octet, the PID, and layer indices (if present) are as
       described by "Reference indices" below.  This MUST only be set to
       1 if the I bit is also set to one; if the I bit is set to zero,
-      then this MUST also be set to zero and ignored by receivers.  The
-      value of this F bit MUST only change on the first packet of a key
-      picture.  A key picture is a picture whose base spatial layer
-      frame is a key frame, and which thus completely resets the encoder
-      state.  This packet will have its P bit equal to zero, SID or D
-      bit (described below) equal to zero, and B bit (described below)
-      equal to 1.
+      then this MUST also be set to zero and ignored by receivers.
+      (Flexible mode's Reference indices are defined as offsets from the
+      Picture ID field, so they would have no meaning if I were not
+      set.)  The value of this F bit MUST only change on the first
+      packet of a key picture.  A key picture is a picture whose base
+      spatial layer frame is a key frame, and which thus completely
+      resets the encoder state.  This packet will have its P bit equal
+      to zero, SID or L bit (described below) equal to zero, and B bit
+      (described below) equal to 1.
 
    B:  Start of a frame.  MUST be set to 1 if the first payload octet of
       the RTP packet is the beginning of a new VP9 frame, and MUST NOT
@@ -439,8 +441,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       picture may follow; see the description of the M bit above.
 
    V:  Scalability structure (SS) data present.  When set to one, the
-      OPTIONAL SS data MUST be present in the payload descriptor.
-      Otherwise, the SS data MUST NOT be present.
 
 
 
@@ -449,6 +449,9 @@ Uberti, et al.           Expires 5 December 2021                [Page 8]
 
 Internet-Draft         RTP Payload Format for VP9              June 2021
 
+
+      OPTIONAL SS data MUST be present in the payload descriptor.
+      Otherwise, the SS data MUST NOT be present.
 
    Z:  Not a reference frame for upper spatial layers.  If set to 1,
       indicates that frames with higher spatial layers SID+1 and greater
@@ -462,9 +465,9 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    that are enabled:
 
    M:  The most significant bit of the first octet is an extension flag.
-      The field MUST be present if the I bit is equal to one.  If set,
-      the PID field MUST contain 15 bits; otherwise, it MUST contain 7
-      bits.  See PID below.
+      The field MUST be present if the I bit is equal to one.  If M is
+      set, the PID field MUST contain 15 bits; otherwise, it MUST
+      contain 7 bits.  See PID below.
 
    Picture ID (PID):  Picture ID represented in 7 or 15 bits, depending
       on the M bit.  This is a running index of the pictures, where the
@@ -494,9 +497,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       All frames of the same picture MUST have the same PID value.
 
       Frames (and their corresponding pictures) with the VP9 show_frame
-      field equal to 0 MUST have distinct PID values from subsequent
-      pictures with show_frame equal to 1.  Thus, a Picture as defined
-      in this specification is different than a VP9 Superframe.
 
 
 
@@ -505,6 +505,10 @@ Uberti, et al.           Expires 5 December 2021                [Page 9]
 
 Internet-Draft         RTP Payload Format for VP9              June 2021
 
+
+      field equal to 0 MUST have distinct PID values from subsequent
+      pictures with show_frame equal to 1.  Thus, a Picture as defined
+      in this specification is different than a VP9 Superframe.
 
       All frames of the same picture MUST have the same value for
       show_frame.
@@ -548,12 +552,8 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
          the frame.
 
       D:  Inter-layer dependency used.  MUST be set to one if and only
-         if the current spatial layer SID frame depends on spatial layer
-         SID-1 frame of the same picture, otherwise MUST set to zero.
-         For the base layer frame (with SID equal to 0), this D bit MUST
-         be set to zero.
 
-      TL0PICIDX:  8 bits temporal layer zero index.  TL0PICIDX is only
+
 
 
 
@@ -562,13 +562,19 @@ Uberti, et al.           Expires 5 December 2021               [Page 10]
 Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
+         if the current spatial layer SID frame depends on spatial layer
+         SID-1 frame of the same picture, otherwise MUST be set to zero.
+         For the base layer frame (with SID equal to 0), this D bit MUST
+         be set to zero.
+
+      TL0PICIDX:  8 bits temporal layer zero index.  TL0PICIDX is only
          present in the non-flexible mode (F = 0).  This is a running
          index for the temporal base layer pictures, i.e., the pictures
          with TID set to 0.  If TID is larger than 0, TL0PICIDX
          indicates which temporal base layer picture the current picture
-         depends on.  TL0PICIDX MUST be incremented when TID is equal to
-         0.  The index SHOULD start on a random number, and MUST restart
-         at 0 after reaching the maximum number 255.
+         depends on.  TL0PICIDX MUST be incremented by 1 when TID is
+         equal to 0.  The index SHOULD start on a random number, and
+         MUST restart at 0 after reaching the maximum number 255.
 
    Reference indices:  When P and F are both set to one, indicating a
       non-key frame in flexible mode, then at least one reference index
@@ -593,12 +599,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    a picture group (PG).  If the VP9 payload descriptor's "V" bit is
    set, the SS data is present in the position indicated in Figure 2 and
    Figure 3.
-
-
-
-
-
-
 
 
 
@@ -656,7 +656,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       picture dependency structure of the VP9 stream to be pre-declared,
       rather than indicating it on the fly with every packet.  If N_G is
       greater than 0, then for N_G pictures in the PG, each picture's
-      temporal layer ID (TID), switch up point (U), and the R reference
+      temporal layer ID (TID), switch up point (U), and the Reference
       indices (P_DIFFs) are specified.
 
       The first picture specified in the PG MUST have TID set to 0.
@@ -822,10 +822,10 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
 
 5.3.  Layer Refresh Request (LRR)
 
-   The Layer Refresh Request [I-D.ietf-avtext-lrr] allows a receiver to
-   request a single layer of a spatially or temporally encoded stream to
-   be refreshed, without necessarily affecting the stream's other
-   layers.
+   The Layer Refresh Request (LRR) [I-D.ietf-avtext-lrr] allows a
+   receiver to request a single layer of a spatially or temporally
+   encoded stream to be refreshed, without necessarily affecting the
+   stream's other layers.
 
                +---------------+---------------+
                |0|1|2|3|4|5|6|7|0|1|2|3|4|5|6|7|
@@ -853,8 +853,8 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    referenced.  Therefore it's recommended for both the flexible and the
    non-flexible mode that, when switching up points are being encoded in
    response to a LRR, those packets should contain layer indices and the
-   reference field(s) so that the decoder or an MCU can make this
-   derivation.
+   reference field(s) so that the decoder or a selective forwarding
+   middleboxes [RFC7667] can make this derivation.
 
    Example:
 

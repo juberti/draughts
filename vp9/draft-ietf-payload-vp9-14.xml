@@ -161,7 +161,7 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This specification describes an RTP payload specification applicable to the
+      <t>This specification describes an <xref target="RFC3550">RTP</xref> payload specification applicable to the
       transmission of video streams encoded using the VP9 video codec <xref
       target="VP9-BITSTREAM"/>. The format described in this document can be used
       both in peer-to-peer and video conferencing applications.</t>
@@ -345,7 +345,7 @@
 			  to be used with the <xref target='RFC8866'>Session
 			  Description Protocol (SDP)</xref>.</t>
 
-            <t hangText="Timestamp:">The RTP timestamp indicates the time when
+            <t hangText="Timestamp:">The <xref target="RFC3550">RTP timestamp</xref> indicates the time when
             the input frame was sampled, at a clock rate of 90 kHz.  If the
             input picture is encoded with multiple layer frames, all of the
             frames of the picture MUST have the same timestamp.</t>
@@ -419,9 +419,10 @@ V:   | SS            |
         <t><list style="hanging">
           <t hangText="I:">Picture ID (PID) present. When set to one, the
           OPTIONAL PID MUST be present after the mandatory first octet and
-          specified as below. Otherwise, PID MUST NOT be present.  If the SS field was present in
-		  the stream's most recent start of a keyframe (i.e., non-flexible scalability mode is in use),
-			then this bit MUST be set on every packet.</t>
+          specified as below. Otherwise, PID MUST NOT be present.  If the V bit was set in the
+          stream's most recent start of a keyframe (i.e. the SS field was present, and non-flexible
+          scalability mode is in use),
+	  then this bit MUST be set on every packet.</t>
 
           <t hangText="P:">Inter-picture predicted frame.  When set to zero, the
           frame does not utilize inter-picture prediction.  In this case,
@@ -445,13 +446,15 @@ V:   | SS            |
           the mandatory first octet, the PID, and layer indices (if present) are 
           as described by "Reference indices" below.  This MUST only be set to 1 if the I 
           bit is also set to one; if the I bit is set to zero, then this MUST also be 
-          set to zero and ignored by receivers.  The value of this F
+          set to zero and ignored by receivers. (Flexible mode's Reference indices are defined as offsets
+          from the Picture ID field, so they would have no meaning if I were not set.)
+          The value of this F
           bit MUST only change 
           on the first packet of a key picture.  A key picture is a
           picture whose base spatial layer frame is a key frame, and
           which thus completely resets the encoder state.  This
           packet will have its P bit
-          equal to zero, SID or D bit (described below) equal to zero, and B bit (described below) 
+          equal to zero, SID or L bit (described below) equal to zero, and B bit (described below) 
           equal to 1.</t>
 
           <t hangText="B:">Start of a frame. MUST be set to 1 if
@@ -484,7 +487,7 @@ V:   | SS            |
         are enabled:<list style="hanging">
           <t hangText="M:">The most significant bit of the first octet is an
           extension flag. The field MUST be present if the I bit is equal to
-          one. If set, the PID field MUST contain 15 bits; otherwise, it MUST
+          one. If M is set, the PID field MUST contain 15 bits; otherwise, it MUST
           contain 7 bits. See PID below.</t>
 
           <t hangText="Picture ID (PID):">Picture ID represented in 7 or 15 bits,
@@ -549,14 +552,14 @@ V:   | SS            |
 			MUST appear in increasing order within the frame.</t>
 
             <t hangText="D:">Inter-layer dependency used.  MUST be set to one if and only if the current spatial layer SID frame
-            depends on spatial layer SID-1 frame of the same picture, otherwise MUST set to zero.  For the base layer frame
+            depends on spatial layer SID-1 frame of the same picture, otherwise MUST be set to zero.  For the base layer frame
             (with SID equal to 0), this D bit MUST be set to zero.</t>
 
             <t hangText="TL0PICIDX:">8 bits temporal layer zero index. TL0PICIDX is only present
             in the non-flexible mode (F = 0).  This is a running index for the temporal
             base layer pictures, i.e., the pictures with TID set to 0.  If TID is larger than 0,
             TL0PICIDX indicates which temporal base layer picture the current picture depends on.  TL0PICIDX MUST be
-            incremented when TID is equal to 0.  The index SHOULD start on a random number, and MUST restart
+            incremented by 1 when TID is equal to 0.  The index SHOULD start on a random number, and MUST restart
             at 0 after reaching the maximum number 255.</t>
           </list></t>
 
@@ -625,7 +628,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
           be pre-declared, rather than indicating it on the fly with
           every packet.  If N_G is greater than 0, then for N_G
           pictures in the PG, each picture's temporal layer ID (TID), switch up point (U), 
-          and the R reference indices (P_DIFFs) are specified.</t>
+          and the Reference indices (P_DIFFs) are specified.</t>
 
           <t>The first picture specified in the PG MUST have TID set to 0.</t>
 
@@ -764,7 +767,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 	  </section>
 
 	  <section title="Layer Refresh Request (LRR)" anchor="LRR">
-		<t>The <xref target="I-D.ietf-avtext-lrr">Layer Refresh Request</xref>
+		<t>The <xref target="I-D.ietf-avtext-lrr">Layer Refresh Request (LRR)</xref>
 		  allows a receiver to request a single layer of a spatially or
 		  temporally encoded stream to be refreshed, without necessarily
 		  affecting the stream's other layers.</t>
@@ -791,8 +794,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 	  referenced. Therefore it's recommended for both the
 	  flexible and the non-flexible mode that, when switching up points are
 	  being encoded in response to a LRR, those packets should contain
-	  layer indices and the reference field(s) so that the decoder or an
-	  MCU can make this derivation.</t>
+	  layer indices and the reference field(s) so that the decoder or a
+	  <xref target='RFC7667'>selective forwarding
+            middleboxes</xref> can make this derivation.</t>
 
 	  <t>Example:</t>
 	  <t>LRR {1,0}, {2,1} is sent by an MCU when it is currently
