@@ -868,9 +868,9 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 		<ttcol align="center">SRGB Colorspace</ttcol>
 		<ttcol align="center">Chroma Subsampling</ttcol>
 		<c>0</c><c>8</c><c>No</c><c>YUV 4:2:0</c>
-		<c>1</c><c>8</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
+		<c>1</c><c>8</c><c>Yes</c><c>YUV 4:2:2,4:4:0 or 4:4:4</c>
 		<c>2</c><c>10 or 12</c><c>No</c><c>YUV 4:2:0</c>
-		<c>3</c><c>10 or 12</c><c>Yes</c><c>YUV 4:2:0,4:4:0 or 4:4:4</c>
+		<c>3</c><c>10 or 12</c><c>Yes</c><c>YUV 4:2:2,4:4:0 or 4:4:4</c>
 	  </texttable>
 
       <section anchor="SDPParameters" title="SDP Parameters">
