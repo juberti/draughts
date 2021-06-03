@@ -86,7 +86,7 @@ Table of Contents
    7.  Media Type Definition . . . . . . . . . . . . . . . . . . . .  19
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
    9.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  21
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
    11. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  22
    12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
      12.1.  Normative References . . . . . . . . . . . . . . . . . .  22
@@ -157,7 +157,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    0, and is sometimes referred to as the "base" temporal or spatial
    layer.
 
-   Layers are designed (and MUST be encoded) such that if any layer, and
+   Layers are designed, and MUST be encoded, such that if any layer, and
    all higher layers, are removed from the bitstream along either the
    spatial or temporal dimension, the remaining bitstream is still
    correctly decodable.
@@ -227,8 +227,8 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
    (Note: A "Picture Group", as used in this document, is not the same
-   thing as a the term "Group of Pictures" as it is traditionally used
-   in video coding, i.e. to mean an independently-decoadable run of
+   thing as the term "Group of Pictures" as it is traditionally used in
+   video coding, i.e. to mean an independently-decoadable run of
    pictures beginning with a keyframe.)
 
    The SS data can also be used to specify the resolution of each
@@ -1036,7 +1036,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       is exactly the same as in the original offer.  However, max-fr and
       max-fs parameters MAY be changed in subsequent offers and answers,
       with the same payload type number, if an endpoint wishes to change
-      its declared receiver capabilties.
+      its declared receiver capabilities.
 
 7.  Media Type Definition
 
@@ -1140,6 +1140,14 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    this security consideration section discusses the security impacting
    properties of the payload format itself.
 
+   Implementations of this RTP payload format need to take appropriate
+   security considerations into account.  It is extremely important for
+   the decoder to be robust against malicious or malformed payloads and
+   ensure that they do not cause the decoder to overrun its allocated
+   memory or otherwise mis-behave.  An overrun in allocated memory could
+   lead to arbitrary code execution by an attacker.  The same applies to
+   the encoder, even though problems in encoders are typically rarer.
+
    This RTP payload format and its media decoder do not exhibit any
    significant non-uniformity in the receiver-side computational
    complexity for packet processing, and thus are unlikely to pose a
@@ -1159,14 +1167,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    reference frames cannot be done if the stream is encrypted (because
    the non-reference marker is encrypted).
 
-10.  IANA Considerations
-
-   The IANA is requested to register the media type registration "video/
-   vp9" as specified in Section 7.  The media type is also requested to
-   be added to the IANA registry for "RTP Payload Format MIME types"
-   <http://www.iana.org/assignments/rtp-parameters>.
-
-
 
 
 
@@ -1177,6 +1177,13 @@ Uberti, et al.           Expires 5 December 2021               [Page 21]
 
 Internet-Draft         RTP Payload Format for VP9              June 2021
 
+
+10.  IANA Considerations
+
+   The IANA is requested to register the media type registration "video/
+   vp9" as specified in Section 7.  The media type is also requested to
+   be added to the IANA registry for "RTP Payload Format MIME types"
+   <http://www.iana.org/assignments/rtp-parameters>.
 
 11.  Acknowledgments
 
@@ -1218,6 +1225,15 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
               DOI 10.17487/RFC4585, July 2006,
               <https://www.rfc-editor.org/info/rfc4585>.
 
+
+
+
+
+Uberti, et al.           Expires 5 December 2021               [Page 22]
+
+Internet-Draft         RTP Payload Format for VP9              June 2021
+
+
    [RFC4855]  Casner, S., "Media Type Registration of RTP Payload
               Formats", RFC 4855, DOI 10.17487/RFC4855, February 2007,
               <https://www.rfc-editor.org/info/rfc4855>.
@@ -1226,13 +1242,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
               "Codec Control Messages in the RTP Audio-Visual Profile
               with Feedback (AVPF)", RFC 5104, DOI 10.17487/RFC5104,
               February 2008, <https://www.rfc-editor.org/info/rfc5104>.
-
-
-
-Uberti, et al.           Expires 5 December 2021               [Page 22]
-
-Internet-Draft         RTP Payload Format for VP9              June 2021
-
 
    [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
               Specifications and Registration Procedures", BCP 13,
@@ -1273,6 +1282,14 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
               (RTP/SAVPF)", RFC 5124, DOI 10.17487/RFC5124, February
               2008, <https://www.rfc-editor.org/info/rfc5124>.
 
+
+
+
+Uberti, et al.           Expires 5 December 2021               [Page 23]
+
+Internet-Draft         RTP Payload Format for VP9              June 2021
+
+
    [RFC6386]  Bankoski, J., Koleszar, J., Quillio, L., Salonen, J.,
               Wilkins, P., and Y. Xu, "VP8 Data Format and Decoding
               Guide", RFC 6386, DOI 10.17487/RFC6386, November 2011,
@@ -1281,14 +1298,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    [RFC7201]  Westerlund, M. and C. Perkins, "Options for Securing RTP
               Sessions", RFC 7201, DOI 10.17487/RFC7201, April 2014,
               <https://www.rfc-editor.org/info/rfc7201>.
-
-
-
-
-Uberti, et al.           Expires 5 December 2021               [Page 23]
-
-Internet-Draft         RTP Payload Format for VP9              June 2021
-
 
    [RFC7202]  Perkins, C. and M. Westerlund, "Securing the RTP
               Framework: Why RTP Does Not Mandate a Single Media
@@ -1328,15 +1337,6 @@ Authors' Addresses
    Email: mflodman@google.com
 
 
-   Danny Hong
-   Google, Inc.
-   1585 Charleston Road
-   Mountain View, CA 94043
-   United States of America
-
-   Email: dannyhong@google.com
-
-
 
 
 
@@ -1346,6 +1346,15 @@ Uberti, et al.           Expires 5 December 2021               [Page 24]
 Internet-Draft         RTP Payload Format for VP9              June 2021
 
 
+   Danny Hong
+   Google, Inc.
+   1585 Charleston Road
+   Mountain View, CA 94043
+   United States of America
+
+   Email: dannyhong@google.com
+
+
    Jonathan Lennox
    8x8, Inc. / Jitsi
    1350 Broadway
@@ -1353,15 +1362,6 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    United States of America
 
    Email: jonathan.lennox@8x8.com
-
-
-
-
-
-
-
-
-
 
 
 

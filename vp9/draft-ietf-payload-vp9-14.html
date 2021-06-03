@@ -1456,7 +1456,7 @@ li > p:last-of-type {
    non-negative integer IDs. The lowest layer of either type has an
    ID of 0, and is sometimes referred to as the "base" temporal or
    spatial layer.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">Layers are designed (and MUST be encoded) such that if
+<p id="section-3-7">Layers are designed, and MUST be encoded, such that if
       any layer, and all higher layers, are removed from the bitstream
       along either the spatial or temporal dimension, the remaining bitstream is
       still correctly decodable.<a href="#section-3-7" class="pilcrow">¶</a></p>
@@ -1504,7 +1504,7 @@ li > p:last-of-type {
       in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.<a href="#section-3-12" class="pilcrow">¶</a></p>
 <p id="section-3-13">(Note: A "Picture Group", as used in this document,
-   is not the same thing as a the term "Group of Pictures" as
+   is not the same thing as the term "Group of Pictures" as
    it is traditionally used in video coding, i.e. to mean an
    independently-decoadable run of pictures beginning with a
    keyframe.)<a href="#section-3-13" class="pilcrow">¶</a></p>
@@ -2425,7 +2425,7 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
        profile-id value is exactly the same as in the original offer.
               However, max-fr and max-fs parameters MAY be changed in subsequent
               offers and answers, with the same payload type number, if an endpoint
-              wishes to change its declared receiver capabilties.<a href="#section-6.1.2-2.3" class="pilcrow">¶</a>
+              wishes to change its declared receiver capabilities.<a href="#section-6.1.2-2.3" class="pilcrow">¶</a>
 </li>
           </ul>
 </section>
@@ -2548,12 +2548,18 @@ a=fmtp:98 max-fr=30;max-fs=3600;profile-id=0
       strong security mechanisms.  The rest of this security
       consideration section discusses the security impacting properties of the
       payload format itself.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">This RTP payload
+<p id="section-8-2">Implementations of this RTP payload format need to take appropriate security
+      considerations into account.  It is extremely important for the decoder to be
+      robust against malicious or malformed payloads and ensure that they do not cause the decoder
+      to overrun its allocated memory or otherwise mis-behave.  An overrun in allocated memory could lead to
+      arbitrary code execution by an attacker.  The same applies to the encoder, even
+      though problems in encoders are typically rarer.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">This RTP payload
       format and its media decoder do not exhibit any significant
       non-uniformity in the receiver-side computational complexity for packet
       processing, and thus are unlikely to pose a denial-of-service threat due
       to the receipt of pathological data. Nor does the RTP payload format
-      contain any active content.<a href="#section-8-2" class="pilcrow">¶</a></p>
+      contain any active content.<a href="#section-8-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="congestionControl">
