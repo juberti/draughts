@@ -213,11 +213,11 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
    pattern is known as a Picture Group (PG).  In this mode, the inter-
    picture dependencies (the reference indices) of the Picture Group
    MUST be pre-specified as part of the scalability structure (SS) data.
-   A Picture Group is a recurring pattern of spatial and temporal
-   dependencies which In this mode, each packet has an index to refer to
-   one of the described pictures in the PG, from which the pictures
-   referenced by the picture transmitted in the current packet for
-   inter-picture prediction can be identified.
+   Each packet has an index to refer to one of the described pictures in
+   the PG, from which the pictures referenced by the picture transmitted
+   in the current packet for inter-picture prediction can be identified.
+
+
 
 
 
@@ -384,8 +384,8 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       be present after the mandatory first octet and specified as below.
       Otherwise, PID MUST NOT be present.  If the V bit was set in the
       stream's most recent start of a keyframe (i.e. the SS field was
-      present, and non-flexible scalability mode is in use), then this
-      bit MUST be set on every packet.
+      present) and the F bit is set to 0 (i.e. non-flexible scalability
+      mode is in use), then this bit MUST be set on every packet.
 
 
 
@@ -683,8 +683,8 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
 
    In a scalable stream sent with a fixed pattern, the SS data SHOULD be
    included in the first packet of every key frame.  This is a packet
-   with P bit equal to zero, SID or Lis not the bit equal to zero, and B
-   bit equal to 1.  The SS data MUST only be changed on the picture that
+   with P bit equal to zero, SID or L bit equal to zero, and B bit equal
+   to 1.  The SS data MUST only be changed on the picture that
    corresponds to the first picture specified in the previous SS data's
    PG (if the previous SS data's N_G was greater than 0).
 

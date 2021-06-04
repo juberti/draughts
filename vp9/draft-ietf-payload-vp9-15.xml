@@ -266,9 +266,8 @@
       the set of pictures that recur in this pattern is known as a Picture Group (PG).
       In this mode, the inter-picture dependencies (the reference
       indices) of the Picture Group MUST be pre-specified as part of the 
-      scalability structure (SS) data.  A Picture Group is a recurring pattern of spatial and temporal
-      dependencies which 
-      In this mode, each 
+      scalability structure (SS) data.
+      Each 
       packet has an index to refer to one of the described pictures
       in the PG, from which the pictures referenced by the picture transmitted in the current packet 
       for inter-picture prediction can be identified.</t>
@@ -420,8 +419,8 @@ V:   | SS            |
           <t hangText="I:">Picture ID (PID) present. When set to one, the
           OPTIONAL PID MUST be present after the mandatory first octet and
           specified as below. Otherwise, PID MUST NOT be present.  If the V bit was set in the
-          stream's most recent start of a keyframe (i.e. the SS field was present, and non-flexible
-          scalability mode is in use),
+          stream's most recent start of a keyframe (i.e. the SS field was present) and the F bit
+          is set to 0 (i.e. non-flexible scalability mode is in use),
 	  then this bit MUST be set on every packet.</t>
 
           <t hangText="P:">Inter-picture predicted frame.  When set to zero, the
@@ -646,7 +645,7 @@ N_G: | TID |U| R |-|-| (OPTIONAL)                 .
 
         <t>In a scalable stream sent with a fixed pattern, the SS data
         SHOULD be included in the first packet of every key frame. This is a packet 
-        with P bit equal to zero, SID or Lis not the bit equal to zero, and B bit equal to 1.
+        with P bit equal to zero, SID or L bit equal to zero, and B bit equal to 1.
         The SS data MUST only be changed on the picture that corresponds to the 
         first picture specified in the previous SS data's PG
         (if the previous SS data's N_G was greater than 0).</t>
