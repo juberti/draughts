@@ -389,7 +389,7 @@ V:   | SS            |
         </figure>
 
         <figure anchor="figureVP9payloadDescriptorNonFlexible">
-          <preamble>In non-flexible mode (with the F bit below set to 0), The first octets 
+          <preamble>In non-flexible mode (with the F bit below set to 0), the first octets 
           after the RTP header are the VP9 payload descriptor, with the following 
           structure.</preamble>
 
