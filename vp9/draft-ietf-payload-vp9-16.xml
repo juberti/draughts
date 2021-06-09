@@ -464,7 +464,7 @@ V:   | SS            |
           decoder to finish decoding the frame, where it otherwise may need to
           wait for the next packet to explicitly know that the frame is complete.
           Note that, if spatial scalability is in use, more frames from the
-          same picture may follow; see the description of the M bit above.</t>
+          same picture may follow; see the description of the B bit above.</t>
 
           <t hangText="V:">Scalability structure (SS) data present. When set
           to one, the OPTIONAL SS data MUST be present in the payload descriptor.
