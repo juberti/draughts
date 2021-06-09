@@ -1357,11 +1357,11 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
 
    Jonathan Lennox
    8x8, Inc. / Jitsi
-   1350 Broadway
-   New York, NY 10018
+   Jersey City, NJ 07302
    United States of America
 
    Email: jonathan.lennox@8x8.com
+
 
 
 

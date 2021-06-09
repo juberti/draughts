@@ -119,13 +119,11 @@
 
       <address>
         <postal>
-          <street>1350 Broadway</street>
+          <city>Jersey City</city>
 
-          <city>New York</city>
+          <region>NJ</region>
 
-          <region>NY</region>
-
-          <code>10018</code>
+          <code>07302</code>
 
           <country>US</country>
         </postal>
