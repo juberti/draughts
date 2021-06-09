@@ -357,7 +357,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
 
                                   Figure 2
 
-   In non-flexible mode (with the F bit below set to 0), The first
+   In non-flexible mode (with the F bit below set to 0), the first
    octets after the RTP header are the VP9 payload descriptor, with the
    following structure.
 
@@ -438,7 +438,7 @@ Internet-Draft         RTP Payload Format for VP9              June 2021
       decoding the frame, where it otherwise may need to wait for the
       next packet to explicitly know that the frame is complete.  Note
       that, if spatial scalability is in use, more frames from the same
-      picture may follow; see the description of the M bit above.
+      picture may follow; see the description of the B bit above.
 
    V:  Scalability structure (SS) data present.  When set to one, the
 
